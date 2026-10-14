@@ -283,32 +283,20 @@ export function CalendarConsistencySection() {
           </div>
 
           <div className="grid grid-cols-3 gap-2 text-center pt-1">
-            <div className="flex flex-col items-center">
-              <div className="w-14 h-14 rounded-full border-2 border-dotted border-black flex items-center justify-center font-heading font-extrabold text-xs shadow-inner bg-zinc-50">
-                6/7
-              </div>
-              <span className="text-[11px] font-heading font-bold mt-1 text-black">
-                Water
-              </span>
-            </div>
-
-            <div className="flex flex-col items-center">
-              <div className="w-14 h-14 rounded-full border-2 border-dotted border-black flex items-center justify-center font-heading font-extrabold text-xs shadow-inner bg-zinc-50">
-                5/7
-              </div>
-              <span className="text-[11px] font-heading font-bold mt-1 text-black">
-                Workout
-              </span>
-            </div>
-
-            <div className="flex flex-col items-center">
-              <div className="w-14 h-14 rounded-full border-2 border-dotted border-black flex items-center justify-center font-heading font-extrabold text-xs shadow-inner bg-zinc-50">
-                7/7
-              </div>
-              <span className="text-[11px] font-heading font-bold mt-1 text-black">
-                Reading
-              </span>
-            </div>
+            {routines.slice(0, 3).map((r) => {
+              const count = getHabitPast7Count(r.id);
+              const label = r.title.split("/")[0].split("(")[0].trim();
+              return (
+                <div key={r.id} className="flex flex-col items-center">
+                  <div className="w-14 h-14 rounded-full border-2 border-dotted border-black flex items-center justify-center font-heading font-extrabold text-xs shadow-inner bg-zinc-50">
+                    {count}/7
+                  </div>
+                  <span className="text-[11px] font-heading font-bold mt-1 text-black truncate max-w-[80px]">
+                    {label}
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </div>
 

@@ -32,6 +32,17 @@ export function TaskDetailDrawer({
     }
   }, [task]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen || !task) return null;
 
   const isRolledOver = task.originDate < task.targetDate;
@@ -47,15 +58,28 @@ export function TaskDetailDrawer({
   };
 
   return (
-    <aside
-      aria-label="Task Details Drawer"
-      className="fixed inset-y-0 right-0 w-88 max-w-full bg-white border-l-2 border-black shadow-[-8px_0_24px_rgba(0,0,0,0.1)] p-6 z-50 flex flex-col justify-between transition-transform duration-300"
-    >
-      <div>
-        <div className="flex items-center justify-between pb-3.5 border-b-2 border-black mb-5">
-          <h3 className="font-heading font-black text-xs uppercase tracking-wider text-black">
-            Task Details
-          </h3>
+    <>
+      {/* Backdrop Overlay */}
+      <div
+        className="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 animate-in fade-in"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+
+      <aside
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="drawer-heading"
+        className="fixed inset-y-0 right-0 w-88 max-w-full bg-white border-l-2 border-black shadow-[-8px_0_24px_rgba(0,0,0,0.1)] p-6 z-50 flex flex-col justify-between transition-transform duration-300"
+      >
+        <div>
+          <div className="flex items-center justify-between pb-3.5 border-b-2 border-black mb-5">
+            <h3
+              id="drawer-heading"
+              className="font-heading font-black text-xs uppercase tracking-wider text-black"
+            >
+              Task Details
+            </h3>
           <button
             onClick={onClose}
             aria-label="Close Drawer"
@@ -147,5 +171,6 @@ export function TaskDetailDrawer({
         </button>
       </div>
     </aside>
+    </>
   );
 }

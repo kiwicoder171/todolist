@@ -10,12 +10,14 @@ import { DailyRoutinesBoard } from "@/components/DailyRoutinesBoard";
 import { DailyTasksBoard } from "@/components/DailyTasksBoard";
 import { KanbanBoard } from "@/components/KanbanBoard";
 import { CalendarConsistencySection } from "@/components/CalendarConsistencySection";
+import { KanbanCardModal } from "@/components/KanbanCardModal";
 
 export default function Home() {
   const [viewMode, setViewMode] = useState<"desktop" | "mobile">("desktop");
   const [dashboardFocus, setDashboardFocus] = useState<"all" | "kanban" | "day">("all");
   const [mobileTab, setMobileTab] = useState<MobileTab>("kanban");
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
+  const [isKanbanModalOpen, setIsKanbanModalOpen] = useState(false);
 
   const getMobilePillTitle = (tab: MobileTab) => {
     switch (tab) {
@@ -27,6 +29,17 @@ export default function Home() {
         return "DAILY TASKS";
       case "progress":
         return "STATISTICS";
+    }
+  };
+
+  const handleMobileQuickAdd = () => {
+    if (mobileTab === "kanban") {
+      setIsKanbanModalOpen(true);
+    } else {
+      const inputs = document.querySelectorAll<HTMLInputElement>("input[type='text']");
+      if (inputs.length > 0) {
+        inputs[inputs.length - 1].focus();
+      }
     }
   };
 
@@ -63,7 +76,7 @@ export default function Home() {
             activeTab={mobileTab}
             onTabChange={setMobileTab}
             pillTitle={getMobilePillTitle(mobileTab)}
-            onQuickAdd={() => alert("Quick Add opened!")}
+            onQuickAdd={handleMobileQuickAdd}
           >
             {mobileTab === "habits" ? (
               <DailyRoutinesBoard />
@@ -81,6 +94,11 @@ export default function Home() {
       <WishlistModal
         isOpen={isWishlistOpen}
         onClose={() => setIsWishlistOpen(false)}
+      />
+
+      <KanbanCardModal
+        isOpen={isKanbanModalOpen}
+        onClose={() => setIsKanbanModalOpen(false)}
       />
     </div>
   );

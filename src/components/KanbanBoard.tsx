@@ -96,8 +96,9 @@ export function KanbanBoard() {
             </span>
             <button
               onClick={() => deleteCard(card.id)}
-              className="opacity-0 group-hover:opacity-100 text-zinc-400 hover:text-black p-0.5 transition"
+              className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 text-zinc-400 hover:text-black p-0.5 transition rounded focus:outline-none focus:ring-1 focus:ring-black"
               title="Delete Card"
+              aria-label="Delete Card"
             >
               <Trash2 className="w-3 h-3" />
             </button>

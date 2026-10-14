@@ -47,6 +47,7 @@ export function DailyRoutinesBoard() {
     toggleCompletion(id, selectedDate);
     if (!wasCompleted) {
       setCelebrationMsg("✨ +1 Routine Done!");
+      setTimeout(() => setCelebrationMsg(null), 2000);
     }
   };
 
@@ -164,12 +165,13 @@ export function DailyRoutinesBoard() {
                   </span>
 
                   {/* Reorder Buttons */}
-                  <div className="opacity-0 group-hover:opacity-100 flex items-center gap-0.5 transition">
+                  <div className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 flex items-center gap-0.5 transition">
                     <button
                       onClick={() => handleMove(idx, "up")}
                       disabled={idx === 0}
                       title="Move Up"
-                      className="p-1 hover:bg-zinc-100 rounded text-zinc-500 disabled:opacity-30"
+                      aria-label="Move routine up"
+                      className="p-1 hover:bg-zinc-100 rounded text-zinc-500 disabled:opacity-30 focus:outline-none focus:ring-1 focus:ring-black"
                     >
                       <ArrowUp className="w-3 h-3" />
                     </button>
@@ -177,14 +179,16 @@ export function DailyRoutinesBoard() {
                       onClick={() => handleMove(idx, "down")}
                       disabled={idx === visibleRoutines.length - 1}
                       title="Move Down"
-                      className="p-1 hover:bg-zinc-100 rounded text-zinc-500 disabled:opacity-30"
+                      aria-label="Move routine down"
+                      className="p-1 hover:bg-zinc-100 rounded text-zinc-500 disabled:opacity-30 focus:outline-none focus:ring-1 focus:ring-black"
                     >
                       <ArrowDown className="w-3 h-3" />
                     </button>
                     <button
                       onClick={() => deleteRoutine(r.id)}
                       title="Delete Routine"
-                      className="p-1 hover:text-black text-zinc-400 rounded transition"
+                      aria-label="Delete routine"
+                      className="p-1 hover:text-black text-zinc-400 rounded transition focus:outline-none focus:ring-1 focus:ring-black"
                     >
                       <X className="w-3 h-3" />
                     </button>
@@ -206,11 +210,13 @@ export function DailyRoutinesBoard() {
             onChange={(e) => setNewTitle(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Add daily routine... (Enter)"
+            aria-label="New routine title"
             className="bg-transparent text-xs font-medium text-black placeholder-zinc-400 focus:outline-none w-full"
           />
 
           <select
             value={typeof newFrequency === "string" ? newFrequency : "custom"}
+            aria-label="Routine frequency"
             onChange={(e) => {
               const val = e.target.value;
               if (val === "daily" || val === "weekdays" || val === "weekends") {
@@ -229,6 +235,7 @@ export function DailyRoutinesBoard() {
 
           <select
             value={newAssignee}
+            aria-label="Routine assignee"
             onChange={(e) => setNewAssignee(e.target.value as Assignee)}
             className="bg-white font-heading font-bold text-[10px] uppercase text-black rounded-lg px-2 py-1 border border-black focus:outline-none"
           >

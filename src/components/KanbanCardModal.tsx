@@ -30,6 +30,17 @@ export function KanbanCardModal({
   const [newCatName, setNewCatName] = useState("");
   const [newCatEmoji, setNewCatEmoji] = useState("📌");
 
+  React.useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -53,6 +64,9 @@ export function KanbanCardModal({
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="kanban-modal-title"
       className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in"
       onClick={onClose}
     >
@@ -61,7 +75,10 @@ export function KanbanCardModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between pb-3 border-b-2 border-black mb-4">
-          <h3 className="font-heading font-black text-sm uppercase tracking-wide text-black">
+          <h3
+            id="kanban-modal-title"
+            className="font-heading font-black text-sm uppercase tracking-wide text-black"
+          >
             New Kanban Card
           </h3>
           <button

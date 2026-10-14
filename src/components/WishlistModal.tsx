@@ -21,6 +21,17 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
   const [newCost, setNewCost] = useState(10);
   const [redeemedNotice, setRedeemedNotice] = useState<string | null>(null);
 
+  React.useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const handleRedeem = (item: RewardItem) => {
@@ -51,6 +62,9 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="wishlist-modal-title"
       className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 animate-in fade-in"
       onClick={onClose}
     >
@@ -60,7 +74,10 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
       >
         <div className="flex items-center justify-between pb-3.5 border-b-2 border-black">
           <div>
-            <h3 className="font-heading font-black text-sm uppercase tracking-wide text-black flex items-center gap-1.5">
+            <h3
+              id="wishlist-modal-title"
+              className="font-heading font-black text-sm uppercase tracking-wide text-black flex items-center gap-1.5"
+            >
               <span>Couple Wishlist Shop</span>
               <Sparkles className="w-3.5 h-3.5" />
             </h3>

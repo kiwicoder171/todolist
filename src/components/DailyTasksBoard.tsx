@@ -88,8 +88,17 @@ export function DailyTasksBoard() {
             return (
               <div
                 key={t.id}
-                className="flex items-start justify-between p-3 rounded-2xl border-2 border-black bg-white squircle-card cursor-pointer group transition"
+                tabIndex={0}
+                role="button"
+                aria-label={`View details for ${t.title}`}
+                className="flex items-start justify-between p-3 rounded-2xl border-2 border-black bg-white squircle-card cursor-pointer group transition focus:outline-none focus:ring-2 focus:ring-black"
                 onClick={() => setSelectedTaskForDrawer(t)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setSelectedTaskForDrawer(t);
+                  }
+                }}
               >
                 <div className="flex items-start gap-3 flex-1 min-w-0 mr-2">
                   <button
@@ -154,7 +163,8 @@ export function DailyTasksBoard() {
                       deleteDailyTask(t.id);
                     }}
                     title="Delete Task"
-                    className="opacity-0 group-hover:opacity-100 text-zinc-400 hover:text-black font-bold text-xs px-1 transition"
+                    aria-label="Delete Task"
+                    className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 text-zinc-400 hover:text-black font-bold text-xs px-1 transition focus:outline-none focus:ring-1 focus:ring-black rounded"
                   >
                     <X className="w-3 h-3" />
                   </button>
@@ -175,10 +185,12 @@ export function DailyTasksBoard() {
             onChange={(e) => setNewTitle(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="What gotta finish today? (Enter)"
+            aria-label="What gotta finish today"
             className="bg-transparent text-xs font-medium text-black placeholder-zinc-400 focus:outline-none w-full"
           />
           <select
             value={newAssignee}
+            aria-label="Daily task assignee"
             onChange={(e) => setNewAssignee(e.target.value as Assignee)}
             className="bg-white font-heading font-bold text-[10px] uppercase text-black rounded-lg px-2 py-1 border border-black focus:outline-none"
           >
