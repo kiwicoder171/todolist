@@ -20,11 +20,11 @@ describe("RoutinesContext (Seam: Daily Routines & Frequency Domain)", () => {
     const { result } = renderHook(() => useRoutines(), { wrapper });
 
     expect(result.current.routines.length).toBeGreaterThan(0);
-    const morningWater = result.current.routines.find((r) =>
-      r.title.includes("water")
+    const dailySync = result.current.routines.find((r) =>
+      r.title.includes("daily sync")
     );
-    expect(morningWater).toBeDefined();
-    expect(morningWater?.frequency).toBe("daily");
+    expect(dailySync).toBeDefined();
+    expect(dailySync?.frequency).toBe("daily");
   });
 
   describe("isRoutineScheduledForDate", () => {

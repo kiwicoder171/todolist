@@ -65,7 +65,7 @@ const RoutinesContext = createContext<RoutinesContextType | undefined>(undefined
 const SEED_ROUTINES: Routine[] = [
   {
     id: "routine-1",
-    title: "Drink water (500ml morning)",
+    title: "15-min daily sync & check-in",
     assignee: "both",
     frequency: "daily",
     order: 0,
@@ -73,8 +73,8 @@ const SEED_ROUTINES: Routine[] = [
   },
   {
     id: "routine-2",
-    title: "Go sleep early (before 11pm)",
-    assignee: "mine",
+    title: "Tidy kitchen & living room together",
+    assignee: "both",
     frequency: "daily",
     order: 1,
     completions: { "2026-10-14": true },
@@ -89,7 +89,7 @@ const SEED_ROUTINES: Routine[] = [
   },
   {
     id: "routine-4",
-    title: "Meditation & breathwork",
+    title: "Review weekly grocery & meal plan",
     assignee: "partner",
     frequency: "daily",
     order: 3,

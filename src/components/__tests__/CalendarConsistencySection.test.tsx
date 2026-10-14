@@ -78,15 +78,15 @@ describe("CalendarConsistencySection (Seam: Ticket 05 Calendar & Dials)", () => 
     expect(screen.getByTestId("selected-day")).toHaveTextContent("20");
   });
 
-  it("renders weekly habit progress bars with 7-segments", () => {
+  it("does not render weekly habit progress bars card (weekly habits removed)", () => {
     render(
       <TestWrapper>
         <CalendarConsistencySection />
       </TestWrapper>
     );
 
-    expect(screen.getByText(/This Week Habits/i)).toBeInTheDocument();
-    expect(screen.getAllByTestId("segment-bar").length).toBeGreaterThan(0);
+    expect(screen.queryByText(/This Week Habits/i)).not.toBeInTheDocument();
+    expect(screen.queryByTestId("segment-bar")).not.toBeInTheDocument();
   });
 
   it("renders consistency dials and handles Couple Momentum cheer", () => {

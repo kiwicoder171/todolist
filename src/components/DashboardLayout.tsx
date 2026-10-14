@@ -16,42 +16,37 @@ export function DashboardLayout({
   kanbanSlot,
 }: DashboardLayoutProps) {
   return (
-    <div className="grid grid-cols-12 gap-5 min-h-[740px] max-w-[1780px] mx-auto">
-      {/* SECTION A: Calendar & Habits Glance */}
+    <div className="flex flex-col gap-6 max-w-[1780px] mx-auto w-full">
+      {/* TOP ROW: Day & Habit Focus (Calendar/Dials + Board 1 & Board 2) */}
       {(dashboardFocus === "all" || dashboardFocus === "day") && (
-        <section
-          className={
-            dashboardFocus === "all"
-              ? "col-span-12 lg:col-span-3 flex flex-col gap-4"
-              : "col-span-12 lg:col-span-5 flex flex-col gap-4"
-          }
-        >
-          {calendarHabitsSlot}
-        </section>
+        <div className="grid grid-cols-12 gap-5 w-full">
+          {/* SECTION A: Calendar & Consistency Dials */}
+          <section
+            className={
+              dashboardFocus === "all"
+                ? "col-span-12 xl:col-span-4 lg:col-span-5 flex flex-col gap-4"
+                : "col-span-12 lg:col-span-5 flex flex-col gap-4"
+            }
+          >
+            {calendarHabitsSlot}
+          </section>
+
+          {/* SECTION B: Daily Execution (Board 1 & 2 side-by-side) */}
+          <section
+            className={
+              dashboardFocus === "all"
+                ? "col-span-12 xl:col-span-8 lg:col-span-7 flex flex-col gap-4"
+                : "col-span-12 lg:col-span-7 flex flex-col gap-4"
+            }
+          >
+            {dailyExecutionSlot}
+          </section>
+        </div>
       )}
 
-      {/* SECTION B: Daily Execution (Board 1 & 2) */}
-      {(dashboardFocus === "all" || dashboardFocus === "day") && (
-        <section
-          className={
-            dashboardFocus === "all"
-              ? "col-span-12 lg:col-span-3 flex flex-col gap-4"
-              : "col-span-12 lg:col-span-7 flex flex-col gap-4"
-          }
-        >
-          {dailyExecutionSlot}
-        </section>
-      )}
-
-      {/* SECTION C: 3-Column Vertical Kanban Board */}
+      {/* BOTTOM ROW: 3-Column Vertical Kanban Focus (Full-Width) */}
       {(dashboardFocus === "all" || dashboardFocus === "kanban") && (
-        <section
-          className={
-            dashboardFocus === "all"
-              ? "col-span-12 lg:col-span-6 bg-white border-2 border-black rounded-3xl p-6 shadow-[4px_4px_0_0_#000] flex flex-col"
-              : "col-span-12 bg-white border-2 border-black rounded-3xl p-6 shadow-[4px_4px_0_0_#000] flex flex-col min-h-[680px]"
-          }
-        >
+        <section className="w-full flex flex-col">
           {kanbanSlot}
         </section>
       )}

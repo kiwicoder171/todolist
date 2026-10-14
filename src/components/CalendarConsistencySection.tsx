@@ -225,52 +225,7 @@ export function CalendarConsistencySection() {
         </div>
       </div>
 
-      {/* 2. Weekly Segmented Habit Card (from 4810889.jpg) */}
-      <div className="bg-white border-2 border-black rounded-3xl p-5 shadow-[4px_4px_0_0_#000]">
-        <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-dashed border-zinc-200">
-          <h3 className="font-heading font-black text-xs uppercase tracking-wider text-black">
-            This Week Habits
-          </h3>
-          <span className="text-[11px] font-heading font-extrabold text-zinc-500">
-            {routines.slice(0, 4).filter((r) => isCompleted(r.id, selectedDate)).length}
-            /{routines.slice(0, 4).length} ACTIVE
-          </span>
-        </div>
-
-        <div className="space-y-3">
-          {routines.slice(0, 4).map((r) => {
-            const completedDays = currentWeek.map((date) =>
-              isCompleted(r.id, date)
-            );
-            const count = completedDays.filter(Boolean).length;
-
-            return (
-              <div key={r.id} className="space-y-1">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-heading font-bold text-zinc-800 text-[11px] truncate max-w-[150px]">
-                    {r.title.split("(")[0]}
-                  </span>
-                  <span className="text-[10px] font-heading font-extrabold text-zinc-500">
-                    {count}/7
-                  </span>
-                </div>
-
-                {/* 7-Segment Progress Bar */}
-                <div data-testid="segment-bar" className="segment-bar">
-                  {completedDays.map((isDone, idx) => (
-                    <div
-                      key={idx}
-                      className={`segment-cell ${isDone ? "filled" : ""}`}
-                    />
-                  ))}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* 3. Consistency Dials Card (Direct from 4810889.jpg) */}
+      {/* 2. Consistency Dials Card (Direct from 4810889.jpg) */}
       <div className="bg-white border-2 border-black rounded-3xl p-5 shadow-[4px_4px_0_0_#000] flex flex-col justify-between">
         <div>
           <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-dashed border-zinc-200">

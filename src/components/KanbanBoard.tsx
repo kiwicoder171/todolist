@@ -21,6 +21,7 @@ export function KanbanBoard() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalInitialStage, setModalInitialStage] = useState<KanbanStage>("todo");
+  const [mobileTab, setMobileTab] = useState<KanbanStage>("todo");
   const [draggedCardId, setDraggedCardId] = useState<string | null>(null);
   const [dragOverStage, setDragOverStage] = useState<KanbanStage | null>(null);
 
@@ -30,6 +31,7 @@ export function KanbanBoard() {
 
   const openAddCard = (stage: KanbanStage = "todo") => {
     setModalInitialStage(stage);
+    setMobileTab(stage);
     setIsModalOpen(true);
   };
 
@@ -74,29 +76,30 @@ export function KanbanBoard() {
         onDragStart={(e) => handleDragStart(e, card.id)}
         className="p-3.5 rounded-2xl border-2 border-black bg-white text-xs squircle-card flex flex-col gap-2.5 shadow-[2px_2px_0_0_#000] cursor-grab active:cursor-grabbing hover:border-black transition group"
       >
-        <div className="flex items-start justify-between gap-1.5">
-          <div className="flex flex-col gap-1 min-w-0">
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex flex-col gap-1 min-w-0 flex-1">
             <span
-              className={`font-heading font-bold text-xs leading-snug text-black ${
+              className={`font-heading font-bold text-xs leading-snug text-black break-words ${
                 currentStage === "done" ? "line-through text-zinc-500" : ""
               }`}
             >
               {card.title}
             </span>
             {card.description && (
-              <p className="text-[11px] text-zinc-500 line-clamp-2">
+              <p className="text-[11px] text-zinc-500 line-clamp-2 break-words">
                 {card.description}
               </p>
             )}
           </div>
 
           <div className="flex items-center gap-1.5 shrink-0">
-            <span className="text-[9px] font-heading font-extrabold uppercase px-2 py-0.5 rounded border border-black bg-[#f4f4f5] text-black">
+            <span className="text-[9px] font-heading font-extrabold uppercase px-1.5 py-0.5 rounded border border-black bg-[#f4f4f5] text-black">
               {card.category}
             </span>
             <button
+              type="button"
               onClick={() => deleteCard(card.id)}
-              className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 text-zinc-400 hover:text-black p-0.5 transition rounded focus:outline-none focus:ring-1 focus:ring-black"
+              className="opacity-70 md:opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 text-zinc-400 hover:text-black p-0.5 transition rounded focus:outline-none focus:ring-1 focus:ring-black"
               title="Delete Card"
               aria-label="Delete Card"
             >
@@ -105,9 +108,9 @@ export function KanbanBoard() {
           </div>
         </div>
 
-        <div className="flex items-center justify-between pt-2 border-t border-zinc-100 gap-1 flex-wrap">
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-[9px] font-heading font-bold text-zinc-600">
+        <div className="flex items-center justify-between pt-2 border-t border-zinc-100 gap-1.5">
+          <div className="flex items-center gap-1.5 min-w-0">
+            <span className="text-[10px] font-heading font-bold text-zinc-600 truncate max-w-[70px] sm:max-w-none">
               {card.assignee === "mine"
                 ? "Me"
                 : card.assignee === "partner"
@@ -117,29 +120,32 @@ export function KanbanBoard() {
 
             {card.doToday ? (
               <button
+                type="button"
                 onClick={() => toggleCardDoToday(card.id)}
                 title="Remove from Today's Daily Tasks"
-                className="text-[9px] font-heading font-extrabold uppercase bg-black text-white px-2 py-0.5 rounded-full flex items-center gap-1 hover:bg-zinc-800 transition"
+                className="text-[9px] font-heading font-extrabold uppercase bg-black text-white px-2 py-0.5 rounded-full flex items-center gap-1 hover:bg-zinc-800 transition shrink-0 whitespace-nowrap"
               >
                 <span>⚡ Do Today</span>
               </button>
             ) : (
               <button
+                type="button"
                 onClick={() => toggleCardDoToday(card.id)}
                 title="Surface in Today's Daily Tasks"
-                className="text-[9px] font-heading font-bold uppercase text-zinc-600 hover:text-black border border-zinc-300 hover:border-black px-2 py-0.5 rounded-full transition bg-white"
+                className="text-[9px] font-heading font-bold uppercase text-zinc-600 hover:text-black border border-zinc-300 hover:border-black px-2 py-0.5 rounded-full transition bg-white shrink-0 whitespace-nowrap"
               >
                 Plan Today
               </button>
             )}
           </div>
 
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 shrink-0">
             {currentStage === "todo" && (
               <button
+                type="button"
                 onClick={() => moveCardStage(card.id, "inprogress")}
                 title="Move to In Progress"
-                className="text-[10px] font-heading font-bold uppercase px-2 py-0.5 border border-black rounded hover:bg-black hover:text-white transition flex items-center gap-1"
+                className="text-[10px] font-heading font-bold uppercase px-2 py-0.5 border border-black rounded hover:bg-black hover:text-white transition flex items-center gap-1 shrink-0 whitespace-nowrap"
               >
                 <span>Start</span>
                 <ArrowRight className="w-3 h-3" />
@@ -149,16 +155,18 @@ export function KanbanBoard() {
             {currentStage === "inprogress" && (
               <>
                 <button
+                  type="button"
                   onClick={() => moveCardStage(card.id, "todo")}
                   title="Move Back to To Do"
-                  className="text-[10px] font-heading font-bold border border-zinc-300 rounded px-1.5 py-0.5 hover:border-black transition"
+                  className="text-[10px] font-heading font-bold border border-zinc-300 rounded px-1.5 py-0.5 hover:border-black transition shrink-0"
                 >
                   <ArrowLeft className="w-3 h-3" />
                 </button>
                 <button
+                  type="button"
                   onClick={() => moveCardStage(card.id, "done")}
                   title="Mark Done"
-                  className="text-[10px] font-heading font-bold uppercase px-2 py-0.5 border border-black bg-black text-white rounded hover:bg-zinc-800 transition flex items-center gap-1"
+                  className="text-[10px] font-heading font-bold uppercase px-2 py-0.5 border border-black bg-black text-white rounded hover:bg-zinc-800 transition flex items-center gap-1 shrink-0 whitespace-nowrap"
                 >
                   <span>Done</span>
                   <Check className="w-3 h-3 stroke-[3]" />
@@ -168,9 +176,10 @@ export function KanbanBoard() {
 
             {currentStage === "done" && (
               <button
+                type="button"
                 onClick={() => moveCardStage(card.id, "inprogress")}
                 title="Reopen Card"
-                className="text-[10px] font-heading font-bold uppercase px-2 py-0.5 border border-zinc-300 rounded hover:border-black transition flex items-center gap-1"
+                className="text-[10px] font-heading font-bold uppercase px-2 py-0.5 border border-zinc-300 rounded hover:border-black transition flex items-center gap-1 shrink-0 whitespace-nowrap"
               >
                 <RotateCcw className="w-3 h-3" />
                 <span>Reopen</span>
@@ -183,15 +192,15 @@ export function KanbanBoard() {
   };
 
   return (
-    <div className="bg-white border-2 border-black rounded-3xl p-6 shadow-[4px_4px_0_0_#000] flex flex-col flex-1">
+    <div className="bg-white border-2 border-black rounded-3xl p-4 sm:p-5 md:p-6 shadow-[4px_4px_0_0_#000] flex flex-col flex-1 w-full">
       {/* Top Header & Category Filter Bar */}
-      <div className="flex flex-wrap items-center justify-between pb-4 border-b-2 border-black mb-4 gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b-2 border-black mb-4 gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-7 h-7 rounded-lg bg-black text-white flex items-center justify-center font-heading font-bold text-xs">
+          <div className="w-7 h-7 rounded-lg bg-black text-white flex items-center justify-center font-heading font-bold text-xs shrink-0">
             3
           </div>
           <div>
-            <h2 className="font-heading font-black text-base uppercase tracking-wide text-black flex items-center gap-2">
+            <h2 className="font-heading font-black text-sm md:text-base uppercase tracking-wide text-black flex items-center gap-2">
               Kanban Board
               <span className="text-[10px] font-heading font-bold uppercase px-2 py-0.5 rounded-full border border-black bg-zinc-100 text-black">
                 3 Vertical Columns
@@ -204,12 +213,12 @@ export function KanbanBoard() {
         </div>
 
         {/* Category Filter Pills & Add Card */}
-        <div className="flex items-center gap-1.5 overflow-x-auto text-[11px] pb-1">
+        <div className="flex items-center gap-1.5 overflow-x-auto text-[11px] pb-1 no-scrollbar">
           {categories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => setSelectedCategory(cat.id)}
-              className={`px-3 py-1 rounded-full font-heading font-bold transition whitespace-nowrap ${
+              className={`px-3 py-1 rounded-full font-heading font-bold transition whitespace-nowrap text-xs ${
                 selectedCategory === cat.id
                   ? "bg-black text-white"
                   : "border border-zinc-300 text-zinc-700 hover:border-black"
@@ -222,7 +231,7 @@ export function KanbanBoard() {
 
           <button
             onClick={() => openAddCard("todo")}
-            className="px-3 py-1 rounded-full font-heading font-bold uppercase bg-black text-white hover:bg-zinc-800 transition whitespace-nowrap flex items-center gap-1"
+            className="px-3 py-1 rounded-full font-heading font-bold uppercase bg-black text-white hover:bg-zinc-800 transition whitespace-nowrap flex items-center gap-1 shrink-0 text-xs"
           >
             <Plus className="w-3 h-3" />
             <span>Card</span>
@@ -230,7 +239,71 @@ export function KanbanBoard() {
         </div>
       </div>
 
-      {/* 3 VERTICAL COLUMNS: Side-by-side grid */}
+      {/* Mobile-Only Column Switcher Tabs */}
+      <div className="flex md:hidden items-center justify-between gap-1 p-1 bg-zinc-100 border-2 border-black rounded-2xl mb-4 text-xs font-heading font-bold">
+        <button
+          type="button"
+          onClick={() => setMobileTab("todo")}
+          className={`flex-1 py-1.5 px-2 rounded-xl text-center transition flex items-center justify-center gap-1.5 ${
+            mobileTab === "todo"
+              ? "bg-black text-white shadow-xs"
+              : "text-zinc-600 hover:text-black"
+          }`}
+        >
+          <span>To Do</span>
+          <span
+            className={`text-[10px] px-1.5 py-0.2 rounded-full font-black ${
+              mobileTab === "todo"
+                ? "bg-white text-black"
+                : "bg-zinc-200 text-zinc-700"
+            }`}
+          >
+            {todoCards.length}
+          </span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setMobileTab("inprogress")}
+          className={`flex-1 py-1.5 px-2 rounded-xl text-center transition flex items-center justify-center gap-1.5 ${
+            mobileTab === "inprogress"
+              ? "bg-black text-white shadow-xs"
+              : "text-zinc-600 hover:text-black"
+          }`}
+        >
+          <span>In Progress</span>
+          <span
+            className={`text-[10px] px-1.5 py-0.2 rounded-full font-black ${
+              mobileTab === "inprogress"
+                ? "bg-white text-black"
+                : "bg-zinc-200 text-zinc-700"
+            }`}
+          >
+            {inProgressCards.length}
+          </span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setMobileTab("done")}
+          className={`flex-1 py-1.5 px-2 rounded-xl text-center transition flex items-center justify-center gap-1.5 ${
+            mobileTab === "done"
+              ? "bg-black text-white shadow-xs"
+              : "text-zinc-600 hover:text-black"
+          }`}
+        >
+          <span>Done</span>
+          <span
+            className={`text-[10px] px-1.5 py-0.2 rounded-full font-black ${
+              mobileTab === "done"
+                ? "bg-white text-black"
+                : "bg-zinc-200 text-zinc-700"
+            }`}
+          >
+            {doneCards.length}
+          </span>
+        </button>
+      </div>
+
+      {/* 3 VERTICAL COLUMNS: Side-by-side grid on desktop, tabbed on mobile */}
       <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4 overflow-y-auto pt-1 min-h-[460px]">
         {/* COLUMN 1: TO DO */}
         <div
@@ -238,8 +311,8 @@ export function KanbanBoard() {
           onDragLeave={() => handleDragLeave("todo")}
           onDrop={(e) => handleDrop(e, "todo")}
           className={`border-2 border-black rounded-2xl p-3.5 bg-zinc-50/70 shadow-sm flex flex-col justify-between transition-colors ${
-            dragOverStage === "todo" ? "bg-zinc-200 border-dashed" : ""
-          }`}
+            mobileTab === "todo" ? "flex" : "hidden md:flex"
+          } ${dragOverStage === "todo" ? "bg-zinc-200 border-dashed" : ""}`}
         >
           <div>
             <div className="flex items-center justify-between pb-3 border-b-2 border-dashed border-zinc-300 mb-3">
@@ -266,6 +339,7 @@ export function KanbanBoard() {
           </div>
 
           <button
+            type="button"
             onClick={() => openAddCard("todo")}
             className="mt-3 w-full py-2 border-2 border-dashed border-zinc-400 hover:border-black rounded-xl text-zinc-600 hover:text-black font-heading font-bold text-xs uppercase transition flex items-center justify-center gap-1.5 bg-white"
           >
@@ -280,8 +354,8 @@ export function KanbanBoard() {
           onDragLeave={() => handleDragLeave("inprogress")}
           onDrop={(e) => handleDrop(e, "inprogress")}
           className={`border-2 border-black rounded-2xl p-3.5 bg-white shadow-[3px_3px_0_0_#000] flex flex-col justify-between transition-colors ${
-            dragOverStage === "inprogress" ? "bg-zinc-100 border-dashed" : ""
-          }`}
+            mobileTab === "inprogress" ? "flex" : "hidden md:flex"
+          } ${dragOverStage === "inprogress" ? "bg-zinc-100 border-dashed" : ""}`}
         >
           <div>
             <div className="flex items-center justify-between pb-3 border-b-2 border-black mb-3">
@@ -308,6 +382,7 @@ export function KanbanBoard() {
           </div>
 
           <button
+            type="button"
             onClick={() => openAddCard("inprogress")}
             className="mt-3 w-full py-2 border-2 border-dashed border-zinc-400 hover:border-black rounded-xl text-zinc-600 hover:text-black font-heading font-bold text-xs uppercase transition flex items-center justify-center gap-1.5 bg-zinc-50"
           >
@@ -322,8 +397,8 @@ export function KanbanBoard() {
           onDragLeave={() => handleDragLeave("done")}
           onDrop={(e) => handleDrop(e, "done")}
           className={`border-2 border-dashed border-zinc-300 rounded-2xl p-3.5 bg-[#fcfcfc] flex flex-col justify-between transition-colors ${
-            dragOverStage === "done" ? "bg-zinc-200" : ""
-          }`}
+            mobileTab === "done" ? "flex" : "hidden md:flex"
+          } ${dragOverStage === "done" ? "bg-zinc-200" : ""}`}
         >
           <div>
             <div className="flex items-center justify-between pb-3 border-b-2 border-dashed border-zinc-300 mb-3">
@@ -352,6 +427,7 @@ export function KanbanBoard() {
           </div>
 
           <button
+            type="button"
             onClick={clearDoneCards}
             className="mt-3 w-full py-2 border border-zinc-300 hover:border-black rounded-xl text-zinc-400 hover:text-black font-heading font-bold text-xs uppercase transition text-center bg-white"
           >

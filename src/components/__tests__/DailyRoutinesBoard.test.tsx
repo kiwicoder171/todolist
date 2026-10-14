@@ -20,15 +20,15 @@ describe("DailyRoutinesBoard (Seam: Board 1 Apple Notes Checklist)", () => {
 
     expect(screen.getByText("Daily Routines")).toBeInTheDocument();
     expect(screen.getByText(/Recurring/i)).toBeInTheDocument();
-    expect(screen.getByText(/Drink water/i)).toBeInTheDocument();
+    expect(screen.getByText(/15-min daily sync/i)).toBeInTheDocument();
   });
 
   it("toggles routine completion and updates strikethrough styling", () => {
     renderBoard();
 
-    const waterRoutine = screen.getByText(/Drink water/i);
+    const syncRoutine = screen.getByText(/15-min daily sync/i);
     // Find checkbox button for this item
-    const checkbox = waterRoutine.closest("div")?.querySelector("button");
+    const checkbox = syncRoutine.closest("div")?.querySelector("button");
     expect(checkbox).toBeDefined();
 
     if (checkbox) {

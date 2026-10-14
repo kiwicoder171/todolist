@@ -52,7 +52,7 @@ export function MobileShell({
         </div>
 
         {/* Dynamic Body */}
-        <div className="flex-1 overflow-y-auto px-5 py-2 space-y-4">
+        <div className="flex-1 overflow-y-auto px-4 sm:px-5 py-2 pb-28 space-y-4">
           {children}
         </div>
 

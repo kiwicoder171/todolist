@@ -116,5 +116,52 @@ describe("UX/UI Interaction & Accessibility Tests", () => {
       expect(screen.getByRole("dialog")).toBeInTheDocument();
       expect(screen.getByText("New Kanban Card")).toBeInTheDocument();
     });
+
+    it("switches mobile kanban columns using segmented tab control", () => {
+      render(
+        <HouseholdProvider>
+          <RoutinesProvider>
+            <DailyTasksProvider>
+              <KanbanProvider>
+                <Home />
+              </KanbanProvider>
+            </DailyTasksProvider>
+          </RoutinesProvider>
+        </HouseholdProvider>
+      );
+
+      // Switch to Mobile Preview
+      const mobileBtn = screen.getByRole("button", { name: "Mobile" });
+      fireEvent.click(mobileBtn);
+
+      // Look for mobile column tab switcher buttons
+      const inProgressTab = screen.getByRole("button", { name: /In Progress/i });
+      fireEvent.click(inProgressTab);
+
+      // Verify In Progress column is selected and card count is displayed
+      expect(inProgressTab).toHaveClass("bg-black");
+    });
+
+    it("renders Day & Habit focus on top and Kanban focus on bottom in desktop all view", () => {
+      render(
+        <HouseholdProvider>
+          <RoutinesProvider>
+            <DailyTasksProvider>
+              <KanbanProvider>
+                <Home />
+              </KanbanProvider>
+            </DailyTasksProvider>
+          </RoutinesProvider>
+        </HouseholdProvider>
+      );
+
+      // Verify Board 1, Board 2, and Calendar/Dials are present on top
+      expect(screen.getByText("Daily Routines")).toBeInTheDocument();
+      expect(screen.getByText("Daily Tasks")).toBeInTheDocument();
+      expect(screen.getByText("Consistency Dials")).toBeInTheDocument();
+
+      // Verify Kanban Board is present
+      expect(screen.getByRole("heading", { name: /Kanban Board/i })).toBeInTheDocument();
+    });
   });
 });

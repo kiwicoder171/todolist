@@ -61,7 +61,7 @@ export default function Home() {
             dashboardFocus={dashboardFocus}
             calendarHabitsSlot={<CalendarConsistencySection />}
             dailyExecutionSlot={
-              <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 h-full">
                 {/* Board 1: Daily Routines (Apple Notes Style) */}
                 <DailyRoutinesBoard />
 
