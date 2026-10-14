@@ -165,5 +165,45 @@ describe("Gamification Engine (Seam: Ticket 06 Scoring, Streaks & Penalty Ladder
       const result = calculatePartnerStreakAndScore(1, dayRecords);
       expect(result.points).toBe(-2);
     });
+
+    it("correctly sorts out-of-order date records before computing streak and penalties", () => {
+      const unorderedRecords = [
+        { date: "2026-10-03", isPerfect: true, isFreeze: false },
+        { date: "2026-10-01", isPerfect: true, isFreeze: false },
+        { date: "2026-10-02", isPerfect: true, isFreeze: false },
+      ];
+
+      const result = calculatePartnerStreakAndScore(0, unorderedRecords);
+      expect(result.streak).toBe(3);
+      expect(result.points).toBe(3);
+    });
+
+    it("treats isExempt days as preserving streak and waiving penalties (like rest days)", () => {
+      const recordsWithExempt = [
+        { date: "2026-10-10", isPerfect: true, isFreeze: false },
+        { date: "2026-10-11", isPerfect: false, isFreeze: false, isExempt: true }, // no routines scheduled
+        { date: "2026-10-12", isPerfect: true, isFreeze: false },
+      ];
+
+      const result = calculatePartnerStreakAndScore(2, recordsWithExempt);
+      expect(result.streak).toBe(2);
+      expect(result.points).toBe(4);
+    });
+  });
+
+  describe("evaluatePartnerDay with zero scheduled routines", () => {
+    it("flags day as isExempt when no routines are scheduled for partner", () => {
+      const evaluation = evaluatePartnerDay(
+        "alex",
+        new Date(2026, 9, 14),
+        [], // no routines
+        () => false,
+        () => false
+      );
+
+      expect(evaluation.totalScheduled).toBe(0);
+      expect(evaluation.isExempt).toBe(true);
+      expect(evaluation.isPerfectDay).toBe(false);
+    });
   });
 });

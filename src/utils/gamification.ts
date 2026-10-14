@@ -7,12 +7,14 @@ export interface DayEvaluation {
   totalScheduled: number;
   completedCount: number;
   isPerfectDay: boolean;
+  isExempt?: boolean;
 }
 
 export interface DayRecord {
   date: string;
   isPerfect: boolean;
   isFreeze: boolean;
+  isExempt?: boolean;
 }
 
 export interface StreakAndScoreResult {
@@ -102,6 +104,7 @@ export function evaluatePartnerDay(
     isRoutineCompleted(r.id, date)
   ).length;
 
+  const isExempt = scheduled.length === 0;
   const isPerfectDay =
     scheduled.length > 0 && completedCount === scheduled.length;
 
@@ -111,6 +114,7 @@ export function evaluatePartnerDay(
     totalScheduled: scheduled.length,
     completedCount,
     isPerfectDay,
+    isExempt,
   };
 }
 
@@ -126,9 +130,12 @@ export function calculatePartnerStreakAndScore(
   let consecutiveMisses = 0;
   let previousPenaltyApplied = 0;
 
-  for (const record of records) {
-    if (record.isFreeze) {
-      // Freeze day: preserves streak, waives penalties
+  // Defensive: ensure day records are processed chronologically
+  const sortedRecords = [...records].sort((a, b) => a.date.localeCompare(b.date));
+
+  for (const record of sortedRecords) {
+    if (record.isFreeze || record.isExempt) {
+      // Freeze or exempt day: preserves streak, waives penalties
       continue;
     }
 

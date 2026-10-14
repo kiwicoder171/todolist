@@ -11,6 +11,7 @@ export interface DailyTask {
   targetDate: string; // YYYY-MM-DD
   originDate: string; // YYYY-MM-DD (Date originally created)
   completed: boolean;
+  completedDate?: string; // YYYY-MM-DD (Date completed)
   notes: string;
   isKanbanSynced?: boolean;
   kanbanId?: number | string;
@@ -30,11 +31,13 @@ export function calculateRolloverTasks(
   }
 
   if (viewKey === todayKey) {
-    // Today: includes tasks targeted for today PLUS unfinished tasks from past dates
+    // Today: includes tasks targeted for today, unfinished tasks from past dates,
+    // and rolled-over tasks that were completed today
     return tasks.filter(
       (t) =>
         t.targetDate === todayKey ||
-        (t.targetDate < todayKey && !t.completed)
+        (t.targetDate < todayKey && !t.completed) ||
+        (t.completed && t.completedDate === todayKey)
     );
   }
 
@@ -52,7 +55,7 @@ export interface DailyTasksContextType {
     isKanbanSynced?: boolean,
     kanbanId?: string
   ) => void;
-  toggleDailyTask: (id: string) => void;
+  toggleDailyTask: (id: string, completedDateKey?: string) => void;
   updateDailyTask: (id: string, updates: Partial<DailyTask>) => void;
   deleteDailyTask: (id: string) => void;
   setTaskCompletedByKanbanId: (kanbanId: string, completed: boolean) => void;
@@ -133,7 +136,7 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
   ) => {
     const dateKey = formatDateKey(targetDate);
     const newTask: DailyTask = {
-      id: `task-${Date.now()}`,
+      id: `task-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
       title,
       assignee,
       targetDate: dateKey,
@@ -146,13 +149,23 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
     setTasks((prev) => [...prev, newTask]);
   };
 
-  const toggleDailyTask = (id: string) => {
+  const toggleDailyTask = (id: string, completedDateKey?: string) => {
     const target = tasks.find((t) => t.id === id);
     if (!target) return;
 
     const nextCompleted = !target.completed;
+    const todayKey = completedDateKey || formatDateKey(new Date(2026, 9, 14));
+
     setTasks((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, completed: nextCompleted } : t))
+      prev.map((t) =>
+        t.id === id
+          ? {
+              ...t,
+              completed: nextCompleted,
+              completedDate: nextCompleted ? todayKey : undefined,
+            }
+          : t
+      )
     );
 
     if (target.isKanbanSynced && target.kanbanId) {

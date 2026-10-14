@@ -36,7 +36,7 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
     if (!newTitle.trim()) return;
 
     const newReward: RewardItem = {
-      id: `reward-${Date.now()}`,
+      id: `reward-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
       title: newTitle.trim(),
       desc: newDesc.trim() || "Custom couple reward",
       cost: Number(newCost) || 5,

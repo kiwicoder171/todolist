@@ -90,6 +90,16 @@ create table if not exists public.frozen_dates (
   unique (household_id, date_key)
 );
 
+-- Indexes for Foreign Keys & Common Query Paths
+create index if not exists idx_partners_household on public.partners(household_id);
+create index if not exists idx_routines_household on public.routines(household_id);
+create index if not exists idx_routine_completions_routine on public.routine_completions(routine_id);
+create index if not exists idx_daily_tasks_household_date on public.daily_tasks(household_id, target_date);
+create index if not exists idx_daily_tasks_kanban on public.daily_tasks(kanban_id);
+create index if not exists idx_kanban_cards_household_stage on public.kanban_cards(household_id, stage);
+create index if not exists idx_rewards_household on public.rewards(household_id);
+create index if not exists idx_frozen_dates_household on public.frozen_dates(household_id);
+
 -- Enable Row Level Security (RLS) on all tables
 alter table public.households enable row level security;
 alter table public.partners enable row level security;

@@ -163,5 +163,24 @@ describe("DailyTasksContext & Rollover Engine (Seam: Daily Tasks Domain)", () =>
       const found = result.current.tasks.find((t) => t.id === taskId);
       expect(found).toBeUndefined();
     });
+
+    it("keeps rolled-over tasks visible on today's view when checked off today", () => {
+      const { result } = renderHook(() => useDailyTasks(), { wrapper });
+
+      // task-101 originated on Oct 13 (yesterday) and is rolled over to Oct 14
+      const rolledOverTask = result.current.tasks.find((t) => t.id === "task-101")!;
+      expect(rolledOverTask.completed).toBe(false);
+
+      act(() => {
+        result.current.toggleDailyTask("task-101");
+      });
+
+      // Recalculate rollover tasks for Oct 14 (today)
+      const todayTasks = calculateRolloverTasks(result.current.tasks, oct14, oct14);
+      const completedRolledTask = todayTasks.find((t) => t.id === "task-101");
+
+      expect(completedRolledTask).toBeDefined();
+      expect(completedRolledTask?.completed).toBe(true);
+    });
   });
 });

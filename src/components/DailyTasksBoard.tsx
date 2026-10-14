@@ -35,7 +35,7 @@ export function DailyTasksBoard() {
   );
 
   const handleToggle = (id: string, wasCompleted: boolean) => {
-    toggleDailyTask(id);
+    toggleDailyTask(id, formatDateKey(selectedDate));
     if (!wasCompleted) {
       setCelebrationMsg("🎉 Task Done!");
       setTimeout(() => setCelebrationMsg(null), 2000);

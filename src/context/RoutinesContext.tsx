@@ -114,7 +114,7 @@ export function RoutinesProvider({ children }: { children: ReactNode }) {
     frequency: RoutineFrequency = "daily"
   ) => {
     const newRoutine: Routine = {
-      id: `routine-${Date.now()}`,
+      id: `routine-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
       title,
       assignee,
       frequency,
@@ -159,7 +159,16 @@ export function RoutinesProvider({ children }: { children: ReactNode }) {
   };
 
   const reorderRoutines = (startIndex: number, endIndex: number) => {
+    if (startIndex === endIndex) return;
     setRoutines((prev) => {
+      if (
+        startIndex < 0 ||
+        startIndex >= prev.length ||
+        endIndex < 0 ||
+        endIndex >= prev.length
+      ) {
+        return prev;
+      }
       const result = Array.from(prev);
       const [removed] = result.splice(startIndex, 1);
       result.splice(endIndex, 0, removed);

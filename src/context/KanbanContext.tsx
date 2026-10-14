@@ -142,7 +142,7 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
     description?: string
   ) => {
     const newCard: KanbanCard = {
-      id: `card-${Date.now()}`,
+      id: `card-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
       title,
       category,
       stage,
