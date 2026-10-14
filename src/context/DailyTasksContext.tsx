@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, useCallback, useRef, ReactNode } from "react";
 import { Assignee } from "./HouseholdContext";
 import { formatDateKey } from "./RoutinesContext";
 
@@ -48,11 +48,18 @@ export interface DailyTasksContextType {
     title: string,
     assignee: Assignee,
     targetDate: Date,
-    notes?: string
+    notes?: string,
+    isKanbanSynced?: boolean,
+    kanbanId?: string
   ) => void;
   toggleDailyTask: (id: string) => void;
   updateDailyTask: (id: string, updates: Partial<DailyTask>) => void;
   deleteDailyTask: (id: string) => void;
+  setTaskCompletedByKanbanId: (kanbanId: string, completed: boolean) => void;
+  removeTaskByKanbanId: (kanbanId: string) => void;
+  registerKanbanSyncHook: (
+    callback: (kanbanId: string, completed: boolean) => void
+  ) => () => void;
 }
 
 const DailyTasksContext = createContext<DailyTasksContextType | undefined>(
@@ -86,7 +93,7 @@ const SEED_TASKS: DailyTask[] = [
     originDate: "2026-10-14",
     completed: false,
     isKanbanSynced: true,
-    kanbanId: 202,
+    kanbanId: "card-202",
     notes: "Direct flights preferred",
   },
   {
@@ -102,12 +109,27 @@ const SEED_TASKS: DailyTask[] = [
 
 export function DailyTasksProvider({ children }: { children: ReactNode }) {
   const [tasks, setTasks] = useState<DailyTask[]>(SEED_TASKS);
+  const syncHooksRef = useRef<
+    ((kanbanId: string, completed: boolean) => void)[]
+  >([]);
+
+  const registerKanbanSyncHook = useCallback(
+    (callback: (kanbanId: string, completed: boolean) => void) => {
+      syncHooksRef.current.push(callback);
+      return () => {
+        syncHooksRef.current = syncHooksRef.current.filter((cb) => cb !== callback);
+      };
+    },
+    []
+  );
 
   const addDailyTask = (
     title: string,
     assignee: Assignee,
     targetDate: Date,
-    notes: string = ""
+    notes: string = "",
+    isKanbanSynced?: boolean,
+    kanbanId?: string
   ) => {
     const dateKey = formatDateKey(targetDate);
     const newTask: DailyTask = {
@@ -118,14 +140,26 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
       originDate: dateKey,
       completed: false,
       notes,
+      isKanbanSynced,
+      kanbanId,
     };
     setTasks((prev) => [...prev, newTask]);
   };
 
   const toggleDailyTask = (id: string) => {
+    const target = tasks.find((t) => t.id === id);
+    if (!target) return;
+
+    const nextCompleted = !target.completed;
     setTasks((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t))
+      prev.map((t) => (t.id === id ? { ...t, completed: nextCompleted } : t))
     );
+
+    if (target.isKanbanSynced && target.kanbanId) {
+      syncHooksRef.current.forEach((cb) =>
+        cb(target.kanbanId as string, nextCompleted)
+      );
+    }
   };
 
   const updateDailyTask = (id: string, updates: Partial<DailyTask>) => {
@@ -138,6 +172,18 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
     setTasks((prev) => prev.filter((t) => t.id !== id));
   };
 
+  const setTaskCompletedByKanbanId = (kanbanId: string, completed: boolean) => {
+    setTasks((prev) =>
+      prev.map((t) =>
+        t.kanbanId === kanbanId ? { ...t, completed } : t
+      )
+    );
+  };
+
+  const removeTaskByKanbanId = (kanbanId: string) => {
+    setTasks((prev) => prev.filter((t) => t.kanbanId !== kanbanId));
+  };
+
   return (
     <DailyTasksContext.Provider
       value={{
@@ -146,6 +192,9 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
         toggleDailyTask,
         updateDailyTask,
         deleteDailyTask,
+        setTaskCompletedByKanbanId,
+        removeTaskByKanbanId,
+        registerKanbanSyncHook,
       }}
     >
       {children}

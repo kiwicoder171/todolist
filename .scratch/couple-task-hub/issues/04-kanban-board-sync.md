@@ -5,10 +5,10 @@ Persistent Kanban board with workflow stages (Backlog, To Do, In Progress, Done)
 
 **Blocked by:** 02: Board 1 — Apple Notes Daily Routines, 03: Board 2 — Daily Tasks
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] Drag-and-drop Kanban columns (Stages) and cards
-- [ ] Category creation and filtering bar (All / Home / Travel / etc.)
-- [ ] "Do Today" flag surfacing card in Board 2 (Daily Tasks)
-- [ ] Two-way synchronization: checking card in Board 2 moves stage to Done
-- [ ] Integration tests verifying two-way sync between Kanban and Daily Tasks
+- [x] Drag-and-drop Kanban columns (Stages) and cards
+- [x] Category creation and filtering bar (All / Home / Travel / etc.)
+- [x] "Do Today" flag surfacing card in Board 2 (Daily Tasks)
+- [x] Two-way synchronization: checking card in Board 2 moves stage to Done
+- [x] Integration tests verifying two-way sync between Kanban and Daily Tasks

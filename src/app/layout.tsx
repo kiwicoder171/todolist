@@ -3,6 +3,7 @@ import "./globals.css";
 import { HouseholdProvider } from "@/context/HouseholdContext";
 import { RoutinesProvider } from "@/context/RoutinesContext";
 import { DailyTasksProvider } from "@/context/DailyTasksContext";
+import { KanbanProvider } from "@/context/KanbanContext";
 
 export const metadata: Metadata = {
   title: "Couple Task Hub",
@@ -28,7 +29,9 @@ export default function RootLayout({
       <body className="antialiased selection:bg-black selection:text-white">
         <HouseholdProvider>
           <RoutinesProvider>
-            <DailyTasksProvider>{children}</DailyTasksProvider>
+            <DailyTasksProvider>
+              <KanbanProvider>{children}</KanbanProvider>
+            </DailyTasksProvider>
           </RoutinesProvider>
         </HouseholdProvider>
       </body>
