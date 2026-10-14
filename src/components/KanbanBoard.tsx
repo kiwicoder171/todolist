@@ -21,6 +21,7 @@ export function KanbanBoard() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalInitialStage, setModalInitialStage] = useState<KanbanStage>("todo");
+  const [mobileTab, setMobileTab] = useState<KanbanStage>("todo");
   const [draggedCardId, setDraggedCardId] = useState<string | null>(null);
   const [dragOverStage, setDragOverStage] = useState<KanbanStage | null>(null);
 
@@ -237,16 +238,80 @@ export function KanbanBoard() {
         </div>
       </div>
 
-      {/* 3 SECTIONS: Continuous single column on mobile, 3-column side-by-side grid on desktop */}
-      <div className="flex-1 flex flex-col md:grid md:grid-cols-3 gap-5 md:gap-4 overflow-y-auto pt-1 min-h-[460px]">
+      {/* Mobile-Only Column Switcher Tabs */}
+      <div className="flex md:hidden items-center justify-between gap-1 p-1 bg-zinc-100 border-2 border-black rounded-2xl mb-4 text-xs font-heading font-bold">
+        <button
+          type="button"
+          onClick={() => setMobileTab("todo")}
+          className={`flex-1 py-1.5 px-2 rounded-xl text-center transition flex items-center justify-center gap-1.5 ${
+            mobileTab === "todo"
+              ? "bg-black text-white shadow-xs"
+              : "text-zinc-600 hover:text-black"
+          }`}
+        >
+          <span>To Do</span>
+          <span
+            className={`text-[10px] px-1.5 py-0.2 rounded-full font-black ${
+              mobileTab === "todo"
+                ? "bg-white text-black"
+                : "bg-zinc-200 text-zinc-700"
+            }`}
+          >
+            {todoCards.length}
+          </span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setMobileTab("inprogress")}
+          className={`flex-1 py-1.5 px-2 rounded-xl text-center transition flex items-center justify-center gap-1.5 ${
+            mobileTab === "inprogress"
+              ? "bg-black text-white shadow-xs"
+              : "text-zinc-600 hover:text-black"
+          }`}
+        >
+          <span>In Progress</span>
+          <span
+            className={`text-[10px] px-1.5 py-0.2 rounded-full font-black ${
+              mobileTab === "inprogress"
+                ? "bg-white text-black"
+                : "bg-zinc-200 text-zinc-700"
+            }`}
+          >
+            {inProgressCards.length}
+          </span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setMobileTab("done")}
+          className={`flex-1 py-1.5 px-2 rounded-xl text-center transition flex items-center justify-center gap-1.5 ${
+            mobileTab === "done"
+              ? "bg-black text-white shadow-xs"
+              : "text-zinc-600 hover:text-black"
+          }`}
+        >
+          <span>Done</span>
+          <span
+            className={`text-[10px] px-1.5 py-0.2 rounded-full font-black ${
+              mobileTab === "done"
+                ? "bg-white text-black"
+                : "bg-zinc-200 text-zinc-700"
+            }`}
+          >
+            {doneCards.length}
+          </span>
+        </button>
+      </div>
+
+      {/* 3 VERTICAL COLUMNS: Side-by-side grid on desktop, tabbed on mobile */}
+      <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4 overflow-y-auto pt-1 min-h-[460px]">
         {/* SECTION 1: TO DO */}
         <div
           onDragOver={(e) => handleDragOver(e, "todo")}
           onDragLeave={() => handleDragLeave("todo")}
           onDrop={(e) => handleDrop(e, "todo")}
           className={`border-2 border-black rounded-2xl p-4 bg-zinc-50/70 shadow-sm flex flex-col justify-between transition-colors ${
-            dragOverStage === "todo" ? "bg-zinc-200 border-dashed" : ""
-          }`}
+            mobileTab === "todo" ? "flex" : "hidden md:flex"
+          } ${dragOverStage === "todo" ? "bg-zinc-200 border-dashed" : ""}`}
         >
           <div>
             <div className="flex items-center justify-between pb-3 border-b-2 border-dashed border-zinc-300 mb-3">
@@ -288,8 +353,8 @@ export function KanbanBoard() {
           onDragLeave={() => handleDragLeave("inprogress")}
           onDrop={(e) => handleDrop(e, "inprogress")}
           className={`border-2 border-black rounded-2xl p-4 bg-white shadow-[3px_3px_0_0_#000] flex flex-col justify-between transition-colors ${
-            dragOverStage === "inprogress" ? "bg-zinc-100 border-dashed" : ""
-          }`}
+            mobileTab === "inprogress" ? "flex" : "hidden md:flex"
+          } ${dragOverStage === "inprogress" ? "bg-zinc-100 border-dashed" : ""}`}
         >
           <div>
             <div className="flex items-center justify-between pb-3 border-b-2 border-black mb-3">
@@ -331,8 +396,8 @@ export function KanbanBoard() {
           onDragLeave={() => handleDragLeave("done")}
           onDrop={(e) => handleDrop(e, "done")}
           className={`border-2 border-dashed border-zinc-300 rounded-2xl p-4 bg-[#fcfcfc] flex flex-col justify-between transition-colors ${
-            dragOverStage === "done" ? "bg-zinc-200" : ""
-          }`}
+            mobileTab === "done" ? "flex" : "hidden md:flex"
+          } ${dragOverStage === "done" ? "bg-zinc-200" : ""}`}
         >
           <div>
             <div className="flex items-center justify-between pb-3 border-b-2 border-dashed border-zinc-300 mb-3">
