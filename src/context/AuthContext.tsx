@@ -8,6 +8,8 @@ import {
   signOut as firebaseSignOut,
   onAuthStateChanged,
   updateProfile,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc, onSnapshot } from "firebase/firestore";
 import { auth, db, isFirebaseConfigured } from "@/lib/firebase";
@@ -28,6 +30,7 @@ export interface AuthContextType {
   isConfigured: boolean;
   register: (username: string, email: string, password: string) => Promise<void>;
   login: (identifier: string, password: string) => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
   updateUserCircle: (circleId: string | null, partnerRole?: "alex" | "sam" | null) => Promise<void>;
 }
@@ -197,6 +200,50 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await signInWithEmailAndPassword(auth, targetEmail, password);
   };
 
+  // Google Sign In (1-click)
+  const signInWithGoogle = async () => {
+    if (!auth || !db) {
+      throw new Error("Firebase Auth is not configured.");
+    }
+    const provider = new GoogleAuthProvider();
+    const cred = await signInWithPopup(auth, provider);
+    const fbUser = cred.user;
+
+    const userRef = doc(db, "users", fbUser.uid);
+    const userSnap = await getDoc(userRef);
+
+    if (!userSnap.exists()) {
+      const generatedUsername = (
+        fbUser.displayName?.replace(/\s+/g, "_").toLowerCase() ||
+        fbUser.email?.split("@")[0] ||
+        `user_${Date.now().toString().slice(-4)}`
+      ).slice(0, 20);
+
+      const usernameRef = doc(db, "usernames", generatedUsername);
+      await setDoc(
+        usernameRef,
+        {
+          username: generatedUsername,
+          email: fbUser.email,
+          uid: fbUser.uid,
+          createdAt: new Date().toISOString(),
+        },
+        { merge: true }
+      );
+
+      const newProfile: UserProfile = {
+        uid: fbUser.uid,
+        email: fbUser.email,
+        username: generatedUsername,
+        circleId: null,
+        partnerRole: null,
+        createdAt: new Date().toISOString(),
+      };
+      await setDoc(userRef, newProfile);
+      setUser(newProfile);
+    }
+  };
+
   // Sign out
   const logout = async () => {
     if (auth) {
@@ -228,6 +275,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isConfigured: configured,
         register,
         login,
+        signInWithGoogle,
         logout,
         updateUserCircle,
       }}
@@ -244,6 +292,7 @@ const defaultAuthContext: AuthContextType = {
   isConfigured: false,
   register: async () => {},
   login: async () => {},
+  signInWithGoogle: async () => {},
   logout: async () => {},
   updateUserCircle: async () => {},
 };
