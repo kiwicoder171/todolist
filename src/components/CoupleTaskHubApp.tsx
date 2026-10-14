@@ -55,7 +55,7 @@ export function CoupleTaskHubApp({ forcedIsMobile }: CoupleTaskHubAppProps = {})
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#fafafa] text-[#18181b]">
+    <div className="min-h-screen flex flex-col bg-[#fafafa] text-[#18181b] overflow-x-hidden max-w-full">
       <Header
         dashboardFocus={dashboardFocus}
         onDashboardFocusChange={setDashboardFocus}

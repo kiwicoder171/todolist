@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useHousehold } from "@/context/HouseholdContext";
-import { Heart, Users, Copy, Check, ArrowRight, Sparkles } from "lucide-react";
+import { Heart, Users, Copy, Check, ArrowRight, Sparkles, X } from "lucide-react";
 import { Logo } from "./Logo";
 
 export function CircleOnboardingModal() {
@@ -33,14 +33,24 @@ export function CircleOnboardingModal() {
     }
   }, []);
 
-  // Show modal if not configured
+  // Show modal on first visit if not configured and not previously dismissed
   useEffect(() => {
-    if (!isConfigured) {
-      setIsOpen(true);
-    } else {
-      setIsOpen(false);
+    if (typeof window !== "undefined") {
+      const dismissed = sessionStorage.getItem("couple_hub_onboarding_dismissed");
+      if (!isConfigured && !dismissed) {
+        setIsOpen(true);
+      } else {
+        setIsOpen(false);
+      }
     }
   }, [isConfigured]);
+
+  const handleClose = () => {
+    setIsOpen(false);
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("couple_hub_onboarding_dismissed", "true");
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -82,20 +92,30 @@ export function CircleOnboardingModal() {
       : "";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="bg-white border-2 border-black rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-[6px_6px_0_0_#000] relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200 overflow-y-auto">
+      <div className="bg-white border-2 border-black rounded-3xl p-5 sm:p-7 w-[calc(100vw-28px)] max-w-sm sm:max-w-md shadow-[4px_4px_0_0_#000] sm:shadow-[6px_6px_0_0_#000] relative my-auto box-border">
+        {/* Close Button */}
+        <button
+          type="button"
+          onClick={handleClose}
+          className="absolute top-4 right-4 w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-black flex items-center justify-center bg-white hover:bg-zinc-100 transition cursor-pointer z-20 shadow-xs"
+          aria-label="Close modal"
+        >
+          <X className="w-3.5 h-3.5 text-black" />
+        </button>
+
         {/* Brand Header */}
-        <div className="flex items-center gap-3 mb-5">
-          <div className="w-11 h-11 rounded-2xl bg-black text-white flex items-center justify-center border-2 border-black shadow-[2px_2px_0_0_#000] p-1.5">
-            <Logo size={28} inverted />
+        <div className="flex items-center gap-3 mb-4 pr-8">
+          <div className="w-10 h-10 rounded-2xl bg-black text-white flex items-center justify-center border-2 border-black shadow-[2px_2px_0_0_#000] p-1.5 shrink-0">
+            <Logo size={24} inverted />
           </div>
-          <div>
-            <h2 className="font-heading font-black text-lg uppercase tracking-wide text-black flex items-center gap-1.5">
+          <div className="min-w-0">
+            <h2 className="font-heading font-black text-base sm:text-lg uppercase tracking-wide text-black flex items-center gap-1.5 truncate">
               <span>Couple Task Hub</span>
-              <Heart className="w-4 h-4 fill-black text-black" />
+              <Heart className="w-3.5 h-3.5 fill-black text-black shrink-0" />
             </h2>
-            <p className="text-xs text-zinc-500 font-medium">
-              A shared, hand-drawn space for you &amp; your partner
+            <p className="text-[11px] sm:text-xs text-zinc-500 font-medium truncate">
+              A shared space for you &amp; your partner
             </p>
           </div>
         </div>
@@ -265,6 +285,16 @@ export function CircleOnboardingModal() {
                 </button>
               </form>
             )}
+
+            <div className="mt-4 text-center">
+              <button
+                type="button"
+                onClick={handleClose}
+                className="text-xs text-zinc-500 hover:text-black font-medium underline underline-offset-2 transition cursor-pointer"
+              >
+                Skip for now &amp; explore demo space
+              </button>
+            </div>
           </div>
         )}
       </div>
