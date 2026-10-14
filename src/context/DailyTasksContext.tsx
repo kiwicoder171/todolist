@@ -152,6 +152,16 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
     return () => unsub();
   }, [circleId]);
 
+  // Reset tasks when user leaves circle
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const handleLeave = () => {
+      setTasks(isTest ? SEED_TASKS : []);
+    };
+    window.addEventListener("couple_hub_circle_left", handleLeave);
+    return () => window.removeEventListener("couple_hub_circle_left", handleLeave);
+  }, [isTest]);
+
   const saveTasks = (updater: (prev: DailyTask[]) => DailyTask[]) => {
     setTasks((prev) => {
       const next = updater(prev);

@@ -147,6 +147,16 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
     return () => unsub();
   }, [circleId]);
 
+  // Reset kanban cards when user leaves circle
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const handleLeave = () => {
+      setCards(isTest ? SEED_KANBAN_CARDS : []);
+    };
+    window.addEventListener("couple_hub_circle_left", handleLeave);
+    return () => window.removeEventListener("couple_hub_circle_left", handleLeave);
+  }, [isTest]);
+
   const saveCards = (updater: (prev: KanbanCard[]) => KanbanCard[]) => {
     setCards((prev) => {
       const next = updater(prev);

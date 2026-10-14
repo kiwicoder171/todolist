@@ -2,24 +2,33 @@
 
 import React, { useState, useEffect } from "react";
 import { useHousehold } from "@/context/HouseholdContext";
+import { useAuth } from "@/context/AuthContext";
 import { Heart, Users, Copy, Check, ArrowRight, Sparkles, X } from "lucide-react";
 import { Logo } from "./Logo";
 
 export function CircleOnboardingModal() {
-  const { isConfigured, createCircle, joinCircle } = useHousehold();
-  const [isOpen, setIsOpen] = useState(false);
+  const { isConfigured, createCircle, joinCircle, isOnboardingOpen, setIsOnboardingOpen } = useHousehold();
+  const { user } = useAuth();
   const [mode, setMode] = useState<"create" | "join">("create");
 
   // Create form state
-  const [userName, setUserName] = useState("");
+  const [userName, setUserName] = useState(user?.username || "");
   const [circleName, setCircleName] = useState("");
   const [createdCode, setCreatedCode] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
   // Join form state
-  const [joinUserName, setJoinUserName] = useState("");
+  const [joinUserName, setJoinUserName] = useState(user?.username || "");
   const [joinCode, setJoinCode] = useState("");
   const [error, setError] = useState<string | null>(null);
+
+  // Sync username if user logs in
+  useEffect(() => {
+    if (user?.username) {
+      setUserName(user.username);
+      setJoinUserName(user.username);
+    }
+  }, [user?.username]);
 
   // Check URL parameters for ?join=CODE
   useEffect(() => {
@@ -29,30 +38,29 @@ export function CircleOnboardingModal() {
       if (codeFromUrl) {
         setJoinCode(codeFromUrl.toUpperCase());
         setMode("join");
+        setIsOnboardingOpen(true);
       }
     }
-  }, []);
+  }, [setIsOnboardingOpen]);
 
   // Show modal on first visit if not configured and not previously dismissed
   useEffect(() => {
     if (typeof window !== "undefined") {
       const dismissed = sessionStorage.getItem("couple_hub_onboarding_dismissed");
       if (!isConfigured && !dismissed) {
-        setIsOpen(true);
-      } else {
-        setIsOpen(false);
+        setIsOnboardingOpen(true);
       }
     }
-  }, [isConfigured]);
+  }, [isConfigured, setIsOnboardingOpen]);
 
   const handleClose = () => {
-    setIsOpen(false);
+    setIsOnboardingOpen(false);
     if (typeof window !== "undefined") {
       sessionStorage.setItem("couple_hub_onboarding_dismissed", "true");
     }
   };
 
-  if (!isOpen) return null;
+  if (!isOnboardingOpen) return null;
 
   const handleCreate = (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,7 +85,7 @@ export function CircleOnboardingModal() {
     }
     setError(null);
     joinCircle(joinUserName, joinCode);
-    setIsOpen(false);
+    handleClose();
   };
 
   const copyInvite = (text: string) => {
@@ -160,7 +168,7 @@ export function CircleOnboardingModal() {
 
             <button
               type="button"
-              onClick={() => setIsOpen(false)}
+              onClick={handleClose}
               className="w-full py-3 px-4 rounded-xl border-2 border-black bg-black text-white hover:bg-zinc-800 font-heading font-extrabold text-sm uppercase transition shadow-[2px_2px_0_0_#000] flex items-center justify-center gap-2"
             >
               <span>Enter Our Space</span>

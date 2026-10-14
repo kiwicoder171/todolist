@@ -141,6 +141,16 @@ export function RoutinesProvider({ children }: { children: ReactNode }) {
     return () => unsub();
   }, [circleId]);
 
+  // Reset routines when user leaves circle
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const handleLeave = () => {
+      setRoutines(isTest ? SEED_ROUTINES : []);
+    };
+    window.addEventListener("couple_hub_circle_left", handleLeave);
+    return () => window.removeEventListener("couple_hub_circle_left", handleLeave);
+  }, [isTest]);
+
   const saveRoutines = (updater: (prev: Routine[]) => Routine[]) => {
     setRoutines((prev) => {
       const next = updater(prev);

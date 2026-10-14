@@ -2,8 +2,10 @@
 
 import React, { useState } from "react";
 import { useHousehold, Partner } from "@/context/HouseholdContext";
-import { Flame, Users } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { Flame, Users, LogIn, LogOut, User as UserIcon } from "lucide-react";
 import { CircleInviteModal } from "./CircleInviteModal";
+import { AuthModal } from "./AuthModal";
 import { Logo } from "./Logo";
 
 export interface HeaderProps {
@@ -19,8 +21,10 @@ export function Header({
   onDashboardFocusChange,
   onOpenWishlist,
 }: HeaderProps) {
-  const { activePartner, setActivePartner, scores, partnerNames, circle } = useHousehold();
+  const { activePartner, setActivePartner, scores, partnerNames, circle, setIsOnboardingOpen } = useHousehold();
+  const { user, logout } = useAuth();
   const [isInviteOpen, setIsInviteOpen] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
   const currentScore = scores[activePartner] || { points: 0, streak: 0 };
 
   return (
@@ -47,15 +51,15 @@ export function Header({
             </div>
           </div>
 
-          {/* Mobile Invite Button */}
+          {/* Mobile Circle / Invite Button */}
           <button
             type="button"
-            onClick={() => setIsInviteOpen(true)}
+            onClick={() => (circle ? setIsInviteOpen(true) : setIsOnboardingOpen(true))}
             className="sm:hidden px-2.5 py-1 rounded-full border-2 border-black bg-zinc-100 hover:bg-black hover:text-white transition text-[11px] font-heading font-extrabold flex items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer"
-            title="Circle Details & Invite Partner"
+            title={circle ? "Circle Details & Invite Partner" : "Join or Create a Circle"}
           >
             <Users className="w-3 h-3" />
-            <span>{circle?.joinCode || "Invite"}</span>
+            <span>{circle?.joinCode || "Join Circle"}</span>
           </button>
         </div>
 
@@ -149,22 +153,67 @@ export function Header({
             </button>
           </div>
 
-          {/* Desktop Invite Code Pill */}
-          <button
-            type="button"
-            onClick={() => setIsInviteOpen(true)}
-            className="hidden sm:flex px-3 py-1.5 rounded-full border-2 border-black bg-zinc-100 hover:bg-black hover:text-white transition text-xs font-heading font-extrabold items-center gap-1.5 shadow-[2px_2px_0_0_#000] shrink-0 cursor-pointer"
-            title="Circle Details & Invite Partner"
-          >
-            <Users className="w-3.5 h-3.5" />
-            <span>{circle?.joinCode || "Invite"}</span>
-          </button>
+          {/* Circle / Space Pill */}
+          {circle ? (
+            <button
+              type="button"
+              onClick={() => setIsInviteOpen(true)}
+              className="hidden sm:flex px-3 py-1.5 rounded-full border-2 border-black bg-zinc-100 hover:bg-black hover:text-white transition text-xs font-heading font-extrabold items-center gap-1.5 shadow-[2px_2px_0_0_#000] shrink-0 cursor-pointer"
+              title="Circle Details & Invite Partner"
+            >
+              <Users className="w-3.5 h-3.5" />
+              <span>{circle.joinCode || "Invite"}</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setIsOnboardingOpen(true)}
+              className="hidden sm:flex px-3 py-1.5 rounded-full border-2 border-black bg-white hover:bg-zinc-100 transition text-xs font-heading font-extrabold items-center gap-1.5 shadow-[2px_2px_0_0_#000] shrink-0 cursor-pointer text-zinc-900"
+              title="Join or Create a Couple Space"
+            >
+              <Users className="w-3.5 h-3.5 text-zinc-500" />
+              <span>Join Circle</span>
+            </button>
+          )}
+
+          {/* Account Profile or Log In */}
+          {user ? (
+            <div className="flex items-center gap-1.5 bg-[#f4f4f5] px-2.5 py-1 rounded-full border border-zinc-300 text-xs shrink-0 font-heading shadow-xs">
+              <UserIcon className="w-3.5 h-3.5 text-zinc-700" />
+              <span className="font-extrabold text-black max-w-[90px] sm:max-w-[120px] truncate">
+                @{user.username}
+              </span>
+              <button
+                type="button"
+                onClick={() => logout()}
+                title="Sign out of account"
+                className="text-zinc-400 hover:text-red-600 transition ml-1 cursor-pointer"
+              >
+                <LogOut className="w-3 h-3" />
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setIsAuthOpen(true)}
+              className="px-2.5 py-1 sm:px-3 sm:py-1 rounded-full border-2 border-black bg-amber-300 hover:bg-amber-400 text-black text-xs font-heading font-extrabold flex items-center gap-1 shadow-[2px_2px_0_0_#000] shrink-0 cursor-pointer transition active:translate-x-0.5 active:translate-y-0.5"
+              title="Sign in with Username or Register with Gmail"
+            >
+              <LogIn className="w-3.5 h-3.5" />
+              <span>Log In</span>
+            </button>
+          )}
         </div>
       </header>
 
       <CircleInviteModal
         isOpen={isInviteOpen}
         onClose={() => setIsInviteOpen(false)}
+      />
+
+      <AuthModal
+        isOpen={isAuthOpen}
+        onClose={() => setIsAuthOpen(false)}
       />
     </>
   );

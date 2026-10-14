@@ -7,6 +7,7 @@ import {
   subscribeToCircle,
   updateScoresInFirebase,
 } from "@/lib/firebaseSync";
+import { useOptionalAuth } from "./AuthContext";
 
 export type Partner = "alex" | "sam";
 export type Assignee = "mine" | "partner" | "both";
@@ -29,6 +30,8 @@ export interface CircleState {
 export interface HouseholdContextType {
   circle: CircleState | null;
   isConfigured: boolean;
+  isOnboardingOpen: boolean;
+  setIsOnboardingOpen: (open: boolean) => void;
   createCircle: (userName: string, circleName?: string) => string;
   joinCircle: (userName: string, joinCode: string) => boolean;
   leaveCircle: () => void;
@@ -94,12 +97,13 @@ function generateJoinCode(): string {
   return code;
 }
 
-const HouseholdContext = createContext<HouseholdContextType | undefined>(
-  undefined
-);
+const HouseholdContext = createContext<HouseholdContextType | undefined>(undefined);
 
 export function HouseholdProvider({ children }: { children: ReactNode }) {
   const isTest = typeof process !== "undefined" && process.env.NODE_ENV === "test";
+  const authContext = useOptionalAuth();
+  const user = authContext?.user;
+  const updateUserCircle = authContext?.updateUserCircle || (async () => {});
 
   const [circle, setCircle] = useState<CircleState | null>(() => {
     if (typeof window === "undefined") return null;
@@ -131,6 +135,7 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
   const [frozenDates, setFrozenDates] = useState<Record<string, boolean>>({
     "2026-10-18": true,
   });
+  const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
 
   const [scores, setScores] = useState<Record<Partner, PartnerScoreState>>(() => {
     if (typeof window === "undefined") {
@@ -169,7 +174,28 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
     } catch {}
   };
 
-  // Real-time listener for circle updates from partner via Firebase
+  // Cross-device sync: If user is logged in and has a circleId attached, subscribe to it!
+  useEffect(() => {
+    if (!user?.circleId) return;
+    const unsub = subscribeToCircle(user.circleId, (remoteCircle) => {
+      setCircle(remoteCircle);
+      const names = {
+        alex: remoteCircle.createdByName || "Alex",
+        sam: remoteCircle.partnerName || "Sam",
+      };
+      setPartnerNames(names);
+      if ((remoteCircle as any).scores) {
+        setScores((remoteCircle as any).scores);
+      }
+      if (user.partnerRole) {
+        setActivePartner(user.partnerRole);
+      }
+      saveState(remoteCircle, names, (remoteCircle as any).scores || scores);
+    });
+    return () => unsub();
+  }, [user?.circleId, user?.partnerRole]);
+
+  // Real-time listener for current active circle from Firebase
   useEffect(() => {
     if (!circle?.id) return;
     const unsub = subscribeToCircle(circle.id, (remoteCircle) => {
@@ -188,15 +214,16 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
   }, [circle?.id]);
 
   const createCircle = (userName: string, circleName?: string): string => {
+    const finalName = user?.username || userName.trim() || "Alex";
     const code = generateJoinCode();
     const newCircle: CircleState = {
       id: `circle-${Date.now()}`,
-      name: circleName?.trim() || `${userName}'s Shared Space`,
+      name: circleName?.trim() || `${finalName}'s Shared Space`,
       joinCode: code,
-      createdByName: userName.trim(),
+      createdByName: finalName,
       createdAt: new Date().toISOString(),
     };
-    const newNames = { alex: userName.trim(), sam: "Partner" };
+    const newNames = { alex: finalName, sam: "Partner" };
     const newScores = {
       alex: { points: 0, streak: 0 },
       sam: { points: 0, streak: 0 },
@@ -208,25 +235,32 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
     setActivePartner("alex");
     saveState(newCircle, newNames, newScores);
     saveCircleToFirebase(newCircle).catch(console.error);
+
+    // Link circle to user profile if authenticated
+    if (user?.uid) {
+      updateUserCircle(newCircle.id, "alex").catch(console.error);
+    }
+    setIsOnboardingOpen(false);
     return code;
   };
 
   const joinCircle = (userName: string, joinCode: string): boolean => {
+    const finalName = user?.username || userName.trim() || "Sam";
     const cleanCode = joinCode.trim().toUpperCase();
     const updatedCircle: CircleState = circle
-      ? { ...circle, partnerName: userName.trim() }
+      ? { ...circle, partnerName: finalName }
       : {
           id: `circle-${Date.now()}`,
           name: "Our Shared Space",
           joinCode: cleanCode,
           createdByName: "Partner",
-          partnerName: userName.trim(),
+          partnerName: finalName,
           createdAt: new Date().toISOString(),
         };
 
     const newNames = {
       alex: updatedCircle.createdByName || "Partner",
-      sam: userName.trim(),
+      sam: finalName,
     };
     const newScores = {
       alex: { points: 0, streak: 0 },
@@ -238,6 +272,7 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
     setScores(newScores);
     setActivePartner("sam");
     saveState(updatedCircle, newNames, newScores);
+    setIsOnboardingOpen(false);
 
     // Merge with remote circle from Firebase if it exists
     findCircleByJoinCode(cleanCode)
@@ -245,18 +280,25 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
         if (remoteCircle) {
           const merged: CircleState = {
             ...remoteCircle,
-            partnerName: userName.trim(),
+            partnerName: finalName,
           };
           setCircle(merged);
           const mergedNames = {
             alex: merged.createdByName || "Partner",
-            sam: userName.trim(),
+            sam: finalName,
           };
           setPartnerNames(mergedNames);
           saveState(merged, mergedNames, scores);
           saveCircleToFirebase(merged).catch(console.error);
+
+          if (user?.uid) {
+            updateUserCircle(remoteCircle.id, "sam").catch(console.error);
+          }
         } else {
           saveCircleToFirebase(updatedCircle).catch(console.error);
+          if (user?.uid) {
+            updateUserCircle(updatedCircle.id, "sam").catch(console.error);
+          }
         }
       })
       .catch(console.error);
@@ -265,17 +307,35 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
   };
 
   const leaveCircle = () => {
+    // 1. Unlink circle from user profile in Firestore
+    if (user?.uid) {
+      updateUserCircle(null, null).catch(console.error);
+    }
+
+    // 2. Reset circle and score state
     setCircle(null);
     setPartnerNames({ alex: "Alex", sam: "Sam" });
     setScores({
       alex: { points: 0, streak: 0 },
       sam: { points: 0, streak: 0 },
     });
+
+    // 3. Clear local storage and session storage
     if (typeof window !== "undefined") {
       try {
         localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem("couple_task_hub_daily_tasks");
+        localStorage.removeItem("couple_task_hub_routines");
+        localStorage.removeItem("couple_task_hub_kanban_cards");
+        sessionStorage.removeItem("couple_hub_onboarding_dismissed");
+
+        // Dispatch broadcast event for all sibling context providers
+        window.dispatchEvent(new CustomEvent("couple_hub_circle_left"));
       } catch {}
     }
+
+    // 4. Immediately trigger onboarding modal so user can join/create again
+    setIsOnboardingOpen(true);
   };
 
   const isDateFrozen = (date: Date): boolean => {
@@ -320,6 +380,8 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
       value={{
         circle,
         isConfigured,
+        isOnboardingOpen,
+        setIsOnboardingOpen,
         createCircle,
         joinCircle,
         leaveCircle,
@@ -350,4 +412,3 @@ export function useHousehold(): HouseholdContextType {
   }
   return context;
 }
-
