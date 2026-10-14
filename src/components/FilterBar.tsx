@@ -10,6 +10,7 @@ export function FilterBar() {
     selectedDate,
     isFreezeDay,
     toggleFreezeDay,
+    activePartner,
   } = useHousehold();
 
   const formattedDate = new Intl.DateTimeFormat("en-US", {
@@ -22,7 +23,7 @@ export function FilterBar() {
   const filters: { key: AssigneeFilter; label: string }[] = [
     { key: "all", label: "All Items" },
     { key: "mine", label: "Mine" },
-    { key: "partner", label: "Sam's" },
+    { key: "partner", label: activePartner === "alex" ? "Sam's" : "Alex's" },
   ];
 
   return (

@@ -120,15 +120,19 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
     useState<KanbanCategoryItem[]>(DEFAULT_CATEGORIES);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
-  // Two-way sync: listen to DailyTasks completion toggles
+  // Two-way sync: listen to DailyTasks completion toggles and deletions
   useEffect(() => {
-    const unregister = registerKanbanSyncHook((kanbanId, completed) => {
+    const unregister = registerKanbanSyncHook((kanbanId, completed, action) => {
       setCards((prev) =>
-        prev.map((c) =>
-          c.id === kanbanId
-            ? { ...c, stage: completed ? "done" : "inprogress" }
-            : c
-        )
+        prev.map((c) => {
+          if (c.id === kanbanId) {
+            if (action === "delete") {
+              return { ...c, doToday: false };
+            }
+            return { ...c, stage: completed ? "done" : "inprogress" };
+          }
+          return c;
+        })
       );
     });
     return unregister;
@@ -211,6 +215,8 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
   };
 
   const clearDoneCards = () => {
+    const doneCards = cards.filter((c) => c.stage === "done");
+    doneCards.forEach((c) => removeTaskByKanbanId(c.id));
     setCards((prev) => prev.filter((c) => c.stage !== "done"));
   };
 

@@ -45,6 +45,13 @@ export function calculateRolloverTasks(
   return tasks.filter((t) => t.targetDate === viewKey);
 }
 
+export type KanbanSyncAction = "status" | "delete";
+export type KanbanSyncCallback = (
+  kanbanId: string,
+  completed: boolean,
+  action?: KanbanSyncAction
+) => void;
+
 export interface DailyTasksContextType {
   tasks: DailyTask[];
   addDailyTask: (
@@ -60,9 +67,7 @@ export interface DailyTasksContextType {
   deleteDailyTask: (id: string) => void;
   setTaskCompletedByKanbanId: (kanbanId: string, completed: boolean) => void;
   removeTaskByKanbanId: (kanbanId: string) => void;
-  registerKanbanSyncHook: (
-    callback: (kanbanId: string, completed: boolean) => void
-  ) => () => void;
+  registerKanbanSyncHook: (callback: KanbanSyncCallback) => () => void;
 }
 
 const DailyTasksContext = createContext<DailyTasksContextType | undefined>(
@@ -112,12 +117,10 @@ const SEED_TASKS: DailyTask[] = [
 
 export function DailyTasksProvider({ children }: { children: ReactNode }) {
   const [tasks, setTasks] = useState<DailyTask[]>(SEED_TASKS);
-  const syncHooksRef = useRef<
-    ((kanbanId: string, completed: boolean) => void)[]
-  >([]);
+  const syncHooksRef = useRef<KanbanSyncCallback[]>([]);
 
   const registerKanbanSyncHook = useCallback(
-    (callback: (kanbanId: string, completed: boolean) => void) => {
+    (callback: KanbanSyncCallback) => {
       syncHooksRef.current.push(callback);
       return () => {
         syncHooksRef.current = syncHooksRef.current.filter((cb) => cb !== callback);
@@ -182,6 +185,12 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
   };
 
   const deleteDailyTask = (id: string) => {
+    const target = tasks.find((t) => t.id === id);
+    if (target?.isKanbanSynced && target.kanbanId) {
+      syncHooksRef.current.forEach((cb) =>
+        cb(target.kanbanId as string, false, "delete")
+      );
+    }
     setTasks((prev) => prev.filter((t) => t.id !== id));
   };
 

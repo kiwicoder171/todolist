@@ -203,5 +203,28 @@ describe("KanbanContext (Seam: Board 3 Unified Kanban & Two-Way Sync)", () => {
         result.current.kanban.cards.find((c) => c.id === "card-202")?.stage
       ).toBe("inprogress");
     });
+
+    it("deleting a synced daily task resets the linked Kanban card's doToday status to false", () => {
+      const { result } = renderHook(
+        () => ({
+          kanban: useKanban(),
+          daily: useDailyTasks(),
+        }),
+        { wrapper }
+      );
+
+      // card-202 is synced with task-103
+      expect(
+        result.current.kanban.cards.find((c) => c.id === "card-202")?.doToday
+      ).toBe(true);
+
+      act(() => {
+        result.current.daily.deleteDailyTask("task-103");
+      });
+
+      expect(
+        result.current.kanban.cards.find((c) => c.id === "card-202")?.doToday
+      ).toBe(false);
+    });
   });
 });

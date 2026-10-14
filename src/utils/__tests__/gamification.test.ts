@@ -93,6 +93,20 @@ describe("Gamification Engine (Seam: Ticket 06 Scoring, Streaks & Penalty Ladder
       expect(evaluation.isPerfectDay).toBe(false);
     });
 
+    it("evaluates Perfect Day for Sam when Sam's routines and shared routines are completed, even if Alex's routine is not", () => {
+      const evaluation = evaluatePartnerDay(
+        "sam",
+        new Date(2026, 9, 14),
+        mockRoutines,
+        () => false,
+        (id) => id === "r1" || id === "r3" // r1 (both) and r3 (Sam) completed, r2 (Alex) not completed
+      );
+
+      expect(evaluation.totalScheduled).toBe(2);
+      expect(evaluation.completedCount).toBe(2);
+      expect(evaluation.isPerfectDay).toBe(true);
+    });
+
     it("recognizes Freeze Day and waives penalty requirements", () => {
       const evaluation = evaluatePartnerDay(
         "alex",

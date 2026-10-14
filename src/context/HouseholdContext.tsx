@@ -35,12 +35,30 @@ export function formatDateKey(date: Date): string {
 
 export function matchesAssigneeFilter(
   itemAssignee: Assignee,
-  _currentPartner: Partner,
+  currentPartner: Partner,
   filter: AssigneeFilter
 ): boolean {
   if (filter === "all") return true;
-  if (filter === "mine") return itemAssignee === "mine" || itemAssignee === "both";
-  if (filter === "partner") return itemAssignee === "partner" || itemAssignee === "both";
+
+  const isAssignedToCurrent =
+    itemAssignee === "both" ||
+    (currentPartner === "alex"
+      ? itemAssignee === "mine"
+      : itemAssignee === "partner");
+
+  if (filter === "mine") {
+    return isAssignedToCurrent;
+  }
+
+  if (filter === "partner") {
+    const isAssignedToOther =
+      itemAssignee === "both" ||
+      (currentPartner === "alex"
+        ? itemAssignee === "partner"
+        : itemAssignee === "mine");
+    return isAssignedToOther;
+  }
+
   return true;
 }
 
