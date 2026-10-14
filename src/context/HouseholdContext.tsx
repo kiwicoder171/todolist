@@ -1,6 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import {
+  saveCircleToFirebase,
+  findCircleByJoinCode,
+  subscribeToCircle,
+  updateScoresInFirebase,
+} from "@/lib/firebaseSync";
 
 export type Partner = "alex" | "sam";
 export type Assignee = "mine" | "partner" | "both";
@@ -163,6 +169,24 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
     } catch {}
   };
 
+  // Real-time listener for circle updates from partner via Firebase
+  useEffect(() => {
+    if (!circle?.id) return;
+    const unsub = subscribeToCircle(circle.id, (remoteCircle) => {
+      setCircle((prev) => ({ ...prev, ...remoteCircle }));
+      if (remoteCircle.createdByName || remoteCircle.partnerName) {
+        setPartnerNames((prev) => ({
+          alex: remoteCircle.createdByName || prev.alex,
+          sam: remoteCircle.partnerName || prev.sam,
+        }));
+      }
+      if ((remoteCircle as any).scores) {
+        setScores((remoteCircle as any).scores);
+      }
+    });
+    return () => unsub();
+  }, [circle?.id]);
+
   const createCircle = (userName: string, circleName?: string): string => {
     const code = generateJoinCode();
     const newCircle: CircleState = {
@@ -183,12 +207,12 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
     setScores(newScores);
     setActivePartner("alex");
     saveState(newCircle, newNames, newScores);
+    saveCircleToFirebase(newCircle).catch(console.error);
     return code;
   };
 
   const joinCircle = (userName: string, joinCode: string): boolean => {
     const cleanCode = joinCode.trim().toUpperCase();
-    // In code-based pairing, create/link joined circle
     const updatedCircle: CircleState = circle
       ? { ...circle, partnerName: userName.trim() }
       : {
@@ -214,6 +238,29 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
     setScores(newScores);
     setActivePartner("sam");
     saveState(updatedCircle, newNames, newScores);
+
+    // Merge with remote circle from Firebase if it exists
+    findCircleByJoinCode(cleanCode)
+      .then((remoteCircle) => {
+        if (remoteCircle) {
+          const merged: CircleState = {
+            ...remoteCircle,
+            partnerName: userName.trim(),
+          };
+          setCircle(merged);
+          const mergedNames = {
+            alex: merged.createdByName || "Partner",
+            sam: userName.trim(),
+          };
+          setPartnerNames(mergedNames);
+          saveState(merged, mergedNames, scores);
+          saveCircleToFirebase(merged).catch(console.error);
+        } else {
+          saveCircleToFirebase(updatedCircle).catch(console.error);
+        }
+      })
+      .catch(console.error);
+
     return true;
   };
 
@@ -259,6 +306,9 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
         },
       };
       saveState(circle, partnerNames, updated);
+      if (circle?.id) {
+        updateScoresInFirebase(circle.id, updated).catch(console.error);
+      }
       return updated;
     });
   };

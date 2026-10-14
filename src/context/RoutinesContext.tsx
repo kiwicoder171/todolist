@@ -1,7 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
-import { Assignee } from "./HouseholdContext";
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { Assignee, useHousehold } from "./HouseholdContext";
+import {
+  subscribeToRoutines,
+  upsertRoutineToFirebase,
+  deleteRoutineFromFirebase,
+} from "@/lib/firebaseSync";
 
 export type RoutineFrequency = "daily" | "weekdays" | "weekends" | number[];
 
@@ -109,6 +114,8 @@ const ROUTINES_STORAGE_KEY = "couple_task_hub_routines";
 
 export function RoutinesProvider({ children }: { children: ReactNode }) {
   const isTest = typeof process !== "undefined" && process.env.NODE_ENV === "test";
+  const { circle } = useHousehold();
+  const circleId = circle?.id;
 
   const [routines, setRoutines] = useState<Routine[]>(() => {
     if (typeof window !== "undefined") {
@@ -119,6 +126,20 @@ export function RoutinesProvider({ children }: { children: ReactNode }) {
     }
     return isTest ? SEED_ROUTINES : [];
   });
+
+  // Real-time listener for routines from Firebase
+  useEffect(() => {
+    if (!circleId) return;
+    const unsub = subscribeToRoutines(circleId, (remoteRoutines) => {
+      if (remoteRoutines && remoteRoutines.length > 0) {
+        setRoutines(remoteRoutines as Routine[]);
+        try {
+          localStorage.setItem(ROUTINES_STORAGE_KEY, JSON.stringify(remoteRoutines));
+        } catch {}
+      }
+    });
+    return () => unsub();
+  }, [circleId]);
 
   const saveRoutines = (updater: (prev: Routine[]) => Routine[]) => {
     setRoutines((prev) => {
@@ -146,9 +167,16 @@ export function RoutinesProvider({ children }: { children: ReactNode }) {
       completions: {},
     };
     saveRoutines((prev) => [...prev, newRoutine]);
+    if (circleId) {
+      upsertRoutineToFirebase(circleId, newRoutine as any).catch(console.error);
+    }
   };
 
   const updateRoutine = (id: string, updates: Partial<Routine>) => {
+    const current = routines.find((r) => r.id === id);
+    if (current && circleId) {
+      upsertRoutineToFirebase(circleId, { ...current, ...updates } as any).catch(console.error);
+    }
     saveRoutines((prev) =>
       prev.map((r) => (r.id === id ? { ...r, ...updates } : r))
     );
@@ -156,23 +184,31 @@ export function RoutinesProvider({ children }: { children: ReactNode }) {
 
   const deleteRoutine = (id: string) => {
     saveRoutines((prev) => prev.filter((r) => r.id !== id));
+    if (circleId) {
+      deleteRoutineFromFirebase(circleId, id).catch(console.error);
+    }
   };
 
   const toggleCompletion = (id: string, date: Date) => {
     const dateKey = formatDateKey(date);
+    let updatedRoutine: Routine | undefined;
     saveRoutines((prev) =>
       prev.map((r) => {
         if (r.id !== id) return r;
         const currentVal = !!r.completions[dateKey];
-        return {
+        updatedRoutine = {
           ...r,
           completions: {
             ...r.completions,
             [dateKey]: !currentVal,
           },
         };
+        return updatedRoutine;
       })
     );
+    if (updatedRoutine && circleId) {
+      upsertRoutineToFirebase(circleId, updatedRoutine as any).catch(console.error);
+    }
   };
 
   const isCompleted = (id: string, date: Date): boolean => {

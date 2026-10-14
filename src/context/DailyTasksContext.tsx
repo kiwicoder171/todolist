@@ -1,8 +1,13 @@
 "use client";
 
-import React, { createContext, useContext, useState, useCallback, useRef, ReactNode } from "react";
-import { Assignee } from "./HouseholdContext";
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef, ReactNode } from "react";
+import { Assignee, useHousehold } from "./HouseholdContext";
 import { formatDateKey } from "./RoutinesContext";
+import {
+  subscribeToDailyTasks,
+  upsertDailyTaskToFirebase,
+  deleteDailyTaskFromFirebase,
+} from "@/lib/firebaseSync";
 
 export interface DailyTask {
   id: string;
@@ -119,6 +124,8 @@ const TASKS_STORAGE_KEY = "couple_task_hub_daily_tasks";
 
 export function DailyTasksProvider({ children }: { children: ReactNode }) {
   const isTest = typeof process !== "undefined" && process.env.NODE_ENV === "test";
+  const { circle } = useHousehold();
+  const circleId = circle?.id;
 
   const [tasks, setTasks] = useState<DailyTask[]>(() => {
     if (typeof window !== "undefined") {
@@ -130,6 +137,20 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
     return isTest ? SEED_TASKS : [];
   });
   const syncHooksRef = useRef<KanbanSyncCallback[]>([]);
+
+  // Real-time listener from Firestore
+  useEffect(() => {
+    if (!circleId) return;
+    const unsub = subscribeToDailyTasks(circleId, (remoteTasks) => {
+      if (remoteTasks && remoteTasks.length > 0) {
+        setTasks(remoteTasks);
+        try {
+          localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(remoteTasks));
+        } catch {}
+      }
+    });
+    return () => unsub();
+  }, [circleId]);
 
   const saveTasks = (updater: (prev: DailyTask[]) => DailyTask[]) => {
     setTasks((prev) => {
@@ -174,6 +195,9 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
       kanbanId,
     };
     saveTasks((prev) => [...prev, newTask]);
+    if (circleId) {
+      upsertDailyTaskToFirebase(circleId, newTask).catch(console.error);
+    }
   };
 
   const toggleDailyTask = (id: string, completedDateKey?: string) => {
@@ -182,18 +206,19 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
 
     const nextCompleted = !target.completed;
     const todayKey = completedDateKey || formatDateKey(new Date(2026, 9, 14));
+    const updatedTask = {
+      ...target,
+      completed: nextCompleted,
+      completedDate: nextCompleted ? todayKey : undefined,
+    };
 
     saveTasks((prev) =>
-      prev.map((t) =>
-        t.id === id
-          ? {
-              ...t,
-              completed: nextCompleted,
-              completedDate: nextCompleted ? todayKey : undefined,
-            }
-          : t
-      )
+      prev.map((t) => (t.id === id ? updatedTask : t))
     );
+
+    if (circleId) {
+      upsertDailyTaskToFirebase(circleId, updatedTask).catch(console.error);
+    }
 
     if (target.isKanbanSynced && target.kanbanId) {
       syncHooksRef.current.forEach((cb) =>
@@ -203,6 +228,10 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
   };
 
   const updateDailyTask = (id: string, updates: Partial<DailyTask>) => {
+    const current = tasks.find((t) => t.id === id);
+    if (current && circleId) {
+      upsertDailyTaskToFirebase(circleId, { ...current, ...updates }).catch(console.error);
+    }
     saveTasks((prev) =>
       prev.map((t) => (t.id === id ? { ...t, ...updates } : t))
     );
@@ -216,6 +245,9 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
       );
     }
     saveTasks((prev) => prev.filter((t) => t.id !== id));
+    if (circleId) {
+      deleteDailyTaskFromFirebase(circleId, id).catch(console.error);
+    }
   };
 
   const setTaskCompletedByKanbanId = (kanbanId: string, completed: boolean) => {

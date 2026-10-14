@@ -9,6 +9,11 @@ import React, {
 } from "react";
 import { Assignee, useHousehold, matchesAssigneeFilter } from "./HouseholdContext";
 import { useDailyTasks } from "./DailyTasksContext";
+import {
+  subscribeToKanbanCards,
+  upsertKanbanCardToFirebase,
+  deleteKanbanCardFromFirebase,
+} from "@/lib/firebaseSync";
 
 export type KanbanStage = "todo" | "inprogress" | "done";
 
@@ -107,7 +112,8 @@ export const SEED_KANBAN_CARDS: KanbanCard[] = [
 ];
 
 export function KanbanProvider({ children }: { children: ReactNode }) {
-  const { activePartner, assigneeFilter, selectedDate } = useHousehold();
+  const { activePartner, assigneeFilter, selectedDate, circle } = useHousehold();
+  const circleId = circle?.id;
   const {
     addDailyTask,
     removeTaskByKanbanId,
@@ -126,6 +132,20 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
     }
     return isTest ? SEED_KANBAN_CARDS : [];
   });
+
+  // Real-time listener for kanban cards from Firebase
+  useEffect(() => {
+    if (!circleId) return;
+    const unsub = subscribeToKanbanCards(circleId, (remoteCards) => {
+      if (remoteCards && remoteCards.length > 0) {
+        setCards(remoteCards);
+        try {
+          localStorage.setItem("couple_task_hub_kanban_cards", JSON.stringify(remoteCards));
+        } catch {}
+      }
+    });
+    return () => unsub();
+  }, [circleId]);
 
   const saveCards = (updater: (prev: KanbanCard[]) => KanbanCard[]) => {
     setCards((prev) => {
@@ -178,9 +198,16 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
       description,
     };
     saveCards((prev) => [...prev, newCard]);
+    if (circleId) {
+      upsertKanbanCardToFirebase(circleId, newCard).catch(console.error);
+    }
   };
 
   const updateCard = (id: string, updates: Partial<KanbanCard>) => {
+    const current = cards.find((c) => c.id === id);
+    if (current && circleId) {
+      upsertKanbanCardToFirebase(circleId, { ...current, ...updates }).catch(console.error);
+    }
     saveCards((prev) =>
       prev.map((c) => (c.id === id ? { ...c, ...updates } : c))
     );
@@ -189,9 +216,16 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
   const deleteCard = (id: string) => {
     saveCards((prev) => prev.filter((c) => c.id !== id));
     removeTaskByKanbanId(id);
+    if (circleId) {
+      deleteKanbanCardFromFirebase(circleId, id).catch(console.error);
+    }
   };
 
   const moveCardStage = (id: string, targetStage: KanbanStage) => {
+    const current = cards.find((c) => c.id === id);
+    if (current && circleId) {
+      upsertKanbanCardToFirebase(circleId, { ...current, stage: targetStage }).catch(console.error);
+    }
     saveCards((prev) =>
       prev.map((c) => {
         if (c.id === id) {
