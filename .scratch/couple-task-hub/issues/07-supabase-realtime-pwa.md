@@ -5,10 +5,10 @@ Supabase database migration schemas (Households, Partners, Routines, RoutineComp
 
 **Blocked by:** 04: Board 3 — Unified Kanban Board & Two-Way Day View Sync, 06: Gamification — Partner Score, Streaks, Penalty Ladder & Reward Wishlist
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] Supabase schema migrations and row-level security (RLS) policies scoped to Household
-- [ ] Realtime client hook listening to postgres changes
-- [ ] PWA manifest, icons, and service worker registration
-- [ ] Seamless fallback to local mock state when Supabase env vars are omitted
-- [ ] E2E multi-device sync test verification
+- [x] Supabase schema migrations and row-level security (RLS) policies scoped to Household
+- [x] Realtime client hook listening to postgres changes
+- [x] PWA manifest, icons, and service worker registration
+- [x] Seamless fallback to local mock state when Supabase env vars are omitted
+- [x] E2E multi-device sync test verification

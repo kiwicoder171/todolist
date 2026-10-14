@@ -4,6 +4,7 @@ import { HouseholdProvider } from "@/context/HouseholdContext";
 import { RoutinesProvider } from "@/context/RoutinesContext";
 import { DailyTasksProvider } from "@/context/DailyTasksContext";
 import { KanbanProvider } from "@/context/KanbanContext";
+import { PWARegistration } from "@/components/PWARegistration";
 
 export const metadata: Metadata = {
   title: "Couple Task Hub",
@@ -30,7 +31,10 @@ export default function RootLayout({
         <HouseholdProvider>
           <RoutinesProvider>
             <DailyTasksProvider>
-              <KanbanProvider>{children}</KanbanProvider>
+              <KanbanProvider>
+                <PWARegistration />
+                {children}
+              </KanbanProvider>
             </DailyTasksProvider>
           </RoutinesProvider>
         </HouseholdProvider>
