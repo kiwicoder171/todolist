@@ -7,6 +7,7 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { MobileShell, MobileTab } from "@/components/MobileShell";
 import { WishlistModal } from "@/components/WishlistModal";
 import { DailyRoutinesBoard } from "@/components/DailyRoutinesBoard";
+import { DailyTasksBoard } from "@/components/DailyTasksBoard";
 
 export default function Home() {
   const [viewMode, setViewMode] = useState<"desktop" | "mobile">("desktop");
@@ -63,25 +64,8 @@ export default function Home() {
                 {/* Board 1: Daily Routines (Apple Notes Style) */}
                 <DailyRoutinesBoard />
 
-                {/* Board 2 Shell */}
-                <div className="bg-white border-2 border-black rounded-3xl p-5 shadow-[4px_4px_0_0_#000] flex flex-col">
-                  <div className="flex items-center justify-between pb-3 border-b-2 border-black mb-3">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-lg bg-black text-white flex items-center justify-center font-heading font-bold text-xs">
-                        2
-                      </div>
-                      <h2 className="font-heading font-black text-sm uppercase tracking-wide text-black">
-                        Daily Tasks
-                      </h2>
-                    </div>
-                    <span className="text-[10px] font-heading font-bold uppercase px-2 py-0.5 rounded-full border border-black bg-black text-white">
-                      Immediate
-                    </span>
-                  </div>
-                  <div className="p-4 border-2 border-dashed border-zinc-300 rounded-2xl text-center text-xs text-zinc-500 font-heading">
-                    [Daily Tasks with Auto-Rollover Slot (Ticket 03)]
-                  </div>
-                </div>
+                {/* Board 2: Daily Tasks with Auto-Rollover */}
+                <DailyTasksBoard />
               </div>
             }
             kanbanSlot={
@@ -190,6 +174,8 @@ export default function Home() {
           >
             {mobileTab === "habits" ? (
               <DailyRoutinesBoard />
+            ) : mobileTab === "daily" ? (
+              <DailyTasksBoard />
             ) : (
               <div className="p-4 border-2 border-dashed border-zinc-300 rounded-2xl text-center text-xs text-zinc-500 font-heading">
                 Active Mobile View: {getMobilePillTitle(mobileTab)}
