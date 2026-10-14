@@ -6,7 +6,11 @@ import { KanbanStage, KanbanCard, useKanban } from "@/context/KanbanContext";
 import { KanbanCardModal } from "./KanbanCardModal";
 import { Plus, Check, ArrowRight, ArrowLeft, RotateCcw, Trash2 } from "lucide-react";
 
-export function KanbanBoard() {
+export interface KanbanBoardProps {
+  isMobile?: boolean;
+}
+
+export function KanbanBoard({ isMobile = false }: KanbanBoardProps = {}) {
   const { activePartner } = useHousehold();
   const {
     categories,
@@ -201,9 +205,11 @@ export function KanbanBoard() {
           <div>
             <h2 className="font-heading font-black text-sm md:text-base uppercase tracking-wide text-black flex items-center gap-2">
               Kanban Board
-              <span className="text-[10px] font-heading font-bold uppercase px-2 py-0.5 rounded-full border border-black bg-zinc-100 text-black">
-                3 Vertical Columns
-              </span>
+              {!isMobile && (
+                <span className="text-[10px] font-heading font-bold uppercase px-2 py-0.5 rounded-full border border-black bg-zinc-100 text-black hidden sm:inline-block">
+                  3 Vertical Columns
+                </span>
+              )}
             </h2>
             <p className="text-xs text-zinc-500">
               Long-term projects &amp; chores synced with Day View
@@ -239,7 +245,11 @@ export function KanbanBoard() {
       </div>
 
       {/* Mobile-Only Column Switcher Tabs */}
-      <div className="flex md:hidden items-center justify-between gap-1 p-1 bg-zinc-100 border-2 border-black rounded-2xl mb-4 text-xs font-heading font-bold">
+      <div
+        className={`${
+          isMobile ? "flex" : "flex md:hidden"
+        } items-center justify-between gap-1 p-1 bg-zinc-100 border-2 border-black rounded-2xl mb-4 text-xs font-heading font-bold`}
+      >
         <button
           type="button"
           onClick={() => setMobileTab("todo")}
@@ -303,14 +313,22 @@ export function KanbanBoard() {
       </div>
 
       {/* 3 VERTICAL COLUMNS: Side-by-side grid on desktop, tabbed on mobile */}
-      <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4 overflow-y-auto pt-1 min-h-[460px]">
+      <div
+        className={`flex-1 ${
+          isMobile
+            ? "flex flex-col gap-4"
+            : "grid grid-cols-1 md:grid-cols-3 gap-4"
+        } overflow-y-auto pt-1 min-h-[460px]`}
+      >
         {/* SECTION 1: TO DO */}
         <div
           onDragOver={(e) => handleDragOver(e, "todo")}
           onDragLeave={() => handleDragLeave("todo")}
           onDrop={(e) => handleDrop(e, "todo")}
           className={`border-2 border-black rounded-2xl p-4 bg-zinc-50/70 shadow-sm flex flex-col justify-between transition-colors ${
-            mobileTab === "todo" ? "flex" : "hidden md:flex"
+            isMobile
+              ? mobileTab === "todo" ? "flex" : "hidden"
+              : mobileTab === "todo" ? "flex" : "hidden md:flex"
           } ${dragOverStage === "todo" ? "bg-zinc-200 border-dashed" : ""}`}
         >
           <div>
@@ -353,7 +371,9 @@ export function KanbanBoard() {
           onDragLeave={() => handleDragLeave("inprogress")}
           onDrop={(e) => handleDrop(e, "inprogress")}
           className={`border-2 border-black rounded-2xl p-4 bg-white shadow-[3px_3px_0_0_#000] flex flex-col justify-between transition-colors ${
-            mobileTab === "inprogress" ? "flex" : "hidden md:flex"
+            isMobile
+              ? mobileTab === "inprogress" ? "flex" : "hidden"
+              : mobileTab === "inprogress" ? "flex" : "hidden md:flex"
           } ${dragOverStage === "inprogress" ? "bg-zinc-100 border-dashed" : ""}`}
         >
           <div>
@@ -396,7 +416,9 @@ export function KanbanBoard() {
           onDragLeave={() => handleDragLeave("done")}
           onDrop={(e) => handleDrop(e, "done")}
           className={`border-2 border-dashed border-zinc-300 rounded-2xl p-4 bg-[#fcfcfc] flex flex-col justify-between transition-colors ${
-            mobileTab === "done" ? "flex" : "hidden md:flex"
+            isMobile
+              ? mobileTab === "done" ? "flex" : "hidden"
+              : mobileTab === "done" ? "flex" : "hidden md:flex"
           } ${dragOverStage === "done" ? "bg-zinc-200" : ""}`}
         >
           <div>

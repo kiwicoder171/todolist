@@ -87,7 +87,7 @@ export default function Home() {
             ) : mobileTab === "daily" ? (
               <DailyTasksBoard />
             ) : mobileTab === "kanban" ? (
-              <KanbanBoard />
+              <KanbanBoard isMobile={true} />
             ) : (
               <CalendarConsistencySection />
             )}
