@@ -36,6 +36,20 @@ export function DailyRoutinesBoard() {
     return isScheduled && matchesFilter;
   });
 
+  const allVisibleDone =
+    visibleRoutines.length > 0 &&
+    visibleRoutines.every((r) => isCompleted(r.id, selectedDate));
+
+  const [celebrationMsg, setCelebrationMsg] = useState<string | null>(null);
+
+  const handleToggle = (id: string) => {
+    const wasCompleted = isCompleted(id, selectedDate);
+    toggleCompletion(id, selectedDate);
+    if (!wasCompleted) {
+      setCelebrationMsg("✨ +1 Routine Done!");
+    }
+  };
+
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && newTitle.trim()) {
       addRoutine(newTitle.trim(), newAssignee, newFrequency);
@@ -51,7 +65,13 @@ export function DailyRoutinesBoard() {
   };
 
   return (
-    <div className="bg-white border-2 border-black rounded-3xl p-5 shadow-[4px_4px_0_0_#000] flex flex-col flex-1">
+    <div className="bg-white border-2 border-black rounded-3xl p-5 shadow-[4px_4px_0_0_#000] flex flex-col flex-1 relative">
+      {celebrationMsg && (
+        <div className="absolute top-2 right-4 z-20 px-3 py-1 bg-black text-white text-[11px] font-heading font-extrabold rounded-full animate-bounce border border-white">
+          {celebrationMsg}
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between pb-3.5 border-b-2 border-black mb-3">
         <div className="flex items-center gap-2.5">
@@ -66,6 +86,18 @@ export function DailyRoutinesBoard() {
           Recurring
         </span>
       </div>
+
+      {allVisibleDone && (
+        <div className="mb-3 p-2.5 rounded-2xl border-2 border-black bg-black text-white flex items-center justify-between text-xs font-heading font-extrabold shadow-[2px_2px_0_0_#000]">
+          <div className="flex items-center gap-2">
+            <span>🔥</span>
+            <span>100% ROUTINES DONE! PERFECT DAY (+1 PT)</span>
+          </div>
+          <span className="text-[10px] px-2 py-0.5 rounded-full border border-white bg-white/20">
+            Streak Active
+          </span>
+        </div>
+      )}
 
       <p className="text-xs text-zinc-500 mb-3 leading-relaxed">
         Apple Notes style. Press{" "}
@@ -92,7 +124,7 @@ export function DailyRoutinesBoard() {
               >
                 <div className="flex items-center gap-3 flex-1 min-w-0 mr-2">
                   <button
-                    onClick={() => toggleCompletion(r.id, selectedDate)}
+                    onClick={() => handleToggle(r.id)}
                     aria-label={`Toggle ${r.title}`}
                     className={`w-6 h-6 rounded-lg border-2 border-black flex items-center justify-center transition-all ${
                       completed

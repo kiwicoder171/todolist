@@ -21,6 +21,7 @@ export function DailyTasksBoard() {
   const [selectedTaskForDrawer, setSelectedTaskForDrawer] = useState<DailyTask | null>(
     null
   );
+  const [celebrationMsg, setCelebrationMsg] = useState<string | null>(null);
 
   // Reference "Today" date
   const today = new Date(2026, 9, 14);
@@ -33,6 +34,14 @@ export function DailyTasksBoard() {
     matchesAssigneeFilter(t.assignee, activePartner, assigneeFilter)
   );
 
+  const handleToggle = (id: string, wasCompleted: boolean) => {
+    toggleDailyTask(id);
+    if (!wasCompleted) {
+      setCelebrationMsg("🎉 Task Done!");
+      setTimeout(() => setCelebrationMsg(null), 2000);
+    }
+  };
+
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && newTitle.trim()) {
       addDailyTask(newTitle.trim(), newAssignee, selectedDate);
@@ -41,7 +50,12 @@ export function DailyTasksBoard() {
   };
 
   return (
-    <div className="bg-white border-2 border-black rounded-3xl p-5 shadow-[4px_4px_0_0_#000] flex flex-col flex-1">
+    <div className="bg-white border-2 border-black rounded-3xl p-5 shadow-[4px_4px_0_0_#000] flex flex-col flex-1 relative">
+      {celebrationMsg && (
+        <div className="absolute top-2 right-4 z-20 px-3 py-1 bg-black text-white text-[11px] font-heading font-extrabold rounded-full animate-bounce border border-white">
+          {celebrationMsg}
+        </div>
+      )}
       {/* Header */}
       <div className="flex items-center justify-between pb-3.5 border-b-2 border-black mb-3">
         <div className="flex items-center gap-2.5">
@@ -81,7 +95,7 @@ export function DailyTasksBoard() {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      toggleDailyTask(t.id);
+                      handleToggle(t.id, t.completed);
                     }}
                     aria-label={`Toggle ${t.title}`}
                     className={`mt-0.5 w-6 h-6 rounded-lg border-2 border-black flex items-center justify-center transition-all ${
