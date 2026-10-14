@@ -5,9 +5,9 @@ Interactive Calendar panel allowing date clicking to drive the Day View. Visual 
 
 **Blocked by:** 02: Board 1 — Apple Notes Daily Routines, 03: Board 2 — Daily Tasks
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] Month/week calendar view with date selection
-- [ ] Visual glance indicators per calendar cell (green = 100% routines done, amber = pending daily tasks)
-- [ ] Freeze Day toggle pausing routine requirements and waiving penalties
-- [ ] Tests for calendar date selection and Freeze Day exemption
+- [x] Month/week calendar view with date selection
+- [x] Visual glance indicators per calendar cell (green = 100% routines done, amber = pending daily tasks)
+- [x] Freeze Day toggle pausing routine requirements and waiving penalties
+- [x] Tests for calendar date selection and Freeze Day exemption

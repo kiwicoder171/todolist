@@ -20,8 +20,17 @@ export interface HouseholdContextType {
   setSelectedDate: (date: Date) => void;
   isFreezeDay: boolean;
   toggleFreezeDay: () => void;
+  isDateFrozen: (date: Date) => boolean;
+  toggleFreezeDate: (date: Date) => void;
   scores: Record<Partner, PartnerScoreState>;
   updateScore: (partner: Partner, deltaPoints: number) => void;
+}
+
+export function formatDateKey(date: Date): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
 }
 
 export function matchesAssigneeFilter(
@@ -43,15 +52,31 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
   const [activePartner, setActivePartner] = useState<Partner>("alex");
   const [assigneeFilter, setAssigneeFilter] = useState<AssigneeFilter>("all");
   const [selectedDate, setSelectedDate] = useState<Date>(new Date(2026, 9, 14)); // Oct 14, 2026
-  const [isFreezeDay, setIsFreezeDay] = useState<boolean>(false);
+  const [frozenDates, setFrozenDates] = useState<Record<string, boolean>>({
+    "2026-10-18": true,
+  });
 
   const [scores, setScores] = useState<Record<Partner, PartnerScoreState>>({
     alex: { points: 12, streak: 4 },
     sam: { points: 9, streak: 2 },
   });
 
+  const isDateFrozen = (date: Date): boolean => {
+    return !!frozenDates[formatDateKey(date)];
+  };
+
+  const toggleFreezeDate = (date: Date) => {
+    const key = formatDateKey(date);
+    setFrozenDates((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
+
+  const isFreezeDay = isDateFrozen(selectedDate);
+
   const toggleFreezeDay = () => {
-    setIsFreezeDay((prev) => !prev);
+    toggleFreezeDate(selectedDate);
   };
 
   const updateScore = (partner: Partner, deltaPoints: number) => {
@@ -75,6 +100,8 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
         setSelectedDate,
         isFreezeDay,
         toggleFreezeDay,
+        isDateFrozen,
+        toggleFreezeDate,
         scores,
         updateScore,
       }}
