@@ -117,7 +117,7 @@ describe("UX/UI Interaction & Accessibility Tests", () => {
       expect(screen.getByText("New Kanban Card")).toBeInTheDocument();
     });
 
-    it("switches mobile kanban columns using segmented tab control", () => {
+    it("renders mobile kanban as a single column with sections in order: To Do, In Progress, Done", () => {
       render(
         <HouseholdProvider>
           <RoutinesProvider>
@@ -134,12 +134,18 @@ describe("UX/UI Interaction & Accessibility Tests", () => {
       const mobileBtn = screen.getByRole("button", { name: "Mobile" });
       fireEvent.click(mobileBtn);
 
-      // Look for mobile column tab switcher buttons
-      const inProgressTab = screen.getByRole("button", { name: /In Progress/i });
-      fireEvent.click(inProgressTab);
+      // Verify all 3 section headings are rendered in order
+      const headings = screen.getAllByRole("heading");
+      const headingTexts = headings.map((h) => h.textContent?.trim());
 
-      // Verify In Progress column is selected and card count is displayed
-      expect(inProgressTab).toHaveClass("bg-black");
+      expect(headingTexts).toContain("To Do");
+      expect(headingTexts).toContain("In Progress");
+      expect(headingTexts).toContain("Done");
+
+      // Verify action buttons for all 3 sections exist
+      expect(screen.getByRole("button", { name: /Add To Do/i })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /Add Active Task/i })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /Archive Done/i })).toBeInTheDocument();
     });
 
     it("renders Day & Habit focus on top and Kanban focus on bottom in desktop all view", () => {

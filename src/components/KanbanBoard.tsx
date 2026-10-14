@@ -21,7 +21,6 @@ export function KanbanBoard() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalInitialStage, setModalInitialStage] = useState<KanbanStage>("todo");
-  const [mobileTab, setMobileTab] = useState<KanbanStage>("todo");
   const [draggedCardId, setDraggedCardId] = useState<string | null>(null);
   const [dragOverStage, setDragOverStage] = useState<KanbanStage | null>(null);
 
@@ -31,7 +30,6 @@ export function KanbanBoard() {
 
   const openAddCard = (stage: KanbanStage = "todo") => {
     setModalInitialStage(stage);
-    setMobileTab(stage);
     setIsModalOpen(true);
   };
 
@@ -239,80 +237,16 @@ export function KanbanBoard() {
         </div>
       </div>
 
-      {/* Mobile-Only Column Switcher Tabs */}
-      <div className="flex md:hidden items-center justify-between gap-1 p-1 bg-zinc-100 border-2 border-black rounded-2xl mb-4 text-xs font-heading font-bold">
-        <button
-          type="button"
-          onClick={() => setMobileTab("todo")}
-          className={`flex-1 py-1.5 px-2 rounded-xl text-center transition flex items-center justify-center gap-1.5 ${
-            mobileTab === "todo"
-              ? "bg-black text-white shadow-xs"
-              : "text-zinc-600 hover:text-black"
-          }`}
-        >
-          <span>To Do</span>
-          <span
-            className={`text-[10px] px-1.5 py-0.2 rounded-full font-black ${
-              mobileTab === "todo"
-                ? "bg-white text-black"
-                : "bg-zinc-200 text-zinc-700"
-            }`}
-          >
-            {todoCards.length}
-          </span>
-        </button>
-        <button
-          type="button"
-          onClick={() => setMobileTab("inprogress")}
-          className={`flex-1 py-1.5 px-2 rounded-xl text-center transition flex items-center justify-center gap-1.5 ${
-            mobileTab === "inprogress"
-              ? "bg-black text-white shadow-xs"
-              : "text-zinc-600 hover:text-black"
-          }`}
-        >
-          <span>In Progress</span>
-          <span
-            className={`text-[10px] px-1.5 py-0.2 rounded-full font-black ${
-              mobileTab === "inprogress"
-                ? "bg-white text-black"
-                : "bg-zinc-200 text-zinc-700"
-            }`}
-          >
-            {inProgressCards.length}
-          </span>
-        </button>
-        <button
-          type="button"
-          onClick={() => setMobileTab("done")}
-          className={`flex-1 py-1.5 px-2 rounded-xl text-center transition flex items-center justify-center gap-1.5 ${
-            mobileTab === "done"
-              ? "bg-black text-white shadow-xs"
-              : "text-zinc-600 hover:text-black"
-          }`}
-        >
-          <span>Done</span>
-          <span
-            className={`text-[10px] px-1.5 py-0.2 rounded-full font-black ${
-              mobileTab === "done"
-                ? "bg-white text-black"
-                : "bg-zinc-200 text-zinc-700"
-            }`}
-          >
-            {doneCards.length}
-          </span>
-        </button>
-      </div>
-
-      {/* 3 VERTICAL COLUMNS: Side-by-side grid on desktop, tabbed on mobile */}
-      <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4 overflow-y-auto pt-1 min-h-[460px]">
-        {/* COLUMN 1: TO DO */}
+      {/* 3 SECTIONS: Continuous single column on mobile, 3-column side-by-side grid on desktop */}
+      <div className="flex-1 flex flex-col md:grid md:grid-cols-3 gap-5 md:gap-4 overflow-y-auto pt-1 min-h-[460px]">
+        {/* SECTION 1: TO DO */}
         <div
           onDragOver={(e) => handleDragOver(e, "todo")}
           onDragLeave={() => handleDragLeave("todo")}
           onDrop={(e) => handleDrop(e, "todo")}
-          className={`border-2 border-black rounded-2xl p-3.5 bg-zinc-50/70 shadow-sm flex flex-col justify-between transition-colors ${
-            mobileTab === "todo" ? "flex" : "hidden md:flex"
-          } ${dragOverStage === "todo" ? "bg-zinc-200 border-dashed" : ""}`}
+          className={`border-2 border-black rounded-2xl p-4 bg-zinc-50/70 shadow-sm flex flex-col justify-between transition-colors ${
+            dragOverStage === "todo" ? "bg-zinc-200 border-dashed" : ""
+          }`}
         >
           <div>
             <div className="flex items-center justify-between pb-3 border-b-2 border-dashed border-zinc-300 mb-3">
@@ -341,21 +275,21 @@ export function KanbanBoard() {
           <button
             type="button"
             onClick={() => openAddCard("todo")}
-            className="mt-3 w-full py-2 border-2 border-dashed border-zinc-400 hover:border-black rounded-xl text-zinc-600 hover:text-black font-heading font-bold text-xs uppercase transition flex items-center justify-center gap-1.5 bg-white"
+            className="mt-3.5 w-full py-2 border-2 border-dashed border-zinc-400 hover:border-black rounded-xl text-zinc-600 hover:text-black font-heading font-bold text-xs uppercase transition flex items-center justify-center gap-1.5 bg-white shadow-xs"
           >
             <Plus className="w-3 h-3" />
             <span>Add To Do</span>
           </button>
         </div>
 
-        {/* COLUMN 2: IN PROGRESS */}
+        {/* SECTION 2: IN PROGRESS */}
         <div
           onDragOver={(e) => handleDragOver(e, "inprogress")}
           onDragLeave={() => handleDragLeave("inprogress")}
           onDrop={(e) => handleDrop(e, "inprogress")}
-          className={`border-2 border-black rounded-2xl p-3.5 bg-white shadow-[3px_3px_0_0_#000] flex flex-col justify-between transition-colors ${
-            mobileTab === "inprogress" ? "flex" : "hidden md:flex"
-          } ${dragOverStage === "inprogress" ? "bg-zinc-100 border-dashed" : ""}`}
+          className={`border-2 border-black rounded-2xl p-4 bg-white shadow-[3px_3px_0_0_#000] flex flex-col justify-between transition-colors ${
+            dragOverStage === "inprogress" ? "bg-zinc-100 border-dashed" : ""
+          }`}
         >
           <div>
             <div className="flex items-center justify-between pb-3 border-b-2 border-black mb-3">
@@ -384,21 +318,21 @@ export function KanbanBoard() {
           <button
             type="button"
             onClick={() => openAddCard("inprogress")}
-            className="mt-3 w-full py-2 border-2 border-dashed border-zinc-400 hover:border-black rounded-xl text-zinc-600 hover:text-black font-heading font-bold text-xs uppercase transition flex items-center justify-center gap-1.5 bg-zinc-50"
+            className="mt-3.5 w-full py-2 border-2 border-dashed border-zinc-400 hover:border-black rounded-xl text-zinc-600 hover:text-black font-heading font-bold text-xs uppercase transition flex items-center justify-center gap-1.5 bg-zinc-50 shadow-xs"
           >
             <Plus className="w-3 h-3" />
             <span>Add Active Task</span>
           </button>
         </div>
 
-        {/* COLUMN 3: DONE */}
+        {/* SECTION 3: DONE */}
         <div
           onDragOver={(e) => handleDragOver(e, "done")}
           onDragLeave={() => handleDragLeave("done")}
           onDrop={(e) => handleDrop(e, "done")}
-          className={`border-2 border-dashed border-zinc-300 rounded-2xl p-3.5 bg-[#fcfcfc] flex flex-col justify-between transition-colors ${
-            mobileTab === "done" ? "flex" : "hidden md:flex"
-          } ${dragOverStage === "done" ? "bg-zinc-200" : ""}`}
+          className={`border-2 border-dashed border-zinc-300 rounded-2xl p-4 bg-[#fcfcfc] flex flex-col justify-between transition-colors ${
+            dragOverStage === "done" ? "bg-zinc-200" : ""
+          }`}
         >
           <div>
             <div className="flex items-center justify-between pb-3 border-b-2 border-dashed border-zinc-300 mb-3">
@@ -429,7 +363,7 @@ export function KanbanBoard() {
           <button
             type="button"
             onClick={clearDoneCards}
-            className="mt-3 w-full py-2 border border-zinc-300 hover:border-black rounded-xl text-zinc-400 hover:text-black font-heading font-bold text-xs uppercase transition text-center bg-white"
+            className="mt-3.5 w-full py-2 border border-zinc-300 hover:border-black rounded-xl text-zinc-400 hover:text-black font-heading font-bold text-xs uppercase transition text-center bg-white shadow-xs"
           >
             Archive Done
           </button>
