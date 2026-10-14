@@ -26,6 +26,19 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300&family=Montserrat:wght@400;500;600;700;800;900&display=swap"
           rel="stylesheet"
         />
+        {process.env.NODE_ENV !== "production" && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+                  navigator.serviceWorker.getRegistrations().then(function(regs) {
+                    for (var r of regs) { r.unregister(); }
+                  });
+                }
+              `,
+            }}
+          />
+        )}
       </head>
       <body className="antialiased selection:bg-black selection:text-white">
         <HouseholdProvider>
