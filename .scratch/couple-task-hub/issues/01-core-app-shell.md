@@ -5,9 +5,9 @@ Scaffold the Next.js application with Tailwind CSS and Lucide icons. Implement t
 
 **Blocked by:** 00: Interactive UI Prototype & Design Review
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] Next.js app scaffold with Tailwind CSS & PWA manifest setup
-- [ ] Responsive layout: 3 panes on desktop, bottom navigation on mobile
-- [ ] Household state provider with active Partner identity and Assignee filter toggle
-- [ ] Unit tests for Household state and Assignee filtering
+- [x] Next.js app scaffold with Tailwind CSS & PWA manifest setup
+- [x] Responsive layout: 3 panes on desktop, bottom navigation on mobile
+- [x] Household state provider with active Partner identity and Assignee filter toggle
+- [x] Unit tests for Household state and Assignee filtering

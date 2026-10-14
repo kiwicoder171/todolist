@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #fafafa;
+  --foreground: #18181b;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: 'Lato', sans-serif;
+}
+
+h1, h2, h3, h4, .font-heading {
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Custom Hand-Drawn Craft Styles */
+.border-sketch {
+  border: 2px solid #18181b;
+}
+
+.border-sketch-dashed {
+  border: 2px dashed #27272a;
+}
+
+.border-sketch-dotted {
+  border: 2px dotted #52525b;
+}
+
+.squircle-card {
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s ease;
+}
+
+.squircle-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px -4px rgba(0, 0, 0, 0.08);
+}
+
+.ink-strikethrough {
+  position: relative;
+  transition: all 0.25s ease;
+}
+
+.ink-strikethrough.done {
+  text-decoration: line-through 2px #18181b;
+  opacity: 0.45;
+}
+
+.segment-bar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+  height: 12px;
+  padding: 2px;
+  background: #f4f4f5;
+  border: 1.5px solid #18181b;
+  border-radius: 9999px;
+}
+
+.segment-cell {
+  height: 100%;
+  border-radius: 2px;
+  background: transparent;
+  transition: background-color 0.2s ease;
+}
+
+.segment-cell.filled {
+  background: #18181b;
+}
