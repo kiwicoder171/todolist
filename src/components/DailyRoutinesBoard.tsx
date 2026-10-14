@@ -8,7 +8,8 @@ import {
   formatFrequencyLabel,
   RoutineFrequency,
 } from "@/context/RoutinesContext";
-import { Check, ArrowUp, ArrowDown, X, Plus } from "lucide-react";
+import { Check, ArrowUp, ArrowDown, X, Plus, Calendar } from "lucide-react";
+import { AddRoutineModal } from "./AddRoutineModal";
 
 export function DailyRoutinesBoard() {
   const { activePartner, assigneeFilter, selectedDate } = useHousehold();
@@ -22,8 +23,9 @@ export function DailyRoutinesBoard() {
   } = useRoutines();
 
   const [newTitle, setNewTitle] = useState("");
-  const [newAssignee, setNewAssignee] = useState<Assignee>("mine");
-  const [newFrequency, setNewFrequency] = useState<RoutineFrequency>("daily");
+  const [newAssignee, setNewAssignee] = useState<Assignee>("both");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalInitialTitle, setModalInitialTitle] = useState("");
 
   // Filter routines by schedule date & assignee filter
   const visibleRoutines = routines.filter((r) => {
@@ -53,7 +55,7 @@ export function DailyRoutinesBoard() {
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && newTitle.trim()) {
-      addRoutine(newTitle.trim(), newAssignee, newFrequency);
+      addRoutine(newTitle.trim(), newAssignee, "daily");
       setNewTitle("");
     }
   };
@@ -74,18 +76,31 @@ export function DailyRoutinesBoard() {
       )}
 
       {/* Header */}
-      <div className="flex items-center justify-between pb-3.5 border-b-2 border-black mb-3">
+      <div className="flex items-center justify-between pb-3.5 border-b-2 border-black mb-3 gap-2">
         <div className="flex items-center gap-2.5">
-          <div className="w-6 h-6 rounded-lg bg-black text-white flex items-center justify-center font-heading font-bold text-xs">
+          <div className="w-6 h-6 rounded-lg bg-black text-white flex items-center justify-center font-heading font-bold text-xs shrink-0">
             1
           </div>
           <h2 className="font-heading font-black text-sm uppercase tracking-wide text-black">
             Daily Routines
           </h2>
         </div>
-        <span className="text-[10px] font-heading font-bold uppercase px-2 py-0.5 rounded-full border border-black bg-zinc-100">
-          Recurring
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] font-heading font-bold uppercase px-2 py-0.5 rounded-full border border-black bg-zinc-100 hidden sm:inline-block">
+            Recurring
+          </span>
+          <button
+            type="button"
+            onClick={() => {
+              setModalInitialTitle(newTitle);
+              setIsModalOpen(true);
+            }}
+            className="px-2.5 py-1 bg-black text-white hover:bg-zinc-800 rounded-full font-heading font-extrabold text-[10px] uppercase flex items-center gap-1 transition shadow-xs"
+          >
+            <Plus className="w-3 h-3" />
+            <span>Add Routine</span>
+          </button>
+        </div>
       </div>
 
       {allVisibleDone && (
@@ -200,10 +215,10 @@ export function DailyRoutinesBoard() {
         )}
       </div>
 
-      {/* Quick Add Routine Input */}
+      {/* Quick Add Routine Bar */}
       <div className="mt-4 pt-3.5 border-t-2 border-dashed border-zinc-300">
-        <div className="flex items-center gap-2 bg-[#f4f4f5] border-2 border-black rounded-2xl px-3 py-2.5 focus-within:ring-2 focus-within:ring-black transition shadow-sm">
-          <Plus className="w-4 h-4 text-zinc-400" />
+        <div className="flex items-center gap-2 bg-[#f4f4f5] border-2 border-black rounded-2xl px-3 py-2 focus-within:ring-2 focus-within:ring-black transition shadow-sm">
+          <Plus className="w-4 h-4 text-zinc-400 shrink-0" />
           <input
             type="text"
             value={newTitle}
@@ -214,37 +229,29 @@ export function DailyRoutinesBoard() {
             className="bg-transparent text-xs font-medium text-black placeholder-zinc-400 focus:outline-none w-full"
           />
 
-          <select
-            value={typeof newFrequency === "string" ? newFrequency : "custom"}
-            aria-label="Routine frequency"
-            onChange={(e) => {
-              const val = e.target.value;
-              if (val === "daily" || val === "weekdays" || val === "weekends") {
-                setNewFrequency(val);
-              } else if (val === "mon-wed-fri") {
-                setNewFrequency([1, 3, 5]);
-              }
+          <button
+            type="button"
+            onClick={() => {
+              setModalInitialTitle(newTitle);
+              setIsModalOpen(true);
             }}
-            className="bg-white font-heading font-bold text-[10px] uppercase text-black rounded-lg px-2 py-1 border border-black focus:outline-none"
+            title="Pick specific days of the week"
+            className="bg-white hover:bg-black hover:text-white font-heading font-extrabold text-[10px] uppercase text-black rounded-xl px-2.5 py-1.5 border border-black transition shrink-0 flex items-center gap-1 shadow-xs whitespace-nowrap"
           >
-            <option value="daily">Daily</option>
-            <option value="weekdays">Weekdays</option>
-            <option value="weekends">Weekends</option>
-            <option value="mon-wed-fri">Mon, Wed, Fri</option>
-          </select>
-
-          <select
-            value={newAssignee}
-            aria-label="Routine assignee"
-            onChange={(e) => setNewAssignee(e.target.value as Assignee)}
-            className="bg-white font-heading font-bold text-[10px] uppercase text-black rounded-lg px-2 py-1 border border-black focus:outline-none"
-          >
-            <option value="mine">Me</option>
-            <option value="partner">Sam</option>
-            <option value="both">Both</option>
-          </select>
+            <Calendar className="w-3 h-3" />
+            <span>Pick Days</span>
+          </button>
         </div>
       </div>
+
+      <AddRoutineModal
+        isOpen={isModalOpen}
+        initialTitle={modalInitialTitle || newTitle}
+        onClose={() => {
+          setIsModalOpen(false);
+          setModalInitialTitle("");
+        }}
+      />
     </div>
   );
 }
