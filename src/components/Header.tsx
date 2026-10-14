@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { useHousehold, Partner } from "@/context/HouseholdContext";
 import { useAuth } from "@/context/AuthContext";
-import { Flame, Users, LogIn, LogOut, User as UserIcon } from "lucide-react";
+import { Flame, Users, LogIn, LogOut, User as UserIcon, BookOpen } from "lucide-react";
 import { CircleInviteModal } from "./CircleInviteModal";
 import { AuthModal } from "./AuthModal";
 import { Logo } from "./Logo";
@@ -175,6 +176,16 @@ export function Header({
               <span>Join Circle</span>
             </button>
           )}
+
+          {/* Documentation & Changelog */}
+          <Link
+            href="/docs"
+            className="px-2.5 py-1 sm:px-3 sm:py-1 rounded-full border-2 border-black bg-white hover:bg-black hover:text-white transition text-xs font-heading font-extrabold flex items-center gap-1 shadow-[2px_2px_0_0_#000] shrink-0 cursor-pointer active:translate-x-0.5 active:translate-y-0.5"
+            title="Read Guide & Version Changelog"
+          >
+            <BookOpen className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Docs</span>
+          </Link>
 
           {/* Account Profile or Log In */}
           {user ? (
