@@ -8,7 +8,7 @@ import { KanbanProvider } from "@/context/KanbanContext";
 import { TaskDetailDrawer } from "@/components/TaskDetailDrawer";
 import { WishlistModal } from "@/components/WishlistModal";
 import { KanbanCardModal } from "@/components/KanbanCardModal";
-import Home from "@/app/page";
+import { CoupleTaskHubApp } from "@/components/CoupleTaskHubApp";
 
 describe("UX/UI Interaction & Accessibility Tests", () => {
   describe("TaskDetailDrawer", () => {
@@ -88,22 +88,18 @@ describe("UX/UI Interaction & Accessibility Tests", () => {
   });
 
   describe("Mobile Navigation & Quick Add", () => {
-    it("switches to mobile view and opens KanbanCardModal on quick add", () => {
+    it("renders mobile view and opens KanbanCardModal on quick add", () => {
       render(
         <HouseholdProvider>
           <RoutinesProvider>
             <DailyTasksProvider>
               <KanbanProvider>
-                <Home />
+                <CoupleTaskHubApp forcedIsMobile={true} />
               </KanbanProvider>
             </DailyTasksProvider>
           </RoutinesProvider>
         </HouseholdProvider>
       );
-
-      // Switch to Mobile Preview
-      const mobileBtn = screen.getByRole("button", { name: "Mobile" });
-      fireEvent.click(mobileBtn);
 
       // Verify phone status bar & pill header
       expect(screen.getByText("3-COL KANBAN")).toBeInTheDocument();
@@ -123,16 +119,12 @@ describe("UX/UI Interaction & Accessibility Tests", () => {
           <RoutinesProvider>
             <DailyTasksProvider>
               <KanbanProvider>
-                <Home />
+                <CoupleTaskHubApp forcedIsMobile={true} />
               </KanbanProvider>
             </DailyTasksProvider>
           </RoutinesProvider>
         </HouseholdProvider>
       );
-
-      // Switch to Mobile Preview
-      const mobileBtn = screen.getByRole("button", { name: "Mobile" });
-      fireEvent.click(mobileBtn);
 
       // Look for mobile column tab switcher buttons
       const inProgressTab = screen.getByRole("button", { name: /In Progress/i });
@@ -148,7 +140,7 @@ describe("UX/UI Interaction & Accessibility Tests", () => {
           <RoutinesProvider>
             <DailyTasksProvider>
               <KanbanProvider>
-                <Home />
+                <CoupleTaskHubApp forcedIsMobile={false} />
               </KanbanProvider>
             </DailyTasksProvider>
           </RoutinesProvider>

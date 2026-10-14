@@ -11,6 +11,7 @@ export function FilterBar() {
     isFreezeDay,
     toggleFreezeDay,
     activePartner,
+    partnerNames,
   } = useHousehold();
 
   const formattedDate = new Intl.DateTimeFormat("en-US", {
@@ -20,10 +21,12 @@ export function FilterBar() {
     year: "numeric",
   }).format(selectedDate);
 
+  const otherPartnerName = activePartner === "alex" ? partnerNames.sam : partnerNames.alex;
+
   const filters: { key: AssigneeFilter; label: string }[] = [
     { key: "all", label: "All Items" },
     { key: "mine", label: "Mine" },
-    { key: "partner", label: activePartner === "alex" ? "Sam's" : "Alex's" },
+    { key: "partner", label: `${otherPartnerName}'s` },
   ];
 
   return (

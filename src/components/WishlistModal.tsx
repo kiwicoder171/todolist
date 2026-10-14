@@ -11,15 +11,32 @@ export interface WishlistModalProps {
 }
 
 export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
-  const { activePartner, scores, updateScore } = useHousehold();
-  const currentScore = scores[activePartner];
+  const { activePartner, scores, updateScore, partnerNames } = useHousehold();
+  const currentScore = scores[activePartner] || { points: 0, streak: 0 };
 
-  const [rewards, setRewards] = useState<RewardItem[]>(DEFAULT_REWARDS);
+  const [rewards, setRewards] = useState<RewardItem[]>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem("couple_task_hub_wishlist");
+        if (stored) return JSON.parse(stored);
+      } catch {}
+    }
+    return DEFAULT_REWARDS;
+  });
   const [isAddingCustom, setIsAddingCustom] = useState(false);
   const [newTitle, setNewTitle] = useState("");
   const [newDesc, setNewDesc] = useState("");
   const [newCost, setNewCost] = useState(10);
   const [redeemedNotice, setRedeemedNotice] = useState<string | null>(null);
+
+  const saveRewards = (newItems: RewardItem[]) => {
+    setRewards(newItems);
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("couple_task_hub_wishlist", JSON.stringify(newItems));
+      } catch {}
+    }
+  };
 
   React.useEffect(() => {
     if (!isOpen) return;
@@ -53,12 +70,14 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
       cost: Number(newCost) || 5,
     };
 
-    setRewards((prev) => [...prev, newReward]);
+    saveRewards([...rewards, newReward]);
     setNewTitle("");
     setNewDesc("");
     setNewCost(10);
     setIsAddingCustom(false);
   };
+
+  const currentPartnerName = activePartner === "alex" ? partnerNames.alex : partnerNames.sam;
 
   return (
     <div
@@ -82,7 +101,7 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
               <Sparkles className="w-3.5 h-3.5" />
             </h3>
             <p className="text-xs text-zinc-500 font-medium">
-              {activePartner === "alex" ? "Alex's" : "Sam's"} Balance:{" "}
+              {currentPartnerName}&apos;s Balance:{" "}
               <strong
                 className={`font-heading font-extrabold ${
                   currentScore.points < 0 ? "text-red-600" : "text-black"

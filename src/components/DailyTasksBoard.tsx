@@ -12,7 +12,7 @@ import { TaskDetailDrawer } from "./TaskDetailDrawer";
 import { Check, CornerDownRight, X, Plus } from "lucide-react";
 
 export function DailyTasksBoard() {
-  const { activePartner, assigneeFilter, selectedDate } = useHousehold();
+  const { activePartner, assigneeFilter, selectedDate, partnerNames } = useHousehold();
   const { tasks, addDailyTask, toggleDailyTask, updateDailyTask, deleteDailyTask } =
     useDailyTasks();
 
@@ -153,7 +153,7 @@ export function DailyTasksBoard() {
                     {t.assignee === "mine"
                       ? "Me"
                       : t.assignee === "partner"
-                      ? "Sam"
+                      ? partnerNames.sam
                       : "Both"}
                   </span>
 

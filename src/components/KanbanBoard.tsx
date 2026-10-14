@@ -11,7 +11,7 @@ export interface KanbanBoardProps {
 }
 
 export function KanbanBoard({ isMobile = false }: KanbanBoardProps = {}) {
-  const { activePartner } = useHousehold();
+  const { activePartner, partnerNames } = useHousehold();
   const {
     categories,
     selectedCategory,
@@ -70,7 +70,7 @@ export function KanbanBoard({ isMobile = false }: KanbanBoardProps = {}) {
   };
 
   const renderCard = (card: KanbanCard, currentStage: KanbanStage) => {
-    const partnerName = activePartner === "alex" ? "Sam" : "Alex";
+    const partnerName = activePartner === "alex" ? partnerNames.sam : partnerNames.alex;
 
     return (
       <div

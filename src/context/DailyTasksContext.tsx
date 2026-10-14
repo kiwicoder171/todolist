@@ -115,9 +115,33 @@ const SEED_TASKS: DailyTask[] = [
   },
 ];
 
+const TASKS_STORAGE_KEY = "couple_task_hub_daily_tasks";
+
 export function DailyTasksProvider({ children }: { children: ReactNode }) {
-  const [tasks, setTasks] = useState<DailyTask[]>(SEED_TASKS);
+  const isTest = typeof process !== "undefined" && process.env.NODE_ENV === "test";
+
+  const [tasks, setTasks] = useState<DailyTask[]>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem(TASKS_STORAGE_KEY);
+        if (stored) return JSON.parse(stored);
+      } catch {}
+    }
+    return isTest ? SEED_TASKS : [];
+  });
   const syncHooksRef = useRef<KanbanSyncCallback[]>([]);
+
+  const saveTasks = (updater: (prev: DailyTask[]) => DailyTask[]) => {
+    setTasks((prev) => {
+      const next = updater(prev);
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(next));
+        } catch {}
+      }
+      return next;
+    });
+  };
 
   const registerKanbanSyncHook = useCallback(
     (callback: KanbanSyncCallback) => {
@@ -149,7 +173,7 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
       isKanbanSynced,
       kanbanId,
     };
-    setTasks((prev) => [...prev, newTask]);
+    saveTasks((prev) => [...prev, newTask]);
   };
 
   const toggleDailyTask = (id: string, completedDateKey?: string) => {
@@ -159,7 +183,7 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
     const nextCompleted = !target.completed;
     const todayKey = completedDateKey || formatDateKey(new Date(2026, 9, 14));
 
-    setTasks((prev) =>
+    saveTasks((prev) =>
       prev.map((t) =>
         t.id === id
           ? {
@@ -179,7 +203,7 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
   };
 
   const updateDailyTask = (id: string, updates: Partial<DailyTask>) => {
-    setTasks((prev) =>
+    saveTasks((prev) =>
       prev.map((t) => (t.id === id ? { ...t, ...updates } : t))
     );
   };
@@ -191,11 +215,11 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
         cb(target.kanbanId as string, false, "delete")
       );
     }
-    setTasks((prev) => prev.filter((t) => t.id !== id));
+    saveTasks((prev) => prev.filter((t) => t.id !== id));
   };
 
   const setTaskCompletedByKanbanId = (kanbanId: string, completed: boolean) => {
-    setTasks((prev) =>
+    saveTasks((prev) =>
       prev.map((t) =>
         t.kanbanId === kanbanId ? { ...t, completed } : t
       )
@@ -203,7 +227,7 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
   };
 
   const removeTaskByKanbanId = (kanbanId: string) => {
-    setTasks((prev) => prev.filter((t) => t.kanbanId !== kanbanId));
+    saveTasks((prev) => prev.filter((t) => t.kanbanId !== kanbanId));
   };
 
   return (

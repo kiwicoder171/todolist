@@ -12,7 +12,7 @@ import { Check, ArrowUp, ArrowDown, X, Plus, Calendar } from "lucide-react";
 import { AddRoutineModal } from "./AddRoutineModal";
 
 export function DailyRoutinesBoard() {
-  const { activePartner, assigneeFilter, selectedDate } = useHousehold();
+  const { activePartner, assigneeFilter, selectedDate, partnerNames } = useHousehold();
   const {
     routines,
     addRoutine,
@@ -175,7 +175,7 @@ export function DailyRoutinesBoard() {
                     {r.assignee === "mine"
                       ? "Me"
                       : r.assignee === "partner"
-                      ? "Sam"
+                      ? partnerNames.sam
                       : "Both"}
                   </span>
 

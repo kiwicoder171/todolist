@@ -90,10 +90,10 @@ export function AddRoutineModal({
   onClose,
   initialTitle = "",
 }: AddRoutineModalProps) {
-  const { activePartner } = useHousehold();
+  const { activePartner, partnerNames } = useHousehold();
   const { addRoutine } = useRoutines();
 
-  const partnerName = activePartner === "alex" ? "Sam" : "Alex";
+  const partnerName = activePartner === "alex" ? partnerNames.sam : partnerNames.alex;
 
   const [title, setTitle] = useState(initialTitle);
   const [assignee, setAssignee] = useState<Assignee>("both");

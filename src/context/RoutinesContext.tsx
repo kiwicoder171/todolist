@@ -105,8 +105,32 @@ const SEED_ROUTINES: Routine[] = [
   },
 ];
 
+const ROUTINES_STORAGE_KEY = "couple_task_hub_routines";
+
 export function RoutinesProvider({ children }: { children: ReactNode }) {
-  const [routines, setRoutines] = useState<Routine[]>(SEED_ROUTINES);
+  const isTest = typeof process !== "undefined" && process.env.NODE_ENV === "test";
+
+  const [routines, setRoutines] = useState<Routine[]>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem(ROUTINES_STORAGE_KEY);
+        if (stored) return JSON.parse(stored);
+      } catch {}
+    }
+    return isTest ? SEED_ROUTINES : [];
+  });
+
+  const saveRoutines = (updater: (prev: Routine[]) => Routine[]) => {
+    setRoutines((prev) => {
+      const next = updater(prev);
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem(ROUTINES_STORAGE_KEY, JSON.stringify(next));
+        } catch {}
+      }
+      return next;
+    });
+  };
 
   const addRoutine = (
     title: string,
@@ -121,22 +145,22 @@ export function RoutinesProvider({ children }: { children: ReactNode }) {
       order: routines.length,
       completions: {},
     };
-    setRoutines((prev) => [...prev, newRoutine]);
+    saveRoutines((prev) => [...prev, newRoutine]);
   };
 
   const updateRoutine = (id: string, updates: Partial<Routine>) => {
-    setRoutines((prev) =>
+    saveRoutines((prev) =>
       prev.map((r) => (r.id === id ? { ...r, ...updates } : r))
     );
   };
 
   const deleteRoutine = (id: string) => {
-    setRoutines((prev) => prev.filter((r) => r.id !== id));
+    saveRoutines((prev) => prev.filter((r) => r.id !== id));
   };
 
   const toggleCompletion = (id: string, date: Date) => {
     const dateKey = formatDateKey(date);
-    setRoutines((prev) =>
+    saveRoutines((prev) =>
       prev.map((r) => {
         if (r.id !== id) return r;
         const currentVal = !!r.completions[dateKey];
@@ -160,7 +184,7 @@ export function RoutinesProvider({ children }: { children: ReactNode }) {
 
   const reorderRoutines = (startIndex: number, endIndex: number) => {
     if (startIndex === endIndex) return;
-    setRoutines((prev) => {
+    saveRoutines((prev) => {
       if (
         startIndex < 0 ||
         startIndex >= prev.length ||

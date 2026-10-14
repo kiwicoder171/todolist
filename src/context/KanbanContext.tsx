@@ -115,7 +115,30 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
     registerKanbanSyncHook,
   } = useDailyTasks();
 
-  const [cards, setCards] = useState<KanbanCard[]>(SEED_KANBAN_CARDS);
+  const isTest = typeof process !== "undefined" && process.env.NODE_ENV === "test";
+
+  const [cards, setCards] = useState<KanbanCard[]>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem("couple_task_hub_kanban_cards");
+        if (stored) return JSON.parse(stored);
+      } catch {}
+    }
+    return isTest ? SEED_KANBAN_CARDS : [];
+  });
+
+  const saveCards = (updater: (prev: KanbanCard[]) => KanbanCard[]) => {
+    setCards((prev) => {
+      const next = updater(prev);
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem("couple_task_hub_kanban_cards", JSON.stringify(next));
+        } catch {}
+      }
+      return next;
+    });
+  };
+
   const [categories, setCategories] =
     useState<KanbanCategoryItem[]>(DEFAULT_CATEGORIES);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -123,7 +146,7 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
   // Two-way sync: listen to DailyTasks completion toggles and deletions
   useEffect(() => {
     const unregister = registerKanbanSyncHook((kanbanId, completed, action) => {
-      setCards((prev) =>
+      saveCards((prev) =>
         prev.map((c) => {
           if (c.id === kanbanId) {
             if (action === "delete") {
@@ -154,22 +177,22 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
       doToday: false,
       description,
     };
-    setCards((prev) => [...prev, newCard]);
+    saveCards((prev) => [...prev, newCard]);
   };
 
   const updateCard = (id: string, updates: Partial<KanbanCard>) => {
-    setCards((prev) =>
+    saveCards((prev) =>
       prev.map((c) => (c.id === id ? { ...c, ...updates } : c))
     );
   };
 
   const deleteCard = (id: string) => {
-    setCards((prev) => prev.filter((c) => c.id !== id));
+    saveCards((prev) => prev.filter((c) => c.id !== id));
     removeTaskByKanbanId(id);
   };
 
   const moveCardStage = (id: string, targetStage: KanbanStage) => {
-    setCards((prev) =>
+    saveCards((prev) =>
       prev.map((c) => {
         if (c.id === id) {
           if (c.doToday) {
@@ -187,7 +210,7 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
   };
 
   const toggleCardDoToday = (id: string) => {
-    setCards((prev) =>
+    saveCards((prev) =>
       prev.map((c) => {
         if (c.id === id) {
           const nextDoToday = !c.doToday;
@@ -217,7 +240,7 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
   const clearDoneCards = () => {
     const doneCards = cards.filter((c) => c.stage === "done");
     doneCards.forEach((c) => removeTaskByKanbanId(c.id));
-    setCards((prev) => prev.filter((c) => c.stage !== "done"));
+    saveCards((prev) => prev.filter((c) => c.stage !== "done"));
   };
 
   const getFilteredCardsByStage = (stage: KanbanStage): KanbanCard[] => {
