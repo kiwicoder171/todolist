@@ -5,9 +5,9 @@ Implement the Daily Routine checklist on Board 1 with Apple Notes-style interact
 
 **Blocked by:** 01: Core App Shell, Responsive 3-Pane Layout & Household State
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] Interactive checklist with Enter/Backspace keyboard handlers and reordering
-- [ ] Routine Frequency selector (Daily, Weekdays, Custom days)
-- [ ] Per-calendar-date completion state persistence
-- [ ] Tests for keyboard navigation, frequency filtering, and per-date completions
+- [x] Interactive checklist with Enter/Backspace keyboard handlers and reordering
+- [x] Routine Frequency selector (Daily, Weekdays, Custom days)
+- [x] Per-calendar-date completion state persistence
+- [x] Tests for keyboard navigation, frequency filtering, and per-date completions

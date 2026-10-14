@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { HouseholdProvider } from "@/context/HouseholdContext";
+import { RoutinesProvider } from "@/context/RoutinesContext";
 
 export const metadata: Metadata = {
   title: "Couple Task Hub",
@@ -24,7 +25,9 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased selection:bg-black selection:text-white">
-        <HouseholdProvider>{children}</HouseholdProvider>
+        <HouseholdProvider>
+          <RoutinesProvider>{children}</RoutinesProvider>
+        </HouseholdProvider>
       </body>
     </html>
   );
