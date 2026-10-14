@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useHousehold } from "@/context/HouseholdContext";
 import { Heart, Users, Copy, Check, ArrowRight, Sparkles } from "lucide-react";
+import { Logo } from "./Logo";
 
 export function CircleOnboardingModal() {
   const { isConfigured, createCircle, joinCircle } = useHousehold();
@@ -85,8 +86,8 @@ export function CircleOnboardingModal() {
       <div className="bg-white border-2 border-black rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-[6px_6px_0_0_#000] relative">
         {/* Brand Header */}
         <div className="flex items-center gap-3 mb-5">
-          <div className="w-10 h-10 rounded-2xl bg-black text-white flex items-center justify-center font-heading font-black text-lg tracking-tighter">
-            2DO
+          <div className="w-11 h-11 rounded-2xl bg-black text-white flex items-center justify-center border-2 border-black shadow-[2px_2px_0_0_#000] p-1.5">
+            <Logo size={28} inverted />
           </div>
           <div>
             <h2 className="font-heading font-black text-lg uppercase tracking-wide text-black flex items-center gap-1.5">

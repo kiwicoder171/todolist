@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title-lb-1">
+  <title id="title-lb-1">2DO Logo — Lovebirds V1: The Kissing Check</title>
+  <g id="symbol">
+    <!-- Floating Heart above kiss -->
+    <path fill="#000000" d="
+      M 128 52
+      C 128 40, 114 32, 104 40
+      C 94 48, 96 62, 108 74
+      L 128 92
+      L 148 74
+      C 160 62, 162 48, 152 40
+      C 142 32, 128 40, 128 52
+      Z
+    "/>
+
+    <!-- Left Chubby Bird (Partner 1) -->
+    <!-- Body with real eye hole via evenodd -->
+    <path fill="#000000" fill-rule="evenodd" d="
+      M 96 100
+      A 46 46 0 1 1 95.9 100
+      Z
+      M 86 130
+      C 82 130, 80 134, 80 138
+      C 80 142, 84 144, 88 144
+      C 92 144, 96 142, 96 138
+      C 96 134, 94 130, 86 130
+      Z
+    "/>
+    <!-- Perky Tail Feather at 45° -->
+    <path fill="#000000" d="
+      M 56 160
+      L 34 138
+      C 30 134, 30 126, 34 122
+      C 38 118, 46 118, 50 122
+      L 74 146
+      Z
+    "/>
+    <!-- Beak -->
+    <polygon points="120,140 128,145 120,150" fill="#000000" />
+
+    <!-- Right Chubby Bird (Partner 2) -->
+    <!-- Body with real eye hole via evenodd -->
+    <path fill="#000000" fill-rule="evenodd" d="
+      M 156 98
+      A 48 48 0 1 1 155.9 98
+      Z
+      M 166 128
+      C 162 128, 160 132, 160 136
+      C 160 140, 164 142, 168 142
+      C 172 142, 176 140, 176 136
+      C 176 132, 174 128, 166 128
+      Z
+    "/>
+    <!-- Giant Upward Check Wing at 45° -->
+    <path fill="#000000" d="
+      M 148 162
+      L 214 96
+      C 220 90, 220 80, 214 74
+      C 208 68, 198 68, 192 74
+      L 132 134
+      Z
+    "/>
+    <!-- Beak -->
+    <polygon points="136,140 128,145 136,150" fill="#000000" />
+
+    <!-- Shared Perch Bar -->
+    <rect x="52" y="196" width="152" height="14" rx="7" fill="#000000" />
+  </g>
+</svg>

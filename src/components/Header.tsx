@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useHousehold, Partner } from "@/context/HouseholdContext";
 import { Flame, Users } from "lucide-react";
 import { CircleInviteModal } from "./CircleInviteModal";
+import { Logo } from "./Logo";
 
 export interface HeaderProps {
   viewMode?: "desktop" | "mobile";
@@ -27,8 +28,8 @@ export function Header({
       <header className="border-b-2 border-black bg-white sticky top-0 z-40 px-5 py-3.5 flex flex-wrap items-center justify-between gap-4 shadow-[0_2px_0_0_rgba(0,0,0,0.05)]">
         {/* Brand / Household */}
         <div className="flex items-center gap-3.5">
-          <div className="w-10 h-10 rounded-2xl bg-black text-white flex items-center justify-center font-heading font-black text-lg tracking-tighter shadow-sm">
-            2DO
+          <div className="w-11 h-11 rounded-2xl bg-black text-white flex items-center justify-center border-2 border-black shadow-[2px_2px_0_0_#000] p-1.5 transition-transform hover:scale-105">
+            <Logo size={28} inverted />
           </div>
           <div>
             <div className="flex items-center gap-2">

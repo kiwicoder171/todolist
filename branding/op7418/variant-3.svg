@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" fill="none" color="#000000" xmlns="http://www.w3.org/2000/svg">
+  <!-- Floating Heart -->
+  <path d="M 50 16 C 50 11, 45 8, 41 11 C 37 14, 38 19, 42 24 L 50 30 L 58 24 C 62 19, 63 14, 59 11 C 55 8, 50 11, 50 16 Z" fill="currentColor"/>
+  <!-- Left Bird Monoline -->
+  <circle cx="37" cy="56" r="16.5" stroke="currentColor" stroke-width="3.5"/>
+  <circle cx="34" cy="53" r="2.5" fill="currentColor"/>
+  <path d="M 23 62 L 14 53" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+  <polygon points="47,53 51,55.5 47,58" fill="currentColor"/>
+  <!-- Right Bird Monoline & Check Wing -->
+  <circle cx="63" cy="56" r="17.5" stroke="currentColor" stroke-width="3.5"/>
+  <circle cx="66" cy="53" r="2.5" fill="currentColor"/>
+  <polygon points="55,53 51,55.5 55,58" fill="currentColor"/>
+  <path d="M 58 61 L 88 31" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+  <!-- Perch Baseline -->
+  <path d="M 18 78 L 82 78" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+</svg>

@@ -1,6 +1,6 @@
 {
   "name": "Couple Task Hub",
-  "short_name": "2DO Hub",
+  "short_name": "Couple Hub",
   "description": "Collaborative daily task & habit tracker for couples",
   "start_url": "/",
   "display": "standalone",

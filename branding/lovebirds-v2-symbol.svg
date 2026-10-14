@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title-lb-2">
+  <title id="title-lb-2">2DO Logo — Lovebirds V2: Heart-Contour Birds</title>
+  <g id="symbol">
+    <!-- Heart shaped bird duo silhouette with real eye and beak cutouts -->
+    <path fill="#000000" fill-rule="evenodd" d="
+      M 128 100
+      C 114 74, 76 60, 52 86
+      C 26 114, 34 162, 78 196
+      L 128 226
+      L 178 196
+      C 188 186, 196 172, 200 156
+      L 226 130
+      C 232 124, 232 114, 226 108
+      C 220 102, 210 102, 204 108
+      L 182 130
+      C 182 92, 150 74, 128 100
+      Z
+      M 78 120
+      A 7 7 0 1 0 78.1 120
+      Z
+      M 166 120
+      A 7 7 0 1 0 166.1 120
+      Z
+      M 128 128
+      L 120 136
+      L 136 136
+      Z
+    "/>
+    <!-- Floating mini heart -->
+    <path fill="#000000" d="
+      M 128 42
+      C 128 34, 120 28, 114 33
+      C 108 38, 108 46, 116 54
+      L 128 66
+      L 140 54
+      C 148 46, 148 38, 142 33
+      C 136 28, 128 34, 128 42
+      Z
+    "/>
+  </g>
+</svg>

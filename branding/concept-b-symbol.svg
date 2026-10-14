@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title-b">
+  <title id="title-b">2DO Logo — Concept B: The Infinity Two</title>
+  <g id="symbol" fill="none" stroke="#000000" stroke-width="28" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Fluid 2-to-D infinity contour -->
+    <path d="M 52 92 C 52 56, 116 52, 138 84 C 150 102, 108 144, 64 184 L 156 184 C 200 184, 208 144, 208 124 C 208 86, 172 76, 138 76" />
+    <!-- Sync dot -->
+    <circle cx="168" cy="126" r="12" fill="#000000" stroke="none"/>
+  </g>
+</svg>

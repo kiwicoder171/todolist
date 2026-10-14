@@ -1,0 +1,1020 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1600" height="984" viewBox="0 0 1600 984"><rect width="1600" height="984" fill="#f7f7f4"/><text x="60" y="78" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="40" font-weight="700" fill="#161616">2DO / Couple Task Hub — Cute Brand Identity Concepts</text><text x="60" y="116" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="20" fill="#6b6b6b">Concepts for review — pick a direction (or tell me what you like in each).</text><rect x="60" y="150" width="474.667" height="774" rx="18" fill="#fff" stroke="#161616" stroke-width="2"/><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-cute-a" viewBox="0 0 256 256" x="90" y="190" width="414.667" height="300" preserveAspectRatio="xMidYMid meet">
+  <title id="c0-title-cute-a">2DO Cute Logo — Concept A: The Lovebird Check</title>
+  <g id="c0-symbol">
+    <!-- Floating heart above their kiss -->
+    <path fill="#000000" d="
+      M 128 54
+      C 128 42, 114 34, 104 42
+      C 94 50, 96 64, 108 76
+      L 128 94
+      L 148 76
+      C 160 64, 162 50, 152 42
+      C 142 34, 128 42, 128 54
+      Z
+    "/>
+
+    <!-- Left Chubby Bird (Partner 1) -->
+    <!-- Body -->
+    <circle cx="96" cy="146" r="46" fill="#000000" />
+    <!-- White eye sparkle -->
+    <circle cx="86" cy="136" r="6" fill="#FFFFFF" />
+    <circle cx="88" cy="134" r="2.5" fill="#000000" />
+    <!-- Perky Tail Feather at 45 deg -->
+    <path fill="#000000" d="
+      M 56 160
+      L 34 138
+      C 30 134, 30 126, 34 122
+      C 38 118, 46 118, 50 122
+      L 74 146
+      Z
+    "/>
+    <!-- Kissing Beak (White cut) -->
+    <polygon points="120,140 128,145 120,150" fill="#FFFFFF" />
+
+    <!-- Right Chubby Bird (Partner 2) - Sweeps into a giant joyful checkmark! -->
+    <!-- Body -->
+    <circle cx="156" cy="146" r="48" fill="#000000" />
+    <!-- White eye sparkle -->
+    <circle cx="166" cy="136" r="6" fill="#FFFFFF" />
+    <circle cx="168" cy="134" r="2.5" fill="#000000" />
+    <!-- Giant Upward Check Wing / Feather at 45 deg -->
+    <path fill="#000000" d="
+      M 148 162
+      L 214 96
+      C 220 90, 220 80, 214 74
+      C 208 68, 198 68, 192 74
+      L 132 134
+      Z
+    "/>
+    <!-- Kissing Beak -->
+    <polygon points="136,140 128,145 136,150" fill="#FFFFFF" />
+
+    <!-- Perch / Ground line -->
+    <rect x="52" y="196" width="152" height="12" rx="6" fill="#000000" />
+  </g>
+</svg>
+</g><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-cute-a-lockup" viewBox="0 0 640 256" x="90" y="514" width="414.667" height="120" preserveAspectRatio="xMidYMid meet">
+  <title id="l0-title-cute-a-lockup">2DO Logo Lockup — The Lovebirds</title>
+  
+    <g id="l0-symbol" transform="translate(10, 0)">
+      <!-- Floating heart -->
+      <path fill="#000000" d="
+        M 128 54
+        C 128 42, 114 34, 104 42
+        C 94 50, 96 64, 108 76
+        L 128 94
+        L 148 76
+        C 160 64, 162 50, 152 42
+        C 142 34, 128 42, 128 54
+        Z
+      "/>
+      <!-- Left Bird -->
+      <circle cx="96" cy="146" r="46" fill="#000000" />
+      <circle cx="86" cy="136" r="6" fill="#FFFFFF" />
+      <circle cx="88" cy="134" r="2.5" fill="#000000" />
+      <path fill="#000000" d="M 56 160 L 34 138 C 30 134, 30 126, 34 122 C 38 118, 46 118, 50 122 L 74 146 Z" />
+      <polygon points="120,140 128,145 120,150" fill="#FFFFFF" />
+      <!-- Right Bird -->
+      <circle cx="156" cy="146" r="48" fill="#000000" />
+      <circle cx="166" cy="136" r="6" fill="#FFFFFF" />
+      <circle cx="168" cy="134" r="2.5" fill="#000000" />
+      <path fill="#000000" d="M 148 162 L 214 96 C 220 90, 220 80, 214 74 C 208 68, 198 68, 192 74 L 132 134 Z" />
+      <polygon points="136,140 128,145 136,150" fill="#FFFFFF" />
+      <!-- Perch -->
+      <rect x="52" y="196" width="152" height="12" rx="6" fill="#000000" />
+    </g>
+    
+  
+    <!-- Wordmark -->
+    <g id="l0-wordmark">
+      
+    <!-- 2 -->
+    <path fill="#000000" fill-rule="evenodd" d="
+      M 280 84
+      C 280 66, 294 54, 312 54
+      C 330 54, 344 66, 344 84
+      C 344 98, 334 110, 318 122
+      L 300 136
+      L 344 136
+      L 344 152
+      L 280 152
+      L 280 138
+      L 308 114
+      C 320 104, 326 94, 326 84
+      C 326 75, 320 68, 312 68
+      C 304 68, 298 75, 298 84
+      Z
+    "/>
+    
+      
+    <!-- D -->
+    <path fill="#000000" fill-rule="evenodd" d="
+      M 362 54
+      L 398 54
+      C 420 54, 434 70, 434 103
+      C 434 136, 420 152, 398 152
+      L 362 152
+      Z
+      M 380 70
+      L 396 70
+      C 408 70, 416 80, 416 103
+      C 416 126, 408 136, 396 136
+      L 380 136
+      Z
+    "/>
+    
+      
+    <!-- O -->
+    <path fill="#000000" fill-rule="evenodd" d="
+      M 490 54
+      C 512 54, 526 70, 526 103
+      C 526 136, 512 152, 490 152
+      C 468 152, 454 136, 454 103
+      C 454 70, 468 54, 490 54
+      Z
+      M 490 70
+      C 502 70, 508 80, 508 103
+      C 508 126, 502 136, 490 136
+      C 478 136, 472 126, 472 103
+      C 472 80, 478 70, 490 70
+      Z
+    "/>
+    
+      <!-- Ink Bar -->
+      <rect x="280" y="160" width="248" height="3" fill="#000000" />
+      <!-- Outlined Subtitle: COUPLE TASK HUB -->
+      <g id="l0-subtitle">
+        <path fill="#000000" fill-rule="evenodd" d="M 293 176 C 291 172, 283 172, 283 181 C 283 190, 291 190, 293 186 L 290 186 C 289 187.5, 286 187.5, 286 181 C 286 174.5, 289 174.5, 290 176 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 305 172 C 300 172, 300 190, 305 190 C 310 190, 310 172, 305 172 Z M 305 175 C 307.5 175, 307.5 187, 305 187 C 302.5 187, 302.5 175, 305 175 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 318 172 L 321 172 L 321 184 C 321 187, 325 187, 325 184 L 325 172 L 328 172 L 328 184 C 328 190, 318 190, 318 184 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 336 172 L 343 172 C 347 172, 347 181, 343 181 L 339 181 L 339 190 L 336 190 Z M 339 175 L 343 175 C 344.5 175, 344.5 178.5, 343 178.5 L 339 178.5 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 354 172 L 357 172 L 357 187 L 364 187 L 364 190 L 354 190 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 372 172 L 382 172 L 382 175 L 375 175 L 375 179.5 L 381 179.5 L 381 182.5 L 375 182.5 L 375 187 L 382 187 L 382 190 L 372 190 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 401 172 L 413 172 L 413 175 L 408.5 175 L 408.5 190 L 405.5 190 L 405.5 175 L 401 175 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 425 172 L 431 190 L 428 190 L 426.5 185.5 L 423.5 185.5 L 422 190 L 419 190 Z M 425 176.5 L 424.2 183 L 425.8 183 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 448 176 C 446 172, 439 172, 439 178 C 439 182, 448 181, 448 185.5 C 448 190, 440 190, 438 186 L 441 185 C 442 187.5, 445 187.5, 445 185.5 C 445 183.5, 438 184, 438 178 C 438 173, 445 172, 448 174 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 456 172 L 459 172 L 459 181 L 463 172 L 467 172 L 461.5 182 L 467 190 L 463.5 190 L 459 183 L 459 190 L 456 190 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 486 172 L 489 172 L 489 179.5 L 493 179.5 L 493 172 L 496 172 L 496 190 L 493 190 L 493 182.5 L 489 182.5 L 489 190 L 486 190 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 504 172 L 507 172 L 507 184 C 507 187, 511 187, 511 184 L 511 172 L 514 172 L 514 184 C 514 190, 504 190, 504 184 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 522 172 L 528 172 C 532 172, 532 179.5, 529 180.5 C 532.5 181.5, 532.5 190, 528 190 L 522 190 Z M 525 175 L 528 175 C 529.5 175, 529.5 178.5, 528 178.5 L 525 178.5 Z M 525 181 L 528 181 C 529.5 181, 529.5 187, 528 187 L 525 187 Z"/>
+      </g>
+    </g>
+    
+</svg>
+</g><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-cute-a" viewBox="0 0 256 256" x="90" y="660" width="64" height="64" preserveAspectRatio="xMidYMid meet">
+  <title id="s064-title-cute-a">2DO Cute Logo — Concept A: The Lovebird Check</title>
+  <g id="s064-symbol">
+    <!-- Floating heart above their kiss -->
+    <path fill="#000000" d="
+      M 128 54
+      C 128 42, 114 34, 104 42
+      C 94 50, 96 64, 108 76
+      L 128 94
+      L 148 76
+      C 160 64, 162 50, 152 42
+      C 142 34, 128 42, 128 54
+      Z
+    "/>
+
+    <!-- Left Chubby Bird (Partner 1) -->
+    <!-- Body -->
+    <circle cx="96" cy="146" r="46" fill="#000000" />
+    <!-- White eye sparkle -->
+    <circle cx="86" cy="136" r="6" fill="#FFFFFF" />
+    <circle cx="88" cy="134" r="2.5" fill="#000000" />
+    <!-- Perky Tail Feather at 45 deg -->
+    <path fill="#000000" d="
+      M 56 160
+      L 34 138
+      C 30 134, 30 126, 34 122
+      C 38 118, 46 118, 50 122
+      L 74 146
+      Z
+    "/>
+    <!-- Kissing Beak (White cut) -->
+    <polygon points="120,140 128,145 120,150" fill="#FFFFFF" />
+
+    <!-- Right Chubby Bird (Partner 2) - Sweeps into a giant joyful checkmark! -->
+    <!-- Body -->
+    <circle cx="156" cy="146" r="48" fill="#000000" />
+    <!-- White eye sparkle -->
+    <circle cx="166" cy="136" r="6" fill="#FFFFFF" />
+    <circle cx="168" cy="134" r="2.5" fill="#000000" />
+    <!-- Giant Upward Check Wing / Feather at 45 deg -->
+    <path fill="#000000" d="
+      M 148 162
+      L 214 96
+      C 220 90, 220 80, 214 74
+      C 208 68, 198 68, 192 74
+      L 132 134
+      Z
+    "/>
+    <!-- Kissing Beak -->
+    <polygon points="136,140 128,145 136,150" fill="#FFFFFF" />
+
+    <!-- Perch / Ground line -->
+    <rect x="52" y="196" width="152" height="12" rx="6" fill="#000000" />
+  </g>
+</svg>
+</g><text x="122" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">64px</text><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-cute-a" viewBox="0 0 256 256" x="180" y="692" width="32" height="32" preserveAspectRatio="xMidYMid meet">
+  <title id="s032-title-cute-a">2DO Cute Logo — Concept A: The Lovebird Check</title>
+  <g id="s032-symbol">
+    <!-- Floating heart above their kiss -->
+    <path fill="#000000" d="
+      M 128 54
+      C 128 42, 114 34, 104 42
+      C 94 50, 96 64, 108 76
+      L 128 94
+      L 148 76
+      C 160 64, 162 50, 152 42
+      C 142 34, 128 42, 128 54
+      Z
+    "/>
+
+    <!-- Left Chubby Bird (Partner 1) -->
+    <!-- Body -->
+    <circle cx="96" cy="146" r="46" fill="#000000" />
+    <!-- White eye sparkle -->
+    <circle cx="86" cy="136" r="6" fill="#FFFFFF" />
+    <circle cx="88" cy="134" r="2.5" fill="#000000" />
+    <!-- Perky Tail Feather at 45 deg -->
+    <path fill="#000000" d="
+      M 56 160
+      L 34 138
+      C 30 134, 30 126, 34 122
+      C 38 118, 46 118, 50 122
+      L 74 146
+      Z
+    "/>
+    <!-- Kissing Beak (White cut) -->
+    <polygon points="120,140 128,145 120,150" fill="#FFFFFF" />
+
+    <!-- Right Chubby Bird (Partner 2) - Sweeps into a giant joyful checkmark! -->
+    <!-- Body -->
+    <circle cx="156" cy="146" r="48" fill="#000000" />
+    <!-- White eye sparkle -->
+    <circle cx="166" cy="136" r="6" fill="#FFFFFF" />
+    <circle cx="168" cy="134" r="2.5" fill="#000000" />
+    <!-- Giant Upward Check Wing / Feather at 45 deg -->
+    <path fill="#000000" d="
+      M 148 162
+      L 214 96
+      C 220 90, 220 80, 214 74
+      C 208 68, 198 68, 192 74
+      L 132 134
+      Z
+    "/>
+    <!-- Kissing Beak -->
+    <polygon points="136,140 128,145 136,150" fill="#FFFFFF" />
+
+    <!-- Perch / Ground line -->
+    <rect x="52" y="196" width="152" height="12" rx="6" fill="#000000" />
+  </g>
+</svg>
+</g><text x="196" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">32px</text><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-cute-a" viewBox="0 0 256 256" x="238" y="708" width="16" height="16" preserveAspectRatio="xMidYMid meet">
+  <title id="s016-title-cute-a">2DO Cute Logo — Concept A: The Lovebird Check</title>
+  <g id="s016-symbol">
+    <!-- Floating heart above their kiss -->
+    <path fill="#000000" d="
+      M 128 54
+      C 128 42, 114 34, 104 42
+      C 94 50, 96 64, 108 76
+      L 128 94
+      L 148 76
+      C 160 64, 162 50, 152 42
+      C 142 34, 128 42, 128 54
+      Z
+    "/>
+
+    <!-- Left Chubby Bird (Partner 1) -->
+    <!-- Body -->
+    <circle cx="96" cy="146" r="46" fill="#000000" />
+    <!-- White eye sparkle -->
+    <circle cx="86" cy="136" r="6" fill="#FFFFFF" />
+    <circle cx="88" cy="134" r="2.5" fill="#000000" />
+    <!-- Perky Tail Feather at 45 deg -->
+    <path fill="#000000" d="
+      M 56 160
+      L 34 138
+      C 30 134, 30 126, 34 122
+      C 38 118, 46 118, 50 122
+      L 74 146
+      Z
+    "/>
+    <!-- Kissing Beak (White cut) -->
+    <polygon points="120,140 128,145 120,150" fill="#FFFFFF" />
+
+    <!-- Right Chubby Bird (Partner 2) - Sweeps into a giant joyful checkmark! -->
+    <!-- Body -->
+    <circle cx="156" cy="146" r="48" fill="#000000" />
+    <!-- White eye sparkle -->
+    <circle cx="166" cy="136" r="6" fill="#FFFFFF" />
+    <circle cx="168" cy="134" r="2.5" fill="#000000" />
+    <!-- Giant Upward Check Wing / Feather at 45 deg -->
+    <path fill="#000000" d="
+      M 148 162
+      L 214 96
+      C 220 90, 220 80, 214 74
+      C 208 68, 198 68, 192 74
+      L 132 134
+      Z
+    "/>
+    <!-- Kissing Beak -->
+    <polygon points="136,140 128,145 136,150" fill="#FFFFFF" />
+
+    <!-- Perch / Ground line -->
+    <rect x="52" y="196" width="152" height="12" rx="6" fill="#000000" />
+  </g>
+</svg>
+</g><text x="246" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">16px</text><text x="90.0" y="780" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#161616">A · The Lovebirds</text><text x="90.0" y="808" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="15" font-weight="700" fill="#161616" letter-spacing="1.5">RECOMMENDED</text><text x="90.0" y="842" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">Two nuzzled lovebirds forming an upward</text><text x="90.0" y="868" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">checkmark and heart: doing life</text><text x="90.0" y="894" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">side-by-side.</text><rect x="562.667" y="150" width="474.667" height="774" rx="18" fill="#fff" stroke="#e4e4e0" stroke-width="1"/><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-cute-b" viewBox="0 0 256 256" x="592.667" y="190" width="414.667" height="300" preserveAspectRatio="xMidYMid meet">
+  <title id="c1-title-cute-b">2DO Cute Logo — Concept B: The Happy Cat Check</title>
+  <g id="c1-symbol">
+    <!-- Cat Ears -->
+    <!-- Left Ear -->
+    <path fill="#000000" d="
+      M 56 104
+      L 74 46
+      C 78 36, 92 36, 96 46
+      L 114 104
+      Z
+    "/>
+    <!-- Right Ear -->
+    <path fill="#000000" d="
+      M 142 104
+      L 160 46
+      C 164 36, 178 36, 182 46
+      L 200 104
+      Z
+    "/>
+    <!-- Head: Squircle Silhouette -->
+    <rect x="44" y="80" width="168" height="136" rx="52" fill="#000000" />
+
+    <!-- Left Eye: Happy squint curve ^ (White cutout) -->
+    <path fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" d="
+      M 78 138
+      C 84 126, 100 126, 106 138
+    "/>
+
+    <!-- Right Eye: Big curious shiny eye (White cutout) -->
+    <circle cx="158" cy="134" r="14" fill="#FFFFFF" />
+    <circle cx="160" cy="132" r="7" fill="#000000" />
+    <circle cx="163" cy="130" r="2.5" fill="#FFFFFF" />
+
+    <!-- Cute Heart Nose -->
+    <path fill="#FFFFFF" d="
+      M 128 144
+      C 128 140, 122 136, 118 140
+      C 114 144, 116 150, 122 154
+      L 128 160
+      L 134 154
+      C 140 150, 142 144, 138 140
+      C 134 136, 128 140, 128 144
+      Z
+    "/>
+
+    <!-- Checkmark Smile! (Starts small on left, sweeps up boldly on right) -->
+    <path fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" d="
+      M 112 168
+      L 124 180
+      L 156 162
+    "/>
+
+    <!-- Whiskers -->
+    <line x1="28" y1="140" x2="40" y2="142" stroke="#000000" stroke-width="5" stroke-linecap="round"/>
+    <line x1="26" y1="154" x2="40" y2="152" stroke="#000000" stroke-width="5" stroke-linecap="round"/>
+    <line x1="216" y1="142" x2="228" y2="140" stroke="#000000" stroke-width="5" stroke-linecap="round"/>
+    <line x1="216" y1="152" x2="230" y2="154" stroke="#000000" stroke-width="5" stroke-linecap="round"/>
+  </g>
+</svg>
+</g><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-cute-b-lockup" viewBox="0 0 640 256" x="592.667" y="514" width="414.667" height="120" preserveAspectRatio="xMidYMid meet">
+  <title id="l1-title-cute-b-lockup">2DO Logo Lockup — The Happy Cat</title>
+  
+    <g id="l1-symbol" transform="translate(10, 0)">
+      <path fill="#000000" d="M 56 104 L 74 46 C 78 36, 92 36, 96 46 L 114 104 Z"/>
+      <path fill="#000000" d="M 142 104 L 160 46 C 164 36, 178 36, 182 46 L 200 104 Z"/>
+      <rect x="44" y="80" width="168" height="136" rx="52" fill="#000000" />
+      <path fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" d="M 78 138 C 84 126, 100 126, 106 138"/>
+      <circle cx="158" cy="134" r="14" fill="#FFFFFF" />
+      <circle cx="160" cy="132" r="7" fill="#000000" />
+      <circle cx="163" cy="130" r="2.5" fill="#FFFFFF" />
+      <path fill="#FFFFFF" d="M 128 144 C 128 140, 122 136, 118 140 C 114 144, 116 150, 122 154 L 128 160 L 134 154 C 140 150, 142 144, 138 140 C 134 136, 128 140, 128 144 Z"/>
+      <path fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" d="M 112 168 L 124 180 L 156 162"/>
+      <line x1="28" y1="140" x2="40" y2="142" stroke="#000000" stroke-width="5" stroke-linecap="round"/>
+      <line x1="26" y1="154" x2="40" y2="152" stroke="#000000" stroke-width="5" stroke-linecap="round"/>
+      <line x1="216" y1="142" x2="228" y2="140" stroke="#000000" stroke-width="5" stroke-linecap="round"/>
+      <line x1="216" y1="152" x2="230" y2="154" stroke="#000000" stroke-width="5" stroke-linecap="round"/>
+    </g>
+    
+  
+    <!-- Wordmark -->
+    <g id="l1-wordmark">
+      
+    <!-- 2 -->
+    <path fill="#000000" fill-rule="evenodd" d="
+      M 280 84
+      C 280 66, 294 54, 312 54
+      C 330 54, 344 66, 344 84
+      C 344 98, 334 110, 318 122
+      L 300 136
+      L 344 136
+      L 344 152
+      L 280 152
+      L 280 138
+      L 308 114
+      C 320 104, 326 94, 326 84
+      C 326 75, 320 68, 312 68
+      C 304 68, 298 75, 298 84
+      Z
+    "/>
+    
+      
+    <!-- D -->
+    <path fill="#000000" fill-rule="evenodd" d="
+      M 362 54
+      L 398 54
+      C 420 54, 434 70, 434 103
+      C 434 136, 420 152, 398 152
+      L 362 152
+      Z
+      M 380 70
+      L 396 70
+      C 408 70, 416 80, 416 103
+      C 416 126, 408 136, 396 136
+      L 380 136
+      Z
+    "/>
+    
+      
+    <!-- O -->
+    <path fill="#000000" fill-rule="evenodd" d="
+      M 490 54
+      C 512 54, 526 70, 526 103
+      C 526 136, 512 152, 490 152
+      C 468 152, 454 136, 454 103
+      C 454 70, 468 54, 490 54
+      Z
+      M 490 70
+      C 502 70, 508 80, 508 103
+      C 508 126, 502 136, 490 136
+      C 478 136, 472 126, 472 103
+      C 472 80, 478 70, 490 70
+      Z
+    "/>
+    
+      <!-- Ink Bar -->
+      <rect x="280" y="160" width="248" height="3" fill="#000000" />
+      <!-- Outlined Subtitle: COUPLE TASK HUB -->
+      <g id="l1-subtitle">
+        <path fill="#000000" fill-rule="evenodd" d="M 293 176 C 291 172, 283 172, 283 181 C 283 190, 291 190, 293 186 L 290 186 C 289 187.5, 286 187.5, 286 181 C 286 174.5, 289 174.5, 290 176 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 305 172 C 300 172, 300 190, 305 190 C 310 190, 310 172, 305 172 Z M 305 175 C 307.5 175, 307.5 187, 305 187 C 302.5 187, 302.5 175, 305 175 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 318 172 L 321 172 L 321 184 C 321 187, 325 187, 325 184 L 325 172 L 328 172 L 328 184 C 328 190, 318 190, 318 184 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 336 172 L 343 172 C 347 172, 347 181, 343 181 L 339 181 L 339 190 L 336 190 Z M 339 175 L 343 175 C 344.5 175, 344.5 178.5, 343 178.5 L 339 178.5 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 354 172 L 357 172 L 357 187 L 364 187 L 364 190 L 354 190 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 372 172 L 382 172 L 382 175 L 375 175 L 375 179.5 L 381 179.5 L 381 182.5 L 375 182.5 L 375 187 L 382 187 L 382 190 L 372 190 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 401 172 L 413 172 L 413 175 L 408.5 175 L 408.5 190 L 405.5 190 L 405.5 175 L 401 175 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 425 172 L 431 190 L 428 190 L 426.5 185.5 L 423.5 185.5 L 422 190 L 419 190 Z M 425 176.5 L 424.2 183 L 425.8 183 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 448 176 C 446 172, 439 172, 439 178 C 439 182, 448 181, 448 185.5 C 448 190, 440 190, 438 186 L 441 185 C 442 187.5, 445 187.5, 445 185.5 C 445 183.5, 438 184, 438 178 C 438 173, 445 172, 448 174 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 456 172 L 459 172 L 459 181 L 463 172 L 467 172 L 461.5 182 L 467 190 L 463.5 190 L 459 183 L 459 190 L 456 190 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 486 172 L 489 172 L 489 179.5 L 493 179.5 L 493 172 L 496 172 L 496 190 L 493 190 L 493 182.5 L 489 182.5 L 489 190 L 486 190 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 504 172 L 507 172 L 507 184 C 507 187, 511 187, 511 184 L 511 172 L 514 172 L 514 184 C 514 190, 504 190, 504 184 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 522 172 L 528 172 C 532 172, 532 179.5, 529 180.5 C 532.5 181.5, 532.5 190, 528 190 L 522 190 Z M 525 175 L 528 175 C 529.5 175, 529.5 178.5, 528 178.5 L 525 178.5 Z M 525 181 L 528 181 C 529.5 181, 529.5 187, 528 187 L 525 187 Z"/>
+      </g>
+    </g>
+    
+</svg>
+</g><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-cute-b" viewBox="0 0 256 256" x="592.667" y="660" width="64" height="64" preserveAspectRatio="xMidYMid meet">
+  <title id="s164-title-cute-b">2DO Cute Logo — Concept B: The Happy Cat Check</title>
+  <g id="s164-symbol">
+    <!-- Cat Ears -->
+    <!-- Left Ear -->
+    <path fill="#000000" d="
+      M 56 104
+      L 74 46
+      C 78 36, 92 36, 96 46
+      L 114 104
+      Z
+    "/>
+    <!-- Right Ear -->
+    <path fill="#000000" d="
+      M 142 104
+      L 160 46
+      C 164 36, 178 36, 182 46
+      L 200 104
+      Z
+    "/>
+    <!-- Head: Squircle Silhouette -->
+    <rect x="44" y="80" width="168" height="136" rx="52" fill="#000000" />
+
+    <!-- Left Eye: Happy squint curve ^ (White cutout) -->
+    <path fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" d="
+      M 78 138
+      C 84 126, 100 126, 106 138
+    "/>
+
+    <!-- Right Eye: Big curious shiny eye (White cutout) -->
+    <circle cx="158" cy="134" r="14" fill="#FFFFFF" />
+    <circle cx="160" cy="132" r="7" fill="#000000" />
+    <circle cx="163" cy="130" r="2.5" fill="#FFFFFF" />
+
+    <!-- Cute Heart Nose -->
+    <path fill="#FFFFFF" d="
+      M 128 144
+      C 128 140, 122 136, 118 140
+      C 114 144, 116 150, 122 154
+      L 128 160
+      L 134 154
+      C 140 150, 142 144, 138 140
+      C 134 136, 128 140, 128 144
+      Z
+    "/>
+
+    <!-- Checkmark Smile! (Starts small on left, sweeps up boldly on right) -->
+    <path fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" d="
+      M 112 168
+      L 124 180
+      L 156 162
+    "/>
+
+    <!-- Whiskers -->
+    <line x1="28" y1="140" x2="40" y2="142" stroke="#000000" stroke-width="5" stroke-linecap="round"/>
+    <line x1="26" y1="154" x2="40" y2="152" stroke="#000000" stroke-width="5" stroke-linecap="round"/>
+    <line x1="216" y1="142" x2="228" y2="140" stroke="#000000" stroke-width="5" stroke-linecap="round"/>
+    <line x1="216" y1="152" x2="230" y2="154" stroke="#000000" stroke-width="5" stroke-linecap="round"/>
+  </g>
+</svg>
+</g><text x="624.667" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">64px</text><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-cute-b" viewBox="0 0 256 256" x="682.667" y="692" width="32" height="32" preserveAspectRatio="xMidYMid meet">
+  <title id="s132-title-cute-b">2DO Cute Logo — Concept B: The Happy Cat Check</title>
+  <g id="s132-symbol">
+    <!-- Cat Ears -->
+    <!-- Left Ear -->
+    <path fill="#000000" d="
+      M 56 104
+      L 74 46
+      C 78 36, 92 36, 96 46
+      L 114 104
+      Z
+    "/>
+    <!-- Right Ear -->
+    <path fill="#000000" d="
+      M 142 104
+      L 160 46
+      C 164 36, 178 36, 182 46
+      L 200 104
+      Z
+    "/>
+    <!-- Head: Squircle Silhouette -->
+    <rect x="44" y="80" width="168" height="136" rx="52" fill="#000000" />
+
+    <!-- Left Eye: Happy squint curve ^ (White cutout) -->
+    <path fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" d="
+      M 78 138
+      C 84 126, 100 126, 106 138
+    "/>
+
+    <!-- Right Eye: Big curious shiny eye (White cutout) -->
+    <circle cx="158" cy="134" r="14" fill="#FFFFFF" />
+    <circle cx="160" cy="132" r="7" fill="#000000" />
+    <circle cx="163" cy="130" r="2.5" fill="#FFFFFF" />
+
+    <!-- Cute Heart Nose -->
+    <path fill="#FFFFFF" d="
+      M 128 144
+      C 128 140, 122 136, 118 140
+      C 114 144, 116 150, 122 154
+      L 128 160
+      L 134 154
+      C 140 150, 142 144, 138 140
+      C 134 136, 128 140, 128 144
+      Z
+    "/>
+
+    <!-- Checkmark Smile! (Starts small on left, sweeps up boldly on right) -->
+    <path fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" d="
+      M 112 168
+      L 124 180
+      L 156 162
+    "/>
+
+    <!-- Whiskers -->
+    <line x1="28" y1="140" x2="40" y2="142" stroke="#000000" stroke-width="5" stroke-linecap="round"/>
+    <line x1="26" y1="154" x2="40" y2="152" stroke="#000000" stroke-width="5" stroke-linecap="round"/>
+    <line x1="216" y1="142" x2="228" y2="140" stroke="#000000" stroke-width="5" stroke-linecap="round"/>
+    <line x1="216" y1="152" x2="230" y2="154" stroke="#000000" stroke-width="5" stroke-linecap="round"/>
+  </g>
+</svg>
+</g><text x="698.667" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">32px</text><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-cute-b" viewBox="0 0 256 256" x="740.667" y="708" width="16" height="16" preserveAspectRatio="xMidYMid meet">
+  <title id="s116-title-cute-b">2DO Cute Logo — Concept B: The Happy Cat Check</title>
+  <g id="s116-symbol">
+    <!-- Cat Ears -->
+    <!-- Left Ear -->
+    <path fill="#000000" d="
+      M 56 104
+      L 74 46
+      C 78 36, 92 36, 96 46
+      L 114 104
+      Z
+    "/>
+    <!-- Right Ear -->
+    <path fill="#000000" d="
+      M 142 104
+      L 160 46
+      C 164 36, 178 36, 182 46
+      L 200 104
+      Z
+    "/>
+    <!-- Head: Squircle Silhouette -->
+    <rect x="44" y="80" width="168" height="136" rx="52" fill="#000000" />
+
+    <!-- Left Eye: Happy squint curve ^ (White cutout) -->
+    <path fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" d="
+      M 78 138
+      C 84 126, 100 126, 106 138
+    "/>
+
+    <!-- Right Eye: Big curious shiny eye (White cutout) -->
+    <circle cx="158" cy="134" r="14" fill="#FFFFFF" />
+    <circle cx="160" cy="132" r="7" fill="#000000" />
+    <circle cx="163" cy="130" r="2.5" fill="#FFFFFF" />
+
+    <!-- Cute Heart Nose -->
+    <path fill="#FFFFFF" d="
+      M 128 144
+      C 128 140, 122 136, 118 140
+      C 114 144, 116 150, 122 154
+      L 128 160
+      L 134 154
+      C 140 150, 142 144, 138 140
+      C 134 136, 128 140, 128 144
+      Z
+    "/>
+
+    <!-- Checkmark Smile! (Starts small on left, sweeps up boldly on right) -->
+    <path fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" d="
+      M 112 168
+      L 124 180
+      L 156 162
+    "/>
+
+    <!-- Whiskers -->
+    <line x1="28" y1="140" x2="40" y2="142" stroke="#000000" stroke-width="5" stroke-linecap="round"/>
+    <line x1="26" y1="154" x2="40" y2="152" stroke="#000000" stroke-width="5" stroke-linecap="round"/>
+    <line x1="216" y1="142" x2="228" y2="140" stroke="#000000" stroke-width="5" stroke-linecap="round"/>
+    <line x1="216" y1="152" x2="230" y2="154" stroke="#000000" stroke-width="5" stroke-linecap="round"/>
+  </g>
+</svg>
+</g><text x="748.667" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">16px</text><text x="592.6666666666667" y="780" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#161616">B · The Happy Cat</text><text x="592.6666666666667" y="814" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">A joyful squircle cat with a triumphant</text><text x="592.6666666666667" y="840" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">checkmark smile: making chores delightful.</text><rect x="1065.33" y="150" width="474.667" height="774" rx="18" fill="#fff" stroke="#e4e4e0" stroke-width="1"/><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-cute-c" viewBox="0 0 256 256" x="1095.33" y="190" width="414.667" height="300" preserveAspectRatio="xMidYMid meet">
+  <title id="c2-title-cute-c">2DO Cute Logo — Concept C: The Twin Hug</title>
+  <g id="c2-symbol">
+    <!-- Double Floating Hearts -->
+    <path fill="#000000" d="
+      M 116 48
+      C 116 40, 106 34, 100 38
+      C 94 42, 94 52, 102 60
+      L 116 72
+      L 130 60
+      C 138 52, 138 42, 132 38
+      C 126 34, 116 40, 116 48
+      Z
+    "/>
+    <path fill="#000000" d="
+      M 148 38
+      C 148 32, 140 28, 136 31
+      C 132 34, 132 40, 138 46
+      L 148 56
+      L 158 46
+      C 164 40, 164 34, 160 31
+      C 156 28, 148 32, 148 38
+      Z
+    "/>
+
+    <!-- Partner 1 (Left Chubby Pill) -->
+    <rect x="52" y="96" width="68" height="110" rx="34" fill="#000000" />
+    <!-- Eyes -->
+    <circle cx="76" cy="130" r="5" fill="#FFFFFF" />
+    <circle cx="96" cy="130" r="5" fill="#FFFFFF" />
+    <!-- Sweet Open Smile -->
+    <path fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" d="
+      M 80 144
+      C 83 150, 90 150, 93 144
+    "/>
+
+    <!-- Partner 2 (Right Chubby Pill) -->
+    <rect x="136" y="78" width="68" height="128" rx="34" fill="#000000" />
+    <!-- Winking Eye -->
+    <path fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" d="
+      M 154 116
+      C 158 111, 164 111, 168 116
+    "/>
+    <circle cx="184" cy="114" r="5" fill="#FFFFFF" />
+    <!-- Happy Grin -->
+    <path fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" d="
+      M 162 128
+      C 166 135, 174 135, 178 128
+    "/>
+
+    <!-- Shared Unified High-Five Checkmark Bridge -->
+    <!-- Starts from Left's tummy, loops down and sweeps up past Right's shoulder! -->
+    <path fill="none" stroke="#000000" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" d="
+      M 40 156
+      L 76 192
+      L 216 78
+    "/>
+    <!-- Inner white highlight inside the checkmark -->
+    <path fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" d="
+      M 46 156
+      L 76 186
+      L 210 82
+    "/>
+  </g>
+</svg>
+</g><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-cute-c-lockup" viewBox="0 0 640 256" x="1095.33" y="514" width="414.667" height="120" preserveAspectRatio="xMidYMid meet">
+  <title id="l2-title-cute-c-lockup">2DO Logo Lockup — The Twin Hug</title>
+  
+    <g id="l2-symbol" transform="translate(10, 0)">
+      <path fill="#000000" d="M 116 48 C 116 40, 106 34, 100 38 C 94 42, 94 52, 102 60 L 116 72 L 130 60 C 138 52, 138 42, 132 38 C 126 34, 116 40, 116 48 Z"/>
+      <path fill="#000000" d="M 148 38 C 148 32, 140 28, 136 31 C 132 34, 132 40, 138 46 L 148 56 L 158 46 C 164 40, 164 34, 160 31 C 156 28, 148 32, 148 38 Z"/>
+      <rect x="52" y="96" width="68" height="110" rx="34" fill="#000000" />
+      <circle cx="76" cy="130" r="5" fill="#FFFFFF" />
+      <circle cx="96" cy="130" r="5" fill="#FFFFFF" />
+      <path fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" d="M 80 144 C 83 150, 90 150, 93 144"/>
+      <rect x="136" y="78" width="68" height="128" rx="34" fill="#000000" />
+      <path fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" d="M 154 116 C 158 111, 164 111, 168 116"/>
+      <circle cx="184" cy="114" r="5" fill="#FFFFFF" />
+      <path fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" d="M 162 128 C 166 135, 174 135, 178 128"/>
+      <path fill="none" stroke="#000000" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" d="M 40 156 L 76 192 L 216 78"/>
+      <path fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" d="M 46 156 L 76 186 L 210 82"/>
+    </g>
+    
+  
+    <!-- Wordmark -->
+    <g id="l2-wordmark">
+      
+    <!-- 2 -->
+    <path fill="#000000" fill-rule="evenodd" d="
+      M 280 84
+      C 280 66, 294 54, 312 54
+      C 330 54, 344 66, 344 84
+      C 344 98, 334 110, 318 122
+      L 300 136
+      L 344 136
+      L 344 152
+      L 280 152
+      L 280 138
+      L 308 114
+      C 320 104, 326 94, 326 84
+      C 326 75, 320 68, 312 68
+      C 304 68, 298 75, 298 84
+      Z
+    "/>
+    
+      
+    <!-- D -->
+    <path fill="#000000" fill-rule="evenodd" d="
+      M 362 54
+      L 398 54
+      C 420 54, 434 70, 434 103
+      C 434 136, 420 152, 398 152
+      L 362 152
+      Z
+      M 380 70
+      L 396 70
+      C 408 70, 416 80, 416 103
+      C 416 126, 408 136, 396 136
+      L 380 136
+      Z
+    "/>
+    
+      
+    <!-- O -->
+    <path fill="#000000" fill-rule="evenodd" d="
+      M 490 54
+      C 512 54, 526 70, 526 103
+      C 526 136, 512 152, 490 152
+      C 468 152, 454 136, 454 103
+      C 454 70, 468 54, 490 54
+      Z
+      M 490 70
+      C 502 70, 508 80, 508 103
+      C 508 126, 502 136, 490 136
+      C 478 136, 472 126, 472 103
+      C 472 80, 478 70, 490 70
+      Z
+    "/>
+    
+      <!-- Ink Bar -->
+      <rect x="280" y="160" width="248" height="3" fill="#000000" />
+      <!-- Outlined Subtitle: COUPLE TASK HUB -->
+      <g id="l2-subtitle">
+        <path fill="#000000" fill-rule="evenodd" d="M 293 176 C 291 172, 283 172, 283 181 C 283 190, 291 190, 293 186 L 290 186 C 289 187.5, 286 187.5, 286 181 C 286 174.5, 289 174.5, 290 176 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 305 172 C 300 172, 300 190, 305 190 C 310 190, 310 172, 305 172 Z M 305 175 C 307.5 175, 307.5 187, 305 187 C 302.5 187, 302.5 175, 305 175 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 318 172 L 321 172 L 321 184 C 321 187, 325 187, 325 184 L 325 172 L 328 172 L 328 184 C 328 190, 318 190, 318 184 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 336 172 L 343 172 C 347 172, 347 181, 343 181 L 339 181 L 339 190 L 336 190 Z M 339 175 L 343 175 C 344.5 175, 344.5 178.5, 343 178.5 L 339 178.5 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 354 172 L 357 172 L 357 187 L 364 187 L 364 190 L 354 190 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 372 172 L 382 172 L 382 175 L 375 175 L 375 179.5 L 381 179.5 L 381 182.5 L 375 182.5 L 375 187 L 382 187 L 382 190 L 372 190 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 401 172 L 413 172 L 413 175 L 408.5 175 L 408.5 190 L 405.5 190 L 405.5 175 L 401 175 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 425 172 L 431 190 L 428 190 L 426.5 185.5 L 423.5 185.5 L 422 190 L 419 190 Z M 425 176.5 L 424.2 183 L 425.8 183 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 448 176 C 446 172, 439 172, 439 178 C 439 182, 448 181, 448 185.5 C 448 190, 440 190, 438 186 L 441 185 C 442 187.5, 445 187.5, 445 185.5 C 445 183.5, 438 184, 438 178 C 438 173, 445 172, 448 174 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 456 172 L 459 172 L 459 181 L 463 172 L 467 172 L 461.5 182 L 467 190 L 463.5 190 L 459 183 L 459 190 L 456 190 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 486 172 L 489 172 L 489 179.5 L 493 179.5 L 493 172 L 496 172 L 496 190 L 493 190 L 493 182.5 L 489 182.5 L 489 190 L 486 190 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 504 172 L 507 172 L 507 184 C 507 187, 511 187, 511 184 L 511 172 L 514 172 L 514 184 C 514 190, 504 190, 504 184 Z"/>
+    <path fill="#000000" fill-rule="evenodd" d="M 522 172 L 528 172 C 532 172, 532 179.5, 529 180.5 C 532.5 181.5, 532.5 190, 528 190 L 522 190 Z M 525 175 L 528 175 C 529.5 175, 529.5 178.5, 528 178.5 L 525 178.5 Z M 525 181 L 528 181 C 529.5 181, 529.5 187, 528 187 L 525 187 Z"/>
+      </g>
+    </g>
+    
+</svg>
+</g><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-cute-c" viewBox="0 0 256 256" x="1095.33" y="660" width="64" height="64" preserveAspectRatio="xMidYMid meet">
+  <title id="s264-title-cute-c">2DO Cute Logo — Concept C: The Twin Hug</title>
+  <g id="s264-symbol">
+    <!-- Double Floating Hearts -->
+    <path fill="#000000" d="
+      M 116 48
+      C 116 40, 106 34, 100 38
+      C 94 42, 94 52, 102 60
+      L 116 72
+      L 130 60
+      C 138 52, 138 42, 132 38
+      C 126 34, 116 40, 116 48
+      Z
+    "/>
+    <path fill="#000000" d="
+      M 148 38
+      C 148 32, 140 28, 136 31
+      C 132 34, 132 40, 138 46
+      L 148 56
+      L 158 46
+      C 164 40, 164 34, 160 31
+      C 156 28, 148 32, 148 38
+      Z
+    "/>
+
+    <!-- Partner 1 (Left Chubby Pill) -->
+    <rect x="52" y="96" width="68" height="110" rx="34" fill="#000000" />
+    <!-- Eyes -->
+    <circle cx="76" cy="130" r="5" fill="#FFFFFF" />
+    <circle cx="96" cy="130" r="5" fill="#FFFFFF" />
+    <!-- Sweet Open Smile -->
+    <path fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" d="
+      M 80 144
+      C 83 150, 90 150, 93 144
+    "/>
+
+    <!-- Partner 2 (Right Chubby Pill) -->
+    <rect x="136" y="78" width="68" height="128" rx="34" fill="#000000" />
+    <!-- Winking Eye -->
+    <path fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" d="
+      M 154 116
+      C 158 111, 164 111, 168 116
+    "/>
+    <circle cx="184" cy="114" r="5" fill="#FFFFFF" />
+    <!-- Happy Grin -->
+    <path fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" d="
+      M 162 128
+      C 166 135, 174 135, 178 128
+    "/>
+
+    <!-- Shared Unified High-Five Checkmark Bridge -->
+    <!-- Starts from Left's tummy, loops down and sweeps up past Right's shoulder! -->
+    <path fill="none" stroke="#000000" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" d="
+      M 40 156
+      L 76 192
+      L 216 78
+    "/>
+    <!-- Inner white highlight inside the checkmark -->
+    <path fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" d="
+      M 46 156
+      L 76 186
+      L 210 82
+    "/>
+  </g>
+</svg>
+</g><text x="1127.33" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">64px</text><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-cute-c" viewBox="0 0 256 256" x="1185.33" y="692" width="32" height="32" preserveAspectRatio="xMidYMid meet">
+  <title id="s232-title-cute-c">2DO Cute Logo — Concept C: The Twin Hug</title>
+  <g id="s232-symbol">
+    <!-- Double Floating Hearts -->
+    <path fill="#000000" d="
+      M 116 48
+      C 116 40, 106 34, 100 38
+      C 94 42, 94 52, 102 60
+      L 116 72
+      L 130 60
+      C 138 52, 138 42, 132 38
+      C 126 34, 116 40, 116 48
+      Z
+    "/>
+    <path fill="#000000" d="
+      M 148 38
+      C 148 32, 140 28, 136 31
+      C 132 34, 132 40, 138 46
+      L 148 56
+      L 158 46
+      C 164 40, 164 34, 160 31
+      C 156 28, 148 32, 148 38
+      Z
+    "/>
+
+    <!-- Partner 1 (Left Chubby Pill) -->
+    <rect x="52" y="96" width="68" height="110" rx="34" fill="#000000" />
+    <!-- Eyes -->
+    <circle cx="76" cy="130" r="5" fill="#FFFFFF" />
+    <circle cx="96" cy="130" r="5" fill="#FFFFFF" />
+    <!-- Sweet Open Smile -->
+    <path fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" d="
+      M 80 144
+      C 83 150, 90 150, 93 144
+    "/>
+
+    <!-- Partner 2 (Right Chubby Pill) -->
+    <rect x="136" y="78" width="68" height="128" rx="34" fill="#000000" />
+    <!-- Winking Eye -->
+    <path fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" d="
+      M 154 116
+      C 158 111, 164 111, 168 116
+    "/>
+    <circle cx="184" cy="114" r="5" fill="#FFFFFF" />
+    <!-- Happy Grin -->
+    <path fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" d="
+      M 162 128
+      C 166 135, 174 135, 178 128
+    "/>
+
+    <!-- Shared Unified High-Five Checkmark Bridge -->
+    <!-- Starts from Left's tummy, loops down and sweeps up past Right's shoulder! -->
+    <path fill="none" stroke="#000000" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" d="
+      M 40 156
+      L 76 192
+      L 216 78
+    "/>
+    <!-- Inner white highlight inside the checkmark -->
+    <path fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" d="
+      M 46 156
+      L 76 186
+      L 210 82
+    "/>
+  </g>
+</svg>
+</g><text x="1201.33" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">32px</text><g><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-cute-c" viewBox="0 0 256 256" x="1243.33" y="708" width="16" height="16" preserveAspectRatio="xMidYMid meet">
+  <title id="s216-title-cute-c">2DO Cute Logo — Concept C: The Twin Hug</title>
+  <g id="s216-symbol">
+    <!-- Double Floating Hearts -->
+    <path fill="#000000" d="
+      M 116 48
+      C 116 40, 106 34, 100 38
+      C 94 42, 94 52, 102 60
+      L 116 72
+      L 130 60
+      C 138 52, 138 42, 132 38
+      C 126 34, 116 40, 116 48
+      Z
+    "/>
+    <path fill="#000000" d="
+      M 148 38
+      C 148 32, 140 28, 136 31
+      C 132 34, 132 40, 138 46
+      L 148 56
+      L 158 46
+      C 164 40, 164 34, 160 31
+      C 156 28, 148 32, 148 38
+      Z
+    "/>
+
+    <!-- Partner 1 (Left Chubby Pill) -->
+    <rect x="52" y="96" width="68" height="110" rx="34" fill="#000000" />
+    <!-- Eyes -->
+    <circle cx="76" cy="130" r="5" fill="#FFFFFF" />
+    <circle cx="96" cy="130" r="5" fill="#FFFFFF" />
+    <!-- Sweet Open Smile -->
+    <path fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" d="
+      M 80 144
+      C 83 150, 90 150, 93 144
+    "/>
+
+    <!-- Partner 2 (Right Chubby Pill) -->
+    <rect x="136" y="78" width="68" height="128" rx="34" fill="#000000" />
+    <!-- Winking Eye -->
+    <path fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" d="
+      M 154 116
+      C 158 111, 164 111, 168 116
+    "/>
+    <circle cx="184" cy="114" r="5" fill="#FFFFFF" />
+    <!-- Happy Grin -->
+    <path fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" d="
+      M 162 128
+      C 166 135, 174 135, 178 128
+    "/>
+
+    <!-- Shared Unified High-Five Checkmark Bridge -->
+    <!-- Starts from Left's tummy, loops down and sweeps up past Right's shoulder! -->
+    <path fill="none" stroke="#000000" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" d="
+      M 40 156
+      L 76 192
+      L 216 78
+    "/>
+    <!-- Inner white highlight inside the checkmark -->
+    <path fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" d="
+      M 46 156
+      L 76 186
+      L 210 82
+    "/>
+  </g>
+</svg>
+</g><text x="1251.33" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">16px</text><text x="1095.3333333333335" y="780" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#161616">C · The Twin Hug</text><text x="1095.3333333333335" y="814" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">Two chubby companion characters high-fiving</text><text x="1095.3333333333335" y="840" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">into a bold checkmark of victory.</text></svg>

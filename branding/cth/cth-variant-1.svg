@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" fill="none" color="#000000" xmlns="http://www.w3.org/2000/svg">
+  <!-- Floating Heart -->
+  <path d="M 50 16 C 50 11, 44 8, 40 11 C 36 14, 37 20, 42 25 L 50 32 L 58 25 C 63 20, 64 14, 60 11 C 56 8, 50 11, 50 16 Z" fill="currentColor"/>
+  <!-- Left Bird (Partner 1) -->
+  <circle cx="37" cy="56" r="17.5" fill="currentColor"/>
+  <circle cx="33" cy="52" r="2.5" fill="#FAFAFA"/>
+  <path d="M 22 62 L 13 53" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
+  <polygon points="47,53 51,55.5 47,58" fill="currentColor"/>
+  <!-- Right Bird (Partner 2) with Ascending Check Wing -->
+  <circle cx="61" cy="56" r="18.5" fill="currentColor"/>
+  <circle cx="65" cy="52" r="2.5" fill="#FAFAFA"/>
+  <path d="M 58 62 L 87 33" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+  <polygon points="53,53 49,55.5 53,58" fill="currentColor"/>
+  <!-- Hub Perch -->
+  <rect x="18" y="77" width="64" height="5" rx="2.5" fill="currentColor"/>
+</svg>

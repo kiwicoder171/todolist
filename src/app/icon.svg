@@ -1,0 +1,11 @@
+<svg width="512" height="512" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100" height="100" rx="24" fill="#FAFAFA"/>
+  <!-- Outer Squircle Ring (Dashed Hub) -->
+  <rect x="13" y="13" width="74" height="74" rx="26" stroke="#000000" stroke-width="4.5" stroke-dasharray="9 6"/>
+  <!-- Partner 1 Heart (Top-Left) -->
+  <path d="M 32 30 C 32 25, 27 22, 24 24 C 20 27, 21 32, 25 37 L 32 43 L 39 37 C 43 32, 44 27, 40 24 C 37 22, 32 25, 32 30 Z" fill="#000000"/>
+  <!-- Partner 2 Heart (Bottom-Right) -->
+  <path d="M 68 66 C 68 61, 63 58, 60 60 C 56 63, 57 68, 61 73 L 68 79 L 75 73 C 79 68, 80 63, 76 60 C 73 58, 68 61, 68 66 Z" fill="#000000"/>
+  <!-- Bold Central Checkmark of Unity -->
+  <path d="M 28 54 L 44 70 L 80 34" stroke="#000000" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

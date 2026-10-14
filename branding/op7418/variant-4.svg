@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" fill="none" color="#000000" xmlns="http://www.w3.org/2000/svg">
+  <!-- Double Floating Hearts -->
+  <path d="M 45 18 C 45 14, 41 11, 38 13 C 35 15, 35 19, 39 23 L 45 28 L 51 23 C 55 19, 55 15, 52 13 C 49 11, 45 14, 45 18 Z" fill="currentColor"/>
+  <path d="M 58 14 C 58 11, 55 9, 53 10 C 51 11, 51 14, 54 17 L 58 21 L 62 17 C 65 14, 65 11, 63 10 C 61 9, 58 11, 58 14 Z" fill="currentColor"/>
+  <!-- Left Chubby Pebble Chick -->
+  <rect x="20" y="38" width="28" height="42" rx="14" fill="currentColor"/>
+  <!-- Closed happy eye ^ -->
+  <path d="M 29 52 Q 33 48 37 52" stroke="#FAFAFA" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <!-- Right Chubby Pebble Chick -->
+  <rect x="52" y="32" width="28" height="48" rx="14" fill="currentColor"/>
+  <!-- Open eye -->
+  <circle cx="66" cy="48" r="2.5" fill="#FAFAFA"/>
+  <!-- Ascending High-Five Checkmark Across Both -->
+  <path d="M 15 60 L 32 75 L 85 28" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 18 60 L 32 72 L 82 30" stroke="#FAFAFA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

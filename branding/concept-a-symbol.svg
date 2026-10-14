@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title-a">
+  <title id="title-a">2DO Logo — Concept A: The Twin Check</title>
+  <g id="symbol" fill="none" stroke="#000000" stroke-width="32" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Left Checkmark (Partner 1) -->
+    <path d="M 44 116 L 104 176 L 196 84" />
+    <!-- Right Checkmark (Partner 2) -->
+    <path d="M 212 116 L 152 176 L 60 84" />
+  </g>
+</svg>

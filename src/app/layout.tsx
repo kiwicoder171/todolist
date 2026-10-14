@@ -10,6 +10,13 @@ export const metadata: Metadata = {
   title: "Couple Task Hub",
   description: "Hand-drawn collaborative daily task & habit tracker for couples",
   manifest: "/manifest.json",
+  icons: {
+    icon: [
+      { url: "/logo.svg", type: "image/svg+xml" },
+      { url: "/favicon.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: "/icon-192.png",
+  },
 };
 
 export default function RootLayout({

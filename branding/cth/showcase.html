@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Couple Task Hub — Logo Design Showcase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background: #FAFAFA;
+            color: #1A1A1A;
+            overflow-x: hidden;
+            padding: 80px 24px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 72px;
+        }
+
+        .header h1 {
+            font-size: 56px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .header p {
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 11px;
+            color: #777;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .divider {
+            width: 48px;
+            height: 2px;
+            background: #1A1A1A;
+            margin: 0 auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 48px;
+            margin-bottom: 80px;
+        }
+
+        @media (max-width: 992px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .logo-card {
+            background: #FFFFFF;
+            border: 2px solid #000000;
+            border-radius: 28px;
+            padding: 40px 32px 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            box-shadow: 4px 4px 0 0 #000000;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .logo-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 6px 6px 0 0 #000000;
+        }
+
+        .logo-canvas {
+            width: 140px;
+            height: 140px;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-canvas svg {
+            width: 100%;
+            height: 100%;
+            color: #1A1A1A;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .card-subtitle {
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 10px;
+            color: #888;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .card-desc {
+            font-size: 13px;
+            line-height: 1.6;
+            color: #444;
+            text-align: left;
+            width: 100%;
+            border-top: 1px dashed #DDD;
+            padding-top: 16px;
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            background: #F4F4F5;
+            color: #1A1A1A;
+            border: 1px solid #1A1A1A;
+        }
+
+        .card-badge.rec {
+            background: #000000;
+            color: #FFFFFF;
+        }
+
+        .footer {
+            text-align: center;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 11px;
+            color: #888;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>COUPLE TASK HUB</h1>
+        <p>BRAND IDENTITY &amp; LOGO DESIGN EXPLORATION</p>
+        <div class="divider"></div>
+    </div>
+
+    <div class="grid">
+        
+        <div class="logo-card">
+            <span class="card-badge rec">RECOMMENDED</span>
+            <div class="logo-canvas">
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Floating Heart -->
+  <path d="M 50 16 C 50 11, 44 8, 40 11 C 36 14, 37 20, 42 25 L 50 32 L 58 25 C 63 20, 64 14, 60 11 C 56 8, 50 11, 50 16 Z" fill="currentColor"/>
+  <!-- Left Bird (Partner 1) -->
+  <circle cx="37" cy="56" r="17.5" fill="currentColor"/>
+  <circle cx="33" cy="52" r="2.5" fill="#FAFAFA"/>
+  <path d="M 22 62 L 13 53" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
+  <polygon points="47,53 51,55.5 47,58" fill="currentColor"/>
+  <!-- Right Bird (Partner 2) with Ascending Check Wing -->
+  <circle cx="61" cy="56" r="18.5" fill="currentColor"/>
+  <circle cx="65" cy="52" r="2.5" fill="#FAFAFA"/>
+  <path d="M 58 62 L 87 33" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+  <polygon points="53,53 49,55.5 53,58" fill="currentColor"/>
+  <!-- Hub Perch -->
+  <rect x="18" y="77" width="64" height="5" rx="2.5" fill="currentColor"/>
+</svg>
+            </div>
+            <div class="card-title">01 / The Lovebirds Hub</div>
+            <div class="card-subtitle">DUAL MASCOT · CHECK WING</div>
+            <div class="card-desc">Two sweet companion lovebirds nestled on a perch, beaks meeting in a kiss. The right bird's wing sweeps into an energetic checkmark with a floating heart above.</div>
+        </div>
+    
+        <div class="logo-card">
+            <span class="card-badge">HOUSE SILHOUETTE</span>
+            <div class="logo-canvas">
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Heart smoke puff from chimney -->
+  <path d="M 72 16 C 72 13, 68 11, 65 13 C 62 15, 63 19, 66 23 L 72 28 L 78 23 C 81 19, 82 15, 79 13 C 76 11, 72 13, 72 16 Z" fill="currentColor"/>
+  <rect x="68" y="27" width="6" height="12" rx="2" fill="currentColor"/>
+  <!-- House Base (Squircle Body) -->
+  <rect x="24" y="44" width="52" height="42" rx="12" fill="currentColor"/>
+  <!-- Two Partner Face Windows inside the House -->
+  <circle cx="38" cy="62" r="5" fill="#FAFAFA"/>
+  <circle cx="62" cy="62" r="5" fill="#FAFAFA"/>
+  <path d="M 46 72 Q 50 76 54 72" stroke="#FAFAFA" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <!-- Dynamic Checkmark Roofline -->
+  <path d="M 16 52 L 38 68 L 86 28" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 20 52 L 38 65 L 82 30" stroke="#FAFAFA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+            </div>
+            <div class="card-title">02 / The Home Hub</div>
+            <div class="card-subtitle">HOUSE SILHOUETTE · CHECK ROOF</div>
+            <div class="card-desc">A charming home representing the couple's shared life, with a heart smoke puff, two smiling face windows, and an energetic ascending checkmark roofline.</div>
+        </div>
+    
+        <div class="logo-card">
+            <span class="card-badge">INTERLOCKED LETTERS</span>
+            <div class="logo-canvas">
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Floating Partner Heart -->
+  <path d="M 50 14 C 50 10, 45 7, 41 9 C 37 12, 38 17, 42 22 L 50 28 L 58 22 C 62 17, 63 12, 59 9 C 55 7, 50 10, 50 14 Z" fill="currentColor"/>
+  <!-- Outer C Arc embracing the Hub -->
+  <path d="M 44 34 C 24 34, 16 48, 16 60 C 16 74, 26 84, 42 84" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+  <!-- Central T with Check Crossbar -->
+  <path d="M 32 46 L 46 56 L 76 28" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 46 56 L 46 84" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+  <!-- H Pillar connecting right side -->
+  <path d="M 68 40 L 68 84" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+  <path d="M 84 40 L 84 84" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+  <path d="M 68 62 L 84 62" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+  <!-- Partner Eye Dots -->
+  <circle cx="36" cy="42" r="3" fill="currentColor"/>
+  <circle cx="76" cy="42" r="3" fill="currentColor"/>
+</svg>
+            </div>
+            <div class="card-title">03 / The CTH Monogram</div>
+            <div class="card-subtitle">INTERLOCKED LETTERS · TASK FLOW</div>
+            <div class="card-desc">A unified monogram where the 'C' (Couple) embraces the 'T' (Task checkmark) and seamlessly connects to the 'H' (Hub pillars) with partner eye accents.</div>
+        </div>
+    
+        <div class="logo-card">
+            <span class="card-badge">SQUIRCLE BADGE</span>
+            <div class="logo-canvas">
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Hub Outer Ring (Dashed/Open Squircle) -->
+  <rect x="14" y="14" width="72" height="72" rx="28" stroke="currentColor" stroke-width="4" stroke-dasharray="8 6"/>
+  <!-- Partner 1 Heart (Top-Left) -->
+  <path d="M 32 30 C 32 26, 28 23, 25 25 C 22 27, 23 32, 26 36 L 32 41 L 38 36 C 41 32, 42 27, 39 25 C 36 23, 32 26, 32 30 Z" fill="currentColor"/>
+  <!-- Partner 2 Heart (Bottom-Right) -->
+  <path d="M 68 66 C 68 62, 64 59, 61 61 C 58 63, 59 68, 62 72 L 68 77 L 74 72 C 77 68, 78 63, 75 61 C 72 59, 68 62, 68 66 Z" fill="currentColor"/>
+  <!-- Bold Central Checkmark of Unity -->
+  <path d="M 26 54 L 44 70 L 78 34" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+            </div>
+            <div class="card-title">04 / The Orbiting Hub</div>
+            <div class="card-subtitle">SQUIRCLE BADGE · DUAL HEARTS</div>
+            <div class="card-desc">A modern dashed squircle hub container enclosing two orbiting partner hearts linked by a bold, central checkmark of shared accomplishment.</div>
+        </div>
+    
+        <div class="logo-card">
+            <span class="card-badge">PEBBLE DUO</span>
+            <div class="logo-canvas">
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Heart Lock -->
+  <path d="M 50 16 C 50 12, 46 9, 43 11 C 40 13, 40 17, 44 21 L 50 26 L 56 21 C 60 17, 60 13, 57 11 C 54 9, 50 12, 50 16 Z" fill="currentColor"/>
+  <!-- Partner 1 Chubby Squircle (Alex) -->
+  <rect x="22" y="36" width="26" height="44" rx="13" fill="currentColor"/>
+  <!-- Sweet smiling eye ^ -->
+  <path d="M 30 50 Q 35 46 40 50" stroke="#FAFAFA" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <!-- Partner 2 Chubby Squircle (Sam) -->
+  <rect x="52" y="30" width="26" height="50" rx="13" fill="currentColor"/>
+  <!-- Winking eye + open eye -->
+  <circle cx="65" cy="46" r="2.5" fill="#FAFAFA"/>
+  <!-- Shared Big Golden Checkmark -->
+  <path d="M 16 58 L 34 74 L 86 26" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 20 58 L 34 71 L 82 28" stroke="#FAFAFA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+            </div>
+            <div class="card-title">05 / The Partner Badge</div>
+            <div class="card-subtitle">PEBBLE DUO · HIGH-FIVE CHECK</div>
+            <div class="card-desc">Two adorable pill-shaped companions (Alex & Sam) with happy winks and smiles, bridged by a giant high-five checkmark celebrating finished daily tasks.</div>
+        </div>
+    
+        <div class="logo-card">
+            <span class="card-badge">DUAL RINGS</span>
+            <div class="logo-canvas">
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Floating Heart Top -->
+  <path d="M 50 15 C 50 10, 44 7, 40 10 C 36 13, 37 19, 42 24 L 50 30 L 58 24 C 63 19, 64 13, 60 10 C 56 7, 50 10, 50 15 Z" fill="currentColor"/>
+  <!-- Two Intertwined Circular Hub Rings -->
+  <circle cx="38" cy="56" r="18" stroke="currentColor" stroke-width="4.5"/>
+  <circle cx="62" cy="56" r="18" stroke="currentColor" stroke-width="4.5"/>
+  <!-- Shared Ascending Central Checkmark -->
+  <path d="M 32 58 L 48 72 L 78 38" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Two Partner Dots inside rings -->
+  <circle cx="34" cy="54" r="3" fill="currentColor"/>
+  <circle cx="66" cy="54" r="3" fill="currentColor"/>
+</svg>
+            </div>
+            <div class="card-title">06 / The Interlocking Rings</div>
+            <div class="card-subtitle">DUAL RINGS · CONVERGENCE CHECK</div>
+            <div class="card-desc">Two interlocking geometric rings representing two independent partners converging into one shared task hub with a triumphant central checkmark.</div>
+        </div>
+    
+    </div>
+
+    <div class="footer">
+        Generated with Logo Generator Skill · Couple Task Hub · 2026
+    </div>
+</div>
+
+</body>
+</html>

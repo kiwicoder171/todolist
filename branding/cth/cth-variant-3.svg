@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" fill="none" color="#000000" xmlns="http://www.w3.org/2000/svg">
+  <!-- Floating Partner Heart -->
+  <path d="M 50 14 C 50 10, 45 7, 41 9 C 37 12, 38 17, 42 22 L 50 28 L 58 22 C 62 17, 63 12, 59 9 C 55 7, 50 10, 50 14 Z" fill="currentColor"/>
+  <!-- Outer C Arc embracing the Hub -->
+  <path d="M 44 34 C 24 34, 16 48, 16 60 C 16 74, 26 84, 42 84" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+  <!-- Central T with Check Crossbar -->
+  <path d="M 32 46 L 46 56 L 76 28" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 46 56 L 46 84" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+  <!-- H Pillar connecting right side -->
+  <path d="M 68 40 L 68 84" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+  <path d="M 84 40 L 84 84" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+  <path d="M 68 62 L 84 62" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+  <!-- Partner Eye Dots -->
+  <circle cx="36" cy="42" r="3" fill="currentColor"/>
+  <circle cx="76" cy="42" r="3" fill="currentColor"/>
+</svg>
