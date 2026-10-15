@@ -452,7 +452,7 @@ export default function DocsPage() {
                     v0.5.5
                   </span>
                   <h3 className="font-heading font-extrabold text-base text-black">
-                    7-Day Mobile Week Calendar Strip (Rhythm OS Design)
+                    7-Day Mobile Week Calendar Strip &amp; Navbar Focus Reordering
                   </h3>
                 </div>
                 <span className="text-xs text-zinc-400 font-medium flex items-center gap-1">
@@ -461,6 +461,9 @@ export default function DocsPage() {
                 </span>
               </div>
               <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
+                <li>
+                  <strong>Desktop Focus Switcher Sequence:</strong> Realigned the top navigation view switcher pills to <code className="font-bold">All Boards &rarr; Day &amp; Habits &rarr; Kanban Focus</code>, matching the natural 1-2-3 left-to-right board progression.
+                </li>
                 <li>
                   <strong>7-Day Pill Row (Mon&ndash;Sun):</strong> Added a dedicated horizontal week calendar directly above the Daily Routines and Daily Tasks boards on mobile screens. Displays day abbreviations (MON to SUN) and dates (12 to 18).
                 </li>
