@@ -213,14 +213,18 @@ export function RoutinesProvider({ children }: { children: ReactNode }) {
     };
     saveRoutines((prev) => [...prev, newRoutine]);
     if (circleId) {
-      upsertRoutineToFirebase(circleId, newRoutine as any).catch(console.error);
+      upsertRoutineToFirebase(circleId, newRoutine as any).catch((err) =>
+        console.warn("Routines sync warning:", err?.message || err)
+      );
     }
   };
 
   const updateRoutine = (id: string, updates: Partial<Routine>) => {
     const current = routines.find((r) => r.id === id);
     if (current && circleId) {
-      upsertRoutineToFirebase(circleId, { ...current, ...updates } as any).catch(console.error);
+      upsertRoutineToFirebase(circleId, { ...current, ...updates } as any).catch((err) =>
+        console.warn("Routines sync warning:", err?.message || err)
+      );
     }
     saveRoutines((prev) =>
       prev.map((r) => (r.id === id ? { ...r, ...updates } : r))
@@ -230,7 +234,9 @@ export function RoutinesProvider({ children }: { children: ReactNode }) {
   const deleteRoutine = (id: string) => {
     saveRoutines((prev) => prev.filter((r) => r.id !== id));
     if (circleId) {
-      deleteRoutineFromFirebase(circleId, id).catch(console.error);
+      deleteRoutineFromFirebase(circleId, id).catch((err) =>
+        console.warn("Routines sync warning:", err?.message || err)
+      );
     }
   };
 
@@ -252,7 +258,9 @@ export function RoutinesProvider({ children }: { children: ReactNode }) {
       })
     );
     if (updatedRoutine && circleId) {
-      upsertRoutineToFirebase(circleId, updatedRoutine as any).catch(console.error);
+      upsertRoutineToFirebase(circleId, updatedRoutine as any).catch((err) =>
+        console.warn("Routines sync warning:", err?.message || err)
+      );
     }
   };
 

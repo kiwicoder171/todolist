@@ -55,7 +55,7 @@ export function AuthModal({
       await signInWithGoogle();
       onClose();
     } catch (err: any) {
-      console.error("Google sign in error:", err);
+      console.warn("Google sign in warning:", err);
       let msg = err.message || "Failed to sign in with Google.";
       if (err.code === "auth/popup-closed-by-user") {
         msg = "Google sign-in was closed before completion.";
@@ -77,7 +77,7 @@ export function AuthModal({
       await register(username, email, password);
       onClose();
     } catch (err: any) {
-      console.error("Registration error:", err);
+      console.warn("Registration warning:", err);
       let msg = err.message || "Failed to register.";
       if (err.code === "auth/email-already-in-use") {
         msg = "This email is already registered. Please log in instead.";
@@ -103,7 +103,7 @@ export function AuthModal({
       await login(loginIdentifier, password);
       onClose();
     } catch (err: any) {
-      console.error("Login error:", err);
+      console.warn("Login warning:", err);
       let msg = err.message || "Failed to sign in.";
       if (err.code === "auth/invalid-credential" || err.code === "auth/wrong-password" || err.code === "auth/user-not-found") {
         msg = "Incorrect username/email or password. Please try again.";

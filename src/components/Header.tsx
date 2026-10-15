@@ -114,41 +114,41 @@ export function Header({
         </div>
 
         {/* Center: View Focus Switcher */}
-        <div className="hidden lg:flex items-center bg-[#f4f4f5] p-1 rounded-2xl border border-zinc-200 text-xs font-heading font-bold shrink-0">
+        <div className="hidden xl:flex items-center bg-[#f4f4f5] p-0.5 rounded-2xl border border-zinc-200 text-[11px] font-heading font-bold shrink-0">
           <button
             onClick={() => onDashboardFocusChange("all")}
-            className={`px-3.5 py-1.5 rounded-xl transition ${
+            className={`px-2.5 py-1 rounded-xl transition cursor-pointer ${
               dashboardFocus === "all"
                 ? "bg-black text-white shadow-sm"
                 : "text-zinc-600 hover:text-black"
             }`}
           >
-            Dashboard View (All)
+            All Boards
           </button>
           <button
             onClick={() => onDashboardFocusChange("kanban")}
-            className={`px-3.5 py-1.5 rounded-xl transition ${
+            className={`px-2.5 py-1 rounded-xl transition cursor-pointer ${
               dashboardFocus === "kanban"
                 ? "bg-black text-white shadow-sm"
                 : "text-zinc-600 hover:text-black"
             }`}
           >
-            3-Column Kanban Focus
+            Kanban Focus
           </button>
           <button
             onClick={() => onDashboardFocusChange("day")}
-            className={`px-3.5 py-1.5 rounded-xl transition ${
+            className={`px-2.5 py-1 rounded-xl transition cursor-pointer ${
               dashboardFocus === "day"
                 ? "bg-black text-white shadow-sm"
                 : "text-zinc-600 hover:text-black"
             }`}
           >
-            Day &amp; Habits Focus
+            Day &amp; Habits
           </button>
         </div>
 
         {/* Partner Identity & Streaks */}
-        <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-2 flex-wrap">
+        <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-1.5 sm:gap-2 flex-wrap sm:flex-nowrap">
           {/* Active Partner Switcher */}
           {user && !circle ? (
             <div
@@ -166,14 +166,14 @@ export function Header({
           ) : (
             <div
               suppressHydrationWarning
-              className="flex items-center bg-[#f4f4f5] p-0.5 sm:p-1 rounded-2xl border border-zinc-200 text-xs shrink-0"
+              className="flex items-center bg-[#f4f4f5] p-0.5 rounded-2xl border border-zinc-200 text-xs shrink-0"
             >
-              <span className="text-zinc-400 px-1.5 text-[10px] font-bold uppercase font-heading">
+              <span className="text-zinc-400 px-1 text-[10px] font-bold uppercase font-heading">
                 User:
               </span>
               <button
                 onClick={() => setActivePartner("alex")}
-                className={`px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-xl font-bold font-heading text-xs transition-all flex items-center gap-1 ${
+                className={`px-2 py-0.5 sm:px-2.5 sm:py-0.5 rounded-xl font-bold font-heading text-xs transition-all flex items-center gap-1 ${
                   activePartner === "alex"
                     ? "bg-black text-white shadow-sm"
                     : "text-zinc-600 hover:text-black"
@@ -188,7 +188,7 @@ export function Header({
               </button>
               <button
                 onClick={() => setActivePartner("sam")}
-                className={`px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-xl font-bold font-heading text-xs transition-all flex items-center gap-1 ${
+                className={`px-2 py-0.5 sm:px-2.5 sm:py-0.5 rounded-xl font-bold font-heading text-xs transition-all flex items-center gap-1 ${
                   activePartner === "sam"
                     ? "bg-black text-white shadow-sm"
                     : "text-zinc-600 hover:text-black"
@@ -207,9 +207,9 @@ export function Header({
           {/* Streaks & Points Pill */}
           <div
             suppressHydrationWarning
-            className="flex items-center gap-1.5 sm:gap-2 bg-white px-2 sm:px-3 py-1 rounded-full border-2 border-black text-xs font-heading font-bold shadow-[2px_2px_0_0_#000] shrink-0"
+            className="flex items-center gap-1.5 bg-white px-2 sm:px-2.5 py-1 rounded-full border-2 border-black text-xs font-heading font-bold shadow-[1.5px_1.5px_0_0_#000] shrink-0"
           >
-            <div className="flex items-center gap-1 border-r border-zinc-200 pr-1.5 text-[11px] sm:text-xs">
+            <div className="flex items-center gap-1 border-r border-zinc-200 pr-1 text-[11px] sm:text-xs">
               <Flame className="w-3 h-3 text-black" />
               <span>{currentScore.streak} DAYS</span>
             </div>
@@ -218,7 +218,7 @@ export function Header({
             </div>
             <button
               onClick={onOpenWishlist}
-              className="ml-0.5 bg-black text-white text-[9px] sm:text-[10px] uppercase font-bold px-2 py-0.5 rounded-full hover:bg-zinc-800 transition"
+              className="ml-0.5 bg-black text-white text-[9px] uppercase font-bold px-1.5 py-0.5 rounded-full hover:bg-zinc-800 transition cursor-pointer"
             >
               Wishlist
             </button>
@@ -229,10 +229,10 @@ export function Header({
             <button
               type="button"
               onClick={() => setIsInviteOpen(true)}
-              className="hidden sm:flex px-3 py-1.5 rounded-full border-2 border-black bg-zinc-100 hover:bg-black hover:text-white transition text-xs font-heading font-extrabold items-center gap-1.5 shadow-[2px_2px_0_0_#000] shrink-0 cursor-pointer"
+              className="hidden sm:flex px-2.5 py-1 rounded-full border-2 border-black bg-zinc-100 hover:bg-black hover:text-white transition text-xs font-heading font-extrabold items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer"
               title="Circle Details & Invite Partner"
             >
-              <Users className="w-3.5 h-3.5" />
+              <Users className="w-3 h-3" />
               <span>{circle.joinCode || "Invite"}</span>
             </button>
           ) : (
@@ -245,10 +245,10 @@ export function Header({
                   setIsOnboardingOpen(true);
                 }
               }}
-              className="hidden sm:flex px-3 py-1.5 rounded-full border-2 border-black bg-white hover:bg-zinc-100 transition text-xs font-heading font-extrabold items-center gap-1.5 shadow-[2px_2px_0_0_#000] shrink-0 cursor-pointer text-zinc-900"
+              className="hidden sm:flex px-2.5 py-1 rounded-full border-2 border-black bg-white hover:bg-zinc-100 transition text-xs font-heading font-extrabold items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer text-zinc-900"
               title={user ? "Join or Create a Couple Space" : "Sign up or Log in to create or join a circle"}
             >
-              <Users className="w-3.5 h-3.5 text-zinc-500" />
+              <Users className="w-3 h-3 text-zinc-500" />
               <span>Join Circle</span>
             </button>
           )}
@@ -256,25 +256,25 @@ export function Header({
           {/* Documentation & Changelog */}
           <Link
             href="/docs"
-            className="hidden sm:flex px-2.5 py-1 sm:px-3 sm:py-1 rounded-full border-2 border-black bg-white hover:bg-black hover:text-white transition text-xs font-heading font-extrabold items-center gap-1 shadow-[2px_2px_0_0_#000] shrink-0 cursor-pointer active:translate-x-0.5 active:translate-y-0.5"
+            className="hidden sm:flex px-2.5 py-1 rounded-full border-2 border-black bg-white hover:bg-black hover:text-white transition text-xs font-heading font-extrabold items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer active:translate-x-0.5 active:translate-y-0.5"
             title="Read Guide & Version Changelog"
           >
-            <BookOpen className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Docs</span>
+            <BookOpen className="w-3 h-3" />
+            <span className="hidden md:inline">Docs</span>
           </Link>
 
           {/* Account Profile or Log In */}
           {user ? (
-            <div className="hidden sm:flex items-center gap-1.5 bg-[#f4f4f5] px-2.5 py-1 rounded-full border border-zinc-300 text-xs shrink-0 font-heading shadow-xs">
-              <UserIcon className="w-3.5 h-3.5 text-zinc-700" />
-              <span className="font-extrabold text-black max-w-[90px] sm:max-w-[120px] truncate">
+            <div className="hidden sm:flex items-center gap-1 bg-[#f4f4f5] px-2 py-1 rounded-full border border-zinc-300 text-xs shrink-0 font-heading shadow-xs">
+              <UserIcon className="w-3 h-3 text-zinc-700" />
+              <span className="font-extrabold text-black max-w-[70px] sm:max-w-[100px] truncate">
                 @{user.username}
               </span>
               <button
                 type="button"
                 onClick={() => logout()}
                 title="Sign out of account"
-                className="text-zinc-400 hover:text-red-600 transition ml-1 cursor-pointer"
+                className="text-zinc-400 hover:text-red-600 transition ml-0.5 cursor-pointer"
               >
                 <LogOut className="w-3 h-3" />
               </button>
@@ -283,10 +283,10 @@ export function Header({
             <button
               type="button"
               onClick={() => openAuthModal("login")}
-              className="hidden sm:flex px-2.5 py-1 sm:px-3 sm:py-1 rounded-full border-2 border-black bg-amber-300 hover:bg-amber-400 text-black text-xs font-heading font-extrabold items-center gap-1 shadow-[2px_2px_0_0_#000] shrink-0 cursor-pointer transition active:translate-x-0.5 active:translate-y-0.5"
+              className="hidden sm:flex px-2.5 py-1 rounded-full border-2 border-black bg-amber-300 hover:bg-amber-400 text-black text-xs font-heading font-extrabold items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer transition active:translate-x-0.5 active:translate-y-0.5"
               title="Sign in with Username or Register with Gmail"
             >
-              <LogIn className="w-3.5 h-3.5" />
+              <LogIn className="w-3 h-3" />
               <span>Log In</span>
             </button>
           )}

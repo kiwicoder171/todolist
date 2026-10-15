@@ -244,14 +244,18 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
     };
     saveCards((prev) => [...prev, newCard]);
     if (circleId) {
-      upsertKanbanCardToFirebase(circleId, newCard).catch(console.error);
+      upsertKanbanCardToFirebase(circleId, newCard).catch((err) =>
+        console.warn("Kanban sync warning:", err?.message || err)
+      );
     }
   };
 
   const updateCard = (id: string, updates: Partial<KanbanCard>) => {
     const current = cards.find((c) => c.id === id);
     if (current && circleId) {
-      upsertKanbanCardToFirebase(circleId, { ...current, ...updates }).catch(console.error);
+      upsertKanbanCardToFirebase(circleId, { ...current, ...updates }).catch((err) =>
+        console.warn("Kanban sync warning:", err?.message || err)
+      );
     }
     saveCards((prev) =>
       prev.map((c) => (c.id === id ? { ...c, ...updates } : c))
@@ -262,14 +266,18 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
     saveCards((prev) => prev.filter((c) => c.id !== id));
     removeTaskByKanbanId(id);
     if (circleId) {
-      deleteKanbanCardFromFirebase(circleId, id).catch(console.error);
+      deleteKanbanCardFromFirebase(circleId, id).catch((err) =>
+        console.warn("Kanban sync warning:", err?.message || err)
+      );
     }
   };
 
   const moveCardStage = (id: string, targetStage: KanbanStage) => {
     const current = cards.find((c) => c.id === id);
     if (current && circleId) {
-      upsertKanbanCardToFirebase(circleId, { ...current, stage: targetStage }).catch(console.error);
+      upsertKanbanCardToFirebase(circleId, { ...current, stage: targetStage }).catch((err) =>
+        console.warn("Kanban sync warning:", err?.message || err)
+      );
     }
     saveCards((prev) =>
       prev.map((c) => {

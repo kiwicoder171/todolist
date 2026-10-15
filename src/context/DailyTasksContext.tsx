@@ -241,7 +241,9 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
     };
     saveTasks((prev) => [...prev, newTask]);
     if (circleId) {
-      upsertDailyTaskToFirebase(circleId, newTask).catch(console.error);
+      upsertDailyTaskToFirebase(circleId, newTask).catch((err) =>
+        console.warn("Daily tasks sync warning:", err?.message || err)
+      );
     }
   };
 
@@ -262,7 +264,9 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
     );
 
     if (circleId) {
-      upsertDailyTaskToFirebase(circleId, updatedTask).catch(console.error);
+      upsertDailyTaskToFirebase(circleId, updatedTask).catch((err) =>
+        console.warn("Daily tasks sync warning:", err?.message || err)
+      );
     }
 
     if (target.isKanbanSynced && target.kanbanId) {
@@ -275,7 +279,9 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
   const updateDailyTask = (id: string, updates: Partial<DailyTask>) => {
     const current = tasks.find((t) => t.id === id);
     if (current && circleId) {
-      upsertDailyTaskToFirebase(circleId, { ...current, ...updates }).catch(console.error);
+      upsertDailyTaskToFirebase(circleId, { ...current, ...updates }).catch((err) =>
+        console.warn("Daily tasks sync warning:", err?.message || err)
+      );
     }
     saveTasks((prev) =>
       prev.map((t) => (t.id === id ? { ...t, ...updates } : t))
@@ -291,7 +297,9 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
     }
     saveTasks((prev) => prev.filter((t) => t.id !== id));
     if (circleId) {
-      deleteDailyTaskFromFirebase(circleId, id).catch(console.error);
+      deleteDailyTaskFromFirebase(circleId, id).catch((err) =>
+        console.warn("Daily tasks sync warning:", err?.message || err)
+      );
     }
   };
 

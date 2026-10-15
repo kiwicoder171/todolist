@@ -280,11 +280,15 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
     setScores(newScores);
     setActivePartner("alex");
     saveState(newCircle, newNames, newScores);
-    saveCircleToFirebase(newCircle).catch(console.error);
+    saveCircleToFirebase(newCircle).catch((err) =>
+      console.warn("Save circle warning:", err?.message || err)
+    );
 
     // Link circle to user profile if authenticated
     if (user?.uid) {
-      updateUserCircle(newCircle.id, "alex").catch(console.error);
+      updateUserCircle(newCircle.id, "alex").catch((err) =>
+        console.warn("Update user circle warning:", err?.message || err)
+      );
     }
     setIsOnboardingOpen(false);
     return code;
@@ -335,19 +339,27 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
           };
           setPartnerNames(mergedNames);
           saveState(merged, mergedNames, scores);
-          saveCircleToFirebase(merged).catch(console.error);
+          saveCircleToFirebase(merged).catch((err) =>
+            console.warn("Save merged circle warning:", err?.message || err)
+          );
 
           if (user?.uid) {
-            updateUserCircle(remoteCircle.id, "sam").catch(console.error);
+            updateUserCircle(remoteCircle.id, "sam").catch((err) =>
+              console.warn("Update user circle warning:", err?.message || err)
+            );
           }
         } else {
-          saveCircleToFirebase(updatedCircle).catch(console.error);
+          saveCircleToFirebase(updatedCircle).catch((err) =>
+            console.warn("Save circle warning:", err?.message || err)
+          );
           if (user?.uid) {
-            updateUserCircle(updatedCircle.id, "sam").catch(console.error);
+            updateUserCircle(updatedCircle.id, "sam").catch((err) =>
+              console.warn("Update user circle warning:", err?.message || err)
+            );
           }
         }
       })
-      .catch(console.error);
+      .catch((err) => console.warn("Find circle warning:", err?.message || err));
 
     return true;
   };
@@ -355,7 +367,9 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
   const leaveCircle = () => {
     // 1. Unlink circle from user profile in Firestore
     if (user?.uid) {
-      updateUserCircle(null, null).catch(console.error);
+      updateUserCircle(null, null).catch((err) =>
+        console.warn("Unlink user circle warning:", err?.message || err)
+      );
     }
 
     // 2. Reset circle and score state
@@ -417,7 +431,9 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
       };
       saveState(circle, partnerNames, updated);
       if (circle?.id) {
-        updateScoresInFirebase(circle.id, updated).catch(console.error);
+        updateScoresInFirebase(circle.id, updated).catch((err) =>
+          console.warn("Update scores warning:", err?.message || err)
+        );
       }
       return updated;
     });

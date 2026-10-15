@@ -87,13 +87,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 partnerRole: null,
                 createdAt: new Date().toISOString(),
               };
-              setDoc(userRef, initialProfile, { merge: true }).catch(console.error);
+              setDoc(userRef, initialProfile, { merge: true }).catch((err) =>
+                console.warn("Initial profile sync warning:", err?.message || err)
+              );
               setUser(initialProfile);
             }
             setLoading(false);
           },
           (error) => {
-            console.error("User profile subscription error:", error);
+            console.warn("User profile subscription warning:", error);
             // Fallback to local profile from auth user
             setUser({
               uid: fbUser.uid,

@@ -14,8 +14,9 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
   const { activePartner, scores, updateScore, partnerNames } = useHousehold();
   const currentScore = scores[activePartner] || { points: 0, streak: 0 };
 
+  const isTest = typeof process !== "undefined" && process.env.NODE_ENV === "test";
   const [rewards, setRewards] = useState<RewardItem[]>(() => {
-    if (typeof window !== "undefined") {
+    if (isTest && typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem("couple_task_hub_wishlist");
         if (stored) return JSON.parse(stored);
@@ -23,6 +24,16 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
     }
     return DEFAULT_REWARDS;
   });
+
+  React.useEffect(() => {
+    if (isTest || typeof window === "undefined") return;
+    try {
+      const stored = localStorage.getItem("couple_task_hub_wishlist");
+      if (stored) {
+        setRewards(JSON.parse(stored));
+      }
+    } catch {}
+  }, [isTest]);
   const [isAddingCustom, setIsAddingCustom] = useState(false);
   const [newTitle, setNewTitle] = useState("");
   const [newDesc, setNewDesc] = useState("");
