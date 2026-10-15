@@ -127,10 +127,13 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
     if (typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem("couple_task_hub_kanban_cards");
-        if (stored) return JSON.parse(stored);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
       } catch {}
     }
-    return isTest ? SEED_KANBAN_CARDS : [];
+    return SEED_KANBAN_CARDS;
   });
 
   // Real-time listener for kanban cards from Firebase
@@ -151,11 +154,11 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const handleLeave = () => {
-      setCards(isTest ? SEED_KANBAN_CARDS : []);
+      setCards(SEED_KANBAN_CARDS);
     };
     window.addEventListener("couple_hub_circle_left", handleLeave);
     return () => window.removeEventListener("couple_hub_circle_left", handleLeave);
-  }, [isTest]);
+  }, []);
 
   const saveCards = (updater: (prev: KanbanCard[]) => KanbanCard[]) => {
     setCards((prev) => {

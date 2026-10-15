@@ -444,21 +444,47 @@ export default function DocsPage() {
               </p>
             </div>
 
-            {/* Timeline Item: v0.5.2 */}
+            {/* Timeline Item: v0.5.3 */}
             <article className="p-6 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-3">
               <div className="flex items-center justify-between flex-wrap gap-2">
                 <div className="flex items-center gap-2">
                   <span className="px-2.5 py-1 rounded-full border-2 border-black bg-black text-white font-heading font-black text-xs">
-                    v0.5.2
+                    v0.5.3
                   </span>
                   <h3 className="font-heading font-extrabold text-base text-black">
-                    Auth-First Onboarding &amp; Mobile Visit Flow
+                    Pre-Login Mock Tasks &amp; Streak Showcase
                   </h3>
                 </div>
                 <span className="text-xs text-zinc-400 font-medium flex items-center gap-1">
                   <Clock className="w-3.5 h-3.5" />
                   <span>Current Release</span>
                 </span>
+              </div>
+              <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
+                <li>
+                  <strong>All 3 Boards Populated:</strong> Before logging in, visitors and new users immediately see vibrant interactive mock items across Daily Routines, Daily Tasks (with rollover indicator), and the 3-Column Kanban board.
+                </li>
+                <li>
+                  <strong>Mock Streaks &amp; Points:</strong> Header and Stats sections showcase live gamification numbers (4-day streak with 12 PTS for Alex, and 2-day streak with 9 PTS for Sam) so visitors can explore partner switching and points feedback.
+                </li>
+                <li>
+                  <strong>Zero Blank States:</strong> First-time visitors on both desktop and mobile experience the full product design without needing to register first.
+                </li>
+              </ul>
+            </article>
+
+            {/* Timeline Item: v0.5.2 */}
+            <article className="p-6 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-3">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-1 rounded-full border-2 border-black bg-amber-300 text-black font-heading font-black text-xs">
+                    v0.5.2
+                  </span>
+                  <h3 className="font-heading font-extrabold text-base text-black">
+                    Auth-First Onboarding &amp; Mobile Visit Flow
+                  </h3>
+                </div>
+                <span className="text-xs text-zinc-400 font-medium">Oct 15, 2026</span>
               </div>
               <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
                 <li>

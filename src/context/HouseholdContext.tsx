@@ -97,7 +97,12 @@ function generateJoinCode(): string {
   return code;
 }
 
-const HouseholdContext = createContext<HouseholdContextType | undefined>(undefined);
+export const MOCK_SCORES: Record<Partner, PartnerScoreState> = {
+  alex: { points: 12, streak: 4 },
+  sam: { points: 9, streak: 2 },
+};
+
+export const HouseholdContext = createContext<HouseholdContextType | undefined>(undefined);
 
 export function HouseholdProvider({ children }: { children: ReactNode }) {
   const isTest = typeof process !== "undefined" && process.env.NODE_ENV === "test";
@@ -138,22 +143,43 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
 
   const [scores, setScores] = useState<Record<Partner, PartnerScoreState>>(() => {
-    if (typeof window === "undefined") {
-      return isTest
-        ? { alex: { points: 12, streak: 4 }, sam: { points: 9, streak: 2 } }
-        : { alex: { points: 0, streak: 0 }, sam: { points: 0, streak: 0 } };
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed.circle && parsed.scores) return parsed.scores;
+          if (
+            parsed.scores &&
+            (parsed.scores.alex?.points > 0 ||
+              parsed.scores.alex?.streak > 0 ||
+              parsed.scores.sam?.points > 0 ||
+              parsed.scores.sam?.streak > 0)
+          ) {
+            return parsed.scores;
+          }
+        }
+      } catch {}
     }
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (parsed.scores) return parsed.scores;
-      }
-    } catch {}
-    return isTest
-      ? { alex: { points: 12, streak: 4 }, sam: { points: 9, streak: 2 } }
-      : { alex: { points: 0, streak: 0 }, sam: { points: 0, streak: 0 } };
+    return MOCK_SCORES;
   });
+
+  // Ensure unauthenticated visitors without a circle always see mock scores
+  useEffect(() => {
+    if (!user && !circle) {
+      setScores((prev) => {
+        if (
+          prev.alex.points === 0 &&
+          prev.alex.streak === 0 &&
+          prev.sam.points === 0 &&
+          prev.sam.streak === 0
+        ) {
+          return MOCK_SCORES;
+        }
+        return prev;
+      });
+    }
+  }, [user, circle]);
 
   // Save to localStorage whenever critical state updates
   const saveState = (

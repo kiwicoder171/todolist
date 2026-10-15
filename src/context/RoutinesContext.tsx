@@ -67,7 +67,7 @@ export interface RoutinesContextType {
 
 const RoutinesContext = createContext<RoutinesContextType | undefined>(undefined);
 
-const SEED_ROUTINES: Routine[] = [
+export const SEED_ROUTINES: Routine[] = [
   {
     id: "routine-1",
     title: "15-min daily sync & check-in",
@@ -121,10 +121,13 @@ export function RoutinesProvider({ children }: { children: ReactNode }) {
     if (typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem(ROUTINES_STORAGE_KEY);
-        if (stored) return JSON.parse(stored);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
       } catch {}
     }
-    return isTest ? SEED_ROUTINES : [];
+    return SEED_ROUTINES;
   });
 
   // Real-time listener for routines from Firebase
@@ -145,11 +148,11 @@ export function RoutinesProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const handleLeave = () => {
-      setRoutines(isTest ? SEED_ROUTINES : []);
+      setRoutines(SEED_ROUTINES);
     };
     window.addEventListener("couple_hub_circle_left", handleLeave);
     return () => window.removeEventListener("couple_hub_circle_left", handleLeave);
-  }, [isTest]);
+  }, []);
 
   const saveRoutines = (updater: (prev: Routine[]) => Routine[]) => {
     setRoutines((prev) => {

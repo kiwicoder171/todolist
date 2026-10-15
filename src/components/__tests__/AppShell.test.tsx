@@ -2,6 +2,10 @@ import { describe, it, expect } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import React from "react";
 import { HouseholdProvider } from "@/context/HouseholdContext";
+import { RoutinesProvider } from "@/context/RoutinesContext";
+import { DailyTasksProvider } from "@/context/DailyTasksContext";
+import { KanbanProvider } from "@/context/KanbanContext";
+import { CoupleTaskHubApp } from "../CoupleTaskHubApp";
 import { Header } from "../Header";
 import { FilterBar } from "../FilterBar";
 
@@ -63,5 +67,35 @@ describe("App Shell Components (Seam: Header & FilterBar)", () => {
 
     fireEvent.click(freezeBtn);
     expect(freezeBtn).toHaveTextContent("ON");
+  });
+
+  it("renders mock tasks for all three boards and mock points/streak before user login", () => {
+    render(
+      <HouseholdProvider>
+        <RoutinesProvider>
+          <DailyTasksProvider>
+            <KanbanProvider>
+              <CoupleTaskHubApp forcedIsMobile={false} />
+            </KanbanProvider>
+          </DailyTasksProvider>
+        </RoutinesProvider>
+      </HouseholdProvider>
+    );
+
+    // Mock Streak and Points in Header
+    expect(screen.getByText(/4 DAYS/i)).toBeInTheDocument();
+    expect(screen.getByText(/12 PTS/i)).toBeInTheDocument();
+
+    // Board 1: Daily Routines mock tasks
+    expect(screen.getAllByText(/15-min daily sync & check-in/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Tidy kitchen & living room together/i).length).toBeGreaterThan(0);
+
+    // Board 2: Daily Tasks mock tasks
+    expect(screen.getByText(/Pick up dry cleaning & winter coats/i)).toBeInTheDocument();
+    expect(screen.getByText(/Call plumber for slow kitchen drain/i)).toBeInTheDocument();
+
+    // Board 3: Kanban mock cards
+    expect(screen.getByText(/Research Hakone onsens & ryokan/i)).toBeInTheDocument();
+    expect(screen.getByText(/Replace living room light dimmer/i)).toBeInTheDocument();
   });
 });

@@ -79,7 +79,7 @@ const DailyTasksContext = createContext<DailyTasksContextType | undefined>(
   undefined
 );
 
-const SEED_TASKS: DailyTask[] = [
+export const SEED_TASKS: DailyTask[] = [
   {
     id: "task-101",
     title: "Pick up dry cleaning & winter coats",
@@ -131,10 +131,13 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
     if (typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem(TASKS_STORAGE_KEY);
-        if (stored) return JSON.parse(stored);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
       } catch {}
     }
-    return isTest ? SEED_TASKS : [];
+    return SEED_TASKS;
   });
   const syncHooksRef = useRef<KanbanSyncCallback[]>([]);
 
@@ -156,11 +159,11 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const handleLeave = () => {
-      setTasks(isTest ? SEED_TASKS : []);
+      setTasks(SEED_TASKS);
     };
     window.addEventListener("couple_hub_circle_left", handleLeave);
     return () => window.removeEventListener("couple_hub_circle_left", handleLeave);
-  }, [isTest]);
+  }, []);
 
   const saveTasks = (updater: (prev: DailyTask[]) => DailyTask[]) => {
     setTasks((prev) => {
