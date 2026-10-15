@@ -45,7 +45,11 @@ export function Header({
                 </span>
               </div>
               <p className="text-[11px] sm:text-xs text-zinc-500 font-medium truncate">
-                {circle?.name || `${partnerNames.alex} & ${partnerNames.sam}'s Space`}
+                {circle
+                  ? circle.name || `${partnerNames.alex} & ${partnerNames.sam}'s Space`
+                  : user
+                  ? `${user.username}'s Space`
+                  : `${partnerNames.alex} & ${partnerNames.sam}'s Space`}
               </p>
             </div>
           </div>
@@ -107,41 +111,53 @@ export function Header({
         {/* Partner Identity & Streaks */}
         <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-2 flex-wrap">
           {/* Active Partner Switcher */}
-          <div className="flex items-center bg-[#f4f4f5] p-0.5 sm:p-1 rounded-2xl border border-zinc-200 text-xs shrink-0">
-            <span className="text-zinc-400 px-1.5 text-[10px] font-bold uppercase font-heading">
-              User:
-            </span>
-            <button
-              onClick={() => setActivePartner("alex")}
-              className={`px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-xl font-bold font-heading text-xs transition-all flex items-center gap-1 ${
-                activePartner === "alex"
-                  ? "bg-black text-white shadow-sm"
-                  : "text-zinc-600 hover:text-black"
-              }`}
-            >
-              <span
-                className={`w-1.5 h-1.5 rounded-full ${
-                  activePartner === "alex" ? "bg-white" : "bg-zinc-400"
+          {user && !circle ? (
+            <div className="flex items-center bg-[#f4f4f5] px-2.5 py-1 rounded-2xl border border-zinc-200 text-xs shrink-0">
+              <span className="text-zinc-400 pr-1.5 text-[10px] font-bold uppercase font-heading">
+                User:
+              </span>
+              <span className="font-bold font-heading text-xs text-black flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                @{user.username}
+              </span>
+            </div>
+          ) : (
+            <div className="flex items-center bg-[#f4f4f5] p-0.5 sm:p-1 rounded-2xl border border-zinc-200 text-xs shrink-0">
+              <span className="text-zinc-400 px-1.5 text-[10px] font-bold uppercase font-heading">
+                User:
+              </span>
+              <button
+                onClick={() => setActivePartner("alex")}
+                className={`px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-xl font-bold font-heading text-xs transition-all flex items-center gap-1 ${
+                  activePartner === "alex"
+                    ? "bg-black text-white shadow-sm"
+                    : "text-zinc-600 hover:text-black"
                 }`}
-              />
-              {partnerNames.alex}
-            </button>
-            <button
-              onClick={() => setActivePartner("sam")}
-              className={`px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-xl font-bold font-heading text-xs transition-all flex items-center gap-1 ${
-                activePartner === "sam"
-                  ? "bg-black text-white shadow-sm"
-                  : "text-zinc-600 hover:text-black"
-              }`}
-            >
-              <span
-                className={`w-1.5 h-1.5 rounded-full ${
-                  activePartner === "sam" ? "bg-white" : "bg-zinc-400"
+              >
+                <span
+                  className={`w-1.5 h-1.5 rounded-full ${
+                    activePartner === "alex" ? "bg-white" : "bg-zinc-400"
+                  }`}
+                />
+                {partnerNames.alex}
+              </button>
+              <button
+                onClick={() => setActivePartner("sam")}
+                className={`px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-xl font-bold font-heading text-xs transition-all flex items-center gap-1 ${
+                  activePartner === "sam"
+                    ? "bg-black text-white shadow-sm"
+                    : "text-zinc-600 hover:text-black"
                 }`}
-              />
-              {partnerNames.sam}
-            </button>
-          </div>
+              >
+                <span
+                  className={`w-1.5 h-1.5 rounded-full ${
+                    activePartner === "sam" ? "bg-white" : "bg-zinc-400"
+                  }`}
+                />
+                {partnerNames.sam}
+              </button>
+            </div>
+          )}
 
           {/* Streaks & Points Pill */}
           <div className="flex items-center gap-1.5 sm:gap-2 bg-white px-2 sm:px-3 py-1 rounded-full border-2 border-black text-xs font-heading font-bold shadow-[2px_2px_0_0_#000] shrink-0">

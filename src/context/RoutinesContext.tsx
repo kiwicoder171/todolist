@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { Assignee, useHousehold } from "./HouseholdContext";
+import { useOptionalAuth } from "./AuthContext";
 import {
   subscribeToRoutines,
   upsertRoutineToFirebase,
@@ -116,8 +117,11 @@ export function RoutinesProvider({ children }: { children: ReactNode }) {
   const isTest = typeof process !== "undefined" && process.env.NODE_ENV === "test";
   const { circle } = useHousehold();
   const circleId = circle?.id;
+  const authContext = useOptionalAuth();
+  const user = authContext?.user;
 
   const [routines, setRoutines] = useState<Routine[]>(() => {
+    if (user && !circleId) return [];
     if (typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem(ROUTINES_STORAGE_KEY);
@@ -127,8 +131,22 @@ export function RoutinesProvider({ children }: { children: ReactNode }) {
         }
       } catch {}
     }
-    return SEED_ROUTINES;
+    return user && !circleId ? [] : SEED_ROUTINES;
   });
+
+  // Ensure mock routines vanish when user logs in without circle, and reappear if unauthenticated
+  useEffect(() => {
+    if (user && !circleId) {
+      setRoutines([]);
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.removeItem(ROUTINES_STORAGE_KEY);
+        } catch {}
+      }
+    } else if (!user && !circleId) {
+      setRoutines(SEED_ROUTINES);
+    }
+  }, [user, circleId]);
 
   // Real-time listener for routines from Firebase
   useEffect(() => {
@@ -148,11 +166,11 @@ export function RoutinesProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const handleLeave = () => {
-      setRoutines(SEED_ROUTINES);
+      setRoutines(user ? [] : SEED_ROUTINES);
     };
     window.addEventListener("couple_hub_circle_left", handleLeave);
     return () => window.removeEventListener("couple_hub_circle_left", handleLeave);
-  }, []);
+  }, [user]);
 
   const saveRoutines = (updater: (prev: Routine[]) => Routine[]) => {
     setRoutines((prev) => {

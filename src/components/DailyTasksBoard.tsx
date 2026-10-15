@@ -23,6 +23,9 @@ export function DailyTasksBoard() {
   );
   const [celebrationMsg, setCelebrationMsg] = useState<string | null>(null);
 
+  const partnerName = activePartner === "alex" ? partnerNames.sam : partnerNames.alex;
+  const myName = activePartner === "alex" ? partnerNames.alex : partnerNames.sam;
+
   // Reference "Today" date
   const today = new Date(2026, 9, 14);
 
@@ -195,7 +198,7 @@ export function DailyTasksBoard() {
             className="bg-white font-heading font-bold text-[10px] uppercase text-black rounded-lg px-2 py-1 border border-black focus:outline-none"
           >
             <option value="mine">Me</option>
-            <option value="partner">Sam</option>
+            <option value="partner">{partnerName}</option>
             <option value="both">Both</option>
           </select>
         </div>

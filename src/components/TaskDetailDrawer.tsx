@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { DailyTask } from "@/context/DailyTasksContext";
-import { Assignee } from "@/context/HouseholdContext";
+import { Assignee, HouseholdContext } from "@/context/HouseholdContext";
 import { X, CornerDownRight } from "lucide-react";
 
 export interface TaskDetailDrawerProps {
@@ -20,6 +20,12 @@ export function TaskDetailDrawer({
   onSave,
   onDelete,
 }: TaskDetailDrawerProps) {
+  const household = useContext(HouseholdContext);
+  const partnerNames = household?.partnerNames || { alex: "Alex", sam: "Sam" };
+  const activePartner = household?.activePartner || "alex";
+  const myName = activePartner === "alex" ? partnerNames.alex : partnerNames.sam;
+  const partnerName = activePartner === "alex" ? partnerNames.sam : partnerNames.alex;
+
   const [title, setTitle] = useState("");
   const [assignee, setAssignee] = useState<Assignee>("mine");
   const [notes, setNotes] = useState("");
@@ -119,8 +125,8 @@ export function TaskDetailDrawer({
               onChange={(e) => setAssignee(e.target.value as Assignee)}
               className="w-full bg-[#f4f4f5] border-2 border-black rounded-xl p-2.5 text-xs font-heading font-bold uppercase text-black focus:outline-none"
             >
-              <option value="mine">Alex (You)</option>
-              <option value="partner">Sam (Partner)</option>
+              <option value="mine">{myName} (You)</option>
+              <option value="partner">{partnerName}</option>
               <option value="both">Both</option>
             </select>
           </div>

@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback, useRef, ReactNode } from "react";
 import { Assignee, useHousehold } from "./HouseholdContext";
+import { useOptionalAuth } from "./AuthContext";
 import { formatDateKey } from "./RoutinesContext";
 import {
   subscribeToDailyTasks,
@@ -126,8 +127,11 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
   const isTest = typeof process !== "undefined" && process.env.NODE_ENV === "test";
   const { circle } = useHousehold();
   const circleId = circle?.id;
+  const authContext = useOptionalAuth();
+  const user = authContext?.user;
 
   const [tasks, setTasks] = useState<DailyTask[]>(() => {
+    if (user && !circleId) return [];
     if (typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem(TASKS_STORAGE_KEY);
@@ -137,9 +141,23 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
         }
       } catch {}
     }
-    return SEED_TASKS;
+    return user && !circleId ? [] : SEED_TASKS;
   });
   const syncHooksRef = useRef<KanbanSyncCallback[]>([]);
+
+  // Ensure mock tasks vanish when user logs in without circle, and reappear if unauthenticated
+  useEffect(() => {
+    if (user && !circleId) {
+      setTasks([]);
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.removeItem(TASKS_STORAGE_KEY);
+        } catch {}
+      }
+    } else if (!user && !circleId) {
+      setTasks(SEED_TASKS);
+    }
+  }, [user, circleId]);
 
   // Real-time listener from Firestore
   useEffect(() => {
@@ -159,11 +177,11 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const handleLeave = () => {
-      setTasks(SEED_TASKS);
+      setTasks(user ? [] : SEED_TASKS);
     };
     window.addEventListener("couple_hub_circle_left", handleLeave);
     return () => window.removeEventListener("couple_hub_circle_left", handleLeave);
-  }, []);
+  }, [user]);
 
   const saveTasks = (updater: (prev: DailyTask[]) => DailyTask[]) => {
     setTasks((prev) => {

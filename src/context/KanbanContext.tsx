@@ -9,6 +9,7 @@ import React, {
 } from "react";
 import { Assignee, useHousehold, matchesAssigneeFilter } from "./HouseholdContext";
 import { useDailyTasks } from "./DailyTasksContext";
+import { useOptionalAuth } from "./AuthContext";
 import {
   subscribeToKanbanCards,
   upsertKanbanCardToFirebase,
@@ -114,6 +115,8 @@ export const SEED_KANBAN_CARDS: KanbanCard[] = [
 export function KanbanProvider({ children }: { children: ReactNode }) {
   const { activePartner, assigneeFilter, selectedDate, circle } = useHousehold();
   const circleId = circle?.id;
+  const authContext = useOptionalAuth();
+  const user = authContext?.user;
   const {
     addDailyTask,
     removeTaskByKanbanId,
@@ -124,6 +127,7 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
   const isTest = typeof process !== "undefined" && process.env.NODE_ENV === "test";
 
   const [cards, setCards] = useState<KanbanCard[]>(() => {
+    if (user && !circleId) return [];
     if (typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem("couple_task_hub_kanban_cards");
@@ -133,8 +137,22 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
         }
       } catch {}
     }
-    return SEED_KANBAN_CARDS;
+    return user && !circleId ? [] : SEED_KANBAN_CARDS;
   });
+
+  // Ensure mock kanban cards vanish when user logs in without circle, and reappear if unauthenticated
+  useEffect(() => {
+    if (user && !circleId) {
+      setCards([]);
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.removeItem("couple_task_hub_kanban_cards");
+        } catch {}
+      }
+    } else if (!user && !circleId) {
+      setCards(SEED_KANBAN_CARDS);
+    }
+  }, [user, circleId]);
 
   // Real-time listener for kanban cards from Firebase
   useEffect(() => {
@@ -154,11 +172,11 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const handleLeave = () => {
-      setCards(SEED_KANBAN_CARDS);
+      setCards(user ? [] : SEED_KANBAN_CARDS);
     };
     window.addEventListener("couple_hub_circle_left", handleLeave);
     return () => window.removeEventListener("couple_hub_circle_left", handleLeave);
-  }, []);
+  }, [user]);
 
   const saveCards = (updater: (prev: KanbanCard[]) => KanbanCard[]) => {
     setCards((prev) => {

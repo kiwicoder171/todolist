@@ -164,9 +164,21 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
     return MOCK_SCORES;
   });
 
-  // Ensure unauthenticated visitors without a circle always see mock scores
+  // Synchronize mock vs authenticated state:
+  // - Pre-login: mock names "Alex & Sam", mock scores (12 & 9 pts)
+  // - Logged in without circle: user's space, clean scores (0 pts, 0 streak), NO "Alex & Sam"
   useEffect(() => {
-    if (!user && !circle) {
+    if (user && !circle) {
+      setScores({
+        alex: { points: 0, streak: 0 },
+        sam: { points: 0, streak: 0 },
+      });
+      setPartnerNames({
+        alex: user.username || "You",
+        sam: "Partner",
+      });
+    } else if (!user && !circle) {
+      setPartnerNames({ alex: "Alex", sam: "Sam" });
       setScores((prev) => {
         if (
           prev.alex.points === 0 &&
@@ -206,8 +218,8 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
     const unsub = subscribeToCircle(user.circleId, (remoteCircle) => {
       setCircle(remoteCircle);
       const names = {
-        alex: remoteCircle.createdByName || "Alex",
-        sam: remoteCircle.partnerName || "Sam",
+        alex: remoteCircle.createdByName || user?.username || "You",
+        sam: remoteCircle.partnerName || "Partner",
       };
       setPartnerNames(names);
       if ((remoteCircle as any).scores) {
@@ -340,7 +352,11 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
 
     // 2. Reset circle and score state
     setCircle(null);
-    setPartnerNames({ alex: "Alex", sam: "Sam" });
+    setPartnerNames(
+      user
+        ? { alex: user.username || "You", sam: "Partner" }
+        : { alex: "Alex", sam: "Sam" }
+    );
     setScores({
       alex: { points: 0, streak: 0 },
       sam: { points: 0, streak: 0 },
