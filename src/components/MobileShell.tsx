@@ -22,15 +22,11 @@ export function MobileShell({
 }: MobileShellProps) {
   return (
     <div className="w-full max-w-md mx-auto min-h-[calc(100vh-80px)] flex flex-col pb-24 relative bg-[#fafafa]">
-      {/* Mobile Header Bar */}
-      <div className="py-2.5 px-4 mb-2 flex items-center justify-between border-b border-zinc-200 bg-white sticky top-0 z-20 shadow-xs">
-        <div className="w-8 h-8 rounded-xl border border-black flex items-center justify-center font-bold text-xs bg-zinc-50">
-          👤
-        </div>
-        <div className="bg-black text-white px-4 py-1.5 rounded-full font-heading font-extrabold text-xs tracking-wider uppercase shadow-xs">
+      {/* Mobile Active View Pill */}
+      <div className="py-2 px-4 flex items-center justify-center">
+        <div className="bg-black text-white px-4 py-1 rounded-full font-heading font-extrabold text-[11px] tracking-wider uppercase shadow-xs">
           {pillTitle}
         </div>
-        <div className="w-8" />
       </div>
 
       {/* Dynamic Body */}

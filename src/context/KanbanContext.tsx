@@ -128,7 +128,7 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
 
   const [cards, setCards] = useState<KanbanCard[]>(() => {
     if (user && !circleId) return [];
-    if (typeof window !== "undefined") {
+    if (isTest && typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem("couple_task_hub_kanban_cards");
         if (stored) {
@@ -139,6 +139,20 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
     }
     return user && !circleId ? [] : SEED_KANBAN_CARDS;
   });
+
+  // Client-side hydration from localStorage (runs after mount, eliminating SSR hydration mismatch)
+  useEffect(() => {
+    if (isTest || typeof window === "undefined" || (user && !circleId)) return;
+    try {
+      const stored = localStorage.getItem("couple_task_hub_kanban_cards");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setCards(parsed);
+        }
+      }
+    } catch {}
+  }, [isTest, user, circleId]);
 
   // Ensure mock kanban cards vanish when user logs in without circle, and reappear if unauthenticated
   useEffect(() => {

@@ -132,7 +132,7 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
 
   const [tasks, setTasks] = useState<DailyTask[]>(() => {
     if (user && !circleId) return [];
-    if (typeof window !== "undefined") {
+    if (isTest && typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem(TASKS_STORAGE_KEY);
         if (stored) {
@@ -143,6 +143,20 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
     }
     return user && !circleId ? [] : SEED_TASKS;
   });
+
+  // Client-side hydration from localStorage (runs after mount, eliminating SSR hydration mismatch)
+  useEffect(() => {
+    if (isTest || typeof window === "undefined" || (user && !circleId)) return;
+    try {
+      const stored = localStorage.getItem(TASKS_STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setTasks(parsed);
+        }
+      }
+    } catch {}
+  }, [isTest, user, circleId]);
   const syncHooksRef = useRef<KanbanSyncCallback[]>([]);
 
   // Ensure mock tasks vanish when user logs in without circle, and reappear if unauthenticated

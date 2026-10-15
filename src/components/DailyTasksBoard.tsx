@@ -184,6 +184,8 @@ export function DailyTasksBoard() {
           <Plus className="w-4 h-4 text-black" />
           <input
             type="text"
+            id="quick-add-daily-task-input"
+            name="dailyTaskTitle"
             value={newTitle}
             onChange={(e) => setNewTitle(e.target.value)}
             onKeyDown={handleKeyDown}
@@ -192,6 +194,8 @@ export function DailyTasksBoard() {
             className="bg-transparent text-xs font-medium text-black placeholder-zinc-400 focus:outline-none w-full"
           />
           <select
+            id="quick-add-daily-task-assignee"
+            name="dailyTaskAssignee"
             value={newAssignee}
             aria-label="Daily task assignee"
             onChange={(e) => setNewAssignee(e.target.value as Assignee)}

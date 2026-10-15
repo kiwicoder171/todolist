@@ -44,7 +44,10 @@ export function Header({
                   v0.5.3
                 </span>
               </div>
-              <p className="text-[11px] sm:text-xs text-zinc-500 font-medium truncate">
+              <p
+                suppressHydrationWarning
+                className="text-[11px] sm:text-xs text-zinc-500 font-medium truncate"
+              >
                 {circle
                   ? circle.name || `${partnerNames.alex} & ${partnerNames.sam}'s Space`
                   : user
@@ -54,24 +57,60 @@ export function Header({
             </div>
           </div>
 
-          {/* Mobile Circle / Invite Button */}
-          <button
-            type="button"
-            onClick={() => {
-              if (circle) {
-                setIsInviteOpen(true);
-              } else if (!user) {
-                openAuthModal("register");
-              } else {
-                setIsOnboardingOpen(true);
-              }
-            }}
-            className="sm:hidden px-2.5 py-1 rounded-full border-2 border-black bg-zinc-100 hover:bg-black hover:text-white transition text-[11px] font-heading font-extrabold flex items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer"
-            title={circle ? "Circle Details & Invite Partner" : user ? "Join or Create a Circle" : "Sign up or Log in to join a circle"}
-          >
-            <Users className="w-3 h-3" />
-            <span>{circle?.joinCode || "Join Circle"}</span>
-          </button>
+          {/* Mobile Right Actions: Circle, Docs, Log In */}
+          <div className="flex items-center gap-1.5 sm:hidden shrink-0">
+            <button
+              type="button"
+              onClick={() => {
+                if (circle) {
+                  setIsInviteOpen(true);
+                } else if (!user) {
+                  openAuthModal("register");
+                } else {
+                  setIsOnboardingOpen(true);
+                }
+              }}
+              className="px-2 py-1 rounded-full border-2 border-black bg-zinc-100 hover:bg-black hover:text-white transition text-[11px] font-heading font-extrabold flex items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer"
+              title={circle ? "Circle Details & Invite Partner" : user ? "Join or Create a Circle" : "Sign up or Log in to join a circle"}
+            >
+              <Users className="w-3 h-3" />
+              <span>{circle?.joinCode || "Circle"}</span>
+            </button>
+
+            <Link
+              href="/docs"
+              className="p-1 rounded-full border-2 border-black bg-white hover:bg-black hover:text-white transition text-xs font-heading font-extrabold flex items-center justify-center shadow-[1.5px_1.5px_0_0_#000] shrink-0"
+              title="Documentation & Guide"
+            >
+              <BookOpen className="w-3.5 h-3.5" />
+            </Link>
+
+            {user ? (
+              <div className="flex items-center gap-1 bg-[#f4f4f5] px-2 py-0.5 rounded-full border border-zinc-300 text-[11px] shrink-0 font-heading">
+                <span className="font-extrabold text-black max-w-[70px] truncate">
+                  @{user.username}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => logout()}
+                  title="Sign out of account"
+                  className="text-zinc-400 hover:text-red-600 transition cursor-pointer"
+                >
+                  <LogOut className="w-3 h-3" />
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => openAuthModal("login")}
+                className="px-2.5 py-1 rounded-full border-2 border-black bg-amber-300 hover:bg-amber-400 text-black text-[11px] font-heading font-extrabold flex items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer"
+                title="Log In"
+              >
+                <LogIn className="w-3 h-3" />
+                <span>Log In</span>
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Center: View Focus Switcher */}
@@ -112,7 +151,10 @@ export function Header({
         <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-2 flex-wrap">
           {/* Active Partner Switcher */}
           {user && !circle ? (
-            <div className="flex items-center bg-[#f4f4f5] px-2.5 py-1 rounded-2xl border border-zinc-200 text-xs shrink-0">
+            <div
+              suppressHydrationWarning
+              className="flex items-center bg-[#f4f4f5] px-2.5 py-1 rounded-2xl border border-zinc-200 text-xs shrink-0"
+            >
               <span className="text-zinc-400 pr-1.5 text-[10px] font-bold uppercase font-heading">
                 User:
               </span>
@@ -122,7 +164,10 @@ export function Header({
               </span>
             </div>
           ) : (
-            <div className="flex items-center bg-[#f4f4f5] p-0.5 sm:p-1 rounded-2xl border border-zinc-200 text-xs shrink-0">
+            <div
+              suppressHydrationWarning
+              className="flex items-center bg-[#f4f4f5] p-0.5 sm:p-1 rounded-2xl border border-zinc-200 text-xs shrink-0"
+            >
               <span className="text-zinc-400 px-1.5 text-[10px] font-bold uppercase font-heading">
                 User:
               </span>
@@ -160,7 +205,10 @@ export function Header({
           )}
 
           {/* Streaks & Points Pill */}
-          <div className="flex items-center gap-1.5 sm:gap-2 bg-white px-2 sm:px-3 py-1 rounded-full border-2 border-black text-xs font-heading font-bold shadow-[2px_2px_0_0_#000] shrink-0">
+          <div
+            suppressHydrationWarning
+            className="flex items-center gap-1.5 sm:gap-2 bg-white px-2 sm:px-3 py-1 rounded-full border-2 border-black text-xs font-heading font-bold shadow-[2px_2px_0_0_#000] shrink-0"
+          >
             <div className="flex items-center gap-1 border-r border-zinc-200 pr-1.5 text-[11px] sm:text-xs">
               <Flame className="w-3 h-3 text-black" />
               <span>{currentScore.streak} DAYS</span>
@@ -208,7 +256,7 @@ export function Header({
           {/* Documentation & Changelog */}
           <Link
             href="/docs"
-            className="px-2.5 py-1 sm:px-3 sm:py-1 rounded-full border-2 border-black bg-white hover:bg-black hover:text-white transition text-xs font-heading font-extrabold flex items-center gap-1 shadow-[2px_2px_0_0_#000] shrink-0 cursor-pointer active:translate-x-0.5 active:translate-y-0.5"
+            className="hidden sm:flex px-2.5 py-1 sm:px-3 sm:py-1 rounded-full border-2 border-black bg-white hover:bg-black hover:text-white transition text-xs font-heading font-extrabold items-center gap-1 shadow-[2px_2px_0_0_#000] shrink-0 cursor-pointer active:translate-x-0.5 active:translate-y-0.5"
             title="Read Guide & Version Changelog"
           >
             <BookOpen className="w-3.5 h-3.5" />
@@ -217,7 +265,7 @@ export function Header({
 
           {/* Account Profile or Log In */}
           {user ? (
-            <div className="flex items-center gap-1.5 bg-[#f4f4f5] px-2.5 py-1 rounded-full border border-zinc-300 text-xs shrink-0 font-heading shadow-xs">
+            <div className="hidden sm:flex items-center gap-1.5 bg-[#f4f4f5] px-2.5 py-1 rounded-full border border-zinc-300 text-xs shrink-0 font-heading shadow-xs">
               <UserIcon className="w-3.5 h-3.5 text-zinc-700" />
               <span className="font-extrabold text-black max-w-[90px] sm:max-w-[120px] truncate">
                 @{user.username}
@@ -235,7 +283,7 @@ export function Header({
             <button
               type="button"
               onClick={() => openAuthModal("login")}
-              className="px-2.5 py-1 sm:px-3 sm:py-1 rounded-full border-2 border-black bg-amber-300 hover:bg-amber-400 text-black text-xs font-heading font-extrabold flex items-center gap-1 shadow-[2px_2px_0_0_#000] shrink-0 cursor-pointer transition active:translate-x-0.5 active:translate-y-0.5"
+              className="hidden sm:flex px-2.5 py-1 sm:px-3 sm:py-1 rounded-full border-2 border-black bg-amber-300 hover:bg-amber-400 text-black text-xs font-heading font-extrabold items-center gap-1 shadow-[2px_2px_0_0_#000] shrink-0 cursor-pointer transition active:translate-x-0.5 active:translate-y-0.5"
               title="Sign in with Username or Register with Gmail"
             >
               <LogIn className="w-3.5 h-3.5" />

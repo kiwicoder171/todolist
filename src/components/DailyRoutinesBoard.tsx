@@ -221,6 +221,8 @@ export function DailyRoutinesBoard() {
           <Plus className="w-4 h-4 text-zinc-400 shrink-0" />
           <input
             type="text"
+            id="quick-add-routine-input"
+            name="routineTitle"
             value={newTitle}
             onChange={(e) => setNewTitle(e.target.value)}
             onKeyDown={handleKeyDown}

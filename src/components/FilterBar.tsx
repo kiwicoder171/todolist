@@ -59,7 +59,10 @@ export function FilterBar() {
           <span className="text-zinc-500 text-[11px] font-bold uppercase font-heading hidden sm:inline">
             Calendar:
           </span>
-          <span className="font-heading font-extrabold text-black bg-[#f4f4f5] border border-black px-3 py-0.5 rounded-lg text-xs">
+          <span
+            suppressHydrationWarning
+            className="font-heading font-extrabold text-black bg-[#f4f4f5] border border-black px-3 py-0.5 rounded-lg text-xs"
+          >
             {formattedDate}
           </span>
         </div>

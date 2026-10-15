@@ -122,7 +122,7 @@ export function RoutinesProvider({ children }: { children: ReactNode }) {
 
   const [routines, setRoutines] = useState<Routine[]>(() => {
     if (user && !circleId) return [];
-    if (typeof window !== "undefined") {
+    if (isTest && typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem(ROUTINES_STORAGE_KEY);
         if (stored) {
@@ -133,6 +133,20 @@ export function RoutinesProvider({ children }: { children: ReactNode }) {
     }
     return user && !circleId ? [] : SEED_ROUTINES;
   });
+
+  // Client-side hydration from localStorage (runs after mount, eliminating SSR hydration mismatch)
+  useEffect(() => {
+    if (isTest || typeof window === "undefined" || (user && !circleId)) return;
+    try {
+      const stored = localStorage.getItem(ROUTINES_STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setRoutines(parsed);
+        }
+      }
+    } catch {}
+  }, [isTest, user, circleId]);
 
   // Ensure mock routines vanish when user logs in without circle, and reappear if unauthenticated
   useEffect(() => {

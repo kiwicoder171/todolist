@@ -169,6 +169,8 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
             </div>
             <input
               type="text"
+              id="wishlist-new-title"
+              name="wishlistTitle"
               required
               placeholder="e.g. Foot massage 🦶"
               value={newTitle}
@@ -178,6 +180,8 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
             <div className="flex gap-2">
               <input
                 type="text"
+                id="wishlist-new-desc"
+                name="wishlistDesc"
                 placeholder="Description / details"
                 value={newDesc}
                 onChange={(e) => setNewDesc(e.target.value)}
@@ -185,6 +189,8 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
               />
               <input
                 type="number"
+                id="wishlist-new-cost"
+                name="wishlistCost"
                 min="1"
                 max="100"
                 value={newCost}

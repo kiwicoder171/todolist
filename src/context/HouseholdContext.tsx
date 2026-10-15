@@ -111,26 +111,28 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
   const updateUserCircle = authContext?.updateUserCircle || (async () => {});
 
   const [circle, setCircle] = useState<CircleState | null>(() => {
-    if (typeof window === "undefined") return null;
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        return parsed.circle || null;
-      }
-    } catch {}
+    if (isTest && typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          return parsed.circle || null;
+        }
+      } catch {}
+    }
     return null;
   });
 
   const [partnerNames, setPartnerNames] = useState<Record<Partner, string>>(() => {
-    if (typeof window === "undefined") return { alex: "Alex", sam: "Sam" };
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (parsed.partnerNames) return parsed.partnerNames;
-      }
-    } catch {}
+    if (isTest && typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed.partnerNames) return parsed.partnerNames;
+        }
+      } catch {}
+    }
     return { alex: "Alex", sam: "Sam" };
   });
 
@@ -143,26 +145,32 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
 
   const [scores, setScores] = useState<Record<Partner, PartnerScoreState>>(() => {
-    if (typeof window !== "undefined") {
+    if (isTest && typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
           const parsed = JSON.parse(stored);
           if (parsed.circle && parsed.scores) return parsed.scores;
-          if (
-            parsed.scores &&
-            (parsed.scores.alex?.points > 0 ||
-              parsed.scores.alex?.streak > 0 ||
-              parsed.scores.sam?.points > 0 ||
-              parsed.scores.sam?.streak > 0)
-          ) {
-            return parsed.scores;
-          }
+          if (parsed.scores) return parsed.scores;
         }
       } catch {}
     }
     return MOCK_SCORES;
   });
+
+  // Client-side hydration from localStorage (runs after mount, eliminating SSR hydration mismatch)
+  useEffect(() => {
+    if (isTest || typeof window === "undefined") return;
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed.circle) setCircle(parsed.circle);
+        if (parsed.partnerNames) setPartnerNames(parsed.partnerNames);
+        if (parsed.scores) setScores(parsed.scores);
+      }
+    } catch {}
+  }, [isTest]);
 
   // Synchronize mock vs authenticated state:
   // - Pre-login: mock names "Alex & Sam", mock scores (12 & 9 pts)
