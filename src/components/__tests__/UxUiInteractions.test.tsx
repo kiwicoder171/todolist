@@ -88,7 +88,7 @@ describe("UX/UI Interaction & Accessibility Tests", () => {
   });
 
   describe("Mobile Navigation & Quick Add", () => {
-    it("renders mobile view and opens KanbanCardModal on quick add", () => {
+    it("renders mobile view with Habits as initial tab, ordered Habits -> Daily -> Kanban -> Stats", () => {
       render(
         <HouseholdProvider>
           <RoutinesProvider>
@@ -101,19 +101,28 @@ describe("UX/UI Interaction & Accessibility Tests", () => {
         </HouseholdProvider>
       );
 
-      // Verify phone status bar & pill header
-      expect(screen.getByText("3-COL KANBAN")).toBeInTheDocument();
+      // Verify phone status bar & pill header defaults to Habits (DAILY ROUTINES)
+      expect(screen.getByText("DAILY ROUTINES")).toBeInTheDocument();
 
-      // Click floating action button (+)
+      // Verify bottom navigation bar buttons exist and in correct visual order
+      const habitsBtn = screen.getByRole("button", { name: /^Habits$/i });
+      const dailyBtn = screen.getByRole("button", { name: /^Daily$/i });
+      const kanbanBtn = screen.getByRole("button", { name: /^Kanban$/i });
+      const statsBtn = screen.getByRole("button", { name: /^Stats$/i });
+
+      expect(habitsBtn).toBeInTheDocument();
+      expect(dailyBtn).toBeInTheDocument();
+      expect(kanbanBtn).toBeInTheDocument();
+      expect(statsBtn).toBeInTheDocument();
+
+      // Quick add on Habits opens AddRoutineModal
       const quickAddBtn = screen.getByLabelText("Quick Add");
       fireEvent.click(quickAddBtn);
-
-      // Verify KanbanCardModal opened
       expect(screen.getByRole("dialog")).toBeInTheDocument();
-      expect(screen.getByText("New Kanban Card")).toBeInTheDocument();
+      expect(screen.getByText("New Daily Routine")).toBeInTheDocument();
     });
 
-    it("switches mobile kanban columns using segmented tab control", () => {
+    it("switches to Kanban tab (third tab) and uses segmented column controls", () => {
       render(
         <HouseholdProvider>
           <RoutinesProvider>
@@ -125,13 +134,24 @@ describe("UX/UI Interaction & Accessibility Tests", () => {
           </RoutinesProvider>
         </HouseholdProvider>
       );
+
+      // Switch to Kanban (third tab)
+      const kanbanNavBtn = screen.getByRole("button", { name: /^Kanban$/i });
+      fireEvent.click(kanbanNavBtn);
+
+      expect(screen.getByText("3-COL KANBAN")).toBeInTheDocument();
 
       // Look for mobile column tab switcher buttons
       const inProgressTab = screen.getByRole("button", { name: /In Progress/i });
       fireEvent.click(inProgressTab);
 
-      // Verify In Progress column is selected and card count is displayed
+      // Verify In Progress column is selected
       expect(inProgressTab).toHaveClass("bg-black");
+
+      // Quick add on Kanban opens KanbanCardModal
+      const quickAddBtn = screen.getByLabelText("Quick Add");
+      fireEvent.click(quickAddBtn);
+      expect(screen.getByText("New Kanban Card")).toBeInTheDocument();
     });
 
     it("renders Day & Habit focus on top and Kanban focus on bottom in desktop all view", () => {

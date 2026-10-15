@@ -3,7 +3,7 @@
 import React, { ReactNode } from "react";
 import { LayoutGrid, CheckSquare, Calendar, BarChart2 } from "lucide-react";
 
-export type MobileTab = "kanban" | "habits" | "daily" | "progress";
+export type MobileTab = "habits" | "daily" | "kanban" | "progress";
 
 export interface MobileShellProps {
   activeTab: MobileTab;
@@ -47,26 +47,8 @@ export function MobileShell({
         ＋
       </button>
 
-      {/* Bottom Navigation */}
+      {/* Bottom Navigation: 1. Habits, 2. Daily, 3. Kanban, 4. Stats */}
       <div className="fixed bottom-0 left-0 right-0 z-20 h-16 border-t-2 border-black bg-white flex items-center justify-around px-4 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] max-w-md mx-auto">
-        <button
-          onClick={() => onTabChange("kanban")}
-          className={`flex flex-col items-center gap-1 font-heading font-extrabold text-[10px] uppercase transition ${
-            activeTab === "kanban" ? "text-black" : "text-zinc-400 hover:text-black"
-          }`}
-        >
-          <div
-            className={`w-7 h-7 rounded-xl flex items-center justify-center ${
-              activeTab === "kanban"
-                ? "border border-black bg-black text-white"
-                : "border border-zinc-300 text-black"
-            }`}
-          >
-            <LayoutGrid className="w-3.5 h-3.5" />
-          </div>
-          <span>Kanban</span>
-        </button>
-
         <button
           onClick={() => onTabChange("habits")}
           className={`flex flex-col items-center gap-1 font-heading font-extrabold text-[10px] uppercase transition ${
@@ -101,6 +83,24 @@ export function MobileShell({
             <CheckSquare className="w-3.5 h-3.5" />
           </div>
           <span>Daily</span>
+        </button>
+
+        <button
+          onClick={() => onTabChange("kanban")}
+          className={`flex flex-col items-center gap-1 font-heading font-extrabold text-[10px] uppercase transition ${
+            activeTab === "kanban" ? "text-black" : "text-zinc-400 hover:text-black"
+          }`}
+        >
+          <div
+            className={`w-7 h-7 rounded-xl flex items-center justify-center ${
+              activeTab === "kanban"
+                ? "border border-black bg-black text-white"
+                : "border border-zinc-300 text-black"
+            }`}
+          >
+            <LayoutGrid className="w-3.5 h-3.5" />
+          </div>
+          <span>Kanban</span>
         </button>
 
         <button

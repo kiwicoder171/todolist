@@ -13,17 +13,19 @@ import { CalendarConsistencySection } from "@/components/CalendarConsistencySect
 import { KanbanCardModal } from "@/components/KanbanCardModal";
 import { AddRoutineModal } from "@/components/AddRoutineModal";
 import { CircleOnboardingModal } from "@/components/CircleOnboardingModal";
+import { AuthModal } from "@/components/AuthModal";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
 export interface CoupleTaskHubAppProps {
   forcedIsMobile?: boolean;
+  initialMobileTab?: MobileTab;
 }
 
-export function CoupleTaskHubApp({ forcedIsMobile }: CoupleTaskHubAppProps = {}) {
+export function CoupleTaskHubApp({ forcedIsMobile, initialMobileTab }: CoupleTaskHubAppProps = {}) {
   const detectedIsMobile = useIsMobile();
   const isMobile = forcedIsMobile !== undefined ? forcedIsMobile : detectedIsMobile;
   const [dashboardFocus, setDashboardFocus] = useState<"all" | "kanban" | "day">("all");
-  const [mobileTab, setMobileTab] = useState<MobileTab>("kanban");
+  const [mobileTab, setMobileTab] = useState<MobileTab>(initialMobileTab || "habits");
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [isKanbanModalOpen, setIsKanbanModalOpen] = useState(false);
   const [isAddRoutineOpen, setIsAddRoutineOpen] = useState(false);
@@ -103,6 +105,7 @@ export function CoupleTaskHubApp({ forcedIsMobile }: CoupleTaskHubAppProps = {})
       </main>
 
       <CircleOnboardingModal />
+      <AuthModal />
 
       <WishlistModal
         isOpen={isWishlistOpen}

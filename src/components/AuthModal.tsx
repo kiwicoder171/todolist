@@ -6,14 +6,37 @@ import { Logo } from "./Logo";
 import { X, Lock, Mail, User, AlertCircle, ArrowRight, Loader2, Sparkles } from "lucide-react";
 
 interface AuthModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen?: boolean;
+  onClose?: () => void;
   defaultMode?: "login" | "register";
 }
 
-export function AuthModal({ isOpen, onClose, defaultMode = "login" }: AuthModalProps) {
-  const { login, register, signInWithGoogle, isConfigured } = useAuth();
-  const [mode, setMode] = useState<"login" | "register">(defaultMode);
+export function AuthModal({
+  isOpen: propIsOpen,
+  onClose: propOnClose,
+  defaultMode: propDefaultMode,
+}: AuthModalProps = {}) {
+  const {
+    login,
+    register,
+    signInWithGoogle,
+    isConfigured,
+    isAuthModalOpen,
+    closeAuthModal,
+    authModalMode,
+  } = useAuth();
+
+  const isOpen = propIsOpen !== undefined ? propIsOpen : isAuthModalOpen;
+  const onClose = propOnClose || closeAuthModal;
+  const [mode, setMode] = useState<"login" | "register">(propDefaultMode || authModalMode || "login");
+
+  React.useEffect(() => {
+    if (propDefaultMode) {
+      setMode(propDefaultMode);
+    } else if (authModalMode) {
+      setMode(authModalMode);
+    }
+  }, [propDefaultMode, authModalMode, isOpen]);
 
   // Form states
   const [username, setUsername] = useState("");

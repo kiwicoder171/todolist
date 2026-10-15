@@ -28,3 +28,7 @@ yarn-error.log*
 
 # Vercel
 .vercel
+
+# Media & Generated Outputs
+brag-output/
+motion-film/

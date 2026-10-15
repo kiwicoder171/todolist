@@ -6,9 +6,17 @@ import { useAuth } from "@/context/AuthContext";
 import { Heart, Users, Copy, Check, ArrowRight, Sparkles, X } from "lucide-react";
 import { Logo } from "./Logo";
 
-export function CircleOnboardingModal() {
+interface CircleOnboardingModalProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
+
+export function CircleOnboardingModal({
+  isOpen: propIsOpen,
+  onClose: propOnClose,
+}: CircleOnboardingModalProps = {}) {
   const { isConfigured, createCircle, joinCircle, isOnboardingOpen, setIsOnboardingOpen } = useHousehold();
-  const { user } = useAuth();
+  const { user, loading, openAuthModal } = useAuth();
   const [mode, setMode] = useState<"create" | "join">("create");
 
   // Create form state
@@ -36,31 +44,123 @@ export function CircleOnboardingModal() {
       const params = new URLSearchParams(window.location.search);
       const codeFromUrl = params.get("join");
       if (codeFromUrl) {
-        setJoinCode(codeFromUrl.toUpperCase());
+        const cleanCode = codeFromUrl.toUpperCase();
+        setJoinCode(cleanCode);
         setMode("join");
-        setIsOnboardingOpen(true);
+        if (!user && !loading) {
+          sessionStorage.setItem("couple_hub_pending_join", cleanCode);
+          openAuthModal("register");
+        } else if (user) {
+          setIsOnboardingOpen(true);
+        }
       }
     }
-  }, [setIsOnboardingOpen]);
+  }, [user, loading, openAuthModal, setIsOnboardingOpen]);
 
-  // Show modal on first visit if not configured and not previously dismissed
+  // If user just logged in and had a pending join code from invite link, open modal with it
+  useEffect(() => {
+    if (user && typeof window !== "undefined") {
+      const pendingCode = sessionStorage.getItem("couple_hub_pending_join");
+      if (pendingCode && !isConfigured) {
+        setJoinCode(pendingCode);
+        setMode("join");
+        setIsOnboardingOpen(true);
+        sessionStorage.removeItem("couple_hub_pending_join");
+      }
+    }
+  }, [user, isConfigured, setIsOnboardingOpen]);
+
+  // Show modal on first visit ONLY if user IS authenticated, has no circle, and not previously dismissed
   useEffect(() => {
     if (typeof window !== "undefined") {
+      if (loading) return; // wait for Firebase auth to finish checking
+      if (!user) return; // CRITICAL: NEVER auto-open if user has not logged in or signed up yet!
       const dismissed = sessionStorage.getItem("couple_hub_onboarding_dismissed");
       if (!isConfigured && !dismissed) {
         setIsOnboardingOpen(true);
       }
     }
-  }, [isConfigured, setIsOnboardingOpen]);
+  }, [user, loading, isConfigured, setIsOnboardingOpen]);
+
+  const isOpen = propIsOpen !== undefined ? propIsOpen : isOnboardingOpen;
 
   const handleClose = () => {
-    setIsOnboardingOpen(false);
+    if (propOnClose) {
+      propOnClose();
+    } else {
+      setIsOnboardingOpen(false);
+    }
     if (typeof window !== "undefined") {
       sessionStorage.setItem("couple_hub_onboarding_dismissed", "true");
     }
   };
 
-  if (!isOnboardingOpen) return null;
+  if (!isOpen) return null;
+
+  // If opened while not logged in, prompt to log in or register first
+  if (!user) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200 overflow-y-auto">
+        <div className="bg-white border-2 border-black rounded-3xl p-5 sm:p-7 w-[calc(100vw-28px)] max-w-sm sm:max-w-md shadow-[4px_4px_0_0_#000] sm:shadow-[6px_6px_0_0_#000] relative my-auto box-border text-center">
+          <button
+            type="button"
+            onClick={handleClose}
+            className="absolute top-4 right-4 w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-black flex items-center justify-center bg-white hover:bg-zinc-100 transition cursor-pointer z-20 shadow-xs"
+            aria-label="Close modal"
+          >
+            <X className="w-3.5 h-3.5 text-black" />
+          </button>
+
+          <div className="w-12 h-12 rounded-2xl bg-black text-white flex items-center justify-center border-2 border-black shadow-[2px_2px_0_0_#000] p-2 mx-auto mb-4">
+            <Logo size={28} inverted />
+          </div>
+
+          <h2 className="font-heading font-black text-base sm:text-lg uppercase tracking-wide text-black mb-2 flex items-center justify-center gap-1.5">
+            <span>Account Required</span>
+            <Sparkles className="w-4 h-4 text-amber-500" />
+          </h2>
+          <p className="text-xs text-zinc-600 font-medium mb-6 leading-relaxed">
+            Please log in or register first. Having an account ensures your couple circle and tasks stay in sync across all your phones and laptops.
+          </p>
+
+          <div className="space-y-2.5">
+            <button
+              type="button"
+              onClick={() => {
+                handleClose();
+                openAuthModal("register");
+              }}
+              className="w-full py-3 px-4 rounded-xl border-2 border-black bg-black text-white hover:bg-zinc-800 font-heading font-extrabold text-xs sm:text-sm uppercase transition shadow-[3px_3px_0_0_#000] flex items-center justify-center gap-2 cursor-pointer active:translate-x-0.5 active:translate-y-0.5"
+            >
+              <span>Register with Gmail</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                handleClose();
+                openAuthModal("login");
+              }}
+              className="w-full py-2.5 px-4 rounded-xl border-2 border-black bg-zinc-100 hover:bg-zinc-200 font-heading font-bold text-xs uppercase transition flex items-center justify-center gap-2 cursor-pointer active:translate-x-0.5 active:translate-y-0.5"
+            >
+              <span>Log In with Username</span>
+            </button>
+          </div>
+
+          <div className="mt-4 text-center">
+            <button
+              type="button"
+              onClick={handleClose}
+              className="text-xs text-zinc-500 hover:text-black font-medium underline underline-offset-2 transition cursor-pointer"
+            >
+              Back to dashboard
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const handleCreate = (e: React.FormEvent) => {
     e.preventDefault();

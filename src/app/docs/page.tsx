@@ -323,7 +323,7 @@ export default function DocsPage() {
                   Zero Horizontal Overflow on Any Screen
                 </h3>
                 <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed font-medium">
-                  On smartphones, the 3-column Kanban collapses into an intuitive segmented tab control (<code className="font-bold">To Do / In Progress / Done</code>) and full-height touch drawers. Header pills wrap cleanly so modals remain centered on 375px mobile screens.
+                  On smartphones, the interface defaults directly to your Daily Routines with an ergonomic bottom navigation bar (<code className="font-bold">Habits &bull; Daily &bull; Kanban &bull; Stats</code>). The 3-column Kanban collapses into an intuitive segmented tab control (<code className="font-bold">To Do / In Progress / Done</code>) and full-height touch drawers. Header pills wrap cleanly so modals remain centered on 375px mobile screens.
                 </p>
               </div>
               <div className="max-w-[280px] mx-auto rounded-3xl border-3 border-black overflow-hidden shadow-[6px_6px_0_0_#000] bg-white">
@@ -444,21 +444,53 @@ export default function DocsPage() {
               </p>
             </div>
 
-            {/* Timeline Item: v0.5.1 */}
+            {/* Timeline Item: v0.5.2 */}
             <article className="p-6 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-3">
               <div className="flex items-center justify-between flex-wrap gap-2">
                 <div className="flex items-center gap-2">
                   <span className="px-2.5 py-1 rounded-full border-2 border-black bg-black text-white font-heading font-black text-xs">
-                    v0.5.1
+                    v0.5.2
                   </span>
                   <h3 className="font-heading font-extrabold text-base text-black">
-                    1-Click Google Sign-In &amp; Built-In Docs
+                    Auth-First Onboarding &amp; Mobile Visit Flow
                   </h3>
                 </div>
                 <span className="text-xs text-zinc-400 font-medium flex items-center gap-1">
                   <Clock className="w-3.5 h-3.5" />
                   <span>Current Release</span>
                 </span>
+              </div>
+              <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
+                <li>
+                  <strong>Mobile Tab Ordering:</strong> Reordered the mobile bottom navigation bar to <code className="font-bold">Habits &rarr; Daily &rarr; Kanban &rarr; Stats</code>, setting Daily Routines as the default initial view on mobile screens.
+                </li>
+                <li>
+                  <strong>Clean First Visit:</strong> Eliminated the premature Join Circle modal popup for unauthenticated visitors on both mobile and desktop screens.
+                </li>
+                <li>
+                  <strong>Auth-Gated Circles:</strong> Joining or creating circles now mandates registering via Gmail or logging in with Username first, preventing isolated local circles and ensuring cloud multi-device sync works flawlessly.
+                </li>
+                <li>
+                  <strong>Invite Link Stashing:</strong> Incoming <code className="bg-zinc-100 px-1 py-0.5 rounded font-mono font-bold">?join=CODE</code> invitation links stash the code across registration/login and automatically open the join prompt once authenticated.
+                </li>
+                <li>
+                  <strong>Smart Header Action:</strong> Clicking &ldquo;Join Circle&rdquo; when logged out directly opens the authentication dialog.
+                </li>
+              </ul>
+            </article>
+
+            {/* Timeline Item: v0.5.1 */}
+            <article className="p-6 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-3">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-1 rounded-full border-2 border-black bg-amber-300 text-black font-heading font-black text-xs">
+                    v0.5.1
+                  </span>
+                  <h3 className="font-heading font-extrabold text-base text-black">
+                    1-Click Google Sign-In &amp; Built-In Docs
+                  </h3>
+                </div>
+                <span className="text-xs text-zinc-400 font-medium">Oct 15, 2026</span>
               </div>
               <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
                 <li>

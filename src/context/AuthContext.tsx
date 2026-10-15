@@ -33,6 +33,11 @@ export interface AuthContextType {
   signInWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
   updateUserCircle: (circleId: string | null, partnerRole?: "alex" | "sam" | null) => Promise<void>;
+  isAuthModalOpen: boolean;
+  setIsAuthModalOpen: (open: boolean) => void;
+  authModalMode: "login" | "register";
+  openAuthModal: (mode?: "login" | "register") => void;
+  closeAuthModal: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -41,7 +46,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authModalMode, setAuthModalMode] = useState<"login" | "register">("login");
   const configured = isFirebaseConfigured();
+
+  const openAuthModal = (mode: "login" | "register" = "login") => {
+    setAuthModalMode(mode);
+    setIsAuthModalOpen(true);
+  };
+
+  const closeAuthModal = () => {
+    setIsAuthModalOpen(false);
+  };
 
   // Listen to Firebase Auth state changes
   useEffect(() => {
@@ -278,6 +294,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         signInWithGoogle,
         logout,
         updateUserCircle,
+        isAuthModalOpen,
+        setIsAuthModalOpen,
+        authModalMode,
+        openAuthModal,
+        closeAuthModal,
       }}
     >
       {children}
@@ -290,6 +311,11 @@ const defaultAuthContext: AuthContextType = {
   firebaseUser: null,
   loading: false,
   isConfigured: false,
+  isAuthModalOpen: false,
+  setIsAuthModalOpen: () => {},
+  authModalMode: "login",
+  openAuthModal: () => {},
+  closeAuthModal: () => {},
   register: async () => {},
   login: async () => {},
   signInWithGoogle: async () => {},

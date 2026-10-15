@@ -6,7 +6,6 @@ import { useHousehold, Partner } from "@/context/HouseholdContext";
 import { useAuth } from "@/context/AuthContext";
 import { Flame, Users, LogIn, LogOut, User as UserIcon, BookOpen } from "lucide-react";
 import { CircleInviteModal } from "./CircleInviteModal";
-import { AuthModal } from "./AuthModal";
 import { Logo } from "./Logo";
 
 export interface HeaderProps {
@@ -23,9 +22,8 @@ export function Header({
   onOpenWishlist,
 }: HeaderProps) {
   const { activePartner, setActivePartner, scores, partnerNames, circle, setIsOnboardingOpen } = useHousehold();
-  const { user, logout } = useAuth();
+  const { user, logout, openAuthModal } = useAuth();
   const [isInviteOpen, setIsInviteOpen] = useState(false);
-  const [isAuthOpen, setIsAuthOpen] = useState(false);
   const currentScore = scores[activePartner] || { points: 0, streak: 0 };
 
   return (
@@ -43,7 +41,7 @@ export function Header({
                   Couple Task Hub
                 </h1>
                 <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full border border-black bg-[#f4f4f5] text-black shrink-0">
-                  v0.5
+                  v0.5.2
                 </span>
               </div>
               <p className="text-[11px] sm:text-xs text-zinc-500 font-medium truncate">
@@ -55,9 +53,17 @@ export function Header({
           {/* Mobile Circle / Invite Button */}
           <button
             type="button"
-            onClick={() => (circle ? setIsInviteOpen(true) : setIsOnboardingOpen(true))}
+            onClick={() => {
+              if (circle) {
+                setIsInviteOpen(true);
+              } else if (!user) {
+                openAuthModal("register");
+              } else {
+                setIsOnboardingOpen(true);
+              }
+            }}
             className="sm:hidden px-2.5 py-1 rounded-full border-2 border-black bg-zinc-100 hover:bg-black hover:text-white transition text-[11px] font-heading font-extrabold flex items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer"
-            title={circle ? "Circle Details & Invite Partner" : "Join or Create a Circle"}
+            title={circle ? "Circle Details & Invite Partner" : user ? "Join or Create a Circle" : "Sign up or Log in to join a circle"}
           >
             <Users className="w-3 h-3" />
             <span>{circle?.joinCode || "Join Circle"}</span>
@@ -168,9 +174,15 @@ export function Header({
           ) : (
             <button
               type="button"
-              onClick={() => setIsOnboardingOpen(true)}
+              onClick={() => {
+                if (!user) {
+                  openAuthModal("register");
+                } else {
+                  setIsOnboardingOpen(true);
+                }
+              }}
               className="hidden sm:flex px-3 py-1.5 rounded-full border-2 border-black bg-white hover:bg-zinc-100 transition text-xs font-heading font-extrabold items-center gap-1.5 shadow-[2px_2px_0_0_#000] shrink-0 cursor-pointer text-zinc-900"
-              title="Join or Create a Couple Space"
+              title={user ? "Join or Create a Couple Space" : "Sign up or Log in to create or join a circle"}
             >
               <Users className="w-3.5 h-3.5 text-zinc-500" />
               <span>Join Circle</span>
@@ -206,7 +218,7 @@ export function Header({
           ) : (
             <button
               type="button"
-              onClick={() => setIsAuthOpen(true)}
+              onClick={() => openAuthModal("login")}
               className="px-2.5 py-1 sm:px-3 sm:py-1 rounded-full border-2 border-black bg-amber-300 hover:bg-amber-400 text-black text-xs font-heading font-extrabold flex items-center gap-1 shadow-[2px_2px_0_0_#000] shrink-0 cursor-pointer transition active:translate-x-0.5 active:translate-y-0.5"
               title="Sign in with Username or Register with Gmail"
             >
@@ -220,11 +232,6 @@ export function Header({
       <CircleInviteModal
         isOpen={isInviteOpen}
         onClose={() => setIsInviteOpen(false)}
-      />
-
-      <AuthModal
-        isOpen={isAuthOpen}
-        onClose={() => setIsAuthOpen(false)}
       />
     </>
   );
