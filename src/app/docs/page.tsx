@@ -444,15 +444,15 @@ export default function DocsPage() {
               </p>
             </div>
 
-            {/* Timeline Item: v0.5.4 */}
+            {/* Timeline Item: v0.5.5 */}
             <article className="p-6 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-3">
               <div className="flex items-center justify-between flex-wrap gap-2">
                 <div className="flex items-center gap-2">
                   <span className="px-2.5 py-1 rounded-full border-2 border-black bg-black text-white font-heading font-black text-xs">
-                    v0.5.4
+                    v0.5.5
                   </span>
                   <h3 className="font-heading font-extrabold text-base text-black">
-                    Mock Data Auto-Wipe, SSR Hydration &amp; Layout Stability
+                    7-Day Mobile Week Calendar Strip (Rhythm OS Design)
                   </h3>
                 </div>
                 <span className="text-xs text-zinc-400 font-medium flex items-center gap-1">
@@ -462,8 +462,37 @@ export default function DocsPage() {
               </div>
               <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
                 <li>
-                  <strong>7-Day Mobile Week Calendar Strip:</strong> Integrated a mobile-first 7-day calendar bar (Mon–Sun) directly above Habits and Daily tasks. Features real-time status dots (green for completed, amber for in-progress, cyan for freeze days), quick week navigation, an instant &ldquo;Today&rdquo; snapback button, and interactive day switching that instantly filters daily routines and rolled-over tasks.
+                  <strong>7-Day Pill Row (Mon&ndash;Sun):</strong> Added a dedicated horizontal week calendar directly above the Daily Routines and Daily Tasks boards on mobile screens. Displays day abbreviations (MON to SUN) and dates (12 to 18).
                 </li>
+                <li>
+                  <strong>Real-Time Status Dots:</strong> Each day pill features a visual status indicator &mdash; green for 100% completion, amber for in-progress or partial completion, cyan for Freeze / Rest Days, and neutral zinc for upcoming/empty days.
+                </li>
+                <li>
+                  <strong>Instant Day Filtering:</strong> Tapping any day pill immediately filters Daily Routines to habits scheduled for that day, and switches Daily Tasks to to-dos and rolled-over tasks for that specific date.
+                </li>
+                <li>
+                  <strong>1-Tap &ldquo;Today&rdquo; Return &amp; Week Slider:</strong> Effortlessly slide forward or backward across weeks with <code className="font-bold">&lt;</code> <code className="font-bold">&gt;</code> controls, and snap back to the current day in a single click via the yellow &ldquo;Today&rdquo; pill.
+                </li>
+                <li>
+                  <strong>Clean Mobile Hierarchy:</strong> Intelligently shown on Habits, Daily, and Progress tabs while kept off the Kanban board to maximize screen real estate for drag-and-drop workflow columns.
+                </li>
+              </ul>
+            </article>
+
+            {/* Timeline Item: v0.5.4 */}
+            <article className="p-6 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-3">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-1 rounded-full border-2 border-black bg-amber-300 text-black font-heading font-black text-xs">
+                    v0.5.4
+                  </span>
+                  <h3 className="font-heading font-extrabold text-base text-black">
+                    Mock Data Auto-Wipe, SSR Hydration &amp; Layout Stability
+                  </h3>
+                </div>
+                <span className="text-xs text-zinc-400 font-medium">Oct 15, 2026</span>
+              </div>
+              <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
                 <li>
                   <strong>Clean Household on Login:</strong> Authenticating via Google Sign-In or Username/Password now completely purges all pre-login mock routines, tasks, Kanban items, mock points/streaks, and the sample &ldquo;Alex &amp; Sam&rdquo; names, giving every authenticated pair a pristine, dedicated space.
                 </li>
