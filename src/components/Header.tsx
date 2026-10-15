@@ -126,16 +126,6 @@ export function Header({
             All Boards
           </button>
           <button
-            onClick={() => onDashboardFocusChange("kanban")}
-            className={`px-2.5 py-1 rounded-xl transition cursor-pointer ${
-              dashboardFocus === "kanban"
-                ? "bg-black text-white shadow-sm"
-                : "text-zinc-600 hover:text-black"
-            }`}
-          >
-            Kanban Focus
-          </button>
-          <button
             onClick={() => onDashboardFocusChange("day")}
             className={`px-2.5 py-1 rounded-xl transition cursor-pointer ${
               dashboardFocus === "day"
@@ -144,6 +134,16 @@ export function Header({
             }`}
           >
             Day &amp; Habits
+          </button>
+          <button
+            onClick={() => onDashboardFocusChange("kanban")}
+            className={`px-2.5 py-1 rounded-xl transition cursor-pointer ${
+              dashboardFocus === "kanban"
+                ? "bg-black text-white shadow-sm"
+                : "text-zinc-600 hover:text-black"
+            }`}
+          >
+            Kanban Focus
           </button>
         </div>
 
