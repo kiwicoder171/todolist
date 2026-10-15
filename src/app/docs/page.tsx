@@ -444,21 +444,50 @@ export default function DocsPage() {
               </p>
             </div>
 
-            {/* Timeline Item: v0.5.3 */}
+            {/* Timeline Item: v0.5.4 */}
             <article className="p-6 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-3">
               <div className="flex items-center justify-between flex-wrap gap-2">
                 <div className="flex items-center gap-2">
                   <span className="px-2.5 py-1 rounded-full border-2 border-black bg-black text-white font-heading font-black text-xs">
-                    v0.5.3
+                    v0.5.4
                   </span>
                   <h3 className="font-heading font-extrabold text-base text-black">
-                    Pre-Login Mock Tasks &amp; Streak Showcase
+                    Mock Data Auto-Wipe, SSR Hydration &amp; Layout Stability
                   </h3>
                 </div>
                 <span className="text-xs text-zinc-400 font-medium flex items-center gap-1">
                   <Clock className="w-3.5 h-3.5" />
                   <span>Current Release</span>
                 </span>
+              </div>
+              <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
+                <li>
+                  <strong>Clean Household on Login:</strong> Authenticating via Google Sign-In or Username/Password now completely purges all pre-login mock routines, tasks, Kanban items, mock points/streaks, and the sample &ldquo;Alex &amp; Sam&rdquo; names, giving every authenticated pair a pristine, dedicated space.
+                </li>
+                <li>
+                  <strong>Next.js SSR Hydration Stability:</strong> Resolved server/client text mismatches across the header space title and Wishlist reward modal by properly isolating client state and applying hydration guards.
+                </li>
+                <li>
+                  <strong>Desktop Header Streamlining:</strong> Refined view focus switcher pills (&ldquo;All Boards&rdquo;, &ldquo;Kanban Focus&rdquo;, &ldquo;Day &amp; Habits&rdquo;) with responsive nowrap behavior, ensuring zero multi-line wrapping or clipping on 1280px–1440px desktop screens.
+                </li>
+                <li>
+                  <strong>HMR &amp; Dev Environment Hardening:</strong> Resolved Webpack chunk manifest cache collisions between production builds and dev server runs, and suppressed blocking dev overlay popups on client-side form validation catches.
+                </li>
+              </ul>
+            </article>
+
+            {/* Timeline Item: v0.5.3 */}
+            <article className="p-6 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-3">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-1 rounded-full border-2 border-black bg-amber-300 text-black font-heading font-black text-xs">
+                    v0.5.3
+                  </span>
+                  <h3 className="font-heading font-extrabold text-base text-black">
+                    Pre-Login Mock Tasks &amp; Streak Showcase
+                  </h3>
+                </div>
+                <span className="text-xs text-zinc-400 font-medium">Oct 15, 2026</span>
               </div>
               <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
                 <li>
