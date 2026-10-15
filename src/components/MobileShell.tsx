@@ -2,6 +2,7 @@
 
 import React, { ReactNode } from "react";
 import { LayoutGrid, CheckSquare, Calendar, BarChart2 } from "lucide-react";
+import { MobileWeekCalendar } from "@/components/MobileWeekCalendar";
 
 export type MobileTab = "habits" | "daily" | "kanban" | "progress";
 
@@ -22,8 +23,15 @@ export function MobileShell({
 }: MobileShellProps) {
   return (
     <div className="w-full max-w-md mx-auto min-h-[calc(100vh-80px)] flex flex-col pb-24 relative bg-[#fafafa]">
+      {/* 7-Day Week Calendar Strip on Habits, Daily, and Progress tabs */}
+      {activeTab !== "kanban" && (
+        <div className="px-3.5 pt-2 pb-1">
+          <MobileWeekCalendar />
+        </div>
+      )}
+
       {/* Mobile Active View Pill */}
-      <div className="py-2 px-4 flex items-center justify-center">
+      <div className="py-1.5 px-4 flex items-center justify-center">
         <div className="bg-black text-white px-4 py-1 rounded-full font-heading font-extrabold text-[11px] tracking-wider uppercase shadow-xs">
           {pillTitle}
         </div>

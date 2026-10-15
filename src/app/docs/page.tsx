@@ -462,6 +462,9 @@ export default function DocsPage() {
               </div>
               <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
                 <li>
+                  <strong>7-Day Mobile Week Calendar Strip:</strong> Integrated a mobile-first 7-day calendar bar (Mon–Sun) directly above Habits and Daily tasks. Features real-time status dots (green for completed, amber for in-progress, cyan for freeze days), quick week navigation, an instant &ldquo;Today&rdquo; snapback button, and interactive day switching that instantly filters daily routines and rolled-over tasks.
+                </li>
+                <li>
                   <strong>Clean Household on Login:</strong> Authenticating via Google Sign-In or Username/Password now completely purges all pre-login mock routines, tasks, Kanban items, mock points/streaks, and the sample &ldquo;Alex &amp; Sam&rdquo; names, giving every authenticated pair a pristine, dedicated space.
                 </li>
                 <li>

@@ -53,8 +53,8 @@ export function FilterBar() {
         </div>
       </div>
 
-      {/* Active Date Display & Freeze Day Button */}
-      <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+      {/* Active Date Display & Freeze Day Button (Desktop & Tablet) */}
+      <div className="hidden sm:flex items-center gap-2 sm:gap-3 flex-wrap">
         <div className="flex items-center gap-1.5 sm:gap-2">
           <span className="text-zinc-500 text-[10px] sm:text-[11px] font-bold uppercase font-heading hidden sm:inline">
             Calendar:
