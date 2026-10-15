@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Couple Task Hub • Today's Changelog Poster (9:16)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #121215;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #000;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 24px 12px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Floating Toolbar */
+    .toolbar {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      display: flex;
+      gap: 10px;
+      z-index: 9999;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 2px solid #000;
+      box-shadow: 4px 4px 0 0 #000;
+    }
+
+    .btn {
+      appearance: none;
+      border: 2px solid #000;
+      background: #FFDE59;
+      color: #000;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 2px 2px 0 0 #000;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+
+    .btn:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0 0 #000;
+    }
+
+    .btn:active {
+      transform: translate(1px, 1px);
+      box-shadow: 1px 1px 0 0 #000;
+    }
+
+    .btn-secondary {
+      background: #FFF;
+    }
+
+    /* Poster Frame (Exact 9:16 - 1080px x 1920px) */
+    #poster-viewport {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin: 40px auto 20px;
+      perspective: 1000px;
+    }
+
+    #poster-canvas {
+      width: 1080px;
+      height: 1920px;
+      min-width: 1080px;
+      min-height: 1920px;
+      max-width: 1080px;
+      max-height: 1920px;
+      background-color: #FBF9F3;
+      background-image: radial-gradient(rgba(0, 0, 0, 0.12) 1.5px, transparent 1.5px);
+      background-size: 24px 24px;
+      position: relative;
+      border: 8px solid #000000;
+      box-shadow: 16px 16px 0px 0px rgba(0, 0, 0, 0.95);
+      padding: 44px 46px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      transform-origin: top center;
+    }
+
+    /* Header Section */
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 22px;
+      border-bottom: 4px solid #000;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-logo-box {
+      width: 64px;
+      height: 64px;
+      background: #A7F3D0;
+      border: 3.5px solid #000;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 4px 4px 0 0 #000;
+    }
+
+    .brand-title {
+      font-size: 32px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .brand-tagline {
+      font-size: 13px;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      color: #52525B;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      border-radius: 999px;
+      border: 3px solid #000;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      font-size: 14px;
+      text-transform: uppercase;
+      box-shadow: 3.5px 3.5px 0 0 #000;
+    }
+
+    .badge-yellow { background: #FFDE59; }
+    .badge-cyan { background: #A5F3FC; }
+    .badge-pink { background: #FDA4AF; }
+    .badge-purple { background: #E9D5FF; }
+    .badge-green { background: #A7F3D0; }
+    .badge-white { background: #FFFFFF; }
+
+    /* Headline Banner */
+    .headline-banner {
+      margin-top: 24px;
+      margin-bottom: 24px;
+      padding: 24px 28px;
+      background: #FFFFFF;
+      border: 4px solid #000;
+      border-radius: 26px;
+      box-shadow: 6px 6px 0 0 #000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .headline-main {
+      font-size: 44px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+    }
+
+    .headline-sub {
+      font-size: 15px;
+      font-weight: 700;
+      color: #52525B;
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stats-trio {
+      display: flex;
+      gap: 12px;
+    }
+
+    .stat-pill {
+      text-align: center;
+      padding: 10px 16px;
+      background: #FAFAFA;
+      border: 2.5px solid #000;
+      border-radius: 16px;
+      box-shadow: 3px 3px 0 0 #000;
+    }
+
+    .stat-pill .val {
+      font-size: 26px;
+      font-weight: 900;
+      line-height: 1;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .stat-pill .lbl {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #71717A;
+      margin-top: 4px;
+    }
+
+    /* Cards Flow */
+    .releases-container {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      flex-grow: 1;
+    }
+
+    .release-card {
+      border: 3.5px solid #000;
+      border-radius: 24px;
+      background: #FFFFFF;
+      box-shadow: 5px 5px 0 0 #000;
+      padding: 20px 24px;
+      position: relative;
+    }
+
+    /* Card 1: v0.5.5 Hero */
+    .card-hero {
+      background: #FFFFFF;
+      border-width: 4px;
+      box-shadow: 7px 7px 0 0 #000;
+      padding: 22px 26px;
+    }
+
+    .card-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .version-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 800;
+      padding: 4px 12px;
+      border: 2.5px solid #000;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 2px 2px 0 0 #000;
+      text-transform: uppercase;
+    }
+
+    .card-title {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    /* 7-Day Pill Visual Strip */
+    .week-strip-demo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #F4F4F5;
+      border: 2.5px solid #000;
+      border-radius: 18px;
+      padding: 10px 14px;
+      margin: 12px 0 14px;
+      box-shadow: 3px 3px 0 0 #000;
+      overflow: hidden;
+    }
+
+    .day-pill-demo {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 0;
+      background: #FFFFFF;
+      border: 2px solid #000;
+      border-radius: 12px;
+      box-shadow: 1.5px 1.5px 0 0 #000;
+      gap: 3px;
+    }
+
+    .day-pill-demo.active {
+      background: #FFDE59;
+      transform: scale(1.04);
+      box-shadow: 2.5px 2.5px 0 0 #000;
+    }
+
+    .day-pill-demo .d-name {
+      font-size: 10px;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase;
+      color: #52525B;
+    }
+
+    .day-pill-demo.active .d-name {
+      color: #000;
+    }
+
+    .day-pill-demo .d-num {
+      font-size: 16px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      border: 1.5px solid #000;
+    }
+    .dot-green { background: #10B981; }
+    .dot-amber { background: #F59E0B; }
+    .dot-cyan { background: #06B6D4; }
+    .dot-zinc { background: #D4D4D8; }
+
+    /* Features Bullet List */
+    .features-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #27272A;
+      line-height: 1.4;
+    }
+
+    .features-list li {
+      list-style: none;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .features-list li::before {
+      content: "■";
+      font-size: 10px;
+      color: #000;
+      margin-top: 3px;
+    }
+
+    .features-list strong {
+      color: #000;
+      font-weight: 800;
+    }
+
+    /* Footer Section */
+    .footer-bar {
+      margin-top: 24px;
+      padding-top: 22px;
+      border-top: 4px solid #000;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .footer-metrics-row {
+      display: flex;
+      gap: 14px;
+    }
+
+    .metric-badge {
+      flex: 1;
+      padding: 10px 14px;
+      border: 2.5px solid #000;
+      border-radius: 14px;
+      background: #FFFFFF;
+      box-shadow: 3px 3px 0 0 #000;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .metric-badge svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .footer-bottom-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #000;
+      color: #FFF;
+      padding: 16px 24px;
+      border-radius: 20px;
+      box-shadow: 4px 4px 0 0 rgba(0,0,0,0.4);
+    }
+
+    .footer-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .footer-app-name {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: #FFDE59;
+    }
+
+    .footer-copy {
+      font-size: 12px;
+      font-weight: 600;
+      color: #A1A1AA;
+    }
+
+    .footer-url-pill {
+      background: #FFF;
+      color: #000;
+      padding: 8px 18px;
+      border-radius: 999px;
+      border: 2px solid #FFF;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      font-size: 14px;
+      text-decoration: none;
+      box-shadow: 3px 3px 0 0 #FFDE59;
+    }
+
+    /* Scaling helper for preview in browser */
+    @media screen and (max-width: 1200px) {
+      #poster-canvas {
+        transform: scale(0.48);
+        margin-bottom: -950px;
+      }
+    }
+
+    @media screen and (max-width: 600px) {
+      #poster-canvas {
+        transform: scale(0.32);
+        margin-bottom: -1280px;
+      }
+    }
+
+    /* Hidden in capture mode */
+    body.capture-mode {
+      padding: 0 !important;
+      margin: 0 !important;
+      background: transparent !important;
+    }
+    body.capture-mode .toolbar {
+      display: none !important;
+    }
+    body.capture-mode #poster-viewport {
+      margin: 0 !important;
+    }
+    body.capture-mode #poster-canvas {
+      transform: none !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Tools for Interactive Preview & Export -->
+  <div class="toolbar" id="toolbar">
+    <a href="/" class="btn btn-secondary">
+      &larr; Back to App
+    </a>
+    <a href="/docs" class="btn btn-secondary">
+      Docs
+    </a>
+    <button class="btn" id="btn-scale">
+      🔍 100% / Fit
+    </button>
+    <button class="btn" id="btn-download" style="background:#A7F3D0;">
+      ⬇️ Download PNG
+    </button>
+  </div>
+
+  <div id="poster-viewport">
+    <div id="poster-canvas">
+
+      <!-- TOP BRAND HEADER -->
+      <div class="header-bar">
+        <div class="brand-group">
+          <div class="brand-logo-box">
+            <!-- Neo-Brutalist Orbiting Hub Logo (Variant 04) -->
+            <svg width="46" height="46" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="13" y="13" width="74" height="74" rx="26" stroke="#000000" stroke-width="5" stroke-dasharray="9 6"/>
+              <path d="M 32 30 C 32 25, 27 22, 24 24 C 20 27, 21 32, 25 37 L 32 43 L 39 37 C 43 32, 44 27, 40 24 C 37 22, 32 25, 32 30 Z" fill="#000000"/>
+              <path d="M 68 66 C 68 61, 63 58, 60 60 C 56 63, 57 68, 61 73 L 68 79 L 75 73 C 79 68, 80 63, 76 60 C 73 58, 68 61, 68 66 Z" fill="#000000"/>
+              <path d="M 28 54 L 44 70 L 80 34" stroke="#000000" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="brand-title">
+            <span>COUPLE TASK HUB</span>
+            <span class="brand-tagline">Collaborative Household OS</span>
+          </div>
+        </div>
+
+        <div class="pill-badge badge-yellow">
+          ★ OFFICIAL CHANGELOG
+        </div>
+      </div>
+
+      <!-- HEADLINE BANNER -->
+      <div class="headline-banner">
+        <div>
+          <div class="headline-main">TODAY&apos;S SHIPPED<br>UPDATES &amp; DROPS</div>
+          <div class="headline-sub">
+            <span class="pill-badge badge-white" style="font-size:12px; padding:4px 12px; border-width:2px; box-shadow:2px 2px 0 0 #000;">OCT 15, 2026</span>
+            <span>&bull;</span>
+            <span style="font-family:'JetBrains Mono',monospace; font-weight:800; color:#000;">v0.5.1 &rarr; v0.5.5</span>
+          </div>
+        </div>
+
+        <div class="stats-trio">
+          <div class="stat-pill">
+            <div class="val" style="color:#059669;">5</div>
+            <div class="lbl">Releases</div>
+          </div>
+          <div class="stat-pill">
+            <div class="val" style="color:#2563EB;">108</div>
+            <div class="lbl">Tests Pass</div>
+          </div>
+          <div class="stat-pill">
+            <div class="val" style="color:#D97706;">0</div>
+            <div class="lbl">Bugs Left</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN CARDS: THE 5 MILESTONES -->
+      <div class="releases-container">
+
+        <!-- CARD 1: v0.5.5 HERO -->
+        <div class="release-card card-hero" style="border-color:#000;">
+          <div class="card-header-row">
+            <span class="version-tag badge-yellow">
+              ● v0.5.5 &bull; CURRENT RELEASE
+            </span>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:800; color:#059669; display:flex; align-items:center; gap:5px;">
+              <span style="display:inline-block; width:8px; height:8px; background:#10B981; border-radius:50%; border:1px solid #000;"></span>
+              LIVE ON VERCEL
+            </span>
+          </div>
+
+          <div class="card-title">7-Day Mobile Week Calendar Strip &amp; Navbar Reordering</div>
+
+          <!-- Component Visual Demo Strip -->
+          <div class="week-strip-demo">
+            <div class="day-pill-demo">
+              <span class="d-name">MON</span>
+              <span class="d-num">12</span>
+              <span class="dot dot-green"></span>
+            </div>
+            <div class="day-pill-demo">
+              <span class="d-name">TUE</span>
+              <span class="d-num">13</span>
+              <span class="dot dot-green"></span>
+            </div>
+            <div class="day-pill-demo">
+              <span class="d-name">WED</span>
+              <span class="d-num">14</span>
+              <span class="dot dot-amber"></span>
+            </div>
+            <div class="day-pill-demo active">
+              <span class="d-name">THU</span>
+              <span class="d-num">15</span>
+              <span class="dot dot-green"></span>
+            </div>
+            <div class="day-pill-demo">
+              <span class="d-name">FRI</span>
+              <span class="d-num">16</span>
+              <span class="dot dot-cyan" title="Freeze Day"></span>
+            </div>
+            <div class="day-pill-demo">
+              <span class="d-name">SAT</span>
+              <span class="d-num">17</span>
+              <span class="dot dot-zinc"></span>
+            </div>
+            <div class="day-pill-demo">
+              <span class="d-name">SUN</span>
+              <span class="d-num">18</span>
+              <span class="dot dot-zinc"></span>
+            </div>
+          </div>
+
+          <ul class="features-list">
+            <li><strong>7-Day Calendar Strip:</strong> Interactive mobile week strip with live daily completion status dots (100% Green, Partial Amber, Rest Cyan).</li>
+            <li><strong>Desktop Switcher Reorder:</strong> Realigned navbar focus to <code style="font-weight:800; background:#FAFAFA; border:1px solid #000; padding:1px 5px; border-radius:4px;">All Boards &rarr; Day &amp; Habits &rarr; Kanban Focus</code>.</li>
+            <li><strong>1-Tap Today &amp; Week Slider:</strong> Fast navigation across past and future weeks with instant today return.</li>
+          </ul>
+        </div>
+
+        <!-- CARD 2: v0.5.4 -->
+        <div class="release-card">
+          <div class="card-header-row">
+            <span class="version-tag badge-cyan">
+              v0.5.4 &bull; DATA &amp; STABILITY
+            </span>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700; color:#71717A;">SSR &amp; HYDRATION</span>
+          </div>
+          <div class="card-title">Mock Auto-Wipe &amp; Zero Hydration Mismatch</div>
+          <ul class="features-list">
+            <li><strong>Clean Slate on Sign-In:</strong> Registering or logging in instantly purges all mock data, demo tasks, and placeholder &ldquo;Alex &amp; Sam&rdquo; names.</li>
+            <li><strong>Next.js 15 SSR Hydration Guard:</strong> Eliminated server/client text mismatches on space names, guarantees seamless client hydration.</li>
+            <li><strong>Desktop Header Streamlining:</strong> Added whitespace-nowrap protection across focus buttons for widescreen displays.</li>
+          </ul>
+        </div>
+
+        <!-- CARD 3: v0.5.3 -->
+        <div class="release-card">
+          <div class="card-header-row">
+            <span class="version-tag badge-pink">
+              v0.5.3 &bull; FIRST-VISIT SHOWCASE
+            </span>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700; color:#71717A;">GAMIFICATION</span>
+          </div>
+          <div class="card-title">Pre-Login Interactive Boards &amp; Streaks</div>
+          <ul class="features-list">
+            <li><strong>Zero Blank States:</strong> New visitors explore interactive mock items across Daily Routines, Rollover Tasks, and 3-Column Kanban.</li>
+            <li><strong>Live Points &amp; Streaks Demo:</strong> Pre-populated Alex (4-day streak, 12 PTS) &amp; Sam (2-day streak, 9 PTS) demonstrating partner switching.</li>
+          </ul>
+        </div>
+
+        <!-- CARD 4: v0.5.2 -->
+        <div class="release-card">
+          <div class="card-header-row">
+            <span class="version-tag badge-purple">
+              v0.5.2 &bull; MOBILE NAVIGATION
+            </span>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700; color:#71717A;">USER ONBOARDING</span>
+          </div>
+          <div class="card-title">Auth-First Circles &amp; Habits-First Mobile Tabs</div>
+          <ul class="features-list">
+            <li><strong>Mobile Tab Sequence:</strong> Reordered navigation to <code style="font-weight:800; background:#FAFAFA; border:1px solid #000; padding:1px 5px; border-radius:4px;">Habits &rarr; Daily &rarr; Kanban &rarr; Stats</code> prioritizing recurring routines.</li>
+            <li><strong>Smart Invite Stashing:</strong> Incoming <code style="font-weight:800; background:#FAFAFA; border:1px solid #000; padding:1px 5px; border-radius:4px;">?join=CODE</code> links persist across auth flow and auto-open upon sign in.</li>
+          </ul>
+        </div>
+
+        <!-- CARD 5: v0.5.1 -->
+        <div class="release-card">
+          <div class="card-header-row">
+            <span class="version-tag badge-yellow">
+              v0.5.1 &bull; AUTH &amp; DOCUMENTATION
+            </span>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700; color:#71717A;">GOOGLE OAUTH</span>
+          </div>
+          <div class="card-title">1-Click Google Sign-In &amp; Built-In /docs Portal</div>
+          <ul class="features-list">
+            <li><strong>1-Click Google OAuth:</strong> Instant sign-in with automatic partner username generation and Firestore linking.</li>
+            <li><strong>Dedicated /docs Portal:</strong> Comprehensive architectural guides, board workflows, and release history.</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- FOOTER SECTION -->
+      <div class="footer-bar">
+        <!-- Metrics Badges -->
+        <div class="footer-metrics-row">
+          <div class="metric-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            <span>108/108 Unit Tests (100%)</span>
+          </div>
+
+          <div class="metric-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span>Real-Time Cloud Firestore</span>
+          </div>
+
+          <div class="metric-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            <span>Next.js 15 &bull; Neo-Brutalist</span>
+          </div>
+        </div>
+
+        <!-- Bottom Black Pill Bar -->
+        <div class="footer-bottom-row">
+          <div class="footer-left">
+            <div class="footer-app-name">COUPLE TASK HUB &bull; 2026</div>
+            <div class="footer-copy">Designed for real-world partners who balance chores, habits &amp; home projects together.</div>
+          </div>
+          <a href="https://github.com/kiwicoder171/todolist" class="footer-url-pill">
+            ★ Open Source &bull; GitHub
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script>
+    // Check URL params for headless screenshot capture
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('capture') === '1' || urlParams.get('raw') === 'true') {
+      document.body.classList.add('capture-mode');
+    }
+
+    // Toggle 100% zoom vs Fit
+    const btnScale = document.getElementById('btn-scale');
+    const poster = document.getElementById('poster-canvas');
+    let isFullSize = false;
+
+    btnScale.addEventListener('click', () => {
+      isFullSize = !isFullSize;
+      if (isFullSize) {
+        poster.style.transform = 'scale(1)';
+        poster.style.marginBottom = '40px';
+        btnScale.innerText = '🔍 Fit to Screen';
+      } else {
+        poster.style.transform = '';
+        poster.style.marginBottom = '';
+        btnScale.innerText = '🔍 100% / Fit';
+      }
+    });
+
+    // 1-Click High-Res PNG Download
+    const btnDownload = document.getElementById('btn-download');
+    btnDownload.addEventListener('click', async () => {
+      btnDownload.innerText = '⏳ Generating 1080x1920 PNG...';
+      btnDownload.disabled = true;
+
+      try {
+        const originalTransform = poster.style.transform;
+        const originalMargin = poster.style.marginBottom;
+        poster.style.transform = 'scale(1)';
+        poster.style.marginBottom = '0';
+
+        const canvas = await html2canvas(poster, {
+          scale: 1,
+          width: 1080,
+          height: 1920,
+          useCORS: true,
+          logging: false,
+          backgroundColor: '#FBF9F3'
+        });
+
+        poster.style.transform = originalTransform;
+        poster.style.marginBottom = originalMargin;
+
+        const dataUrl = canvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        link.download = 'couple-task-hub-changelog-oct15-2026.png';
+        link.href = dataUrl;
+        link.click();
+
+        btnDownload.innerText = '✅ Downloaded!';
+        setTimeout(() => {
+          btnDownload.innerText = '⬇️ Download PNG';
+          btnDownload.disabled = false;
+        }, 2000);
+      } catch (err) {
+        console.error('Download error:', err);
+        btnDownload.innerText = '❌ Failed (Use right-click)';
+        btnDownload.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
