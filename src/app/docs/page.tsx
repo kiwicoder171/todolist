@@ -444,6 +444,32 @@ export default function DocsPage() {
               </p>
             </div>
 
+            {/* Roadmap: Coming Soon */}
+            <article className="p-6 rounded-3xl border-2 border-dashed border-black bg-[#fff9db] shadow-[4px_4px_0_0_#000] space-y-3">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-1 rounded-full border-2 border-black bg-pink-300 text-black font-heading font-black text-xs">
+                    COMING SOON
+                  </span>
+                  <h3 className="font-heading font-extrabold text-base text-black">
+                    Roadmap: What&apos;s Next
+                  </h3>
+                </div>
+                <span className="text-xs text-zinc-500 font-medium">Planned &mdash; not yet released</span>
+              </div>
+              <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
+                <li>
+                  <strong>Your Space, Your Way:</strong> Choose at sign-up how you use the hub &mdash; <code className="font-bold">Solo</code>, <code className="font-bold">With Partner</code>, <code className="font-bold">With Friends</code> or <code className="font-bold">With Family</code> &mdash; and switch any time.
+                </li>
+                <li>
+                  <strong>Notifications:</strong> Gentle reminders for due routines and tasks, partner activity and cheers, and streak nudges.
+                </li>
+                <li>
+                  <strong>Home Screen Widgets:</strong> See today&apos;s routines, tasks and your streak at a glance without opening the app.
+                </li>
+              </ul>
+            </article>
+
             {/* Timeline Item: v0.5.5 */}
             <article className="p-6 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-3">
               <div className="flex items-center justify-between flex-wrap gap-2">
