@@ -500,6 +500,9 @@ export default function DocsPage() {
                   <strong>Live Floating Notification Toasts (&ldquo;Momentum Floaters&rdquo;):</strong> Real-time dynamic floating toast pills that glide across the top of the screen when your partner checks off a task, hits a streak milestone, or sends love, complete with a 1-tap &ldquo;Cheer Back ❤️&rdquo; micro-reaction.
                 </li>
                 <li>
+                  <strong>Polish Mobile UI:</strong> Refinements to mobile touch ergonomics, responsive flow, layout spacing, and gestures as further real-world device testing and feedback roll in.
+                </li>
+                <li>
                   <strong>Custom Partner Reward Scratch Cards:</strong> Gamified surprise vouchers and realistic scratch-off reward cards in the Wishlist.
                 </li>
                 <li>
