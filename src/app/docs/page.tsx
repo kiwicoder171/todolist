@@ -476,6 +476,9 @@ export default function DocsPage() {
                 <li>
                   <strong>Board Hover Elevation Polish:</strong> Added top headroom (<code className="bg-zinc-100 px-1 py-0.5 rounded font-mono font-bold">pt-1.5 pb-1</code>) to scroll containers in Daily Tasks and Daily Routines boards, eliminating top border clipping during hover animations on mobile and desktop.
                 </li>
+                <li>
+                  <strong>Task Detail Drawer &amp; 2-Way Kanban Sync Badge:</strong> Enhanced <code className="bg-zinc-100 px-1 py-0.5 rounded font-mono font-bold">TaskDetailDrawer</code> with accurate rollover detection keyed to the active calendar view date, and surfaced live 2-way Kanban sync status badges.
+                </li>
               </ul>
             </article>
 
