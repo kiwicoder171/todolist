@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect, useContext } from "react";
 import { DailyTask } from "@/context/DailyTasksContext";
-import { Assignee, HouseholdContext } from "@/context/HouseholdContext";
-import { X, CornerDownRight } from "lucide-react";
+import { Assignee, HouseholdContext, formatDateKey } from "@/context/HouseholdContext";
+import { X, CornerDownRight, RefreshCw } from "lucide-react";
 
 export interface TaskDetailDrawerProps {
   task: DailyTask | null;
@@ -25,6 +25,7 @@ export function TaskDetailDrawer({
   const activePartner = household?.activePartner || "alex";
   const myName = activePartner === "alex" ? partnerNames.alex : partnerNames.sam;
   const partnerName = activePartner === "alex" ? partnerNames.sam : partnerNames.alex;
+  const selectedDateKey = household?.selectedDate ? formatDateKey(household.selectedDate) : formatDateKey(new Date());
 
   const [title, setTitle] = useState("");
   const [assignee, setAssignee] = useState<Assignee>("mine");
@@ -51,7 +52,7 @@ export function TaskDetailDrawer({
 
   if (!isOpen || !task) return null;
 
-  const isRolledOver = task.originDate < task.targetDate;
+  const isRolledOver = task.originDate < selectedDateKey || task.originDate < task.targetDate;
 
   const handleSave = () => {
     onSave(task.id, { title, assignee, notes });
@@ -139,6 +140,23 @@ export function TaskDetailDrawer({
               <div className="bg-zinc-100 border border-black rounded-xl p-2.5 text-xs font-heading font-bold text-black flex items-center gap-2">
                 <CornerDownRight className="w-3.5 h-3.5" />
                 <span>Rolled over from {task.originDate}</span>
+              </div>
+            </div>
+          )}
+
+          {task.isKanbanSynced && (
+            <div>
+              <span className="block font-heading font-bold text-[11px] uppercase text-zinc-500 mb-1.5">
+                Kanban Synchronization
+              </span>
+              <div className="bg-zinc-100 border border-black rounded-xl p-2.5 text-xs font-heading font-bold text-black flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <RefreshCw className="w-3.5 h-3.5 text-black animate-spin-slow" />
+                  <span>Synced with Kanban Board</span>
+                </div>
+                <span className="text-[9px] uppercase px-2 py-0.5 rounded-full bg-black text-white font-extrabold tracking-wider">
+                  2-Way
+                </span>
               </div>
             </div>
           )}

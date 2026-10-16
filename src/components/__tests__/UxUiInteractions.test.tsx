@@ -53,6 +53,47 @@ describe("UX/UI Interaction & Accessibility Tests", () => {
       expect(dialog).toHaveAttribute("aria-modal", "true");
       expect(dialog).toHaveAttribute("aria-labelledby", "drawer-heading");
     });
+
+    it("renders rollover origin banner when originDate precedes view date", () => {
+      const rolledOverTask = {
+        ...mockTask,
+        originDate: "2026-10-10",
+        targetDate: "2026-10-14",
+      };
+
+      render(
+        <TaskDetailDrawer
+          task={rolledOverTask}
+          isOpen={true}
+          onClose={vi.fn()}
+          onSave={vi.fn()}
+          onDelete={vi.fn()}
+        />
+      );
+
+      expect(screen.getByText(/Rolled over from 2026-10-10/i)).toBeInTheDocument();
+    });
+
+    it("renders Kanban sync status banner when task is kanban synced", () => {
+      const syncedTask = {
+        ...mockTask,
+        isKanbanSynced: true,
+        kanbanId: "card-202",
+      };
+
+      render(
+        <TaskDetailDrawer
+          task={syncedTask}
+          isOpen={true}
+          onClose={vi.fn()}
+          onSave={vi.fn()}
+          onDelete={vi.fn()}
+        />
+      );
+
+      expect(screen.getByText(/Synced with Kanban Board/i)).toBeInTheDocument();
+      expect(screen.getByText(/2-Way/i)).toBeInTheDocument();
+    });
   });
 
   describe("WishlistModal", () => {
