@@ -491,16 +491,22 @@ export default function DocsPage() {
               </div>
               <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
                 <li>
+                  <strong>Multi-Circle Architecture &amp; Unified Personal Sync:</strong> Join multiple circles simultaneously (e.g. Partner space, Roommates space, Family circle) with 1-click space switching. Tasks assigned to <code className="font-bold">Mine</code> automatically synchronize across all your circles so you only track personal to-dos once, while shared tasks marked <code className="font-bold">Both</code> remain strictly sandboxed and private to that specific circle.
+                </li>
+                <li>
+                  <strong>Live Floating Notification Toasts (&ldquo;Momentum Floaters&rdquo;):</strong> Real-time dynamic floating toast pills that glide across the top of the screen when your partner checks off a task, hits a streak milestone, or sends love, complete with a 1-tap &ldquo;Cheer Back ❤️&rdquo; micro-reaction.
+                </li>
+                <li>
+                  <strong>Custom Partner Reward Scratch Cards:</strong> Gamified surprise vouchers and realistic scratch-off reward cards in the Wishlist.
+                </li>
+                <li>
+                  <strong>Voice Task Dictation:</strong> 1-tap micro-dictation to quickly capture to-dos and habit reminders on the go.
+                </li>
+                <li>
                   <strong>Google &amp; Apple Calendar Sync:</strong> Two-way calendar synchronization for time-blocked routines and shared household deadlines.
                 </li>
                 <li>
-                  <strong>AI Smart Habit Suggestions:</strong> Intelligent habit breakdown and cadence recommendations based on past consistency data.
-                </li>
-                <li>
-                  <strong>Voice Task Dictation:</strong> 1-tap micro-dictation to quickly capture to-dos on the go.
-                </li>
-                <li>
-                  <strong>Custom Partner Reward Scratch Cards:</strong> Gamified surprise vouchers and scratch-off reward cards in the Wishlist.
+                  <strong>AI Smart Habit Breakdown:</strong> Intelligent task breakdown and cadence recommendations for complex household chores.
                 </li>
               </ul>
             </article>
