@@ -6,6 +6,7 @@ import { RoutinesProvider } from "@/context/RoutinesContext";
 import { DailyTasksProvider } from "@/context/DailyTasksContext";
 import { KanbanProvider } from "@/context/KanbanContext";
 import { PWARegistration } from "@/components/PWARegistration";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: "Couple Task Hub",
@@ -56,6 +57,7 @@ export default function RootLayout({
                 <KanbanProvider>
                   <PWARegistration />
                   {children}
+                  <Analytics />
                 </KanbanProvider>
               </DailyTasksProvider>
             </RoutinesProvider>
