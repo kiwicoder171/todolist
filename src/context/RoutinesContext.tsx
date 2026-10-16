@@ -309,7 +309,15 @@ export function RoutinesProvider({ children }: { children: ReactNode }) {
 export function useRoutines(): RoutinesContextType {
   const context = useContext(RoutinesContext);
   if (!context) {
-    throw new Error("useRoutines must be used within a RoutinesProvider");
+    return {
+      routines: [],
+      addRoutine: () => {},
+      updateRoutine: () => {},
+      deleteRoutine: () => {},
+      toggleCompletion: () => {},
+      isCompleted: () => false,
+      reorderRoutines: () => {},
+    };
   }
   return context;
 }

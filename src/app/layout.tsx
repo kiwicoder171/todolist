@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { HouseholdProvider } from "@/context/HouseholdContext";
+import { NotificationProvider } from "@/context/NotificationContext";
 import { RoutinesProvider } from "@/context/RoutinesContext";
 import { DailyTasksProvider } from "@/context/DailyTasksContext";
 import { KanbanProvider } from "@/context/KanbanContext";
@@ -52,15 +53,17 @@ export default function RootLayout({
       <body className="antialiased selection:bg-black selection:text-white">
         <AuthProvider>
           <HouseholdProvider>
-            <RoutinesProvider>
-              <DailyTasksProvider>
-                <KanbanProvider>
-                  <PWARegistration />
-                  {children}
-                  <Analytics />
-                </KanbanProvider>
-              </DailyTasksProvider>
-            </RoutinesProvider>
+            <NotificationProvider>
+              <RoutinesProvider>
+                <DailyTasksProvider>
+                  <KanbanProvider>
+                    <PWARegistration />
+                    {children}
+                    <Analytics />
+                  </KanbanProvider>
+                </DailyTasksProvider>
+              </RoutinesProvider>
+            </NotificationProvider>
           </HouseholdProvider>
         </AuthProvider>
       </body>

@@ -10,7 +10,7 @@ export interface CircleInviteModalProps {
 }
 
 export function CircleInviteModal({ isOpen, onClose }: CircleInviteModalProps) {
-  const { circle, partnerNames, leaveCircle } = useHousehold();
+  const { circle, partnerNames, leaveCircle, spaceMode, setSpaceMode } = useHousehold();
   const [copied, setCopied] = useState(false);
 
   if (!isOpen) return null;
@@ -33,27 +33,90 @@ export function CircleInviteModal({ isOpen, onClose }: CircleInviteModalProps) {
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 p-1 rounded-lg text-zinc-400 hover:text-black hover:bg-zinc-100 transition"
+          className="absolute top-4 right-4 p-1 rounded-lg text-zinc-400 hover:text-black hover:bg-zinc-100 transition cursor-pointer"
         >
           <X className="w-5 h-5" />
         </button>
 
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-3">
           <div className="w-8 h-8 rounded-xl bg-black text-white flex items-center justify-center font-bold text-xs">
             <Users className="w-4 h-4" />
           </div>
-          <div>
-            <h3 className="font-heading font-black text-base uppercase tracking-wide text-black">
-              {circle?.name || "Our Circle"}
+          <div className="min-w-0">
+            <h3 className="font-heading font-black text-base uppercase tracking-wide text-black truncate">
+              {circle?.name || "Our Space"}
             </h3>
-            <p className="text-xs text-zinc-500 font-medium">
-              Partners: {partnerNames.alex} &amp; {partnerNames.sam}
+            <p className="text-xs text-zinc-500 font-medium truncate">
+              {spaceMode === "solo"
+                ? `Solo Space • ${partnerNames.alex}`
+                : spaceMode === "friends"
+                ? `Friends Hub • ${partnerNames.alex} & ${partnerNames.sam}`
+                : spaceMode === "family"
+                ? `Family Space • ${partnerNames.alex} & ${partnerNames.sam}`
+                : `Partners: ${partnerNames.alex} & ${partnerNames.sam}`}
             </p>
           </div>
         </div>
 
+        {/* Space Mode Switcher */}
+        <div className="mb-4 p-2 rounded-2xl bg-zinc-100 border-2 border-black">
+          <span className="text-[10px] font-heading font-extrabold uppercase text-zinc-600 block mb-1.5 px-1">
+            Space Mode
+          </span>
+          <div className="grid grid-cols-4 gap-1">
+            <button
+              type="button"
+              onClick={() => setSpaceMode("solo")}
+              className={`py-1 px-1 rounded-lg text-[10px] font-heading font-extrabold uppercase transition border border-black cursor-pointer ${
+                spaceMode === "solo"
+                  ? "bg-amber-300 text-black shadow-xs font-black"
+                  : "bg-white text-zinc-600 hover:bg-zinc-50"
+              }`}
+            >
+              🧍 Solo
+            </button>
+            <button
+              type="button"
+              onClick={() => setSpaceMode("partner")}
+              className={`py-1 px-1 rounded-lg text-[10px] font-heading font-extrabold uppercase transition border border-black cursor-pointer ${
+                spaceMode === "partner"
+                  ? "bg-rose-300 text-black shadow-xs font-black"
+                  : "bg-white text-zinc-600 hover:bg-zinc-50"
+              }`}
+            >
+              💕 Partner
+            </button>
+            <button
+              type="button"
+              onClick={() => setSpaceMode("friends")}
+              className={`py-1 px-1 rounded-lg text-[10px] font-heading font-extrabold uppercase transition border border-black cursor-pointer ${
+                spaceMode === "friends"
+                  ? "bg-cyan-300 text-black shadow-xs font-black"
+                  : "bg-white text-zinc-600 hover:bg-zinc-50"
+              }`}
+            >
+              🧑‍🤝‍🧑 Friends
+            </button>
+            <button
+              type="button"
+              onClick={() => setSpaceMode("family")}
+              className={`py-1 px-1 rounded-lg text-[10px] font-heading font-extrabold uppercase transition border border-black cursor-pointer ${
+                spaceMode === "family"
+                  ? "bg-emerald-300 text-black shadow-xs font-black"
+                  : "bg-white text-zinc-600 hover:bg-zinc-50"
+              }`}
+            >
+              🏡 Family
+            </button>
+          </div>
+        </div>
+
         <div className="p-4 rounded-2xl bg-zinc-50 border-2 border-dashed border-black text-center space-y-2 mb-4">
-          <p className="text-xs text-zinc-600 font-medium">Invite Code for Partner:</p>
+          <p className="text-xs text-zinc-600 font-medium">
+            {spaceMode === "solo"
+              ? "Share code to invite collaborators:"
+              : "Invite Code for Members:"}
+          </p>
           <div className="py-2 px-3 bg-white border-2 border-black rounded-xl font-heading font-black text-xl tracking-widest text-black select-all">
             {joinCode}
           </div>

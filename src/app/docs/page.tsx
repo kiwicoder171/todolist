@@ -444,28 +444,63 @@ export default function DocsPage() {
               </p>
             </div>
 
-            {/* Roadmap: Coming Soon */}
+            {/* Timeline Item: v0.6.0 (Current Release) */}
+            <article className="p-6 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-3">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-1 rounded-full border-2 border-black bg-black text-white font-heading font-black text-xs">
+                    v0.6.0
+                  </span>
+                  <h3 className="font-heading font-extrabold text-base text-black">
+                    Multi-Mode Spaces, In-App &amp; Push Notifications, and Home Screen Widgets
+                  </h3>
+                </div>
+                <span className="text-xs text-zinc-400 font-medium flex items-center gap-1">
+                  <Clock className="w-3.5 h-3.5" />
+                  <span>Current Release</span>
+                </span>
+              </div>
+              <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
+                <li>
+                  <strong>Multi-Mode Collaboration (&ldquo;Your Space, Your Way&rdquo;):</strong> Users can now choose whether to use the app <code className="font-bold">🧍 Solo</code>, <code className="font-bold">💕 With Partner (Duo)</code>, <code className="font-bold">🧑‍🤝‍🧑 With Friends</code>, or <code className="font-bold">🏡 With Family</code>. Switch modes anytime directly from the top navigation bar or circle settings with tailor-made title labels and tailored single- or multi-user profiles.
+                </li>
+                <li>
+                  <strong>Real-Time Notifications &amp; Web Push:</strong> Integrated in-app neo-brutalist slide-out notification drawer with unread count badge, filter tabs (All, Cheers, Tasks, Streaks), native Web Notifications API browser push alerts, and 1-tap quick cheers. Routine and task completions instantly push live alerts.
+                </li>
+                <li>
+                  <strong>Glanceable Home Screen Widgets:</strong> Interactive widget system supporting Small (2×2), Medium (4×2), and Large (4×4) sizes with live habit check toggles, 7-day consistency strip, flame streaks, and completion meters. Includes dedicated standalone <code className="bg-zinc-100 px-1 py-0.5 rounded font-mono font-bold">/widget</code> route and step-by-step home screen installation guide for iOS (Safari), Android (Chrome), and Notion.
+                </li>
+                <li>
+                  <strong>Vercel Privacy-Friendly Analytics:</strong> Zero-config analytics tracking integrated to monitor Core Web Vitals and app traffic.
+                </li>
+              </ul>
+            </article>
+
+            {/* Roadmap: What's Next */}
             <article className="p-6 rounded-3xl border-2 border-dashed border-black bg-[#fff9db] shadow-[4px_4px_0_0_#000] space-y-3">
               <div className="flex items-center justify-between flex-wrap gap-2">
                 <div className="flex items-center gap-2">
                   <span className="px-2.5 py-1 rounded-full border-2 border-black bg-pink-300 text-black font-heading font-black text-xs">
-                    COMING SOON
+                    NEXT UP
                   </span>
                   <h3 className="font-heading font-extrabold text-base text-black">
                     Roadmap: What&apos;s Next
                   </h3>
                 </div>
-                <span className="text-xs text-zinc-500 font-medium">Planned &mdash; not yet released</span>
+                <span className="text-xs text-zinc-500 font-medium">Future additions</span>
               </div>
               <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
                 <li>
-                  <strong>Your Space, Your Way:</strong> Choose at sign-up how you use the hub &mdash; <code className="font-bold">Solo</code>, <code className="font-bold">With Partner</code>, <code className="font-bold">With Friends</code> or <code className="font-bold">With Family</code> &mdash; and switch any time.
+                  <strong>Google &amp; Apple Calendar Sync:</strong> Two-way calendar synchronization for time-blocked routines and shared household deadlines.
                 </li>
                 <li>
-                  <strong>Notifications:</strong> Gentle reminders for due routines and tasks, partner activity and cheers, and streak nudges.
+                  <strong>AI Smart Habit Suggestions:</strong> Intelligent habit breakdown and cadence recommendations based on past consistency data.
                 </li>
                 <li>
-                  <strong>Home Screen Widgets:</strong> See today&apos;s routines, tasks and your streak at a glance without opening the app.
+                  <strong>Voice Task Dictation:</strong> 1-tap micro-dictation to quickly capture to-dos on the go.
+                </li>
+                <li>
+                  <strong>Custom Partner Reward Scratch Cards:</strong> Gamified surprise vouchers and scratch-off reward cards in the Wishlist.
                 </li>
               </ul>
             </article>
@@ -474,17 +509,14 @@ export default function DocsPage() {
             <article className="p-6 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-3">
               <div className="flex items-center justify-between flex-wrap gap-2">
                 <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 rounded-full border-2 border-black bg-black text-white font-heading font-black text-xs">
+                  <span className="px-2.5 py-1 rounded-full border-2 border-black bg-amber-300 text-black font-heading font-black text-xs">
                     v0.5.5
                   </span>
                   <h3 className="font-heading font-extrabold text-base text-black">
                     7-Day Mobile Week Calendar Strip &amp; Navbar Focus Reordering
                   </h3>
                 </div>
-                <span className="text-xs text-zinc-400 font-medium flex items-center gap-1">
-                  <Clock className="w-3.5 h-3.5" />
-                  <span>Current Release</span>
-                </span>
+                <span className="text-xs text-zinc-400 font-medium">Oct 15, 2026</span>
               </div>
               <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
                 <li>

@@ -336,7 +336,16 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
 export function useDailyTasks(): DailyTasksContextType {
   const context = useContext(DailyTasksContext);
   if (!context) {
-    throw new Error("useDailyTasks must be used within a DailyTasksProvider");
+    return {
+      tasks: [],
+      addDailyTask: () => {},
+      toggleDailyTask: () => {},
+      updateDailyTask: () => {},
+      deleteDailyTask: () => {},
+      setTaskCompletedByKanbanId: () => {},
+      removeTaskByKanbanId: () => {},
+      registerKanbanSyncHook: () => () => {},
+    };
   }
   return context;
 }

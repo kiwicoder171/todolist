@@ -8,6 +8,7 @@ import {
   DailyTask,
 } from "@/context/DailyTasksContext";
 import { formatDateKey } from "@/context/RoutinesContext";
+import { useNotifications } from "@/context/NotificationContext";
 import { TaskDetailDrawer } from "./TaskDetailDrawer";
 import { Check, CornerDownRight, X, Plus } from "lucide-react";
 
@@ -15,6 +16,7 @@ export function DailyTasksBoard() {
   const { activePartner, assigneeFilter, selectedDate, partnerNames } = useHousehold();
   const { tasks, addDailyTask, toggleDailyTask, updateDailyTask, deleteDailyTask } =
     useDailyTasks();
+  const { addNotification } = useNotifications();
 
   const [newTitle, setNewTitle] = useState("");
   const [newAssignee, setNewAssignee] = useState<Assignee>("mine");
@@ -41,6 +43,12 @@ export function DailyTasksBoard() {
     toggleDailyTask(id, formatDateKey(selectedDate));
     if (!wasCompleted) {
       setCelebrationMsg("🎉 Task Done!");
+      addNotification({
+        title: "Task Done! 🎉",
+        message: `${myName} checked off a daily task`,
+        type: "task_completed",
+        partner: activePartner,
+      });
       setTimeout(() => setCelebrationMsg(null), 2000);
     }
   };

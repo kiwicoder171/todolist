@@ -1,8 +1,7 @@
-"use client";
-
 import React, { useState } from "react";
 import { useHousehold, formatDateKey } from "@/context/HouseholdContext";
 import { useRoutines, isRoutineScheduledForDate } from "@/context/RoutinesContext";
+import { useNotifications } from "@/context/NotificationContext";
 import { ChevronLeft, ChevronRight, Heart, Sparkles } from "lucide-react";
 
 export function CalendarConsistencySection() {
@@ -10,9 +9,12 @@ export function CalendarConsistencySection() {
     selectedDate,
     setSelectedDate,
     isDateFrozen,
+    activePartner,
+    partnerNames,
   } = useHousehold();
 
   const { routines, isCompleted } = useRoutines();
+  const { sendCheer } = useNotifications();
 
   // State for navigating calendar months
   const [viewYear, setViewYear] = useState<number>(selectedDate.getFullYear());
@@ -270,8 +272,13 @@ export function CalendarConsistencySection() {
           </div>
 
           <button
-            onClick={() => setHasCheered(true)}
-            className={`px-3 py-1.5 border-2 border-black rounded-xl text-xs font-bold font-heading transition ${
+            onClick={() => {
+              setHasCheered(true);
+              const sender = partnerNames[activePartner] || "You";
+              sendCheer(sender, "sent you love & momentum! Keep rocking it! ❤️");
+              setTimeout(() => setHasCheered(false), 3000);
+            }}
+            className={`px-3 py-1.5 border-2 border-black rounded-xl text-xs font-bold font-heading transition cursor-pointer active:translate-x-0.5 active:translate-y-0.5 ${
               hasCheered
                 ? "bg-black text-white"
                 : "bg-white text-black hover:bg-black hover:text-white"

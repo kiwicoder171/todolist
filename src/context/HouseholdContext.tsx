@@ -12,6 +12,7 @@ import { useOptionalAuth } from "./AuthContext";
 export type Partner = "alex" | "sam";
 export type Assignee = "mine" | "partner" | "both";
 export type AssigneeFilter = "all" | "mine" | "partner";
+export type SpaceMode = "solo" | "partner" | "friends" | "family";
 
 export interface PartnerScoreState {
   points: number;
@@ -25,14 +26,17 @@ export interface CircleState {
   createdByName: string;
   partnerName?: string;
   createdAt: string;
+  mode?: SpaceMode;
 }
 
 export interface HouseholdContextType {
   circle: CircleState | null;
+  spaceMode: SpaceMode;
+  setSpaceMode: (mode: SpaceMode) => void;
   isConfigured: boolean;
   isOnboardingOpen: boolean;
   setIsOnboardingOpen: (open: boolean) => void;
-  createCircle: (userName: string, circleName?: string) => string;
+  createCircle: (userName: string, circleName?: string, mode?: SpaceMode) => string;
   joinCircle: (userName: string, joinCode: string) => boolean;
   leaveCircle: () => void;
   partnerNames: Record<Partner, string>;
@@ -143,6 +147,19 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
     "2026-10-18": true,
   });
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
+  const [spaceMode, setSpaceModeState] = useState<SpaceMode>(() => {
+    if (isTest && typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed.spaceMode) return parsed.spaceMode;
+          if (parsed.circle?.mode) return parsed.circle.mode;
+        }
+      } catch {}
+    }
+    return "partner";
+  });
 
   const [scores, setScores] = useState<Record<Partner, PartnerScoreState>>(() => {
     if (isTest && typeof window !== "undefined") {
@@ -168,6 +185,8 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
         if (parsed.circle) setCircle(parsed.circle);
         if (parsed.partnerNames) setPartnerNames(parsed.partnerNames);
         if (parsed.scores) setScores(parsed.scores);
+        if (parsed.spaceMode) setSpaceModeState(parsed.spaceMode);
+        else if (parsed.circle?.mode) setSpaceModeState(parsed.circle.mode);
       }
     } catch {}
   }, [isTest]);
@@ -205,7 +224,8 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
   const saveState = (
     newCircle: CircleState | null,
     newNames: Record<Partner, string>,
-    newScores: Record<Partner, PartnerScoreState>
+    newScores: Record<Partner, PartnerScoreState>,
+    newMode?: SpaceMode
   ) => {
     if (typeof window === "undefined") return;
     try {
@@ -215,9 +235,24 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
           circle: newCircle,
           partnerNames: newNames,
           scores: newScores,
+          spaceMode: newMode !== undefined ? newMode : spaceMode,
         })
       );
     } catch {}
+  };
+
+  const setSpaceMode = (newMode: SpaceMode) => {
+    setSpaceModeState(newMode);
+    if (circle) {
+      const updated = { ...circle, mode: newMode };
+      setCircle(updated);
+      saveCircleToFirebase(updated).catch((err) =>
+        console.warn("Update circle mode warning:", err?.message || err)
+      );
+      saveState(updated, partnerNames, scores, newMode);
+    } else {
+      saveState(circle, partnerNames, scores, newMode);
+    }
   };
 
   // Cross-device sync: If user is logged in and has a circleId attached, subscribe to it!
@@ -259,17 +294,26 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
     return () => unsub();
   }, [circle?.id]);
 
-  const createCircle = (userName: string, circleName?: string): string => {
+  const createCircle = (userName: string, circleName?: string, mode: SpaceMode = "partner"): string => {
     const finalName = user?.username || userName.trim() || "Alex";
     const code = generateJoinCode();
+    let defaultTitle = `${finalName}'s Shared Space`;
+    if (mode === "solo") defaultTitle = `${finalName}'s Space`;
+    else if (mode === "friends") defaultTitle = `${finalName}'s Friends Hub`;
+    else if (mode === "family") defaultTitle = `${finalName}'s Family Space`;
+
     const newCircle: CircleState = {
       id: `circle-${Date.now()}`,
-      name: circleName?.trim() || `${finalName}'s Shared Space`,
+      name: circleName?.trim() || defaultTitle,
       joinCode: code,
       createdByName: finalName,
       createdAt: new Date().toISOString(),
+      mode,
     };
-    const newNames = { alex: finalName, sam: "Partner" };
+    const newNames = {
+      alex: finalName,
+      sam: mode === "solo" ? "Solo" : mode === "friends" ? "Friends" : mode === "family" ? "Family" : "Partner",
+    };
     const newScores = {
       alex: { points: 0, streak: 0 },
       sam: { points: 0, streak: 0 },
@@ -278,8 +322,9 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
     setCircle(newCircle);
     setPartnerNames(newNames);
     setScores(newScores);
+    setSpaceModeState(mode);
     setActivePartner("alex");
-    saveState(newCircle, newNames, newScores);
+    saveState(newCircle, newNames, newScores, mode);
     saveCircleToFirebase(newCircle).catch((err) =>
       console.warn("Save circle warning:", err?.message || err)
     );
@@ -333,12 +378,15 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
             partnerName: finalName,
           };
           setCircle(merged);
+          if (remoteCircle.mode) {
+            setSpaceModeState(remoteCircle.mode);
+          }
           const mergedNames = {
             alex: merged.createdByName || "Partner",
             sam: finalName,
           };
           setPartnerNames(mergedNames);
-          saveState(merged, mergedNames, scores);
+          saveState(merged, mergedNames, scores, remoteCircle.mode);
           saveCircleToFirebase(merged).catch((err) =>
             console.warn("Save merged circle warning:", err?.message || err)
           );
@@ -445,6 +493,8 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
     <HouseholdContext.Provider
       value={{
         circle,
+        spaceMode,
+        setSpaceMode,
         isConfigured,
         isOnboardingOpen,
         setIsOnboardingOpen,

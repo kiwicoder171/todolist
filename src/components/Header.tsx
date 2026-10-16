@@ -4,8 +4,20 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useHousehold, Partner } from "@/context/HouseholdContext";
 import { useAuth } from "@/context/AuthContext";
-import { Flame, Users, LogIn, LogOut, User as UserIcon, BookOpen } from "lucide-react";
+import { useNotifications } from "@/context/NotificationContext";
+import {
+  Flame,
+  Users,
+  LogIn,
+  LogOut,
+  User as UserIcon,
+  BookOpen,
+  Bell,
+  Smartphone,
+} from "lucide-react";
 import { CircleInviteModal } from "./CircleInviteModal";
+import { NotificationDrawer } from "./NotificationDrawer";
+import { WidgetModal } from "./WidgetModal";
 import { Logo } from "./Logo";
 
 export interface HeaderProps {
@@ -21,10 +33,28 @@ export function Header({
   onDashboardFocusChange,
   onOpenWishlist,
 }: HeaderProps) {
-  const { activePartner, setActivePartner, scores, partnerNames, circle, setIsOnboardingOpen } = useHousehold();
+  const {
+    activePartner,
+    setActivePartner,
+    scores,
+    partnerNames,
+    circle,
+    setIsOnboardingOpen,
+    spaceMode,
+  } = useHousehold();
   const { user, logout, openAuthModal } = useAuth();
+  const { unreadCount, setIsDrawerOpen } = useNotifications();
   const [isInviteOpen, setIsInviteOpen] = useState(false);
+  const [isWidgetOpen, setIsWidgetOpen] = useState(false);
   const currentScore = scores[activePartner] || { points: 0, streak: 0 };
+
+  const spaceModeConfig = {
+    solo: { label: "Solo", icon: "🧍", bg: "bg-[#FEF08A]" },
+    partner: { label: "Duo", icon: "💕", bg: "bg-[#FBCFE8]" },
+    friends: { label: "Friends", icon: "🧑‍🤝‍🧑", bg: "bg-[#BAE6FD]" },
+    family: { label: "Family", icon: "🏡", bg: "bg-[#A7F3D0]" },
+  };
+  const modeInfo = spaceModeConfig[spaceMode || "partner"];
 
   return (
     <>
@@ -36,29 +66,73 @@ export function Header({
               <Logo size={24} inverted />
             </div>
             <div className="min-w-0">
-              <div className="flex items-center gap-1.5 sm:gap-2">
+              <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap sm:flex-nowrap">
                 <h1 className="font-heading font-extrabold text-sm sm:text-base tracking-tight text-black uppercase truncate">
                   Couple Task Hub
                 </h1>
                 <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full border border-black bg-[#f4f4f5] text-black shrink-0">
-                  v0.5.5
+                  v0.6.0
                 </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (circle) setIsInviteOpen(true);
+                    else if (user) setIsOnboardingOpen(true);
+                  }}
+                  className={`text-[9px] sm:text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full border border-black ${modeInfo.bg} text-black shrink-0 cursor-pointer shadow-xs hover:opacity-80 transition`}
+                  title="Active Space Mode (Click to Change)"
+                >
+                  {modeInfo.icon} {modeInfo.label}
+                </button>
               </div>
               <p
                 suppressHydrationWarning
                 className="text-[11px] sm:text-xs text-zinc-500 font-medium truncate"
               >
                 {circle
-                  ? circle.name || `${partnerNames.alex} & ${partnerNames.sam}'s Space`
+                  ? circle.name ||
+                    (spaceMode === "solo"
+                      ? `${partnerNames.alex || "Solo"}'s Space`
+                      : `${partnerNames.alex} & ${partnerNames.sam}'s Space`)
                   : user
                   ? `${user.username}'s Space`
+                  : spaceMode === "solo"
+                  ? `${partnerNames.alex || "Solo"}'s Space`
                   : `${partnerNames.alex} & ${partnerNames.sam}'s Space`}
               </p>
             </div>
           </div>
 
-          {/* Mobile Right Actions: Circle, Docs, Log In */}
+          {/* Mobile Right Actions: Notifications, Widgets, Circle, Docs, Log In */}
           <div className="flex items-center gap-1.5 sm:hidden shrink-0">
+            {/* Notification Bell */}
+            <button
+              type="button"
+              onClick={() => setIsDrawerOpen(true)}
+              className="relative p-1 rounded-full border-2 border-black bg-white hover:bg-zinc-100 transition text-xs font-heading font-extrabold flex items-center justify-center shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer"
+              title="Notifications"
+              aria-label="Open notifications"
+            >
+              <Bell className="w-3.5 h-3.5 text-black" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-rose-500 border border-black flex items-center justify-center text-[8px] font-black text-white">
+                  {unreadCount > 9 ? "!" : unreadCount}
+                </span>
+              )}
+            </button>
+
+            {/* Widget Button */}
+            <button
+              type="button"
+              onClick={() => setIsWidgetOpen(true)}
+              className="p-1 rounded-full border-2 border-black bg-white hover:bg-zinc-100 transition text-xs font-heading font-extrabold flex items-center justify-center shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer"
+              title="Home Screen Widgets"
+              aria-label="Open widgets"
+            >
+              <Smartphone className="w-3.5 h-3.5 text-black" />
+            </button>
+
+            {/* Circle */}
             <button
               type="button"
               onClick={() => {
@@ -147,10 +221,23 @@ export function Header({
           </button>
         </div>
 
-        {/* Partner Identity & Streaks */}
+        {/* Partner Identity, Widgets, Notifications, Streaks & Auth */}
         <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-1.5 sm:gap-2 flex-wrap sm:flex-nowrap">
           {/* Active Partner Switcher */}
-          {user && !circle ? (
+          {spaceMode === "solo" ? (
+            <div
+              suppressHydrationWarning
+              className="flex items-center bg-[#f4f4f5] px-2.5 py-1 rounded-2xl border border-zinc-200 text-xs shrink-0"
+            >
+              <span className="text-zinc-400 pr-1.5 text-[10px] font-bold uppercase font-heading">
+                Solo:
+              </span>
+              <span className="font-bold font-heading text-xs text-black flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                {partnerNames.alex || user?.username || "You"}
+              </span>
+            </div>
+          ) : user && !circle ? (
             <div
               suppressHydrationWarning
               className="flex items-center bg-[#f4f4f5] px-2.5 py-1 rounded-2xl border border-zinc-200 text-xs shrink-0"
@@ -224,13 +311,42 @@ export function Header({
             </button>
           </div>
 
+          {/* Notification Bell Button (Desktop) */}
+          <button
+            type="button"
+            onClick={() => setIsDrawerOpen(true)}
+            className="hidden sm:flex relative px-2.5 py-1 rounded-full border-2 border-black bg-white hover:bg-zinc-100 transition text-xs font-heading font-extrabold items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer active:translate-x-0.5 active:translate-y-0.5"
+            title="Notifications & Cheers"
+            aria-label="Open notifications"
+          >
+            <Bell className="w-3.5 h-3.5 text-black" />
+            <span className="hidden md:inline">Alerts</span>
+            {unreadCount > 0 && (
+              <span className="min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-black flex items-center justify-center border border-black shadow-xs">
+                {unreadCount > 9 ? "9+" : unreadCount}
+              </span>
+            )}
+          </button>
+
+          {/* Widgets Button (Desktop) */}
+          <button
+            type="button"
+            onClick={() => setIsWidgetOpen(true)}
+            className="hidden sm:flex px-2.5 py-1 rounded-full border-2 border-black bg-white hover:bg-zinc-100 transition text-xs font-heading font-extrabold items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer active:translate-x-0.5 active:translate-y-0.5"
+            title="Home Screen Widgets"
+            aria-label="Open widgets"
+          >
+            <Smartphone className="w-3.5 h-3.5 text-black" />
+            <span className="hidden md:inline">Widgets</span>
+          </button>
+
           {/* Circle / Space Pill */}
           {circle ? (
             <button
               type="button"
               onClick={() => setIsInviteOpen(true)}
               className="hidden sm:flex px-2.5 py-1 rounded-full border-2 border-black bg-zinc-100 hover:bg-black hover:text-white transition text-xs font-heading font-extrabold items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer"
-              title="Circle Details & Invite Partner"
+              title="Circle Details & Invite Members"
             >
               <Users className="w-3 h-3" />
               <span>{circle.joinCode || "Invite"}</span>
@@ -246,7 +362,7 @@ export function Header({
                 }
               }}
               className="hidden sm:flex px-2.5 py-1 rounded-full border-2 border-black bg-white hover:bg-zinc-100 transition text-xs font-heading font-extrabold items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer text-zinc-900"
-              title={user ? "Join or Create a Couple Space" : "Sign up or Log in to create or join a circle"}
+              title={user ? "Join or Create a Space" : "Sign up or Log in to create or join a circle"}
             >
               <Users className="w-3 h-3 text-zinc-500" />
               <span>Join Circle</span>
@@ -293,6 +409,14 @@ export function Header({
         </div>
       </header>
 
+      {/* Global Modals & Drawers */}
+      <NotificationDrawer />
+      {isWidgetOpen && (
+        <WidgetModal
+          isOpen={isWidgetOpen}
+          onClose={() => setIsWidgetOpen(false)}
+        />
+      )}
       <CircleInviteModal
         isOpen={isInviteOpen}
         onClose={() => setIsInviteOpen(false)}

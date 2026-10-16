@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useHousehold } from "@/context/HouseholdContext";
+import { useHousehold, SpaceMode } from "@/context/HouseholdContext";
 import { useAuth } from "@/context/AuthContext";
-import { Heart, Users, Copy, Check, ArrowRight, Sparkles, X } from "lucide-react";
+import { Heart, Users, Copy, Check, ArrowRight, Sparkles, X, User, Home } from "lucide-react";
 import { Logo } from "./Logo";
 
 interface CircleOnboardingModalProps {
@@ -18,6 +18,7 @@ export function CircleOnboardingModal({
   const { isConfigured, createCircle, joinCircle, isOnboardingOpen, setIsOnboardingOpen } = useHousehold();
   const { user, loading, openAuthModal } = useAuth();
   const [mode, setMode] = useState<"create" | "join">("create");
+  const [selectedSpaceMode, setSelectedSpaceMode] = useState<SpaceMode>("partner");
 
   // Create form state
   const [userName, setUserName] = useState(user?.username || "");
@@ -169,7 +170,7 @@ export function CircleOnboardingModal({
       return;
     }
     setError(null);
-    const code = createCircle(userName, circleName);
+    const code = createCircle(userName, circleName, selectedSpaceMode);
     setCreatedCode(code);
   };
 
@@ -223,7 +224,7 @@ export function CircleOnboardingModal({
               <Heart className="w-3.5 h-3.5 fill-black text-black shrink-0" />
             </h2>
             <p className="text-[11px] sm:text-xs text-zinc-500 font-medium truncate">
-              A shared space for you &amp; your partner
+              Collaborative OS for couples, solo, friends &amp; family
             </p>
           </div>
         </div>
@@ -234,10 +235,20 @@ export function CircleOnboardingModal({
             <div className="p-4 rounded-2xl bg-zinc-50 border-2 border-dashed border-black text-center space-y-2">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black text-white text-[11px] font-heading font-bold uppercase">
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>Circle Ready!</span>
+                <span>
+                  {selectedSpaceMode === "solo"
+                    ? "Solo Space Ready!"
+                    : selectedSpaceMode === "friends"
+                    ? "Friends Hub Ready!"
+                    : selectedSpaceMode === "family"
+                    ? "Family Space Ready!"
+                    : "Circle Ready!"}
+                </span>
               </div>
               <p className="text-xs text-zinc-600 font-medium">
-                Share this invite code with your partner so they can join your space:
+                {selectedSpaceMode === "solo"
+                  ? "Your personal productivity space is initialized. You can invite partners or friends anytime later:"
+                  : "Share this invite code so others can join your space:"}
               </p>
               <div className="py-2.5 px-4 bg-white border-2 border-black rounded-xl font-heading font-black text-2xl tracking-widest text-black select-all">
                 {createdCode}
@@ -320,6 +331,69 @@ export function CircleOnboardingModal({
               <form onSubmit={handleCreate} className="space-y-4">
                 <div>
                   <label className="block text-xs font-heading font-bold uppercase mb-1.5 text-zinc-700">
+                    How will you use the hub?
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedSpaceMode("solo")}
+                      className={`p-2 rounded-xl border-2 border-black flex flex-col items-center justify-center text-center transition cursor-pointer ${
+                        selectedSpaceMode === "solo"
+                          ? "bg-amber-300 shadow-[2px_2px_0_0_#000] scale-[1.02]"
+                          : "bg-white hover:bg-zinc-50"
+                      }`}
+                    >
+                      <span className="text-lg mb-0.5">🧍</span>
+                      <span className="font-heading font-extrabold text-xs uppercase text-black">Solo</span>
+                      <span className="text-[10px] text-zinc-600 font-medium leading-tight">Just me</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setSelectedSpaceMode("partner")}
+                      className={`p-2 rounded-xl border-2 border-black flex flex-col items-center justify-center text-center transition cursor-pointer ${
+                        selectedSpaceMode === "partner"
+                          ? "bg-rose-200 shadow-[2px_2px_0_0_#000] scale-[1.02]"
+                          : "bg-white hover:bg-zinc-50"
+                      }`}
+                    >
+                      <span className="text-lg mb-0.5">💕</span>
+                      <span className="font-heading font-extrabold text-xs uppercase text-black">With Partner</span>
+                      <span className="text-[10px] text-zinc-600 font-medium leading-tight">Shared Home OS</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setSelectedSpaceMode("friends")}
+                      className={`p-2 rounded-xl border-2 border-black flex flex-col items-center justify-center text-center transition cursor-pointer ${
+                        selectedSpaceMode === "friends"
+                          ? "bg-cyan-200 shadow-[2px_2px_0_0_#000] scale-[1.02]"
+                          : "bg-white hover:bg-zinc-50"
+                      }`}
+                    >
+                      <span className="text-lg mb-0.5">🧑‍🤝‍🧑</span>
+                      <span className="font-heading font-extrabold text-xs uppercase text-black">With Friends</span>
+                      <span className="text-[10px] text-zinc-600 font-medium leading-tight">Trips &amp; chores</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setSelectedSpaceMode("family")}
+                      className={`p-2 rounded-xl border-2 border-black flex flex-col items-center justify-center text-center transition cursor-pointer ${
+                        selectedSpaceMode === "family"
+                          ? "bg-emerald-200 shadow-[2px_2px_0_0_#000] scale-[1.02]"
+                          : "bg-white hover:bg-zinc-50"
+                      }`}
+                    >
+                      <span className="text-lg mb-0.5">🏡</span>
+                      <span className="font-heading font-extrabold text-xs uppercase text-black">With Family</span>
+                      <span className="text-[10px] text-zinc-600 font-medium leading-tight">Chores &amp; kids</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-heading font-bold uppercase mb-1.5 text-zinc-700">
                     Your Name
                   </label>
                   <input
@@ -334,11 +408,19 @@ export function CircleOnboardingModal({
 
                 <div>
                   <label className="block text-xs font-heading font-bold uppercase mb-1.5 text-zinc-700">
-                    Circle / Household Name (Optional)
+                    Space Title (Optional)
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. Our Cozy Space"
+                    placeholder={
+                      selectedSpaceMode === "solo"
+                        ? "e.g. My Personal Space"
+                        : selectedSpaceMode === "friends"
+                        ? "e.g. Flatmates & Trips"
+                        : selectedSpaceMode === "family"
+                        ? "e.g. Our Family Hub"
+                        : "e.g. Our Cozy Space"
+                    }
                     value={circleName}
                     onChange={(e) => setCircleName(e.target.value)}
                     className="w-full px-3.5 py-2.5 border-2 border-black rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-black bg-white"
@@ -347,9 +429,17 @@ export function CircleOnboardingModal({
 
                 <button
                   type="submit"
-                  className="w-full mt-2 py-3 px-4 rounded-xl border-2 border-black bg-black text-white hover:bg-zinc-800 font-heading font-extrabold text-sm uppercase transition shadow-[3px_3px_0_0_#000] flex items-center justify-center gap-2"
+                  className="w-full mt-2 py-3 px-4 rounded-xl border-2 border-black bg-black text-white hover:bg-zinc-800 font-heading font-extrabold text-sm uppercase transition shadow-[3px_3px_0_0_#000] flex items-center justify-center gap-2 cursor-pointer active:translate-x-0.5 active:translate-y-0.5"
                 >
-                  <span>Create Our Space</span>
+                  <span>
+                    {selectedSpaceMode === "solo"
+                      ? "Create Solo Space"
+                      : selectedSpaceMode === "friends"
+                      ? "Create Friends Hub"
+                      : selectedSpaceMode === "family"
+                      ? "Create Family Space"
+                      : "Create Couple Space"}
+                  </span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </form>

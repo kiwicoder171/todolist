@@ -8,6 +8,7 @@ import {
   formatFrequencyLabel,
   RoutineFrequency,
 } from "@/context/RoutinesContext";
+import { useNotifications } from "@/context/NotificationContext";
 import { Check, ArrowUp, ArrowDown, X, Plus, Calendar } from "lucide-react";
 import { AddRoutineModal } from "./AddRoutineModal";
 
@@ -21,11 +22,14 @@ export function DailyRoutinesBoard() {
     isCompleted,
     reorderRoutines,
   } = useRoutines();
+  const { addNotification } = useNotifications();
 
   const [newTitle, setNewTitle] = useState("");
   const [newAssignee, setNewAssignee] = useState<Assignee>("both");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalInitialTitle, setModalInitialTitle] = useState("");
+
+  const myName = activePartner === "alex" ? partnerNames.alex : partnerNames.sam;
 
   // Filter routines by schedule date & assignee filter
   const visibleRoutines = routines.filter((r) => {
@@ -46,9 +50,16 @@ export function DailyRoutinesBoard() {
 
   const handleToggle = (id: string) => {
     const wasCompleted = isCompleted(id, selectedDate);
+    const routine = routines.find((r) => r.id === id);
     toggleCompletion(id, selectedDate);
     if (!wasCompleted) {
       setCelebrationMsg("✨ +1 Routine Done!");
+      addNotification({
+        title: "Routine Complete! 🎯",
+        message: routine ? `${myName} completed "${routine.title}"` : `${myName} checked off a routine`,
+        type: "routine_completed",
+        partner: activePartner,
+      });
       setTimeout(() => setCelebrationMsg(null), 2000);
     }
   };

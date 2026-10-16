@@ -90,4 +90,38 @@ describe("HouseholdContext & Assignee Filter (Seam: Household State)", () => {
 
     expect(result.current.isFreezeDay).toBe(true);
   });
+
+  describe("Space Mode (Solo, Partner, Friends, Family)", () => {
+    it("defaults to partner space mode", () => {
+      const wrapper = ({ children }: { children: React.ReactNode }) => (
+        <HouseholdProvider>{children}</HouseholdProvider>
+      );
+
+      const { result } = renderHook(() => useHousehold(), { wrapper });
+      expect(result.current.spaceMode).toBe("partner");
+    });
+
+    it("allows switching spaceMode to solo, friends, and family", () => {
+      const wrapper = ({ children }: { children: React.ReactNode }) => (
+        <HouseholdProvider>{children}</HouseholdProvider>
+      );
+
+      const { result } = renderHook(() => useHousehold(), { wrapper });
+
+      act(() => {
+        result.current.setSpaceMode("solo");
+      });
+      expect(result.current.spaceMode).toBe("solo");
+
+      act(() => {
+        result.current.setSpaceMode("friends");
+      });
+      expect(result.current.spaceMode).toBe("friends");
+
+      act(() => {
+        result.current.setSpaceMode("family");
+      });
+      expect(result.current.spaceMode).toBe("family");
+    });
+  });
 });
