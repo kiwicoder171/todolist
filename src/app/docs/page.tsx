@@ -473,6 +473,9 @@ export default function DocsPage() {
                 <li>
                   <strong>Vercel Privacy-Friendly Analytics:</strong> Zero-config analytics tracking integrated to monitor Core Web Vitals and app traffic.
                 </li>
+                <li>
+                  <strong>Board Hover Elevation Polish:</strong> Added top headroom (<code className="bg-zinc-100 px-1 py-0.5 rounded font-mono font-bold">pt-1.5 pb-1</code>) to scroll containers in Daily Tasks and Daily Routines boards, eliminating top border clipping during hover animations on mobile and desktop.
+                </li>
               </ul>
             </article>
 
@@ -495,9 +498,6 @@ export default function DocsPage() {
                 </li>
                 <li>
                   <strong>Live Floating Notification Toasts (&ldquo;Momentum Floaters&rdquo;):</strong> Real-time dynamic floating toast pills that glide across the top of the screen when your partner checks off a task, hits a streak milestone, or sends love, complete with a 1-tap &ldquo;Cheer Back ❤️&rdquo; micro-reaction.
-                </li>
-                <li>
-                  <strong>Task &amp; Routine Card Elevation Polish:</strong> Prevent top border clipping on hover animations inside Daily Tasks and Daily Routines scroll containers across mobile and desktop.
                 </li>
                 <li>
                   <strong>Custom Partner Reward Scratch Cards:</strong> Gamified surprise vouchers and realistic scratch-off reward cards in the Wishlist.
