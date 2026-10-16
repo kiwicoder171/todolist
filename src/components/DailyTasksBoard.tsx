@@ -87,7 +87,7 @@ export function DailyTasksBoard() {
       </p>
 
       {/* Task List Container */}
-      <div className="space-y-2.5 flex-1 overflow-y-auto pr-1 min-h-[220px]">
+      <div className="space-y-2.5 flex-1 overflow-y-auto pt-1.5 pb-1 pr-1 min-h-[220px]">
         {visibleTasks.length === 0 ? (
           <div className="h-28 border-2 border-dashed border-zinc-200 rounded-2xl flex items-center justify-center text-xs text-zinc-400 font-heading">
             No daily tasks for this day

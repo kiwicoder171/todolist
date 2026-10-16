@@ -497,6 +497,9 @@ export default function DocsPage() {
                   <strong>Live Floating Notification Toasts (&ldquo;Momentum Floaters&rdquo;):</strong> Real-time dynamic floating toast pills that glide across the top of the screen when your partner checks off a task, hits a streak milestone, or sends love, complete with a 1-tap &ldquo;Cheer Back ❤️&rdquo; micro-reaction.
                 </li>
                 <li>
+                  <strong>Task &amp; Routine Card Elevation Polish:</strong> Prevent top border clipping on hover animations inside Daily Tasks and Daily Routines scroll containers across mobile and desktop.
+                </li>
+                <li>
                   <strong>Custom Partner Reward Scratch Cards:</strong> Gamified surprise vouchers and realistic scratch-off reward cards in the Wishlist.
                 </li>
                 <li>
