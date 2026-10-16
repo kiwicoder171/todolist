@@ -60,7 +60,13 @@ export function CoupleTaskHubApp({ forcedIsMobile, initialMobileTab }: CoupleTas
     <div className="min-h-screen flex flex-col bg-[#fafafa] text-[#18181b] overflow-x-hidden max-w-full">
       <Header
         dashboardFocus={dashboardFocus}
-        onDashboardFocusChange={setDashboardFocus}
+        onDashboardFocusChange={(focus) => {
+          setDashboardFocus(focus);
+          if (isMobile) {
+            if (focus === "kanban") setMobileTab("kanban");
+            else if (focus === "day") setMobileTab("habits");
+          }
+        }}
         onOpenWishlist={() => setIsWishlistOpen(true)}
       />
 
