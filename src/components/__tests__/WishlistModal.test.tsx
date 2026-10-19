@@ -87,4 +87,18 @@ describe("WishlistModal (Seam: Ticket 06 Couple Reward Wishlist)", () => {
     expect(screen.getByText(/Weekend Road Trip/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "30 PTS" })).toBeInTheDocument();
   });
+
+  it("allows deleting an existing reward", () => {
+    render(
+      <TestWrapper>
+        <WishlistModal isOpen={true} onClose={() => {}} />
+      </TestWrapper>
+    );
+
+    expect(screen.getByText(/Cook Favorite Dinner/i)).toBeInTheDocument();
+    const deleteBtn = screen.getByRole("button", { name: /Delete Cook Favorite Dinner/i });
+    fireEvent.click(deleteBtn);
+
+    expect(screen.queryByText(/Cook Favorite Dinner/i)).not.toBeInTheDocument();
+  });
 });

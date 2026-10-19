@@ -473,6 +473,12 @@ export default function DocsPage() {
                 <li>
                   <strong>Live Real-Time Calendar Date:</strong> Resolved system date bug where calendar and task boards were hardcoded to October 14, 2026, dynamically binding to the user&rsquo;s live current device day while preserving test suite determinism.
                 </li>
+                <li>
+                  <strong>Wishlist Shop Hover Polish &amp; Headroom:</strong> Added top headroom padding to the scroll container in the Couple Wishlist Shop modal, preventing card hover elevation (<code className="font-bold">translateY(-2px)</code>) on the first reward card from clipping or overlapping under the modal header border.
+                </li>
+                <li>
+                  <strong>Delete Existing Rewards Option:</strong> Added a 1-tap delete button (trash icon) to every wishlist item card, empowering couples to delete existing rewards and customize their rewards shop to their liking.
+                </li>
               </ul>
             </article>
 

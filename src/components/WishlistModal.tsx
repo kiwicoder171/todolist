@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useHousehold } from "@/context/HouseholdContext";
 import { DEFAULT_REWARDS, RewardItem } from "@/utils/gamification";
-import { Plus, X, Sparkles, Check } from "lucide-react";
+import { Plus, X, Sparkles, Check, Trash2 } from "lucide-react";
 
 export interface WishlistModalProps {
   isOpen: boolean;
@@ -47,6 +47,11 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
         localStorage.setItem("couple_task_hub_wishlist", JSON.stringify(newItems));
       } catch {}
     }
+  };
+
+  const handleDeleteReward = (id: string) => {
+    const next = rewards.filter((r) => r.id !== id);
+    saveRewards(next);
   };
 
   React.useEffect(() => {
@@ -138,26 +143,52 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
           </div>
         )}
 
-        <div className="space-y-2.5 max-h-72 overflow-y-auto pr-1">
-          {rewards.map((r) => (
-            <div
-              key={r.id}
-              className="border-2 border-black rounded-2xl p-3 flex items-center justify-between bg-zinc-50 squircle-card hover:border-black transition"
-            >
-              <div className="pr-2 min-w-0">
-                <h4 className="font-heading font-bold text-xs text-black truncate">
-                  {r.title}
-                </h4>
-                <p className="text-[11px] text-zinc-500">{r.desc}</p>
-              </div>
+        {/* Scroll list with top headroom so hover elevation (translateY(-2px)) never clips under border */}
+        <div className="space-y-2.5 max-h-72 overflow-y-auto pt-2 pb-1.5 px-1 -mx-1">
+          {rewards.length === 0 ? (
+            <div className="py-6 text-center text-xs text-zinc-400 font-medium">
+              <p>No rewards yet in your wishlist.</p>
               <button
-                onClick={() => handleRedeem(r)}
-                className="bg-black text-white text-xs font-heading font-extrabold px-3.5 py-1.5 rounded-full hover:bg-zinc-800 transition shrink-0"
+                type="button"
+                onClick={() => saveRewards(DEFAULT_REWARDS)}
+                className="mt-2 text-[11px] font-heading font-bold underline text-black hover:text-zinc-600 cursor-pointer"
               >
-                {r.cost} PTS
+                Restore default rewards
               </button>
             </div>
-          ))}
+          ) : (
+            rewards.map((r) => (
+              <div
+                key={r.id}
+                className="border-2 border-black rounded-2xl p-3 flex items-center justify-between bg-zinc-50 squircle-card hover:border-black transition gap-2"
+              >
+                <div className="pr-1 min-w-0 flex-1">
+                  <h4 className="font-heading font-bold text-xs text-black truncate">
+                    {r.title}
+                  </h4>
+                  <p className="text-[11px] text-zinc-500 truncate">{r.desc}</p>
+                </div>
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => handleRedeem(r)}
+                    className="bg-black text-white text-xs font-heading font-extrabold px-3.5 py-1.5 rounded-full hover:bg-zinc-800 transition shrink-0 active:scale-95 cursor-pointer shadow-xs"
+                  >
+                    {r.cost} PTS
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteReward(r.id)}
+                    aria-label={`Delete ${r.title}`}
+                    title="Delete reward"
+                    className="w-7 h-7 rounded-full border border-zinc-200 hover:border-red-500 hover:bg-red-50 text-zinc-400 hover:text-red-600 flex items-center justify-center transition active:scale-90 cursor-pointer shrink-0"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
         </div>
 
         {/* Custom Reward Creator */}
