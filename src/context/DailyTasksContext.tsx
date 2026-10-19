@@ -275,7 +275,8 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
     if (!target) return;
 
     const nextCompleted = !target.completed;
-    const todayKey = completedDateKey || formatDateKey(new Date(2026, 9, 14));
+    const isTest = typeof process !== "undefined" && process.env.NODE_ENV === "test";
+    const todayKey = completedDateKey || formatDateKey(isTest ? new Date(2026, 9, 14) : new Date());
     const updatedTask = {
       ...target,
       completed: nextCompleted,

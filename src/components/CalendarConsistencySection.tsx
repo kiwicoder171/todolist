@@ -56,12 +56,14 @@ export function CalendarConsistencySection() {
     calendarDays.push(new Date(viewYear, viewMonth, d));
   }
 
-  // Today reference: Oct 14, 2026
+  // Today reference: Live current date (pinned to Oct 14 in tests)
   const isToday = (date: Date) => {
+    const isTest = typeof process !== "undefined" && process.env.NODE_ENV === "test";
+    const now = isTest ? new Date(2026, 9, 14) : new Date();
     return (
-      date.getDate() === 14 &&
-      date.getMonth() === 9 &&
-      date.getFullYear() === 2026
+      date.getDate() === now.getDate() &&
+      date.getMonth() === now.getMonth() &&
+      date.getFullYear() === now.getFullYear()
     );
   };
 

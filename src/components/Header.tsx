@@ -60,15 +60,15 @@ export function Header({
     <>
       <header className="border-b-2 border-black bg-white sticky top-0 z-40 shadow-[0_2px_0_0_rgba(0,0,0,0.05)] w-full">
         {/* Tier 1: Brand Identity & Global Actions Dock */}
-        <div className="px-3 sm:px-5 py-2 sm:py-2.5 flex items-center justify-between gap-3 border-b border-zinc-100">
+        <div className="px-3 sm:px-5 py-2 sm:py-2.5 flex items-center justify-between gap-2 sm:gap-3 border-b border-zinc-100">
           {/* Brand & Space Mode */}
-          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-black text-white flex items-center justify-center border-2 border-black shadow-[2px_2px_0_0_#000] p-1.5 transition-transform hover:scale-105 shrink-0">
-              <Logo size={22} inverted />
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-2xl bg-black text-white flex items-center justify-center border-2 border-black shadow-[2px_2px_0_0_#000] p-1.5 transition-transform hover:scale-105 shrink-0">
+              <Logo size={20} inverted />
             </div>
-            <div className="min-w-0">
-              <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap sm:flex-nowrap">
-                <h1 className="font-heading font-extrabold text-sm sm:text-base tracking-tight text-black uppercase truncate">
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-1.5 flex-nowrap">
+                <h1 className="font-heading font-extrabold text-xs sm:text-base tracking-tight text-black uppercase truncate">
                   Couple Task Hub
                 </h1>
                 <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full border border-black bg-[#f4f4f5] text-black shrink-0">
@@ -80,7 +80,7 @@ export function Header({
                     if (circle) setIsInviteOpen(true);
                     else if (user) setIsOnboardingOpen(true);
                   }}
-                  className={`text-[9px] sm:text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full border border-black ${modeInfo.bg} text-black shrink-0 cursor-pointer shadow-xs hover:opacity-85 transition`}
+                  className={`hidden sm:inline-flex text-[9px] sm:text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full border border-black ${modeInfo.bg} text-black shrink-0 cursor-pointer shadow-xs hover:opacity-85 transition`}
                   title="Active Space Mode (Click to Change)"
                 >
                   {modeInfo.icon} {modeInfo.label}
@@ -88,7 +88,7 @@ export function Header({
               </div>
               <p
                 suppressHydrationWarning
-                className="text-[11px] sm:text-xs text-zinc-500 font-medium truncate max-w-[200px] sm:max-w-xs"
+                className="text-[10px] sm:text-xs text-zinc-500 font-medium truncate max-w-[140px] sm:max-w-xs"
               >
                 {circle
                   ? circle.name ||
@@ -123,11 +123,11 @@ export function Header({
               )}
             </button>
 
-            {/* Widgets Preview */}
+            {/* Widgets Preview - Desktop only to preserve mobile header space */}
             <button
               type="button"
               onClick={() => setIsWidgetOpen(true)}
-              className="p-1.5 sm:px-2.5 sm:py-1 rounded-full border-2 border-black bg-white hover:bg-zinc-100 transition text-xs font-heading font-extrabold flex items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer active:translate-x-0.5 active:translate-y-0.5"
+              className="hidden sm:flex p-1.5 sm:px-2.5 sm:py-1 rounded-full border-2 border-black bg-white hover:bg-zinc-100 transition text-xs font-heading font-extrabold items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer active:translate-x-0.5 active:translate-y-0.5"
               title="Home Screen Widgets"
               aria-label="Open widgets"
             >
@@ -140,12 +140,12 @@ export function Header({
               <button
                 type="button"
                 onClick={() => setIsInviteOpen(true)}
-                className="p-1.5 sm:px-2.5 sm:py-1 rounded-full border-2 border-black bg-zinc-100 hover:bg-black hover:text-white transition text-xs font-heading font-extrabold flex items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer"
+                className="p-1.5 sm:px-2.5 sm:py-1 rounded-full border-2 border-black bg-zinc-100 hover:bg-black hover:text-white transition text-xs font-heading font-extrabold flex items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer max-w-[85px] sm:max-w-none"
                 title="Circle Details & Invite Members"
                 aria-label="Circle Details"
               >
-                <Users className="w-3.5 h-3.5" />
-                <span className="text-[11px] font-black">{circle.joinCode || "Invite"}</span>
+                <Users className="w-3.5 h-3.5 shrink-0" />
+                <span className="text-[10px] sm:text-[11px] font-black truncate">{circle.joinCode || "Invite"}</span>
               </button>
             ) : (
               <button
@@ -161,15 +161,15 @@ export function Header({
                 title={user ? "Join or Create a Space" : "Sign up or Log in to create or join a circle"}
                 aria-label="Join Circle"
               >
-                <Users className="w-3.5 h-3.5 text-zinc-600" />
-                <span className="text-[11px] font-black">Join Circle</span>
+                <Users className="w-3.5 h-3.5 text-zinc-600 shrink-0" />
+                <span className="text-[10px] sm:text-[11px] font-black">Join</span>
               </button>
             )}
 
-            {/* Docs & Changelog */}
+            {/* Docs & Changelog - Desktop only */}
             <Link
               href="/docs"
-              className="p-1.5 sm:px-2.5 sm:py-1 rounded-full border-2 border-black bg-white hover:bg-black hover:text-white transition text-xs font-heading font-extrabold flex items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer active:translate-x-0.5 active:translate-y-0.5"
+              className="hidden sm:flex p-1.5 sm:px-2.5 sm:py-1 rounded-full border-2 border-black bg-white hover:bg-black hover:text-white transition text-xs font-heading font-extrabold items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer active:translate-x-0.5 active:translate-y-0.5"
               title="Documentation & Guide"
               aria-label="Documentation"
             >
@@ -179,9 +179,9 @@ export function Header({
 
             {/* Account Profile or Log In */}
             {user ? (
-              <div className="flex items-center gap-1 bg-[#f4f4f5] px-2 py-0.5 sm:py-1 rounded-full border border-zinc-300 text-xs shrink-0 font-heading shadow-xs">
-                <UserIcon className="w-3 h-3 text-zinc-700" />
-                <span className="font-extrabold text-black max-w-[70px] sm:max-w-[90px] truncate text-[11px]">
+              <div className="flex items-center gap-1 bg-[#f4f4f5] px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full border border-zinc-300 text-xs shrink-0 font-heading shadow-xs">
+                <UserIcon className="w-3 h-3 text-zinc-700 shrink-0" />
+                <span className="font-extrabold text-black max-w-[55px] sm:max-w-[90px] truncate text-[10px] sm:text-[11px]">
                   @{user.username}
                 </span>
                 <button
@@ -198,21 +198,21 @@ export function Header({
               <button
                 type="button"
                 onClick={() => openAuthModal("login")}
-                className="px-2.5 py-1 rounded-full border-2 border-black bg-amber-300 hover:bg-amber-400 text-black text-xs font-heading font-extrabold flex items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer transition active:translate-x-0.5 active:translate-y-0.5"
+                className="px-2 sm:px-2.5 py-1 rounded-full border-2 border-black bg-amber-300 hover:bg-amber-400 text-black text-xs font-heading font-extrabold flex items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer transition active:translate-x-0.5 active:translate-y-0.5"
                 title="Sign In or Register"
                 aria-label="Log In"
               >
-                <LogIn className="w-3 h-3" />
-                <span className="text-[11px]">Log In</span>
+                <LogIn className="w-3 h-3 shrink-0" />
+                <span className="text-[10px] sm:text-[11px]">Log In</span>
               </button>
             )}
           </div>
         </div>
 
         {/* Tier 2: Workspace View & Context Controls Bar */}
-        <div className="px-3 sm:px-5 py-1.5 bg-[#fafafa] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 border-t border-black/5">
-          {/* Left: Board Focus Selector (Cleanly isolated on the left, NEVER overlapped) */}
-          <div className="flex items-center gap-1.5 shrink-0 overflow-x-auto py-0.5">
+        <div className="px-3 sm:px-5 py-1.5 bg-[#fafafa] flex items-center justify-between gap-2 border-t border-black/5">
+          {/* Left: Desktop Board Focus Selector (Hidden on mobile where bottom navigation handles tab switching) */}
+          <div className="hidden md:flex items-center gap-1.5 shrink-0 overflow-x-auto py-0.5">
             <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 font-heading shrink-0 mr-0.5 hidden xs:inline">
               View:
             </span>
@@ -250,8 +250,8 @@ export function Header({
             </div>
           </div>
 
-          {/* Right: User Switcher & Streaks (Isolated on the right, zero collision) */}
-          <div className="flex items-center justify-between sm:justify-end gap-1.5 sm:gap-2 flex-wrap sm:flex-nowrap shrink-0">
+          {/* Right on Desktop, Full Width Space-Between on Mobile: User Switcher & Streaks */}
+          <div className="flex items-center justify-between md:justify-end gap-1.5 sm:gap-2 w-full md:w-auto shrink-0">
             {/* Active Partner Switcher */}
             {spaceMode === "solo" ? (
               <div

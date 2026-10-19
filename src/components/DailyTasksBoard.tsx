@@ -29,7 +29,8 @@ export function DailyTasksBoard() {
   const myName = activePartner === "alex" ? partnerNames.alex : partnerNames.sam;
 
   // Reference "Today" date
-  const today = new Date(2026, 9, 14);
+  const isTest = typeof process !== "undefined" && process.env.NODE_ENV === "test";
+  const today = isTest ? new Date(2026, 9, 14) : new Date();
 
   // Rollover calculation engine
   const dateTasks = calculateRolloverTasks(tasks, selectedDate, today);

@@ -23,8 +23,8 @@ export function MobileShell({
 }: MobileShellProps) {
   return (
     <div className="w-full max-w-md mx-auto min-h-[calc(100vh-80px)] flex flex-col pb-24 relative bg-[#fafafa]">
-      {/* 7-Day Week Calendar Strip on Habits, Daily, and Progress tabs */}
-      {activeTab !== "kanban" && (
+      {/* 7-Day Week Calendar Strip on Habits and Daily tabs only (redundant on Stats which has its own calendar consistency board) */}
+      {(activeTab === "habits" || activeTab === "daily") && (
         <div className="px-3.5 pt-2 pb-1">
           <MobileWeekCalendar />
         </div>

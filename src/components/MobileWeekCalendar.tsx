@@ -18,8 +18,9 @@ export function MobileWeekCalendar() {
   const { routines, isCompleted } = useRoutines();
   const { tasks } = useDailyTasks();
 
-  // "Today" reference: Oct 14, 2026
-  const today = useMemo(() => new Date(2026, 9, 14), []);
+  // "Today" reference: Live current date (pinned to Oct 14 in tests)
+  const isTest = typeof process !== "undefined" && process.env.NODE_ENV === "test";
+  const today = useMemo(() => (isTest ? new Date(2026, 9, 14) : new Date()), [isTest]);
 
   // Base Monday date for the currently visible week
   const getMonday = (d: Date) => {

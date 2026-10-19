@@ -464,6 +464,15 @@ export default function DocsPage() {
                 <li>
                   <strong>Fixed Mock Data Restoration on Page Refresh:</strong> Resolved an issue where refreshing the browser while logged in caused all pre-login mock routines, tasks, Kanban items, and &ldquo;Alex &amp; Sam&rdquo; streaks to reappear on screen due to an asynchronous authentication gap. Added synchronous session caching and auth loading guards across all boards.
                 </li>
+                <li>
+                  <strong>Fixed Mobile Header Overlapping &amp; Negative Space:</strong> Polished top navigation layout on mobile screens by hiding redundant desktop controls (Widgets preview, Docs link, and Desktop multi-board view switcher), compressing action dock buttons, and streamlining partner switcher and streak counters into a single balanced row with zero empty negative space.
+                </li>
+                <li>
+                  <strong>Removed Duplicate Calendar on Stats Tab:</strong> Fixed mobile navigation so the 7-day week calendar strip is only shown on Habits and Daily tabs, removing the redundant duplicate calendar from the Stars/Stats screen.
+                </li>
+                <li>
+                  <strong>Live Real-Time Calendar Date:</strong> Resolved system date bug where calendar and task boards were hardcoded to October 14, 2026, dynamically binding to the user&rsquo;s live current device day while preserving test suite determinism.
+                </li>
               </ul>
             </article>
 

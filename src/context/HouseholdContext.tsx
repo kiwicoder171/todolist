@@ -146,7 +146,9 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
 
   const [activePartner, setActivePartner] = useState<Partner>("alex");
   const [assigneeFilter, setAssigneeFilter] = useState<AssigneeFilter>("all");
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date(2026, 9, 14)); // Oct 14, 2026
+  const [selectedDate, setSelectedDate] = useState<Date>(() =>
+    isTest ? new Date(2026, 9, 14) : new Date()
+  );
   const [frozenDates, setFrozenDates] = useState<Record<string, boolean>>({
     "2026-10-18": true,
   });
