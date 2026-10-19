@@ -123,36 +123,49 @@ export const SEED_TASKS: DailyTask[] = [
 
 const TASKS_STORAGE_KEY = "couple_task_hub_daily_tasks";
 
+export const isSeedTasks = (taskList: DailyTask[]) => {
+  if (!Array.isArray(taskList) || taskList.length !== SEED_TASKS.length) return false;
+  return taskList.every((t) => SEED_TASKS.some((st) => st.id === t.id));
+};
+
 export function DailyTasksProvider({ children }: { children: ReactNode }) {
   const isTest = typeof process !== "undefined" && process.env.NODE_ENV === "test";
   const { circle } = useHousehold();
   const circleId = circle?.id;
   const authContext = useOptionalAuth();
   const user = authContext?.user;
+  const authLoading = authContext?.loading ?? false;
 
   const [tasks, setTasks] = useState<DailyTask[]>(() => {
-    if (user && !circleId) return [];
-    if (isTest && typeof window !== "undefined") {
+    if (typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem(TASKS_STORAGE_KEY);
         if (stored) {
           const parsed = JSON.parse(stored);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+          if (Array.isArray(parsed)) {
+            if (user && isSeedTasks(parsed)) return [];
+            return parsed;
+          }
         }
       } catch {}
     }
-    return user && !circleId ? [] : SEED_TASKS;
+    return user ? [] : SEED_TASKS;
   });
 
   // Client-side hydration from localStorage (runs after mount, eliminating SSR hydration mismatch)
   useEffect(() => {
-    if (isTest || typeof window === "undefined" || (user && !circleId)) return;
+    if (isTest || typeof window === "undefined") return;
     try {
       const stored = localStorage.getItem(TASKS_STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setTasks(parsed);
+        if (Array.isArray(parsed)) {
+          if (user && isSeedTasks(parsed)) {
+            setTasks([]);
+            localStorage.removeItem(TASKS_STORAGE_KEY);
+          } else if (parsed.length > 0 || user) {
+            setTasks(parsed);
+          }
         }
       }
     } catch {}
@@ -161,23 +174,33 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
 
   // Ensure mock tasks vanish when user logs in without circle, and reappear if unauthenticated
   useEffect(() => {
+    if (authLoading) return;
+
     if (user && !circleId) {
-      setTasks([]);
-      if (typeof window !== "undefined") {
-        try {
-          localStorage.removeItem(TASKS_STORAGE_KEY);
-        } catch {}
-      }
+      setTasks((prev) => {
+        if (isSeedTasks(prev)) {
+          if (typeof window !== "undefined") {
+            try {
+              localStorage.removeItem(TASKS_STORAGE_KEY);
+            } catch {}
+          }
+          return [];
+        }
+        return prev;
+      });
     } else if (!user && !circleId) {
-      setTasks(SEED_TASKS);
+      setTasks((prev) => {
+        if (prev.length === 0) return SEED_TASKS;
+        return prev;
+      });
     }
-  }, [user, circleId]);
+  }, [user, circleId, authLoading]);
 
   // Real-time listener from Firestore
   useEffect(() => {
     if (!circleId) return;
     const unsub = subscribeToDailyTasks(circleId, (remoteTasks) => {
-      if (remoteTasks && remoteTasks.length > 0) {
+      if (remoteTasks) {
         setTasks(remoteTasks);
         try {
           localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(remoteTasks));

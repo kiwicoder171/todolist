@@ -2,13 +2,31 @@ import { describe, it, expect } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import React from "react";
 import { HouseholdProvider } from "@/context/HouseholdContext";
-import { AuthContext } from "@/context/AuthContext";
+import { AuthContext, AuthProvider, AUTH_STORAGE_KEY } from "@/context/AuthContext";
 import { RoutinesProvider } from "@/context/RoutinesContext";
 import { DailyTasksProvider } from "@/context/DailyTasksContext";
 import { KanbanProvider } from "@/context/KanbanContext";
 import { CoupleTaskHubApp } from "../CoupleTaskHubApp";
 import { Header } from "../Header";
 import { FilterBar } from "../FilterBar";
+const storage: Record<string, string> = {};
+const mockLocalStorage = {
+  getItem: (key: string) => storage[key] ?? null,
+  setItem: (key: string, value: string) => {
+    storage[key] = value;
+  },
+  removeItem: (key: string) => {
+    delete storage[key];
+  },
+  clear: () => {
+    Object.keys(storage).forEach((k) => delete storage[k]);
+  },
+};
+
+Object.defineProperty(window, "localStorage", {
+  value: mockLocalStorage,
+  writable: true,
+});
 
 describe("App Shell Components (Seam: Header & FilterBar)", () => {
   it("renders brand title, partner switcher, and streak counter", () => {
@@ -160,6 +178,47 @@ describe("App Shell Components (Seam: Header & FilterBar)", () => {
     expect(screen.queryByText(/Pick up dry cleaning & winter coats/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/Research Hakone onsens & ryokan/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/Replace living room light dimmer/i)).not.toBeInTheDocument();
+  });
+
+  it("does NOT bring back mock data when page is refreshed while user was logged in", () => {
+    // Simulate user having logged in and session stored in localStorage
+    const cachedUser = {
+      uid: "user-456",
+      username: "sarah",
+      email: "sarah@example.com",
+      circleId: null,
+    };
+    window.localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(cachedUser));
+
+    render(
+      <AuthProvider>
+        <HouseholdProvider>
+          <RoutinesProvider>
+            <DailyTasksProvider>
+              <KanbanProvider>
+                <CoupleTaskHubApp forcedIsMobile={false} />
+              </KanbanProvider>
+            </DailyTasksProvider>
+          </RoutinesProvider>
+        </HouseholdProvider>
+      </AuthProvider>
+    );
+
+    // 1. Should show user's space, NOT Alex & Sam
+    expect(screen.getByText("sarah's Space")).toBeInTheDocument();
+    expect(screen.queryByText(/Alex & Sam's Space/i)).not.toBeInTheDocument();
+
+    // 2. Streaks and points should stay 0
+    expect(screen.getByText(/0 DAYS/i)).toBeInTheDocument();
+    expect(screen.getByText(/0 PTS/i)).toBeInTheDocument();
+
+    // 3. Mock data MUST NOT be back
+    expect(screen.queryByText(/15-min daily sync & check-in/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Pick up dry cleaning & winter coats/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Research Hakone onsens & ryokan/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Replace living room light dimmer/i)).not.toBeInTheDocument();
+
+    window.localStorage.removeItem(AUTH_STORAGE_KEY);
   });
 });
 

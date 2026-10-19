@@ -112,10 +112,11 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
   const isTest = typeof process !== "undefined" && process.env.NODE_ENV === "test";
   const authContext = useOptionalAuth();
   const user = authContext?.user;
+  const authLoading = authContext?.loading ?? false;
   const updateUserCircle = authContext?.updateUserCircle || (async () => {});
 
   const [circle, setCircle] = useState<CircleState | null>(() => {
-    if (isTest && typeof window !== "undefined") {
+    if (typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
@@ -128,7 +129,7 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
   });
 
   const [partnerNames, setPartnerNames] = useState<Record<Partner, string>>(() => {
-    if (isTest && typeof window !== "undefined") {
+    if (typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
@@ -136,6 +137,9 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
           if (parsed.partnerNames) return parsed.partnerNames;
         }
       } catch {}
+    }
+    if (user) {
+      return { alex: user.username || "You", sam: "Partner" };
     }
     return { alex: "Alex", sam: "Sam" };
   });
@@ -148,7 +152,7 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
   });
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
   const [spaceMode, setSpaceModeState] = useState<SpaceMode>(() => {
-    if (isTest && typeof window !== "undefined") {
+    if (typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
@@ -162,7 +166,7 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
   });
 
   const [scores, setScores] = useState<Record<Partner, PartnerScoreState>>(() => {
-    if (isTest && typeof window !== "undefined") {
+    if (typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
@@ -171,6 +175,9 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
           if (parsed.scores) return parsed.scores;
         }
       } catch {}
+    }
+    if (user) {
+      return { alex: { points: 0, streak: 0 }, sam: { points: 0, streak: 0 } };
     }
     return MOCK_SCORES;
   });
@@ -195,6 +202,8 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
   // - Pre-login: mock names "Alex & Sam", mock scores (12 & 9 pts)
   // - Logged in without circle: user's space, clean scores (0 pts, 0 streak), NO "Alex & Sam"
   useEffect(() => {
+    if (authLoading) return;
+
     if (user && !circle) {
       setScores({
         alex: { points: 0, streak: 0 },
@@ -218,7 +227,7 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
         return prev;
       });
     }
-  }, [user, circle]);
+  }, [user, circle, authLoading]);
 
   // Save to localStorage whenever critical state updates
   const saveState = (

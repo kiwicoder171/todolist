@@ -113,36 +113,49 @@ export const SEED_ROUTINES: Routine[] = [
 
 const ROUTINES_STORAGE_KEY = "couple_task_hub_routines";
 
+export const isSeedRoutines = (routineList: Routine[]) => {
+  if (!Array.isArray(routineList) || routineList.length !== SEED_ROUTINES.length) return false;
+  return routineList.every((r) => SEED_ROUTINES.some((sr) => sr.id === r.id));
+};
+
 export function RoutinesProvider({ children }: { children: ReactNode }) {
   const isTest = typeof process !== "undefined" && process.env.NODE_ENV === "test";
   const { circle } = useHousehold();
   const circleId = circle?.id;
   const authContext = useOptionalAuth();
   const user = authContext?.user;
+  const authLoading = authContext?.loading ?? false;
 
   const [routines, setRoutines] = useState<Routine[]>(() => {
-    if (user && !circleId) return [];
-    if (isTest && typeof window !== "undefined") {
+    if (typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem(ROUTINES_STORAGE_KEY);
         if (stored) {
           const parsed = JSON.parse(stored);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+          if (Array.isArray(parsed)) {
+            if (user && isSeedRoutines(parsed)) return [];
+            return parsed;
+          }
         }
       } catch {}
     }
-    return user && !circleId ? [] : SEED_ROUTINES;
+    return user ? [] : SEED_ROUTINES;
   });
 
   // Client-side hydration from localStorage (runs after mount, eliminating SSR hydration mismatch)
   useEffect(() => {
-    if (isTest || typeof window === "undefined" || (user && !circleId)) return;
+    if (isTest || typeof window === "undefined") return;
     try {
       const stored = localStorage.getItem(ROUTINES_STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setRoutines(parsed);
+        if (Array.isArray(parsed)) {
+          if (user && isSeedRoutines(parsed)) {
+            setRoutines([]);
+            localStorage.removeItem(ROUTINES_STORAGE_KEY);
+          } else if (parsed.length > 0 || user) {
+            setRoutines(parsed);
+          }
         }
       }
     } catch {}
@@ -150,23 +163,33 @@ export function RoutinesProvider({ children }: { children: ReactNode }) {
 
   // Ensure mock routines vanish when user logs in without circle, and reappear if unauthenticated
   useEffect(() => {
+    if (authLoading) return;
+
     if (user && !circleId) {
-      setRoutines([]);
-      if (typeof window !== "undefined") {
-        try {
-          localStorage.removeItem(ROUTINES_STORAGE_KEY);
-        } catch {}
-      }
+      setRoutines((prev) => {
+        if (isSeedRoutines(prev)) {
+          if (typeof window !== "undefined") {
+            try {
+              localStorage.removeItem(ROUTINES_STORAGE_KEY);
+            } catch {}
+          }
+          return [];
+        }
+        return prev;
+      });
     } else if (!user && !circleId) {
-      setRoutines(SEED_ROUTINES);
+      setRoutines((prev) => {
+        if (prev.length === 0) return SEED_ROUTINES;
+        return prev;
+      });
     }
-  }, [user, circleId]);
+  }, [user, circleId, authLoading]);
 
   // Real-time listener for routines from Firebase
   useEffect(() => {
     if (!circleId) return;
     const unsub = subscribeToRoutines(circleId, (remoteRoutines) => {
-      if (remoteRoutines && remoteRoutines.length > 0) {
+      if (remoteRoutines) {
         setRoutines(remoteRoutines as Routine[]);
         try {
           localStorage.setItem(ROUTINES_STORAGE_KEY, JSON.stringify(remoteRoutines));

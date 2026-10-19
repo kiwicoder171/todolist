@@ -42,13 +42,47 @@ export interface AuthContextType {
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+export const AUTH_STORAGE_KEY = "couple_task_hub_auth_user";
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
-  const [user, setUser] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<UserProfile | null>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem(AUTH_STORAGE_KEY);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed && parsed.uid) return parsed;
+        }
+      } catch {}
+    }
+    return null;
+  });
+  const [loading, setLoading] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem(AUTH_STORAGE_KEY);
+        if (stored) return false;
+      } catch {}
+    }
+    return true;
+  });
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authModalMode, setAuthModalMode] = useState<"login" | "register">("login");
   const configured = isFirebaseConfigured();
+
+  const updateCachedUser = (profile: UserProfile | null) => {
+    setUser(profile);
+    if (typeof window !== "undefined") {
+      try {
+        if (profile) {
+          localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(profile));
+        } else {
+          localStorage.removeItem(AUTH_STORAGE_KEY);
+        }
+      } catch {}
+    }
+  };
 
   const openAuthModal = (mode: "login" | "register" = "login") => {
     setAuthModalMode(mode);
@@ -76,7 +110,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           userRef,
           (docSnap) => {
             if (docSnap.exists()) {
-              setUser(docSnap.data() as UserProfile);
+              updateCachedUser(docSnap.data() as UserProfile);
             } else {
               // Create initial profile if missing
               const initialProfile: UserProfile = {
@@ -90,14 +124,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               setDoc(userRef, initialProfile, { merge: true }).catch((err) =>
                 console.warn("Initial profile sync warning:", err?.message || err)
               );
-              setUser(initialProfile);
+              updateCachedUser(initialProfile);
             }
             setLoading(false);
           },
           (error) => {
             console.warn("User profile subscription warning:", error);
             // Fallback to local profile from auth user
-            setUser({
+            updateCachedUser({
               uid: fbUser.uid,
               email: fbUser.email,
               username: fbUser.displayName || fbUser.email?.split("@")[0] || "User",
@@ -110,7 +144,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         return () => unsubProfile();
       } else {
-        setUser(null);
+        updateCachedUser(null);
         setLoading(false);
       }
     });
@@ -178,7 +212,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
     await setDoc(doc(db, "users", newFbUser.uid), userProfile);
 
-    setUser(userProfile);
+    updateCachedUser(userProfile);
   };
 
   // Login via Username OR Email, and Password
@@ -215,7 +249,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     // Sign in with Firebase Auth using resolved email & password
-    await signInWithEmailAndPassword(auth, targetEmail, password);
+    const cred = await signInWithEmailAndPassword(auth, targetEmail, password);
+    const fbUser = cred.user;
+
+    // Immediately cache user profile to prevent mock data flash on refresh
+    if (db) {
+      try {
+        const userRef = doc(db, "users", fbUser.uid);
+        const snap = await getDoc(userRef);
+        if (snap.exists()) {
+          updateCachedUser(snap.data() as UserProfile);
+        } else {
+          updateCachedUser({
+            uid: fbUser.uid,
+            email: fbUser.email,
+            username: fbUser.displayName || cleanInput,
+            circleId: null,
+            partnerRole: null,
+            createdAt: new Date().toISOString(),
+          });
+        }
+      } catch {
+        updateCachedUser({
+          uid: fbUser.uid,
+          email: fbUser.email,
+          username: fbUser.displayName || cleanInput,
+          circleId: null,
+          partnerRole: null,
+        });
+      }
+    }
   };
 
   // Google Sign In (1-click)
@@ -258,7 +321,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         createdAt: new Date().toISOString(),
       };
       await setDoc(userRef, newProfile);
-      setUser(newProfile);
+      updateCachedUser(newProfile);
+    } else {
+      updateCachedUser(userSnap.data() as UserProfile);
     }
   };
 
@@ -267,7 +332,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (auth) {
       await firebaseSignOut(auth);
     }
-    setUser(null);
+    updateCachedUser(null);
     setFirebaseUser(null);
   };
 
@@ -281,7 +346,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       partnerRole: partnerRole || null,
     });
 
-    setUser((prev) => (prev ? { ...prev, circleId, partnerRole: partnerRole || null } : null));
+    setUser((prev) => {
+      const updated = prev ? { ...prev, circleId, partnerRole: partnerRole || null } : null;
+      updateCachedUser(updated);
+      return updated;
+    });
   };
 
   return (

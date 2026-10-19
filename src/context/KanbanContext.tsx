@@ -112,11 +112,17 @@ export const SEED_KANBAN_CARDS: KanbanCard[] = [
   },
 ];
 
+export const isSeedKanbanCards = (cardList: KanbanCard[]) => {
+  if (!Array.isArray(cardList) || cardList.length !== SEED_KANBAN_CARDS.length) return false;
+  return cardList.every((c) => SEED_KANBAN_CARDS.some((sc) => sc.id === c.id));
+};
+
 export function KanbanProvider({ children }: { children: ReactNode }) {
   const { activePartner, assigneeFilter, selectedDate, circle } = useHousehold();
   const circleId = circle?.id;
   const authContext = useOptionalAuth();
   const user = authContext?.user;
+  const authLoading = authContext?.loading ?? false;
   const {
     addDailyTask,
     removeTaskByKanbanId,
@@ -127,28 +133,35 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
   const isTest = typeof process !== "undefined" && process.env.NODE_ENV === "test";
 
   const [cards, setCards] = useState<KanbanCard[]>(() => {
-    if (user && !circleId) return [];
-    if (isTest && typeof window !== "undefined") {
+    if (typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem("couple_task_hub_kanban_cards");
         if (stored) {
           const parsed = JSON.parse(stored);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+          if (Array.isArray(parsed)) {
+            if (user && isSeedKanbanCards(parsed)) return [];
+            return parsed;
+          }
         }
       } catch {}
     }
-    return user && !circleId ? [] : SEED_KANBAN_CARDS;
+    return user ? [] : SEED_KANBAN_CARDS;
   });
 
   // Client-side hydration from localStorage (runs after mount, eliminating SSR hydration mismatch)
   useEffect(() => {
-    if (isTest || typeof window === "undefined" || (user && !circleId)) return;
+    if (isTest || typeof window === "undefined") return;
     try {
       const stored = localStorage.getItem("couple_task_hub_kanban_cards");
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setCards(parsed);
+        if (Array.isArray(parsed)) {
+          if (user && isSeedKanbanCards(parsed)) {
+            setCards([]);
+            localStorage.removeItem("couple_task_hub_kanban_cards");
+          } else if (parsed.length > 0 || user) {
+            setCards(parsed);
+          }
         }
       }
     } catch {}
@@ -156,23 +169,33 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
 
   // Ensure mock kanban cards vanish when user logs in without circle, and reappear if unauthenticated
   useEffect(() => {
+    if (authLoading) return;
+
     if (user && !circleId) {
-      setCards([]);
-      if (typeof window !== "undefined") {
-        try {
-          localStorage.removeItem("couple_task_hub_kanban_cards");
-        } catch {}
-      }
+      setCards((prev) => {
+        if (isSeedKanbanCards(prev)) {
+          if (typeof window !== "undefined") {
+            try {
+              localStorage.removeItem("couple_task_hub_kanban_cards");
+            } catch {}
+          }
+          return [];
+        }
+        return prev;
+      });
     } else if (!user && !circleId) {
-      setCards(SEED_KANBAN_CARDS);
+      setCards((prev) => {
+        if (prev.length === 0) return SEED_KANBAN_CARDS;
+        return prev;
+      });
     }
-  }, [user, circleId]);
+  }, [user, circleId, authLoading]);
 
   // Real-time listener for kanban cards from Firebase
   useEffect(() => {
     if (!circleId) return;
     const unsub = subscribeToKanbanCards(circleId, (remoteCards) => {
-      if (remoteCards && remoteCards.length > 0) {
+      if (remoteCards) {
         setCards(remoteCards);
         try {
           localStorage.setItem("couple_task_hub_kanban_cards", JSON.stringify(remoteCards));
