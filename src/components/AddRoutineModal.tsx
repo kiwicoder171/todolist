@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useHousehold, Assignee } from "@/context/HouseholdContext";
+import { useHousehold, Assignee, resolveIntentToAssignee } from "@/context/HouseholdContext";
 import { useRoutines, RoutineFrequency } from "@/context/RoutinesContext";
 import { X, Plus, Calendar, Check } from "lucide-react";
 
@@ -137,7 +137,7 @@ export function AddRoutineModal({
     e.preventDefault();
     if (!title.trim() || selectedDays.length === 0) return;
 
-    addRoutine(title.trim(), assignee, frequency);
+    addRoutine(title.trim(), resolveIntentToAssignee(assignee, activePartner), frequency);
     setTitle("");
     setSelectedDays([1, 2, 3, 4, 5, 6, 0]);
     onClose();

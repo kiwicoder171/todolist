@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Assignee } from "@/context/HouseholdContext";
+import { Assignee, useHousehold, resolveIntentToAssignee } from "@/context/HouseholdContext";
 import { KanbanStage, useKanban } from "@/context/KanbanContext";
 import { X, Plus } from "lucide-react";
 
@@ -17,6 +17,8 @@ export function KanbanCardModal({
   onClose,
 }: KanbanCardModalProps) {
   const { categories, addCard, addCategory } = useKanban();
+  const { activePartner, partnerNames } = useHousehold();
+  const partnerName = activePartner === "alex" ? partnerNames.sam : partnerNames.alex;
 
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState(
@@ -47,7 +49,13 @@ export function KanbanCardModal({
     e.preventDefault();
     if (!title.trim()) return;
 
-    addCard(title.trim(), category, stage, assignee, description.trim());
+    addCard(
+      title.trim(),
+      category,
+      stage,
+      resolveIntentToAssignee(assignee, activePartner),
+      description.trim()
+    );
     setTitle("");
     setDescription("");
     onClose();
@@ -202,7 +210,7 @@ export function KanbanCardModal({
                       : "border-black bg-white text-black hover:bg-zinc-100"
                   }`}
                 >
-                  {opt === "mine" ? "Me" : opt === "partner" ? "Partner" : "Both"}
+                  {opt === "mine" ? "Me" : opt === "partner" ? partnerName : "Both"}
                 </button>
               ))}
             </div>

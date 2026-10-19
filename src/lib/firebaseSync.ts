@@ -18,12 +18,27 @@ import { Routine } from "@/context/RoutinesContext";
 import { KanbanCard } from "@/context/KanbanContext";
 
 /**
+ * Sanitizes object keys, stripping any `undefined` values before sending to Firestore
+ * to prevent Firestore SDK from rejecting writes.
+ */
+export function sanitizeForFirestore<T extends Record<string, any>>(obj: T): Partial<T> {
+  const clean: any = {};
+  for (const key of Object.keys(obj)) {
+    if (obj[key] !== undefined) {
+      clean[key] = obj[key];
+    }
+  }
+  return clean;
+}
+
+/**
  * Saves or updates a circle in Firestore
  */
 export async function saveCircleToFirebase(circle: CircleState): Promise<void> {
   if (!db || !isFirebaseConfigured()) return;
   const circleRef = doc(db, "circles", circle.id);
-  await setDoc(circleRef, circle, { merge: true });
+  const clean = sanitizeForFirestore(circle);
+  await setDoc(circleRef, clean, { merge: true });
 }
 
 /**
@@ -74,7 +89,8 @@ export async function upsertDailyTaskToFirebase(
 ): Promise<void> {
   if (!db || !isFirebaseConfigured()) return;
   const taskRef = doc(db, "circles", circleId, "daily_tasks", task.id);
-  await setDoc(taskRef, task, { merge: true });
+  const clean = sanitizeForFirestore(task);
+  await setDoc(taskRef, clean, { merge: true });
 }
 
 export async function deleteDailyTaskFromFirebase(
@@ -107,7 +123,8 @@ export async function upsertRoutineToFirebase(
 ): Promise<void> {
   if (!db || !isFirebaseConfigured()) return;
   const routineRef = doc(db, "circles", circleId, "routines", routine.id);
-  await setDoc(routineRef, routine, { merge: true });
+  const clean = sanitizeForFirestore(routine);
+  await setDoc(routineRef, clean, { merge: true });
 }
 
 export async function deleteRoutineFromFirebase(
@@ -140,7 +157,8 @@ export async function upsertKanbanCardToFirebase(
 ): Promise<void> {
   if (!db || !isFirebaseConfigured()) return;
   const cardRef = doc(db, "circles", circleId, "kanban_cards", String(card.id));
-  await setDoc(cardRef, card, { merge: true });
+  const clean = sanitizeForFirestore(card);
+  await setDoc(cardRef, clean, { merge: true });
 }
 
 export async function deleteKanbanCardFromFirebase(
@@ -161,5 +179,6 @@ export async function updateScoresInFirebase(
 ): Promise<void> {
   if (!db || !isFirebaseConfigured()) return;
   const circleRef = doc(db, "circles", circleId);
-  await updateDoc(circleRef, { scores });
+  const clean = sanitizeForFirestore(scores);
+  await setDoc(circleRef, { scores: clean }, { merge: true });
 }

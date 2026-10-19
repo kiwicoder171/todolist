@@ -32,3 +32,4 @@ yarn-error.log*
 # Media & Generated Outputs
 brag-output/
 motion-film/
+graphify-out/

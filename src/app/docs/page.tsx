@@ -479,6 +479,18 @@ export default function DocsPage() {
                 <li>
                   <strong>Delete Existing Rewards Option:</strong> Added a 1-tap delete button (trash icon) to every wishlist item card, empowering couples to delete existing rewards and customize their rewards shop to their liking.
                 </li>
+                <li>
+                  <strong>Prevent Mobile Auto-Zoom on Input Focus:</strong> Added Next.js viewport locking (<code className="font-bold">maximumScale: 1, userScalable: false</code>) in root layout and enforced 16px font-size standards on mobile input fields, completely preventing iOS Safari from zooming into the screen when focusing task and habit inputs.
+                </li>
+                <li>
+                  <strong>Fixed Assignee Filter &amp; Partner Intent Inversion:</strong> Resolved issue where Partner 2 (Sam) adding a daily routine or kanban task marked &ldquo;Me&rdquo; caused the task to be attributed to Partner 1 and appear under the partner&rsquo;s filter instead. Implemented dynamic intent resolution (<code className="font-bold">resolveIntentToAssignee</code>) and contextual badge labeling (<code className="font-bold">getAssigneeLabel</code>).
+                </li>
+                <li>
+                  <strong>Fixed Daily Tasks Disappearing on Refresh:</strong> Resolved synchronization bug where daily tasks containing undefined fields failed during Firestore <code className="font-bold">setDoc</code> writes and were subsequently erased by empty remote snapshots on page refresh. Added recursive payload sanitization and resilient local-remote snapshot merging.
+                </li>
+                <li>
+                  <strong>Purged Mock Streaks &amp; Points for Logged-In Users:</strong> Removed lingering pre-login demo scores (9 PTS / 12 PTS) from local state, guaranteeing authenticated and circle spaces always display authentic, live household point balances and streak counters starting from clean state.
+                </li>
               </ul>
             </article>
 

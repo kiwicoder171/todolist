@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, KeyboardEvent } from "react";
-import { useHousehold, matchesAssigneeFilter, Assignee } from "@/context/HouseholdContext";
+import { useHousehold, matchesAssigneeFilter, Assignee, resolveIntentToAssignee, getAssigneeLabel } from "@/context/HouseholdContext";
 import {
   useDailyTasks,
   calculateRolloverTasks,
@@ -56,7 +56,7 @@ export function DailyTasksBoard() {
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && newTitle.trim()) {
-      addDailyTask(newTitle.trim(), newAssignee, selectedDate);
+      addDailyTask(newTitle.trim(), resolveIntentToAssignee(newAssignee, activePartner), selectedDate);
       setNewTitle("");
     }
   };
@@ -162,11 +162,7 @@ export function DailyTasksBoard() {
                         : "border border-black bg-[#f4f4f5] text-black"
                     }`}
                   >
-                    {t.assignee === "mine"
-                      ? "Me"
-                      : t.assignee === "partner"
-                      ? partnerNames.sam
-                      : "Both"}
+                    {getAssigneeLabel(t.assignee, activePartner, partnerNames)}
                   </span>
 
                   <button

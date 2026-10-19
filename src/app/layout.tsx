@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { HouseholdProvider } from "@/context/HouseholdContext";
@@ -8,6 +8,13 @@ import { DailyTasksProvider } from "@/context/DailyTasksContext";
 import { KanbanProvider } from "@/context/KanbanContext";
 import { PWARegistration } from "@/components/PWARegistration";
 import { Analytics } from "@vercel/analytics/next";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
 
 export const metadata: Metadata = {
   title: "Couple Task Hub",

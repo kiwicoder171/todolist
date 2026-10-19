@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useContext } from "react";
 import { DailyTask } from "@/context/DailyTasksContext";
-import { Assignee, HouseholdContext, formatDateKey } from "@/context/HouseholdContext";
+import { Assignee, HouseholdContext, formatDateKey, resolveIntentToAssignee, Partner } from "@/context/HouseholdContext";
 import { X, CornerDownRight, RefreshCw } from "lucide-react";
 
 export interface TaskDetailDrawerProps {
@@ -28,16 +28,22 @@ export function TaskDetailDrawer({
   const selectedDateKey = household?.selectedDate ? formatDateKey(household.selectedDate) : formatDateKey(new Date());
 
   const [title, setTitle] = useState("");
-  const [assignee, setAssignee] = useState<Assignee>("mine");
+  const [assigneeIntent, setAssigneeIntent] = useState<"mine" | "partner" | "both">("mine");
   const [notes, setNotes] = useState("");
+
+  const getAssigneeIntent = (rawAssignee: Assignee, partner: Partner): "mine" | "partner" | "both" => {
+    if (rawAssignee === "both") return "both";
+    const isMine = partner === "alex" ? rawAssignee === "mine" : rawAssignee === "partner";
+    return isMine ? "mine" : "partner";
+  };
 
   useEffect(() => {
     if (task) {
       setTitle(task.title);
-      setAssignee(task.assignee);
+      setAssigneeIntent(getAssigneeIntent(task.assignee, activePartner));
       setNotes(task.notes || "");
     }
-  }, [task]);
+  }, [task, activePartner]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -55,7 +61,11 @@ export function TaskDetailDrawer({
   const isRolledOver = task.originDate < selectedDateKey || task.originDate < task.targetDate;
 
   const handleSave = () => {
-    onSave(task.id, { title, assignee, notes });
+    onSave(task.id, {
+      title,
+      assignee: resolveIntentToAssignee(assigneeIntent, activePartner),
+      notes,
+    });
     onClose();
   };
 
@@ -122,8 +132,8 @@ export function TaskDetailDrawer({
             </label>
             <select
               id="drawer-task-assignee"
-              value={assignee}
-              onChange={(e) => setAssignee(e.target.value as Assignee)}
+              value={assigneeIntent}
+              onChange={(e) => setAssigneeIntent(e.target.value as "mine" | "partner" | "both")}
               className="w-full bg-[#f4f4f5] border-2 border-black rounded-xl p-2.5 text-xs font-heading font-bold uppercase text-black focus:outline-none"
             >
               <option value="mine">{myName} (You)</option>

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, KeyboardEvent } from "react";
-import { useHousehold, matchesAssigneeFilter, Assignee } from "@/context/HouseholdContext";
+import { useHousehold, matchesAssigneeFilter, Assignee, getAssigneeLabel } from "@/context/HouseholdContext";
 import {
   useRoutines,
   isRoutineScheduledForDate,
@@ -183,11 +183,7 @@ export function DailyRoutinesBoard() {
                         : "border border-black bg-[#f4f4f5] text-black"
                     }`}
                   >
-                    {r.assignee === "mine"
-                      ? "Me"
-                      : r.assignee === "partner"
-                      ? partnerNames.sam
-                      : "Both"}
+                    {getAssigneeLabel(r.assignee, activePartner, partnerNames)}
                   </span>
 
                   {/* Reorder Buttons */}

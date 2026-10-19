@@ -201,10 +201,17 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
     if (!circleId) return;
     const unsub = subscribeToDailyTasks(circleId, (remoteTasks) => {
       if (remoteTasks) {
-        setTasks(remoteTasks);
-        try {
-          localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(remoteTasks));
-        } catch {}
+        setTasks((prev) => {
+          const remoteIds = new Set(remoteTasks.map((t) => t.id));
+          const localOnly = prev.filter(
+            (t) => !remoteIds.has(t.id) && !isSeedTasks([t])
+          );
+          const merged = [...remoteTasks, ...localOnly];
+          try {
+            localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(merged));
+          } catch {}
+          return merged;
+        });
       }
     });
     return () => unsub();
@@ -258,9 +265,9 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
       targetDate: dateKey,
       originDate: dateKey,
       completed: false,
-      notes,
-      isKanbanSynced,
-      kanbanId,
+      notes: notes || "",
+      isKanbanSynced: Boolean(isKanbanSynced),
+      ...(kanbanId ? { kanbanId } : {}),
     };
     saveTasks((prev) => [...prev, newTask]);
     if (circleId) {

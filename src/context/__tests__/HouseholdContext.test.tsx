@@ -5,6 +5,10 @@ import {
   HouseholdProvider,
   useHousehold,
   matchesAssigneeFilter,
+  resolveIntentToAssignee,
+  getAssigneeLabel,
+  isMockScores,
+  MOCK_SCORES,
 } from "../HouseholdContext";
 
 describe("HouseholdContext & Assignee Filter (Seam: Household State)", () => {
@@ -72,6 +76,47 @@ describe("HouseholdContext & Assignee Filter (Seam: Household State)", () => {
       expect(matchesAssigneeFilter("partner", "alex", "partner")).toBe(true);
       expect(matchesAssigneeFilter("both", "alex", "partner")).toBe(true);
       expect(matchesAssigneeFilter("mine", "alex", "partner")).toBe(false);
+    });
+
+    it("correctly resolves intent to domain assignee for both alex and sam", () => {
+      // When Alex chooses 'mine' (Me), it maps to 'mine'
+      expect(resolveIntentToAssignee("mine", "alex")).toBe("mine");
+      // When Alex chooses 'partner' (Partner), it maps to 'partner'
+      expect(resolveIntentToAssignee("partner", "alex")).toBe("partner");
+
+      // When Sam chooses 'mine' (Me), it maps to 'partner' (Sam's domain assignee)
+      expect(resolveIntentToAssignee("mine", "sam")).toBe("partner");
+      // When Sam chooses 'partner' (Partner), it maps to 'mine' (Alex's domain assignee)
+      expect(resolveIntentToAssignee("partner", "sam")).toBe("mine");
+
+      // Both always maps to 'both'
+      expect(resolveIntentToAssignee("both", "alex")).toBe("both");
+      expect(resolveIntentToAssignee("both", "sam")).toBe("both");
+    });
+
+    it("returns correct relative user label based on who is viewing", () => {
+      const names = { alex: "Alex", sam: "Sam" };
+
+      // Alex viewing
+      expect(getAssigneeLabel("mine", "alex", names)).toBe("Me");
+      expect(getAssigneeLabel("partner", "alex", names)).toBe("Sam");
+      expect(getAssigneeLabel("both", "alex", names)).toBe("Both");
+
+      // Sam viewing
+      expect(getAssigneeLabel("partner", "sam", names)).toBe("Me");
+      expect(getAssigneeLabel("mine", "sam", names)).toBe("Alex");
+      expect(getAssigneeLabel("both", "sam", names)).toBe("Both");
+    });
+
+    it("identifies mock scores correctly", () => {
+      expect(isMockScores(MOCK_SCORES)).toBe(true);
+      expect(
+        isMockScores({
+          alex: { points: 0, streak: 0 },
+          sam: { points: 0, streak: 0 },
+        })
+      ).toBe(false);
+      expect(isMockScores(undefined)).toBe(false);
     });
   });
 

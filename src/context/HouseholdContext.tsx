@@ -90,6 +90,42 @@ export function matchesAssigneeFilter(
   return true;
 }
 
+/**
+ * Maps the user's intent in task/routine forms ("mine" -> Me, "partner" -> Partner, "both" -> Both)
+ * to the domain storage assignee relative to who is active.
+ * - When activePartner is "alex": Me -> "mine", Partner -> "partner", Both -> "both"
+ * - When activePartner is "sam":  Me -> "partner", Partner -> "mine", Both -> "both"
+ */
+export function resolveIntentToAssignee(
+  intent: "mine" | "partner" | "both",
+  activePartner: Partner
+): Assignee {
+  if (intent === "both") return "both";
+  if (activePartner === "alex") {
+    return intent === "mine" ? "mine" : "partner";
+  } else {
+    return intent === "mine" ? "partner" : "mine";
+  }
+}
+
+/**
+ * Maps a domain storage assignee to a relative user-facing label:
+ * - "Me" (if assigned to the currently active partner)
+ * - partnerName (if assigned to the other partner)
+ * - "Both" (if assigned to both)
+ */
+export function getAssigneeLabel(
+  assignee: Assignee,
+  activePartner: Partner,
+  partnerNames: Record<Partner, string>
+): string {
+  if (assignee === "both") return "Both";
+  const isMine =
+    activePartner === "alex" ? assignee === "mine" : assignee === "partner";
+  if (isMine) return "Me";
+  return activePartner === "alex" ? partnerNames.sam : partnerNames.alex;
+}
+
 const STORAGE_KEY = "couple_task_hub_household";
 
 function generateJoinCode(): string {
@@ -104,6 +140,16 @@ function generateJoinCode(): string {
 export const MOCK_SCORES: Record<Partner, PartnerScoreState> = {
   alex: { points: 12, streak: 4 },
   sam: { points: 9, streak: 2 },
+};
+
+export const isMockScores = (s: Record<Partner, PartnerScoreState> | undefined | null): boolean => {
+  if (!s || !s.alex || !s.sam) return false;
+  return (
+    s.alex.points === MOCK_SCORES.alex.points &&
+    s.alex.streak === MOCK_SCORES.alex.streak &&
+    s.sam.points === MOCK_SCORES.sam.points &&
+    s.sam.streak === MOCK_SCORES.sam.streak
+  );
 };
 
 export const HouseholdContext = createContext<HouseholdContextType | undefined>(undefined);
@@ -173,8 +219,12 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
           const parsed = JSON.parse(stored);
-          if (parsed.circle && parsed.scores) return parsed.scores;
-          if (parsed.scores) return parsed.scores;
+          if (parsed.scores) {
+            if ((user || parsed.circle) && isMockScores(parsed.scores)) {
+              return { alex: { points: 0, streak: 0 }, sam: { points: 0, streak: 0 } };
+            }
+            return parsed.scores;
+          }
         }
       } catch {}
     }
@@ -193,12 +243,20 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
         const parsed = JSON.parse(stored);
         if (parsed.circle) setCircle(parsed.circle);
         if (parsed.partnerNames) setPartnerNames(parsed.partnerNames);
-        if (parsed.scores) setScores(parsed.scores);
+        if (parsed.scores) {
+          if ((user || parsed.circle) && isMockScores(parsed.scores)) {
+            const clean = { alex: { points: 0, streak: 0 }, sam: { points: 0, streak: 0 } };
+            setScores(clean);
+            saveState(parsed.circle || circle, parsed.partnerNames || partnerNames, clean, parsed.spaceMode || spaceMode);
+          } else {
+            setScores(parsed.scores);
+          }
+        }
         if (parsed.spaceMode) setSpaceModeState(parsed.spaceMode);
         else if (parsed.circle?.mode) setSpaceModeState(parsed.circle.mode);
       }
     } catch {}
-  }, [isTest]);
+  }, [isTest, user]);
 
   // Synchronize mock vs authenticated state:
   // - Pre-login: mock names "Alex & Sam", mock scores (12 & 9 pts)
@@ -206,15 +264,19 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (authLoading) return;
 
-    if (user && !circle) {
-      setScores({
-        alex: { points: 0, streak: 0 },
-        sam: { points: 0, streak: 0 },
+    if (user) {
+      setScores((prev) => {
+        if (isMockScores(prev)) {
+          return { alex: { points: 0, streak: 0 }, sam: { points: 0, streak: 0 } };
+        }
+        return prev;
       });
-      setPartnerNames({
-        alex: user.username || "You",
-        sam: "Partner",
-      });
+      if (!circle) {
+        setPartnerNames({
+          alex: user.username || "You",
+          sam: "Partner",
+        });
+      }
     } else if (!user && !circle) {
       setPartnerNames({ alex: "Alex", sam: "Sam" });
       setScores((prev) => {
@@ -276,13 +338,17 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
         sam: remoteCircle.partnerName || "Partner",
       };
       setPartnerNames(names);
-      if ((remoteCircle as any).scores) {
-        setScores((remoteCircle as any).scores);
-      }
+      const cleanScores =
+        (remoteCircle as any).scores && !isMockScores((remoteCircle as any).scores)
+          ? (remoteCircle as any).scores
+          : user || remoteCircle
+          ? { alex: { points: 0, streak: 0 }, sam: { points: 0, streak: 0 } }
+          : scores;
+      setScores(cleanScores);
       if (user.partnerRole) {
         setActivePartner(user.partnerRole);
       }
-      saveState(remoteCircle, names, (remoteCircle as any).scores || scores);
+      saveState(remoteCircle, names, cleanScores);
     });
     return () => unsub();
   }, [user?.circleId, user?.partnerRole]);
@@ -298,7 +364,7 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
           sam: remoteCircle.partnerName || prev.sam,
         }));
       }
-      if ((remoteCircle as any).scores) {
+      if ((remoteCircle as any).scores && !isMockScores((remoteCircle as any).scores)) {
         setScores((remoteCircle as any).scores);
       }
     });
@@ -481,11 +547,15 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
 
   const updateScore = (partner: Partner, deltaPoints: number) => {
     setScores((prev) => {
+      const base =
+        (user || circle) && isMockScores(prev)
+          ? { alex: { points: 0, streak: 0 }, sam: { points: 0, streak: 0 } }
+          : prev;
       const updated = {
-        ...prev,
+        ...base,
         [partner]: {
-          ...prev[partner],
-          points: prev[partner].points + deltaPoints,
+          ...base[partner],
+          points: base[partner].points + deltaPoints,
         },
       };
       saveState(circle, partnerNames, updated);

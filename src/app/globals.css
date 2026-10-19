@@ -73,3 +73,15 @@ h1, h2, h3, h4, .font-heading {
 .segment-cell.filled {
   background: #18181b;
 }
+
+/* Prevent auto-zooming on focus in iOS Safari by ensuring font-size is at least 16px on mobile */
+@media screen and (max-width: 767px) {
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  input[type="password"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}

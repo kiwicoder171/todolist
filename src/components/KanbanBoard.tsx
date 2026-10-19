@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, DragEvent } from "react";
-import { useHousehold } from "@/context/HouseholdContext";
+import { useHousehold, getAssigneeLabel } from "@/context/HouseholdContext";
 import { KanbanStage, KanbanCard, useKanban } from "@/context/KanbanContext";
 import { KanbanCardModal } from "./KanbanCardModal";
 import { Plus, Check, ArrowRight, ArrowLeft, RotateCcw, Trash2 } from "lucide-react";
@@ -114,11 +114,7 @@ export function KanbanBoard({ isMobile = false }: KanbanBoardProps = {}) {
         <div className="flex items-center justify-between pt-2 border-t border-zinc-100 gap-1.5">
           <div className="flex items-center gap-1.5 min-w-0">
             <span className="text-[10px] font-heading font-bold text-zinc-600 truncate max-w-[70px] sm:max-w-none">
-              {card.assignee === "mine"
-                ? "Me"
-                : card.assignee === "partner"
-                ? partnerName
-                : "Both"}
+              {getAssigneeLabel(card.assignee, activePartner, partnerNames)}
             </span>
 
             {card.doToday ? (
