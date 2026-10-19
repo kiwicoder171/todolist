@@ -444,21 +444,41 @@ export default function DocsPage() {
               </p>
             </div>
 
-            {/* Timeline Item: v0.6.0 (Current Release) */}
+            {/* Timeline Item: v0.6.1 (Current Release) */}
             <article className="p-6 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-3">
               <div className="flex items-center justify-between flex-wrap gap-2">
                 <div className="flex items-center gap-2">
                   <span className="px-2.5 py-1 rounded-full border-2 border-black bg-black text-white font-heading font-black text-xs">
-                    v0.6.0
+                    v0.6.1
                   </span>
                   <h3 className="font-heading font-extrabold text-base text-black">
-                    Multi-Mode Spaces, In-App &amp; Push Notifications, and Home Screen Widgets
+                    v0.6.1 (still fixing)
                   </h3>
                 </div>
                 <span className="text-xs text-zinc-400 font-medium flex items-center gap-1">
                   <Clock className="w-3.5 h-3.5" />
                   <span>Current Release</span>
                 </span>
+              </div>
+              <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
+                <li>
+                  <strong>Fixed Mock Data Restoration on Page Refresh:</strong> Resolved an issue where refreshing the browser while logged in caused all pre-login mock routines, tasks, Kanban items, and &ldquo;Alex &amp; Sam&rdquo; streaks to reappear on screen due to an asynchronous authentication gap. Added synchronous session caching and auth loading guards across all boards.
+                </li>
+              </ul>
+            </article>
+
+            {/* Timeline Item: v0.6.0 */}
+            <article className="p-6 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-3">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-1 rounded-full border-2 border-black bg-zinc-200 text-black font-heading font-black text-xs">
+                    v0.6.0
+                  </span>
+                  <h3 className="font-heading font-extrabold text-base text-black">
+                    Multi-Mode Spaces, In-App &amp; Push Notifications, and Home Screen Widgets
+                  </h3>
+                </div>
+                <span className="text-xs text-zinc-400 font-medium">October 16, 2026</span>
               </div>
               <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
                 <li>

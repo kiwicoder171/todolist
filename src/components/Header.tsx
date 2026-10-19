@@ -72,7 +72,7 @@ export function Header({
                   Couple Task Hub
                 </h1>
                 <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full border border-black bg-[#f4f4f5] text-black shrink-0">
-                  v0.6.0
+                  v0.6.1
                 </span>
                 <button
                   type="button"
