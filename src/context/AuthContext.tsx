@@ -11,7 +11,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
-import { doc, getDoc, setDoc, updateDoc, onSnapshot } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc, deleteDoc, onSnapshot } from "firebase/firestore";
 import { auth, db, isFirebaseConfigured } from "@/lib/firebase";
 
 export interface UserProfile {
@@ -33,6 +33,7 @@ export interface AuthContextType {
   signInWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
   updateUserCircle: (circleId: string | null, partnerRole?: "alex" | "sam" | null) => Promise<void>;
+  updateUsername: (newUsername: string) => Promise<void>;
   isAuthModalOpen: boolean;
   setIsAuthModalOpen: (open: boolean) => void;
   authModalMode: "login" | "register";
@@ -43,6 +44,14 @@ export interface AuthContextType {
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AUTH_STORAGE_KEY = "couple_task_hub_auth_user";
+
+export function extractCleanUsername(fbUser: FirebaseUser): string {
+  // Use first name or email prefix, never full name + surname
+  const firstName = fbUser.displayName ? fbUser.displayName.trim().split(/\s+/)[0].toLowerCase() : "";
+  const emailPrefix = fbUser.email ? fbUser.email.split("@")[0].toLowerCase() : "";
+  const candidate = (firstName || emailPrefix || `user_${Date.now().toString().slice(-4)}`).replace(/[^a-zA-Z0-9_-]/g, "");
+  return candidate.slice(0, 18) || "user";
+}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
@@ -116,7 +125,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               const initialProfile: UserProfile = {
                 uid: fbUser.uid,
                 email: fbUser.email,
-                username: fbUser.displayName || fbUser.email?.split("@")[0] || "User",
+                username: extractCleanUsername(fbUser),
                 circleId: null,
                 partnerRole: null,
                 createdAt: new Date().toISOString(),
@@ -134,7 +143,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             updateCachedUser({
               uid: fbUser.uid,
               email: fbUser.email,
-              username: fbUser.displayName || fbUser.email?.split("@")[0] || "User",
+              username: extractCleanUsername(fbUser),
               circleId: null,
               partnerRole: null,
             });
@@ -294,15 +303,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const userSnap = await getDoc(userRef);
 
     if (!userSnap.exists()) {
-      const generatedUsername = (
-        fbUser.displayName?.replace(/\s+/g, "_").toLowerCase() ||
-        fbUser.email?.split("@")[0] ||
-        `user_${Date.now().toString().slice(-4)}`
-      ).slice(0, 20);
+      let generatedUsername = extractCleanUsername(fbUser);
 
+      // Check if candidate username is already taken; if so, append random digits
       const usernameRef = doc(db, "usernames", generatedUsername);
+      const existingSnap = await getDoc(usernameRef);
+      if (existingSnap.exists()) {
+        generatedUsername = `${generatedUsername}_${Date.now().toString().slice(-4)}`;
+      }
+
+      const finalUsernameRef = doc(db, "usernames", generatedUsername);
       await setDoc(
-        usernameRef,
+        finalUsernameRef,
         {
           username: generatedUsername,
           email: fbUser.email,
@@ -324,6 +336,70 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       updateCachedUser(newProfile);
     } else {
       updateCachedUser(userSnap.data() as UserProfile);
+    }
+  };
+
+  // Update Username & sync everywhere
+  const updateUsername = async (newUsername: string) => {
+    const clean = newUsername.trim().toLowerCase();
+    if (!clean || clean.length < 3) {
+      throw new Error("Username must be at least 3 characters long.");
+    }
+    if (!/^[a-zA-Z0-9_-]+$/.test(clean)) {
+      throw new Error("Username can only contain letters, numbers, hyphens, and underscores.");
+    }
+    if (!user || !user.uid || !db) {
+      throw new Error("You must be logged in to update your username.");
+    }
+    if (clean === user.username.toLowerCase()) {
+      return;
+    }
+
+    const usernameRef = doc(db, "usernames", clean);
+    const snap = await getDoc(usernameRef);
+    if (snap.exists()) {
+      throw new Error(`The username "${clean}" is already taken.`);
+    }
+
+    // Remove old username mapping if existing
+    if (user.username) {
+      try {
+        await deleteDoc(doc(db, "usernames", user.username.toLowerCase()));
+      } catch {}
+    }
+
+    // Create new username mapping
+    await setDoc(usernameRef, {
+      username: clean,
+      email: user.email,
+      uid: user.uid,
+      updatedAt: new Date().toISOString(),
+    });
+
+    // Update user profile document
+    const userRef = doc(db, "users", user.uid);
+    await updateDoc(userRef, { username: clean });
+
+    // Update local cached user profile
+    const updatedUser = { ...user, username: clean };
+    updateCachedUser(updatedUser);
+
+    // Sync to active circle if linked
+    if (user.circleId) {
+      try {
+        const circleRef = doc(db, "circles", user.circleId);
+        const cSnap = await getDoc(circleRef);
+        if (cSnap.exists()) {
+          const cData = cSnap.data();
+          if (user.partnerRole === "alex" || cData.createdByName === user.username) {
+            await updateDoc(circleRef, { createdByName: clean });
+          } else {
+            await updateDoc(circleRef, { partnerName: clean });
+          }
+        }
+      } catch (err) {
+        console.warn("Could not sync updated username to circle:", err);
+      }
     }
   };
 
@@ -365,6 +441,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         signInWithGoogle,
         logout,
         updateUserCircle,
+        updateUsername,
         isAuthModalOpen,
         setIsAuthModalOpen,
         authModalMode,
@@ -392,6 +469,7 @@ const defaultAuthContext: AuthContextType = {
   signInWithGoogle: async () => {},
   logout: async () => {},
   updateUserCircle: async () => {},
+  updateUsername: async () => {},
 };
 
 export function useAuth(): AuthContextType {

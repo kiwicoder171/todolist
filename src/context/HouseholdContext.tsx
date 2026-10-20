@@ -40,6 +40,7 @@ export interface HouseholdContextType {
   joinCircle: (userName: string, joinCode: string) => boolean;
   leaveCircle: () => void;
   partnerNames: Record<Partner, string>;
+  updatePartnerName: (partner: Partner, newName: string) => void;
   activePartner: Partner;
   setActivePartner: (partner: Partner) => void;
   assigneeFilter: AssigneeFilter;
@@ -372,7 +373,7 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
   }, [circle?.id]);
 
   const createCircle = (userName: string, circleName?: string, mode: SpaceMode = "partner"): string => {
-    const finalName = user?.username || userName.trim() || "Alex";
+    const finalName = userName.trim() || user?.username || "Alex";
     const code = generateJoinCode();
     let defaultTitle = `${finalName}'s Shared Space`;
     if (mode === "solo") defaultTitle = `${finalName}'s Space`;
@@ -417,7 +418,7 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
   };
 
   const joinCircle = (userName: string, joinCode: string): boolean => {
-    const finalName = user?.username || userName.trim() || "Sam";
+    const finalName = userName.trim() || user?.username || "Sam";
     const cleanCode = joinCode.trim().toUpperCase();
     const updatedCircle: CircleState = circle
       ? { ...circle, partnerName: finalName }
@@ -568,6 +569,27 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  const updatePartnerName = (partner: Partner, newName: string) => {
+    const clean = newName.trim();
+    if (!clean) return;
+    const updatedNames = { ...partnerNames, [partner]: clean };
+    setPartnerNames(updatedNames);
+    if (circle) {
+      const updatedCircle: CircleState = {
+        ...circle,
+        createdByName: partner === "alex" ? clean : circle.createdByName,
+        partnerName: partner === "sam" ? clean : circle.partnerName,
+      };
+      setCircle(updatedCircle);
+      saveCircleToFirebase(updatedCircle).catch((err) =>
+        console.warn("Update circle partner name warning:", err?.message || err)
+      );
+      saveState(updatedCircle, updatedNames, scores, spaceMode);
+    } else {
+      saveState(circle, updatedNames, scores, spaceMode);
+    }
+  };
+
   const isConfigured = Boolean(circle || isTest);
 
   return (
@@ -583,6 +605,7 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
         joinCircle,
         leaveCircle,
         partnerNames,
+        updatePartnerName,
         activePartner,
         setActivePartner,
         assigneeFilter,

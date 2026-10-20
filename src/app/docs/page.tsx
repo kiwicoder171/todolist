@@ -491,6 +491,12 @@ export default function DocsPage() {
                 <li>
                   <strong>Purged Mock Streaks &amp; Points for Logged-In Users:</strong> Removed lingering pre-login demo scores (9 PTS / 12 PTS) from local state, guaranteeing authenticated and circle spaces always display authentic, live household point balances and streak counters starting from clean state.
                 </li>
+                <li>
+                  <strong>Username Display &amp; Google Auth First-Name Normalization:</strong> Updated user switcher and filter tags to display clean usernames instead of full names (first + last name). Fixed Google Auth username generation to derive clean handles from first names rather than underscore-joined full names, cleaned existing partner records, and introduced an in-app Profile &amp; Username editor modal.
+                </li>
+                <li>
+                  <strong>Fixed Mobile Horizontal Screen Overflow:</strong> Resolved mobile layout bug where partner switcher buttons and streak counters in header Tier 2 exceeded mobile screen boundaries, pushing the streaks pill off-screen and creating horizontal page sway. Added button text truncation, compact responsive badge formatting, and strict <code className="font-bold">overflow-x-clip</code> viewport containment.
+                </li>
               </ul>
             </article>
 

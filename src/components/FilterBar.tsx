@@ -41,13 +41,14 @@ export function FilterBar() {
             <button
               key={f.key}
               onClick={() => setAssigneeFilter(f.key)}
-              className={`px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full font-heading font-bold text-xs transition cursor-pointer ${
+              title={f.label}
+              className={`px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full font-heading font-bold text-xs transition cursor-pointer max-w-[125px] sm:max-w-[180px] ${
                 assigneeFilter === f.key
                   ? "border border-black bg-black text-white shadow-sm"
                   : "border border-zinc-300 text-zinc-600 hover:border-black hover:text-black"
               }`}
             >
-              {f.label}
+              <span className="truncate block">{f.label}</span>
             </button>
           ))}
         </div>

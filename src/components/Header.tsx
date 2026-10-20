@@ -18,6 +18,7 @@ import {
 import { CircleInviteModal } from "./CircleInviteModal";
 import { NotificationDrawer } from "./NotificationDrawer";
 import { WidgetModal } from "./WidgetModal";
+import { ProfileModal } from "./ProfileModal";
 import { Logo } from "./Logo";
 
 export interface HeaderProps {
@@ -46,6 +47,7 @@ export function Header({
   const { unreadCount, setIsDrawerOpen } = useNotifications();
   const [isInviteOpen, setIsInviteOpen] = useState(false);
   const [isWidgetOpen, setIsWidgetOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const currentScore = scores[activePartner] || { points: 0, streak: 0 };
 
   const spaceModeConfig = {
@@ -58,7 +60,7 @@ export function Header({
 
   return (
     <>
-      <header className="border-b-2 border-black bg-white sticky top-0 z-40 shadow-[0_2px_0_0_rgba(0,0,0,0.05)] w-full">
+      <header className="border-b-2 border-black bg-white sticky top-0 z-40 shadow-[0_2px_0_0_rgba(0,0,0,0.05)] w-full max-w-full overflow-x-clip">
         {/* Tier 1: Brand Identity & Global Actions Dock */}
         <div className="px-3 sm:px-5 py-2 sm:py-2.5 flex items-center justify-between gap-2 sm:gap-3 border-b border-zinc-100">
           {/* Brand & Space Mode */}
@@ -180,10 +182,17 @@ export function Header({
             {/* Account Profile or Log In */}
             {user ? (
               <div className="flex items-center gap-1 bg-[#f4f4f5] px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full border border-zinc-300 text-xs shrink-0 font-heading shadow-xs">
-                <UserIcon className="w-3 h-3 text-zinc-700 shrink-0" />
-                <span className="font-extrabold text-black max-w-[55px] sm:max-w-[90px] truncate text-[10px] sm:text-[11px]">
-                  @{user.username}
-                </span>
+                <button
+                  type="button"
+                  onClick={() => setIsProfileOpen(true)}
+                  className="flex items-center gap-1 hover:text-amber-600 transition cursor-pointer"
+                  title="Edit your username & circle display name"
+                >
+                  <UserIcon className="w-3 h-3 text-zinc-700 shrink-0" />
+                  <span className="font-extrabold text-black max-w-[55px] sm:max-w-[90px] truncate text-[10px] sm:text-[11px]">
+                    @{user.username}
+                  </span>
+                </button>
                 <button
                   type="button"
                   onClick={() => logout()}
@@ -210,7 +219,7 @@ export function Header({
         </div>
 
         {/* Tier 2: Workspace View & Context Controls Bar */}
-        <div className="px-3 sm:px-5 py-1.5 bg-[#fafafa] flex items-center justify-between gap-2 border-t border-black/5">
+        <div className="px-2.5 sm:px-5 py-1.5 bg-[#fafafa] flex items-center justify-between gap-1.5 sm:gap-2 border-t border-black/5 w-full max-w-full overflow-hidden">
           {/* Left: Desktop Board Focus Selector (Hidden on mobile where bottom navigation handles tab switching) */}
           <div className="hidden md:flex items-center gap-1.5 shrink-0 overflow-x-auto py-0.5">
             <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 font-heading shrink-0 mr-0.5 hidden xs:inline">
@@ -251,71 +260,73 @@ export function Header({
           </div>
 
           {/* Right on Desktop, Full Width Space-Between on Mobile: User Switcher & Streaks */}
-          <div className="flex items-center justify-between md:justify-end gap-1.5 sm:gap-2 w-full md:w-auto shrink-0">
+          <div className="flex items-center justify-between md:justify-end gap-1.5 sm:gap-2 w-full md:w-auto min-w-0">
             {/* Active Partner Switcher */}
             {spaceMode === "solo" ? (
               <div
                 suppressHydrationWarning
-                className="flex items-center bg-white px-2.5 py-1 rounded-2xl border border-zinc-300 text-xs shrink-0 shadow-xs"
+                className="flex items-center bg-white px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-2xl border border-zinc-300 text-xs shrink min-w-0 shadow-xs"
               >
-                <span className="text-zinc-400 pr-1.5 text-[10px] font-bold uppercase font-heading">
+                <span className="text-zinc-400 pr-1 text-[9px] sm:text-[10px] font-bold uppercase font-heading shrink-0">
                   Solo:
                 </span>
-                <span className="font-bold font-heading text-xs text-black flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                  {partnerNames.alex || user?.username || "You"}
+                <span className="font-bold font-heading text-xs text-black flex items-center gap-1 truncate">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
+                  <span className="truncate">{partnerNames.alex || user?.username || "You"}</span>
                 </span>
               </div>
             ) : user && !circle ? (
               <div
                 suppressHydrationWarning
-                className="flex items-center bg-white px-2.5 py-1 rounded-2xl border border-zinc-300 text-xs shrink-0 shadow-xs"
+                className="flex items-center bg-white px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-2xl border border-zinc-300 text-xs shrink min-w-0 shadow-xs"
               >
-                <span className="text-zinc-400 pr-1.5 text-[10px] font-bold uppercase font-heading">
+                <span className="text-zinc-400 pr-1 text-[9px] sm:text-[10px] font-bold uppercase font-heading shrink-0">
                   User:
                 </span>
-                <span className="font-bold font-heading text-xs text-black flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  @{user.username}
+                <span className="font-bold font-heading text-xs text-black flex items-center gap-1 truncate">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                  <span className="truncate">@{user.username}</span>
                 </span>
               </div>
             ) : (
               <div
                 suppressHydrationWarning
-                className="flex items-center bg-[#f4f4f5] p-0.5 rounded-2xl border border-zinc-300 text-xs shrink-0 shadow-xs"
+                className="flex items-center bg-[#f4f4f5] p-0.5 rounded-2xl border border-zinc-300 text-xs shrink min-w-0 shadow-xs"
               >
-                <span className="text-zinc-400 px-1 text-[10px] font-bold uppercase font-heading">
+                <span className="text-zinc-400 px-1 text-[9px] sm:text-[10px] font-bold uppercase font-heading shrink-0">
                   User:
                 </span>
                 <button
                   onClick={() => setActivePartner("alex")}
-                  className={`px-2 py-0.5 sm:px-2.5 sm:py-0.5 rounded-xl font-bold font-heading text-xs transition-all flex items-center gap-1 cursor-pointer ${
+                  className={`px-1.5 py-0.5 sm:px-2.5 sm:py-0.5 rounded-xl font-bold font-heading text-[11px] sm:text-xs transition-all flex items-center gap-1 cursor-pointer min-w-0 max-w-[75px] xs:max-w-[95px] sm:max-w-[125px] ${
                     activePartner === "alex"
                       ? "bg-black text-white shadow-xs"
                       : "text-zinc-600 hover:text-black"
                   }`}
+                  title={partnerNames.alex}
                 >
                   <span
-                    className={`w-1.5 h-1.5 rounded-full ${
+                    className={`w-1.5 h-1.5 rounded-full shrink-0 ${
                       activePartner === "alex" ? "bg-white" : "bg-zinc-400"
                     }`}
                   />
-                  {partnerNames.alex}
+                  <span className="truncate">{partnerNames.alex}</span>
                 </button>
                 <button
                   onClick={() => setActivePartner("sam")}
-                  className={`px-2 py-0.5 sm:px-2.5 sm:py-0.5 rounded-xl font-bold font-heading text-xs transition-all flex items-center gap-1 cursor-pointer ${
+                  className={`px-1.5 py-0.5 sm:px-2.5 sm:py-0.5 rounded-xl font-bold font-heading text-[11px] sm:text-xs transition-all flex items-center gap-1 cursor-pointer min-w-0 max-w-[75px] xs:max-w-[95px] sm:max-w-[125px] ${
                     activePartner === "sam"
                       ? "bg-black text-white shadow-xs"
                       : "text-zinc-600 hover:text-black"
                   }`}
+                  title={partnerNames.sam}
                 >
                   <span
-                    className={`w-1.5 h-1.5 rounded-full ${
+                    className={`w-1.5 h-1.5 rounded-full shrink-0 ${
                       activePartner === "sam" ? "bg-white" : "bg-zinc-400"
                     }`}
                   />
-                  {partnerNames.sam}
+                  <span className="truncate">{partnerNames.sam}</span>
                 </button>
               </div>
             )}
@@ -323,18 +334,18 @@ export function Header({
             {/* Streaks & Points Pill */}
             <div
               suppressHydrationWarning
-              className="flex items-center gap-1.5 bg-white px-2 sm:px-2.5 py-1 rounded-full border-2 border-black text-xs font-heading font-bold shadow-[1.5px_1.5px_0_0_#000] shrink-0"
+              className="flex items-center gap-1 sm:gap-1.5 bg-white px-1.5 sm:px-2.5 py-1 rounded-full border-2 border-black text-xs font-heading font-bold shadow-[1.5px_1.5px_0_0_#000] shrink-0"
             >
-              <div className="flex items-center gap-1 border-r border-zinc-200 pr-1 text-[11px] sm:text-xs">
-                <Flame className="w-3.5 h-3.5 text-black" />
+              <div className="flex items-center gap-0.5 sm:gap-1 border-r border-zinc-200 pr-1 text-[10px] sm:text-xs">
+                <Flame className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-black shrink-0" />
                 <span>{currentScore.streak} DAYS</span>
               </div>
-              <div className="flex items-center gap-1 text-[11px] sm:text-xs">
+              <div className="flex items-center gap-0.5 text-[10px] sm:text-xs">
                 <span>{currentScore.points} PTS</span>
               </div>
               <button
                 onClick={onOpenWishlist}
-                className="ml-0.5 bg-black text-white text-[9px] uppercase font-bold px-1.5 py-0.5 rounded-full hover:bg-zinc-800 transition cursor-pointer"
+                className="ml-0.5 bg-black text-white text-[8px] sm:text-[9px] uppercase font-bold px-1.5 py-0.5 rounded-full hover:bg-zinc-800 transition cursor-pointer shrink-0"
               >
                 Wishlist
               </button>
@@ -354,6 +365,10 @@ export function Header({
       <CircleInviteModal
         isOpen={isInviteOpen}
         onClose={() => setIsInviteOpen(false)}
+      />
+      <ProfileModal
+        isOpen={isProfileOpen}
+        onClose={() => setIsProfileOpen(false)}
       />
     </>
   );

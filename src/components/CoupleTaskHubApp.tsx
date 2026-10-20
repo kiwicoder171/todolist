@@ -72,7 +72,7 @@ export function CoupleTaskHubApp({ forcedIsMobile, initialMobileTab }: CoupleTas
 
       <FilterBar />
 
-      <main className="flex-1 p-3 sm:p-5 overflow-x-auto">
+      <main className="flex-1 p-2 sm:p-5 min-w-0 max-w-full overflow-x-hidden sm:overflow-x-auto">
         {isMobile ? (
           /* Mobile View: automatically active on screens < md */
           <MobileShell
