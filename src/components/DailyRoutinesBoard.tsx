@@ -20,7 +20,7 @@ export function DailyRoutinesBoard() {
     selectedDate,
     partnerNames,
     isDateFrozen,
-    reconcilePerfectDays,
+    updateScore,
   } = useHousehold();
   const {
     routines,
@@ -61,30 +61,6 @@ export function DailyRoutinesBoard() {
   const isMyDayPerfect = myEvaluation.isPerfectDay;
   const isBothHouseholdPerfect = myEvaluation.isPerfectDay && otherEvaluation.isPerfectDay;
 
-  // Automatically reconcile perfect days and scores whenever routines are updated or loaded
-  useEffect(() => {
-    const allDateKeys = new Set<string>();
-    routines.forEach((r) => {
-      Object.keys(r.completions || {}).forEach((d) => allDateKeys.add(d));
-    });
-    allDateKeys.add(formatDateKey(selectedDate));
-    allDateKeys.add(formatDateKey(new Date()));
-
-    const perfectDatesForPartner: string[] = [];
-    allDateKeys.forEach((dateStr) => {
-      const parts = dateStr.split("-").map(Number);
-      if (parts.length === 3) {
-        const d = new Date(parts[0], parts[1] - 1, parts[2]);
-        const ev = evaluatePartnerDay(activePartner, d, routines, isDateFrozen, isCompleted);
-        if (ev.isPerfectDay) {
-          perfectDatesForPartner.push(dateStr);
-        }
-      }
-    });
-
-    reconcilePerfectDays(activePartner, perfectDatesForPartner);
-  }, [routines, activePartner, isDateFrozen, isCompleted, selectedDate]);
-
   // Filter routines by schedule date & assignee filter
   const visibleRoutines = routines.filter((r) => {
     const isScheduled = isRoutineScheduledForDate(r.frequency, selectedDate);
@@ -117,6 +93,7 @@ export function DailyRoutinesBoard() {
       // If completing this routine achieves a Perfect Day for active partner
       if (!wasMyDayPerfect && myEvaluation.completedCount + 1 >= myEvaluation.totalScheduled && myEvaluation.totalScheduled > 0) {
         setCelebrationMsg("🔥 Perfect Day! +1 PT Earned!");
+        updateScore(activePartner, 1, 1);
         addNotification({
           title: "🔥 Perfect Day Achieved!",
           message: `${myName} completed all assigned routines for today! (+1 Point earned)`,
@@ -129,6 +106,11 @@ export function DailyRoutinesBoard() {
         setCelebrationMsg("✨ +1 Routine Done!");
       }
       setTimeout(() => setCelebrationMsg(null), 2500);
+    } else {
+      // User is unchecking a routine from a previously perfected day
+      if (wasMyDayPerfect) {
+        updateScore(activePartner, -1, -1);
+      }
     }
   };
 

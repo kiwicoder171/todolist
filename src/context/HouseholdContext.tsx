@@ -52,7 +52,7 @@ export interface HouseholdContextType {
   isDateFrozen: (date: Date) => boolean;
   toggleFreezeDate: (date: Date) => void;
   scores: Record<Partner, PartnerScoreState>;
-  updateScore: (partner: Partner, deltaPoints: number) => void;
+  updateScore: (partner: Partner, deltaPoints: number, deltaStreak?: number) => void;
   perfectDays: Record<Partner, string[]>;
   reconcilePerfectDays: (partner: Partner, perfectDateKeys: string[]) => void;
 }
@@ -154,6 +154,22 @@ export const isMockScores = (s: Record<Partner, PartnerScoreState> | undefined |
     s.sam.streak === MOCK_SCORES.sam.streak
   );
 };
+
+export function sanitizeScores(raw: any): Record<Partner, PartnerScoreState> {
+  if (!raw || isMockScores(raw)) {
+    return { alex: { points: 0, streak: 0 }, sam: { points: 0, streak: 0 } };
+  }
+  return {
+    alex: {
+      points: Number(raw?.alex?.points) > 500 ? 1 : Math.max(0, Number(raw?.alex?.points) || 0),
+      streak: Math.max(0, Number(raw?.alex?.streak) || 0),
+    },
+    sam: {
+      points: Number(raw?.sam?.points) > 500 ? 1 : Math.max(0, Number(raw?.sam?.points) || 0),
+      streak: Math.max(0, Number(raw?.sam?.streak) || 0),
+    },
+  };
+}
 
 export const HouseholdContext = createContext<HouseholdContextType | undefined>(undefined);
 
@@ -357,13 +373,18 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
         sam: remoteCircle.partnerName || "Partner",
       };
       setPartnerNames(names);
-      const cleanScores =
-        (remoteCircle as any).scores && !isMockScores((remoteCircle as any).scores)
-          ? (remoteCircle as any).scores
-          : user || remoteCircle
-          ? { alex: { points: 0, streak: 0 }, sam: { points: 0, streak: 0 } }
-          : scores;
-      setScores(cleanScores);
+      const cleanScores = sanitizeScores((remoteCircle as any).scores);
+      setScores((prev) => {
+        if (
+          prev.alex.points === cleanScores.alex.points &&
+          prev.alex.streak === cleanScores.alex.streak &&
+          prev.sam.points === cleanScores.sam.points &&
+          prev.sam.streak === cleanScores.sam.streak
+        ) {
+          return prev;
+        }
+        return cleanScores;
+      });
       if (user.partnerRole) {
         setActivePartner(user.partnerRole);
       }
@@ -383,8 +404,19 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
           sam: remoteCircle.partnerName || prev.sam,
         }));
       }
-      if ((remoteCircle as any).scores && !isMockScores((remoteCircle as any).scores)) {
-        setScores((remoteCircle as any).scores);
+      if ((remoteCircle as any).scores) {
+        const cleanScores = sanitizeScores((remoteCircle as any).scores);
+        setScores((prev) => {
+          if (
+            prev.alex.points === cleanScores.alex.points &&
+            prev.alex.streak === cleanScores.alex.streak &&
+            prev.sam.points === cleanScores.sam.points &&
+            prev.sam.streak === cleanScores.sam.streak
+          ) {
+            return prev;
+          }
+          return cleanScores;
+        });
       }
       if ((remoteCircle as any).perfectDays) {
         setPerfectDays((remoteCircle as any).perfectDays);
@@ -567,17 +599,22 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
     toggleFreezeDate(selectedDate);
   };
 
-  const updateScore = (partner: Partner, deltaPoints: number) => {
+  const updateScore = (partner: Partner, deltaPoints: number, deltaStreak: number = 0) => {
     setScores((prev) => {
       const base =
         (user || circle) && isMockScores(prev)
           ? { alex: { points: 0, streak: 0 }, sam: { points: 0, streak: 0 } }
           : prev;
+      const nextPoints = base[partner].points + deltaPoints;
+      const nextStreak = Math.max(0, base[partner].streak + deltaStreak);
+      if (nextPoints === base[partner].points && nextStreak === base[partner].streak) {
+        return prev;
+      }
       const updated = {
         ...base,
         [partner]: {
-          ...base[partner],
-          points: base[partner].points + deltaPoints,
+          points: nextPoints,
+          streak: nextStreak,
         },
       };
       saveState(circle, partnerNames, updated, spaceMode, perfectDays);
