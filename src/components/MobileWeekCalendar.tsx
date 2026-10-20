@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { useHousehold, formatDateKey } from "@/context/HouseholdContext";
+import { useHousehold, formatDateKey, matchesAssigneeFilter } from "@/context/HouseholdContext";
 import { useRoutines, isRoutineScheduledForDate } from "@/context/RoutinesContext";
 import { useDailyTasks, calculateRolloverTasks } from "@/context/DailyTasksContext";
 import { ChevronLeft, ChevronRight, Snowflake, Check, Sparkles } from "lucide-react";
 
 export function MobileWeekCalendar() {
   const {
+    activePartner,
     selectedDate,
     setSelectedDate,
     isDateFrozen,
@@ -77,17 +78,24 @@ export function MobileWeekCalendar() {
   const isViewingToday = isSameDay(selectedDate, today);
   const showTodayButton = !isCurrentWeek || !isViewingToday;
 
-  // Status for a day: done (all routines complete), partial, frozen, or pending/empty
+  // Status for a day: done (all routines complete for active partner), partial, frozen, or pending/empty
   const getDayStatus = (date: Date): "done" | "partial" | "frozen" | "pending" | "empty" => {
     if (isDateFrozen(date)) return "frozen";
 
-    const scheduled = routines.filter((r) =>
+    // Active partner's scheduled routines (mine + both)
+    const myRoutines = routines.filter((r) =>
+      matchesAssigneeFilter(r.assignee, activePartner, "mine")
+    );
+    const scheduled = myRoutines.filter((r) =>
       isRoutineScheduledForDate(r.frequency, date)
     );
 
     if (scheduled.length === 0) {
       // Check if daily tasks exist for this date
-      const dateTasks = calculateRolloverTasks(tasks, date, today);
+      const myTasks = tasks.filter((t) =>
+        matchesAssigneeFilter(t.assignee, activePartner, "mine")
+      );
+      const dateTasks = calculateRolloverTasks(myTasks, date, today);
       if (dateTasks.length === 0) return "empty";
       const allTasksDone = dateTasks.every((t) => t.completed);
       return allTasksDone ? "done" : "pending";

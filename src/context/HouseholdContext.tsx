@@ -53,6 +53,8 @@ export interface HouseholdContextType {
   toggleFreezeDate: (date: Date) => void;
   scores: Record<Partner, PartnerScoreState>;
   updateScore: (partner: Partner, deltaPoints: number) => void;
+  perfectDays: Record<Partner, string[]>;
+  reconcilePerfectDays: (partner: Partner, perfectDateKeys: string[]) => void;
 }
 
 export function formatDateKey(date: Date): string {
@@ -235,6 +237,19 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
     return MOCK_SCORES;
   });
 
+  const [perfectDays, setPerfectDays] = useState<Record<Partner, string[]>>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed.perfectDays) return parsed.perfectDays;
+        }
+      } catch {}
+    }
+    return { alex: [], sam: [] };
+  });
+
   // Client-side hydration from localStorage (runs after mount, eliminating SSR hydration mismatch)
   useEffect(() => {
     if (isTest || typeof window === "undefined") return;
@@ -244,6 +259,7 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
         const parsed = JSON.parse(stored);
         if (parsed.circle) setCircle(parsed.circle);
         if (parsed.partnerNames) setPartnerNames(parsed.partnerNames);
+        if (parsed.perfectDays) setPerfectDays(parsed.perfectDays);
         if (parsed.scores) {
           if ((user || parsed.circle) && isMockScores(parsed.scores)) {
             const clean = { alex: { points: 0, streak: 0 }, sam: { points: 0, streak: 0 } };
@@ -299,7 +315,8 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
     newCircle: CircleState | null,
     newNames: Record<Partner, string>,
     newScores: Record<Partner, PartnerScoreState>,
-    newMode?: SpaceMode
+    newMode?: SpaceMode,
+    newPerfectDays?: Record<Partner, string[]>
   ) => {
     if (typeof window === "undefined") return;
     try {
@@ -310,6 +327,7 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
           partnerNames: newNames,
           scores: newScores,
           spaceMode: newMode !== undefined ? newMode : spaceMode,
+          perfectDays: newPerfectDays !== undefined ? newPerfectDays : perfectDays,
         })
       );
     } catch {}
@@ -367,6 +385,9 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
       }
       if ((remoteCircle as any).scores && !isMockScores((remoteCircle as any).scores)) {
         setScores((remoteCircle as any).scores);
+      }
+      if ((remoteCircle as any).perfectDays) {
+        setPerfectDays((remoteCircle as any).perfectDays);
       }
     });
     return () => unsub();
@@ -559,13 +580,84 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
           points: base[partner].points + deltaPoints,
         },
       };
-      saveState(circle, partnerNames, updated);
+      saveState(circle, partnerNames, updated, spaceMode, perfectDays);
       if (circle?.id) {
         updateScoresInFirebase(circle.id, updated).catch((err) =>
           console.warn("Update scores warning:", err?.message || err)
         );
       }
       return updated;
+    });
+  };
+
+  const reconcilePerfectDays = (partner: Partner, perfectDateKeys: string[]) => {
+    setPerfectDays((prevPerfect) => {
+      const currentDates = prevPerfect[partner] || [];
+      const newDatesSet = new Set(perfectDateKeys);
+      const currentDatesSet = new Set(currentDates);
+
+      // Check if there are any differences
+      const addedDates = perfectDateKeys.filter((d) => !currentDatesSet.has(d));
+      const removedDates = currentDates.filter((d) => !newDatesSet.has(d));
+
+      if (addedDates.length === 0 && removedDates.length === 0) {
+        return prevPerfect; // No change
+      }
+
+      const deltaPoints = addedDates.length - removedDates.length;
+
+      // Calculate streak: consecutive perfect dates
+      const sorted = [...perfectDateKeys].sort();
+      let currentStreak = 0;
+      if (sorted.length > 0) {
+        currentStreak = 1;
+        for (let i = sorted.length - 1; i > 0; i--) {
+          const curr = new Date(sorted[i]);
+          const prev = new Date(sorted[i - 1]);
+          const diffDays = Math.round((curr.getTime() - prev.getTime()) / (1000 * 60 * 60 * 24));
+          if (diffDays === 1) {
+            currentStreak++;
+          } else {
+            break;
+          }
+        }
+      }
+
+      setScores((prevScores) => {
+        const base =
+          (user || circle) && isMockScores(prevScores)
+            ? { alex: { points: 0, streak: 0 }, sam: { points: 0, streak: 0 } }
+            : prevScores || { alex: { points: 0, streak: 0 }, sam: { points: 0, streak: 0 } };
+
+        const updatedPartnerScore: PartnerScoreState = {
+          points: Math.max(0, base[partner].points + deltaPoints),
+          streak: currentStreak,
+        };
+        const updatedScores = {
+          ...base,
+          [partner]: updatedPartnerScore,
+        };
+
+        const updatedPerfect = {
+          ...prevPerfect,
+          [partner]: [...perfectDateKeys],
+        };
+
+        saveState(circle, partnerNames, updatedScores, spaceMode, updatedPerfect);
+
+        if (circle?.id) {
+          updateScoresInFirebase(circle.id, updatedScores).catch((err) =>
+            console.warn("Update scores warning:", err?.message || err)
+          );
+        }
+
+        return updatedScores;
+      });
+
+      return {
+        ...prevPerfect,
+        [partner]: [...perfectDateKeys],
+      };
     });
   };
 
@@ -618,6 +710,8 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
         toggleFreezeDate,
         scores,
         updateScore,
+        perfectDays,
+        reconcilePerfectDays,
       }}
     >
       {children}

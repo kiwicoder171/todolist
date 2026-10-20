@@ -1,19 +1,27 @@
 "use client";
 
-import React, { useState, KeyboardEvent } from "react";
-import { useHousehold, matchesAssigneeFilter, Assignee, getAssigneeLabel } from "@/context/HouseholdContext";
+import React, { useState, useEffect, KeyboardEvent } from "react";
+import { useHousehold, matchesAssigneeFilter, Assignee, getAssigneeLabel, formatDateKey } from "@/context/HouseholdContext";
 import {
   useRoutines,
   isRoutineScheduledForDate,
   formatFrequencyLabel,
   RoutineFrequency,
 } from "@/context/RoutinesContext";
+import { evaluatePartnerDay } from "@/utils/gamification";
 import { useNotifications } from "@/context/NotificationContext";
 import { Check, ArrowUp, ArrowDown, X, Plus, Calendar } from "lucide-react";
 import { AddRoutineModal } from "./AddRoutineModal";
 
 export function DailyRoutinesBoard() {
-  const { activePartner, assigneeFilter, selectedDate, partnerNames } = useHousehold();
+  const {
+    activePartner,
+    assigneeFilter,
+    selectedDate,
+    partnerNames,
+    isDateFrozen,
+    reconcilePerfectDays,
+  } = useHousehold();
   const {
     routines,
     addRoutine,
@@ -31,6 +39,52 @@ export function DailyRoutinesBoard() {
 
   const myName = activePartner === "alex" ? partnerNames.alex : partnerNames.sam;
 
+  // Active partner's day evaluation (evaluates partner's assigned 'mine' + 'both' routines)
+  const myEvaluation = evaluatePartnerDay(
+    activePartner,
+    selectedDate,
+    routines,
+    isDateFrozen,
+    isCompleted
+  );
+
+  // Other partner's evaluation
+  const otherPartner = activePartner === "alex" ? "sam" : "alex";
+  const otherEvaluation = evaluatePartnerDay(
+    otherPartner,
+    selectedDate,
+    routines,
+    isDateFrozen,
+    isCompleted
+  );
+
+  const isMyDayPerfect = myEvaluation.isPerfectDay;
+  const isBothHouseholdPerfect = myEvaluation.isPerfectDay && otherEvaluation.isPerfectDay;
+
+  // Automatically reconcile perfect days and scores whenever routines are updated or loaded
+  useEffect(() => {
+    const allDateKeys = new Set<string>();
+    routines.forEach((r) => {
+      Object.keys(r.completions || {}).forEach((d) => allDateKeys.add(d));
+    });
+    allDateKeys.add(formatDateKey(selectedDate));
+    allDateKeys.add(formatDateKey(new Date()));
+
+    const perfectDatesForPartner: string[] = [];
+    allDateKeys.forEach((dateStr) => {
+      const parts = dateStr.split("-").map(Number);
+      if (parts.length === 3) {
+        const d = new Date(parts[0], parts[1] - 1, parts[2]);
+        const ev = evaluatePartnerDay(activePartner, d, routines, isDateFrozen, isCompleted);
+        if (ev.isPerfectDay) {
+          perfectDatesForPartner.push(dateStr);
+        }
+      }
+    });
+
+    reconcilePerfectDays(activePartner, perfectDatesForPartner);
+  }, [routines, activePartner, isDateFrozen, isCompleted, selectedDate]);
+
   // Filter routines by schedule date & assignee filter
   const visibleRoutines = routines.filter((r) => {
     const isScheduled = isRoutineScheduledForDate(r.frequency, selectedDate);
@@ -42,25 +96,36 @@ export function DailyRoutinesBoard() {
     return isScheduled && matchesFilter;
   });
 
-  const allVisibleDone =
-    visibleRoutines.length > 0 &&
-    visibleRoutines.every((r) => isCompleted(r.id, selectedDate));
-
   const [celebrationMsg, setCelebrationMsg] = useState<string | null>(null);
 
   const handleToggle = (id: string) => {
     const wasCompleted = isCompleted(id, selectedDate);
     const routine = routines.find((r) => r.id === id);
+    const wasMyDayPerfect = myEvaluation.isPerfectDay;
     toggleCompletion(id, selectedDate);
+
     if (!wasCompleted) {
-      setCelebrationMsg("✨ +1 Routine Done!");
       addNotification({
         title: "Routine Complete! 🎯",
         message: routine ? `${myName} completed "${routine.title}"` : `${myName} checked off a routine`,
         type: "routine_completed",
         partner: activePartner,
       });
-      setTimeout(() => setCelebrationMsg(null), 2000);
+
+      // If completing this routine achieves a Perfect Day for active partner
+      if (!wasMyDayPerfect && myEvaluation.completedCount + 1 >= myEvaluation.totalScheduled && myEvaluation.totalScheduled > 0) {
+        setCelebrationMsg("🔥 Perfect Day! +1 PT Earned!");
+        addNotification({
+          title: "🔥 Perfect Day Achieved!",
+          message: `${myName} completed all assigned routines for today! (+1 Point earned)`,
+          type: "streak_alert",
+          partner: activePartner,
+          points: 1,
+        });
+      } else {
+        setCelebrationMsg("✨ +1 Routine Done!");
+      }
+      setTimeout(() => setCelebrationMsg(null), 2500);
     }
   };
 
@@ -114,17 +179,27 @@ export function DailyRoutinesBoard() {
         </div>
       </div>
 
-      {allVisibleDone && (
+      {isBothHouseholdPerfect ? (
         <div className="mb-3 p-2.5 rounded-2xl border-2 border-black bg-black text-white flex items-center justify-between text-xs font-heading font-extrabold shadow-[2px_2px_0_0_#000]">
           <div className="flex items-center gap-2">
-            <span>🔥</span>
-            <span>100% ROUTINES DONE! PERFECT DAY (+1 PT)</span>
+            <span>🎉</span>
+            <span>100% HOUSEHOLD ROUTINES DONE! PERFECT DAY FOR BOTH (+1 PT EACH)</span>
           </div>
           <span className="text-[10px] px-2 py-0.5 rounded-full border border-white bg-white/20">
             Streak Active
           </span>
         </div>
-      )}
+      ) : isMyDayPerfect ? (
+        <div className="mb-3 p-2.5 rounded-2xl border-2 border-black bg-emerald-600 text-white flex items-center justify-between text-xs font-heading font-extrabold shadow-[2px_2px_0_0_#000]">
+          <div className="flex items-center gap-2">
+            <span>🔥</span>
+            <span>ALL YOUR ROUTINES DONE! PERFECT DAY (+1 PT)</span>
+          </div>
+          <span className="text-[10px] px-2 py-0.5 rounded-full border border-white bg-white/20">
+            Streak Active
+          </span>
+        </div>
+      ) : null}
 
       <p className="text-xs text-zinc-500 mb-3 leading-relaxed">
         Apple Notes style. Press{" "}

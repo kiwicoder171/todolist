@@ -497,6 +497,9 @@ export default function DocsPage() {
                 <li>
                   <strong>Fixed Mobile Horizontal Screen Overflow:</strong> Resolved mobile layout bug where partner switcher buttons and streak counters in header Tier 2 exceeded mobile screen boundaries, pushing the streaks pill off-screen and creating horizontal page sway. Added button text truncation, compact responsive badge formatting, and strict <code className="font-bold">overflow-x-clip</code> viewport containment.
                 </li>
+                <li>
+                  <strong>Independent Partner Perfect Day &amp; Automated Point Accrual:</strong> Resolved an issue where completing all personal (&ldquo;Me&rdquo;) and shared (&ldquo;Both&rdquo;) daily routines did not award +1 point or activate streak counters when the partner had remaining tasks. Replaced filter-dependent completion checks with partner-specific domain evaluation (<code className="font-bold">evaluatePartnerDay</code>), wired automated real-time point and streak reconciliation into household state and Firestore, and updated the celebratory banner to recognize individual and household Perfect Days.
+                </li>
               </ul>
             </article>
 

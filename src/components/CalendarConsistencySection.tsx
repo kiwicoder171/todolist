@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHousehold, formatDateKey } from "@/context/HouseholdContext";
+import { useHousehold, formatDateKey, matchesAssigneeFilter } from "@/context/HouseholdContext";
 import { useRoutines, isRoutineScheduledForDate } from "@/context/RoutinesContext";
 import { useNotifications } from "@/context/NotificationContext";
 import { ChevronLeft, ChevronRight, Heart, Sparkles } from "lucide-react";
@@ -79,7 +79,10 @@ export function CalendarConsistencySection() {
   const getDateStatus = (date: Date): "done" | "frozen" | "pending" | "empty" => {
     if (isDateFrozen(date)) return "frozen";
 
-    const scheduled = routines.filter((r) =>
+    const myRoutines = routines.filter((r) =>
+      matchesAssigneeFilter(r.assignee, activePartner, "mine")
+    );
+    const scheduled = myRoutines.filter((r) =>
       isRoutineScheduledForDate(r.frequency, date)
     );
     if (scheduled.length === 0) return "empty";
