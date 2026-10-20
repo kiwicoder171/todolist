@@ -40,7 +40,8 @@ export function NotificationDrawer() {
 
   const handleSendCheer = (e: React.FormEvent) => {
     e.preventDefault();
-    sendCheer(currentUserName, cheerMsg.trim() || undefined);
+    const otherPartner = activePartner === "alex" ? "sam" : "alex";
+    sendCheer(currentUserName, cheerMsg.trim() || undefined, otherPartner);
     setCheerMsg("");
     setCheerSent(true);
     setTimeout(() => setCheerSent(false), 2000);

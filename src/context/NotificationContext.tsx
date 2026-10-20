@@ -1,6 +1,13 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { HouseholdContext, Partner } from "./HouseholdContext";
+import {
+  subscribeToNotifications,
+  upsertNotificationToFirebase,
+  markNotificationReadInFirebase,
+  clearNotificationsFromFirebase,
+} from "@/lib/firebaseSync";
 
 export type NotificationType =
   | "task_completed"
@@ -15,13 +22,18 @@ export interface AppNotification {
   title: string;
   message: string;
   timestamp: string;
+  createdAt?: number;
   read: boolean;
+  readBy?: string[];
   partner?: string;
+  sender?: string;
+  recipient?: string;
   points?: number;
 }
 
 export interface NotificationContextType {
   notifications: AppNotification[];
+  allNotifications?: AppNotification[];
   unreadCount: number;
   addNotification: (
     notification: Omit<AppNotification, "id" | "timestamp" | "read">
@@ -29,7 +41,7 @@ export interface NotificationContextType {
   markAsRead: (id: string) => void;
   markAllAsRead: () => void;
   clearAll: () => void;
-  sendCheer: (fromName: string, message?: string) => void;
+  sendCheer: (fromName: string, message?: string, targetRecipient?: string) => void;
   requestBrowserPermission: () => Promise<boolean>;
   browserPermission: NotificationPermission | "unsupported";
   isDrawerOpen: boolean;
@@ -45,7 +57,9 @@ export const INITIAL_NOTIFICATIONS: AppNotification[] = [
     title: "🔥 4-Day Streak Active!",
     message: "You and your partner are in sync! Keep the flame alive today.",
     timestamp: "Just now",
+    createdAt: Date.now() - 60000,
     read: false,
+    recipient: "both",
   },
   {
     id: "notif-2",
@@ -53,7 +67,9 @@ export const INITIAL_NOTIFICATIONS: AppNotification[] = [
     title: "❤️ Partner Cheer Received",
     message: "Alex sent you a cheer: 'You're doing amazing today!'",
     timestamp: "10m ago",
+    createdAt: Date.now() - 600000,
     read: false,
+    recipient: "both",
   },
   {
     id: "notif-3",
@@ -61,7 +77,9 @@ export const INITIAL_NOTIFICATIONS: AppNotification[] = [
     title: "✅ Task Completed",
     message: "Pick up dry cleaning & winter coats marked done (+3 PTS).",
     timestamp: "1h ago",
+    createdAt: Date.now() - 3600000,
     read: true,
+    recipient: "both",
   },
 ];
 
@@ -71,6 +89,11 @@ export const NotificationContext = createContext<NotificationContextType | undef
 
 export function NotificationProvider({ children }: { children: ReactNode }) {
   const isTest = typeof process !== "undefined" && process.env.NODE_ENV === "test";
+  const household = useContext(HouseholdContext);
+  const circleId = household?.circle?.id;
+  const activePartner: Partner = household?.activePartner || "alex";
+  const otherPartner: Partner = activePartner === "alex" ? "sam" : "alex";
+
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [browserPermission, setBrowserPermission] = useState<
     NotificationPermission | "unsupported"
@@ -102,6 +125,51 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
     } catch {}
   }, [isTest]);
 
+  // Real-time listener from Firebase for circles
+  useEffect(() => {
+    if (!circleId) return;
+    const unsub = subscribeToNotifications(circleId, (remoteNotifs) => {
+      if (remoteNotifs && Array.isArray(remoteNotifs)) {
+        setNotifications((prev) => {
+          const remoteIds = new Set(remoteNotifs.map((n) => n.id));
+          const localOnly = prev.filter(
+            (n) => !remoteIds.has(n.id) && !INITIAL_NOTIFICATIONS.some((i) => i.id === n.id)
+          );
+          const merged = [...(remoteNotifs as AppNotification[]), ...localOnly].sort(
+            (a, b) => (b.createdAt || 0) - (a.createdAt || 0)
+          );
+          saveToStorage(merged);
+
+          // Check if any new unread notification is targeted to active user for native push
+          if (
+            typeof window !== "undefined" &&
+            "Notification" in window &&
+            Notification.permission === "granted"
+          ) {
+            const incoming = remoteNotifs.find(
+              (n) =>
+                !n.read &&
+                (!n.readBy || !n.readBy.includes(activePartner)) &&
+                (n.recipient === activePartner || n.recipient === "both") &&
+                Date.now() - (n.createdAt || 0) < 15000 // received within last 15 seconds
+            );
+            if (incoming) {
+              try {
+                new Notification(incoming.title, {
+                  body: incoming.message,
+                  icon: "/favicon.png",
+                });
+              } catch {}
+            }
+          }
+
+          return merged;
+        });
+      }
+    });
+    return () => unsub();
+  }, [circleId, activePartner]);
+
   const saveToStorage = (updated: AppNotification[]) => {
     if (typeof window === "undefined") return;
     try {
@@ -116,24 +184,39 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
       ...notif,
       id: `notif-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
       timestamp: "Just now",
+      createdAt: Date.now(),
       read: false,
+      readBy: [],
+      sender: notif.sender || activePartner,
+      recipient:
+        notif.recipient ||
+        (notif.type === "task_completed" || notif.type === "routine_completed"
+          ? otherPartner
+          : "both"),
     };
 
     setNotifications((prev) => {
-      const updated = [newNotif, ...prev].slice(0, 30); // keep recent 30
+      const updated = [newNotif, ...prev].slice(0, 50); // keep recent 50
       saveToStorage(updated);
       return updated;
     });
+
+    if (circleId) {
+      upsertNotificationToFirebase(circleId, newNotif).catch((err) =>
+        console.warn("Notification sync warning:", err?.message || err)
+      );
+    }
 
     // Native browser notification if permission granted
     if (
       typeof window !== "undefined" &&
       "Notification" in window &&
-      Notification.permission === "granted"
+      Notification.permission === "granted" &&
+      (newNotif.recipient === activePartner || newNotif.recipient === "both")
     ) {
       try {
-        new Notification(notif.title, {
-          body: notif.message,
+        new Notification(newNotif.title, {
+          body: newNotif.message,
           icon: "/favicon.png",
         });
       } catch {}
@@ -141,16 +224,40 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
   };
 
   const markAsRead = (id: string) => {
+    let updatedNotif: AppNotification | undefined;
     setNotifications((prev) => {
-      const updated = prev.map((n) => (n.id === id ? { ...n, read: true } : n));
+      const updated = prev.map((n) => {
+        if (n.id === id) {
+          const currentReadBy = Array.isArray(n.readBy) ? n.readBy : [];
+          const readBy = Array.from(new Set([...currentReadBy, activePartner]));
+          updatedNotif = { ...n, read: true, readBy };
+          return updatedNotif;
+        }
+        return n;
+      });
       saveToStorage(updated);
       return updated;
     });
+
+    if (circleId && updatedNotif) {
+      markNotificationReadInFirebase(
+        circleId,
+        id,
+        (updatedNotif as AppNotification).readBy || [activePartner]
+      ).catch((err) => console.warn("Mark read sync warning:", err?.message || err));
+    }
   };
 
   const markAllAsRead = () => {
     setNotifications((prev) => {
-      const updated = prev.map((n) => ({ ...n, read: true }));
+      const updated = prev.map((n) => {
+        const currentReadBy = Array.isArray(n.readBy) ? n.readBy : [];
+        const readBy = Array.from(new Set([...currentReadBy, activePartner]));
+        if (circleId) {
+          markNotificationReadInFirebase(circleId, n.id, readBy).catch(() => {});
+        }
+        return { ...n, read: true, readBy };
+      });
       saveToStorage(updated);
       return updated;
     });
@@ -159,15 +266,40 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
   const clearAll = () => {
     setNotifications([]);
     saveToStorage([]);
+    if (circleId) {
+      clearNotificationsFromFirebase(circleId).catch((err) =>
+        console.warn("Clear notifications sync warning:", err?.message || err)
+      );
+    }
   };
 
-  const sendCheer = (fromName: string, message?: string) => {
-    addNotification({
+  const sendCheer = (fromName: string, message?: string, targetRecipient?: string) => {
+    const toPartner = targetRecipient || otherPartner;
+    const cheerNotif: AppNotification = {
+      id: `notif-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
       type: "cheer",
-      title: "❤️ Cheer Sent!",
-      message: `${fromName}: "${message || "Keep up the great momentum today! Love you!"}"`,
+      title: "❤️ Partner Cheer Received",
+      message: `${fromName} sent you a cheer: "${message || "Keep up the great momentum today! Love you!"}"`,
+      timestamp: "Just now",
+      createdAt: Date.now(),
+      read: false,
+      readBy: [],
+      sender: activePartner,
       partner: fromName,
+      recipient: toPartner,
+    };
+
+    setNotifications((prev) => {
+      const updated = [cheerNotif, ...prev].slice(0, 50);
+      saveToStorage(updated);
+      return updated;
     });
+
+    if (circleId) {
+      upsertNotificationToFirebase(circleId, cheerNotif).catch((err) =>
+        console.warn("Send cheer sync warning:", err?.message || err)
+      );
+    }
   };
 
   const requestBrowserPermission = async (): Promise<boolean> => {
@@ -191,12 +323,23 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const unreadCount = notifications.filter((n) => !n.read).length;
+  // Filter notifications visible for the active partner
+  const visibleNotifications = notifications.filter((n) => {
+    if (isTest || !circleId) return true;
+    if (n.recipient === activePartner || n.recipient === "both" || !n.recipient) return true;
+    return false;
+  });
+
+  const unreadCount = visibleNotifications.filter((n) => {
+    if (n.readBy && n.readBy.includes(activePartner)) return false;
+    return !n.read;
+  }).length;
 
   return (
     <NotificationContext.Provider
       value={{
-        notifications,
+        notifications: visibleNotifications,
+        allNotifications: notifications,
         unreadCount,
         addNotification,
         markAsRead,
@@ -233,3 +376,4 @@ export function useNotifications(): NotificationContextType {
   }
   return context;
 }
+

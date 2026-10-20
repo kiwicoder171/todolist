@@ -500,6 +500,12 @@ export default function DocsPage() {
                 <li>
                   <strong>Independent Partner Perfect Day &amp; Automated Point Accrual:</strong> Resolved an issue where completing all personal (&ldquo;Me&rdquo;) and shared (&ldquo;Both&rdquo;) daily routines did not award +1 point or activate streak counters when the partner had remaining tasks. Replaced filter-dependent completion checks with partner-specific domain evaluation (<code className="font-bold">evaluatePartnerDay</code>), wired automated real-time point and streak reconciliation into household state and Firestore, and updated the celebratory banner to recognize individual and household Perfect Days.
                 </li>
+                <li>
+                  <strong>Real-Time Partner Cheers &amp; Notifications Sync:</strong> Connected in-app notifications and cheers to Firestore circle subcollections (<code className="font-bold">circles/&#123;circleId&#125;/notifications</code>), enabling instant cross-device notification delivery. When cheering from Consistency Dials or the Notification Drawer quick cheer box, cheers and habit/task completion alerts are directly delivered to your partner&rsquo;s device with live push notifications, and drawer filtering displays incoming alerts intended for you rather than echoing your own sent cheers.
+                </li>
+                <li>
+                  <strong>Persistent Task &amp; Kanban Check State Across Reloads:</strong> Resolved task state persistence gaps where checking off a daily task or moving a card on the Kanban board occasionally reverted upon page reload or snapshot sync. Fixed two-way Kanban-Daily task sync hooks to immediately write deterministic updates to Firestore, eliminated race conditions during asynchronous React state updates, and guaranteed bidirectional status synchronization.
+                </li>
               </ul>
             </article>
 

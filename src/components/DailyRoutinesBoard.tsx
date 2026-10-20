@@ -105,11 +105,13 @@ export function DailyRoutinesBoard() {
     toggleCompletion(id, selectedDate);
 
     if (!wasCompleted) {
+      const otherPartner = activePartner === "alex" ? "sam" : "alex";
       addNotification({
         title: "Routine Complete! 🎯",
         message: routine ? `${myName} completed "${routine.title}"` : `${myName} checked off a routine`,
         type: "routine_completed",
         partner: activePartner,
+        recipient: otherPartner,
       });
 
       // If completing this routine achieves a Perfect Day for active partner
@@ -120,6 +122,7 @@ export function DailyRoutinesBoard() {
           message: `${myName} completed all assigned routines for today! (+1 Point earned)`,
           type: "streak_alert",
           partner: activePartner,
+          recipient: "both",
           points: 1,
         });
       } else {

@@ -44,11 +44,14 @@ export function DailyTasksBoard() {
     toggleDailyTask(id, formatDateKey(selectedDate));
     if (!wasCompleted) {
       setCelebrationMsg("🎉 Task Done!");
+      const targetTask = tasks.find((t) => t.id === id);
+      const otherPartner = activePartner === "alex" ? "sam" : "alex";
       addNotification({
         title: "Task Done! 🎉",
-        message: `${myName} checked off a daily task`,
+        message: targetTask ? `${myName} checked off "${targetTask.title}"` : `${myName} checked off a daily task`,
         type: "task_completed",
         partner: activePartner,
+        recipient: otherPartner,
       });
       setTimeout(() => setCelebrationMsg(null), 2000);
     }

@@ -234,20 +234,28 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
   // Two-way sync: listen to DailyTasks completion toggles and deletions
   useEffect(() => {
     const unregister = registerKanbanSyncHook((kanbanId, completed, action) => {
+      let updatedCard: KanbanCard | undefined;
       saveCards((prev) =>
         prev.map((c) => {
-          if (c.id === kanbanId) {
+          if (String(c.id) === String(kanbanId)) {
             if (action === "delete") {
-              return { ...c, doToday: false };
+              updatedCard = { ...c, doToday: false };
+            } else {
+              updatedCard = { ...c, stage: completed ? "done" : "inprogress" };
             }
-            return { ...c, stage: completed ? "done" : "inprogress" };
+            return updatedCard;
           }
           return c;
         })
       );
+      if (updatedCard && circleId) {
+        upsertKanbanCardToFirebase(circleId, updatedCard).catch((err) =>
+          console.warn("Kanban sync warning:", err?.message || err)
+        );
+      }
     });
     return unregister;
-  }, [registerKanbanSyncHook]);
+  }, [registerKanbanSyncHook, circleId]);
 
   const addCard = (
     title: string,
@@ -320,9 +328,10 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
   };
 
   const toggleCardDoToday = (id: string) => {
+    let updatedCard: KanbanCard | undefined;
     saveCards((prev) =>
       prev.map((c) => {
-        if (c.id === id) {
+        if (String(c.id) === String(id)) {
           const nextDoToday = !c.doToday;
           if (nextDoToday) {
             addDailyTask(
@@ -336,11 +345,17 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
           } else {
             removeTaskByKanbanId(c.id);
           }
-          return { ...c, doToday: nextDoToday };
+          updatedCard = { ...c, doToday: nextDoToday };
+          return updatedCard;
         }
         return c;
       })
     );
+    if (updatedCard && circleId) {
+      upsertKanbanCardToFirebase(circleId, updatedCard).catch((err) =>
+        console.warn("Kanban sync warning:", err?.message || err)
+      );
+    }
   };
 
   const addCategory = (id: string, name: string, emoji?: string) => {
@@ -349,7 +364,14 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
 
   const clearDoneCards = () => {
     const doneCards = cards.filter((c) => c.stage === "done");
-    doneCards.forEach((c) => removeTaskByKanbanId(c.id));
+    doneCards.forEach((c) => {
+      removeTaskByKanbanId(c.id);
+      if (circleId) {
+        deleteKanbanCardFromFirebase(circleId, c.id).catch((err) =>
+          console.warn("Kanban delete sync warning:", err?.message || err)
+        );
+      }
+    });
     saveCards((prev) => prev.filter((c) => c.stage !== "done"));
   };
 

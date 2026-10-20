@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHousehold, formatDateKey, matchesAssigneeFilter } from "@/context/HouseholdContext";
+import { useHousehold, formatDateKey, matchesAssigneeFilter, Partner } from "@/context/HouseholdContext";
 import { useRoutines, isRoutineScheduledForDate } from "@/context/RoutinesContext";
 import { useNotifications } from "@/context/NotificationContext";
 import { ChevronLeft, ChevronRight, Heart, Sparkles } from "lucide-react";
@@ -280,7 +280,8 @@ export function CalendarConsistencySection() {
             onClick={() => {
               setHasCheered(true);
               const sender = partnerNames[activePartner] || "You";
-              sendCheer(sender, "sent you love & momentum! Keep rocking it! ❤️");
+              const otherPartner: Partner = activePartner === "alex" ? "sam" : "alex";
+              sendCheer(sender, "sent you love & momentum! Keep rocking it! ❤️", otherPartner);
               setTimeout(() => setHasCheered(false), 3000);
             }}
             className={`px-3 py-1.5 border-2 border-black rounded-xl text-xs font-bold font-heading transition cursor-pointer active:translate-x-0.5 active:translate-y-0.5 ${

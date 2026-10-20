@@ -284,10 +284,10 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
     const nextCompleted = !target.completed;
     const isTest = typeof process !== "undefined" && process.env.NODE_ENV === "test";
     const todayKey = completedDateKey || formatDateKey(isTest ? new Date(2026, 9, 14) : new Date());
-    const updatedTask = {
+    const updatedTask: DailyTask = {
       ...target,
       completed: nextCompleted,
-      completedDate: nextCompleted ? todayKey : undefined,
+      completedDate: nextCompleted ? todayKey : "",
     };
 
     saveTasks((prev) =>
@@ -302,7 +302,7 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
 
     if (target.isKanbanSynced && target.kanbanId) {
       syncHooksRef.current.forEach((cb) =>
-        cb(target.kanbanId as string, nextCompleted)
+        cb(String(target.kanbanId), nextCompleted)
       );
     }
   };
@@ -323,7 +323,7 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
     const target = tasks.find((t) => t.id === id);
     if (target?.isKanbanSynced && target.kanbanId) {
       syncHooksRef.current.forEach((cb) =>
-        cb(target.kanbanId as string, false, "delete")
+        cb(String(target.kanbanId), false, "delete")
       );
     }
     saveTasks((prev) => prev.filter((t) => t.id !== id));
@@ -335,15 +335,37 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
   };
 
   const setTaskCompletedByKanbanId = (kanbanId: string, completed: boolean) => {
+    let updatedTask: DailyTask | undefined;
     saveTasks((prev) =>
-      prev.map((t) =>
-        t.kanbanId === kanbanId ? { ...t, completed } : t
-      )
+      prev.map((t) => {
+        if (String(t.kanbanId) === String(kanbanId)) {
+          const isTest = typeof process !== "undefined" && process.env.NODE_ENV === "test";
+          const todayKey = formatDateKey(isTest ? new Date(2026, 9, 14) : new Date());
+          updatedTask = {
+            ...t,
+            completed,
+            completedDate: completed ? todayKey : "",
+          };
+          return updatedTask;
+        }
+        return t;
+      })
     );
+    if (updatedTask && circleId) {
+      upsertDailyTaskToFirebase(circleId, updatedTask).catch((err) =>
+        console.warn("Daily tasks sync warning:", err?.message || err)
+      );
+    }
   };
 
   const removeTaskByKanbanId = (kanbanId: string) => {
-    saveTasks((prev) => prev.filter((t) => t.kanbanId !== kanbanId));
+    const target = tasks.find((t) => String(t.kanbanId) === String(kanbanId));
+    if (target && circleId) {
+      deleteDailyTaskFromFirebase(circleId, target.id).catch((err) =>
+        console.warn("Daily tasks sync warning:", err?.message || err)
+      );
+    }
+    saveTasks((prev) => prev.filter((t) => String(t.kanbanId) !== String(kanbanId)));
   };
 
   return (

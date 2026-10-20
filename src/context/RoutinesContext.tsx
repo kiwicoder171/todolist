@@ -264,23 +264,21 @@ export function RoutinesProvider({ children }: { children: ReactNode }) {
   };
 
   const toggleCompletion = (id: string, date: Date) => {
+    const target = routines.find((r) => r.id === id);
+    if (!target) return;
     const dateKey = formatDateKey(date);
-    let updatedRoutine: Routine | undefined;
+    const currentVal = !!target.completions[dateKey];
+    const updatedRoutine: Routine = {
+      ...target,
+      completions: {
+        ...target.completions,
+        [dateKey]: !currentVal,
+      },
+    };
     saveRoutines((prev) =>
-      prev.map((r) => {
-        if (r.id !== id) return r;
-        const currentVal = !!r.completions[dateKey];
-        updatedRoutine = {
-          ...r,
-          completions: {
-            ...r.completions,
-            [dateKey]: !currentVal,
-          },
-        };
-        return updatedRoutine;
-      })
+      prev.map((r) => (r.id === id ? updatedRoutine : r))
     );
-    if (updatedRoutine && circleId) {
+    if (circleId) {
       upsertRoutineToFirebase(circleId, updatedRoutine as any).catch((err) =>
         console.warn("Routines sync warning:", err?.message || err)
       );

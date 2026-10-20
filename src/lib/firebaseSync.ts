@@ -182,3 +182,61 @@ export async function updateScoresInFirebase(
   const clean = sanitizeForFirestore(scores);
   await setDoc(circleRef, { scores: clean }, { merge: true });
 }
+
+/**
+ * Real-time listener for circle notifications subcollection
+ */
+export function subscribeToNotifications(
+  circleId: string,
+  onUpdate: (notifications: any[]) => void
+): Unsubscribe {
+  if (!db || !isFirebaseConfigured()) return () => {};
+  const colRef = collection(db, "circles", circleId, "notifications");
+  return onSnapshot(colRef, (snap) => {
+    const notifs = snap.docs.map((d) => d.data());
+    onUpdate(notifs);
+  });
+}
+
+export async function upsertNotificationToFirebase(
+  circleId: string,
+  notification: any
+): Promise<void> {
+  if (!db || !isFirebaseConfigured()) return;
+  const notifRef = doc(db, "circles", circleId, "notifications", notification.id);
+  const clean = sanitizeForFirestore(notification);
+  await setDoc(notifRef, clean, { merge: true });
+}
+
+export async function markNotificationReadInFirebase(
+  circleId: string,
+  notificationId: string,
+  readBy: string[]
+): Promise<void> {
+  if (!db || !isFirebaseConfigured()) return;
+  const notifRef = doc(db, "circles", circleId, "notifications", notificationId);
+  await updateDoc(notifRef, {
+    read: true,
+    readBy,
+  });
+}
+
+export async function deleteNotificationFromFirebase(
+  circleId: string,
+  notificationId: string
+): Promise<void> {
+  if (!db || !isFirebaseConfigured()) return;
+  const notifRef = doc(db, "circles", circleId, "notifications", notificationId);
+  await deleteDoc(notifRef);
+}
+
+export async function clearNotificationsFromFirebase(
+  circleId: string
+): Promise<void> {
+  if (!db || !isFirebaseConfigured()) return;
+  const colRef = collection(db, "circles", circleId, "notifications");
+  const snap = await getDocs(colRef);
+  const deletePromises = snap.docs.map((d) => deleteDoc(d.ref));
+  await Promise.all(deletePromises);
+}
+
