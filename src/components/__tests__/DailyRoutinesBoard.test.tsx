@@ -45,6 +45,6 @@ describe("DailyRoutinesBoard (Seam: Board 1 Apple Notes Checklist)", () => {
     fireEvent.change(input, { target: { value: "Take multivitamins" } });
     fireEvent.keyDown(input, { key: "Enter", code: "Enter" });
 
-    expect(screen.getByText(/Take multivitamins/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Take multivitamins/i).length).toBeGreaterThan(0);
   });
 });

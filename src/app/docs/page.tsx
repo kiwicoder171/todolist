@@ -506,6 +506,9 @@ export default function DocsPage() {
                 <li>
                   <strong>Persistent Task &amp; Kanban Check State Across Reloads:</strong> Resolved task state persistence gaps where checking off a daily task or moving a card on the Kanban board occasionally reverted upon page reload or snapshot sync. Fixed two-way Kanban-Daily task sync hooks to immediately write deterministic updates to Firestore, eliminated race conditions during asynchronous React state updates, and guaranteed bidirectional status synchronization.
                 </li>
+                <li>
+                  <strong>Resilient Routine Creation, Mobile Quick Add Bar &amp; Other-Days Visibility:</strong> Fixed routine creation so incoming Firestore snapshots never overwrite pending or locally added habits via robust <code className="font-bold">localOnly</code> snapshot merging. Upgraded the Quick Add Routine bar with an explicit <code className="font-bold">&lt;form onSubmit&gt;</code>, mobile-friendly <strong>Add</strong> button, and Assignee selector (<code className="font-bold">Me</code>, <code className="font-bold">Partner</code>, <code className="font-bold">Both</code>). Added an &ldquo;Other Days&rdquo; collapsible indicator on the habits board so routines scheduled for different days of the week (such as Tue/Thu/Sat when viewing Wednesday) are clearly displayed and manageable instead of appearing missing.
+                </li>
               </ul>
             </article>
 

@@ -196,10 +196,17 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
     if (!circleId) return;
     const unsub = subscribeToKanbanCards(circleId, (remoteCards) => {
       if (remoteCards) {
-        setCards(remoteCards);
-        try {
-          localStorage.setItem("couple_task_hub_kanban_cards", JSON.stringify(remoteCards));
-        } catch {}
+        setCards((prev) => {
+          const remoteIds = new Set(remoteCards.map((c) => c.id));
+          const localOnly = prev.filter(
+            (c) => !remoteIds.has(c.id) && !SEED_KANBAN_CARDS.some((s) => s.id === c.id)
+          );
+          const merged = [...remoteCards, ...localOnly];
+          try {
+            localStorage.setItem("couple_task_hub_kanban_cards", JSON.stringify(merged));
+          } catch {}
+          return merged;
+        });
       }
     });
     return () => unsub();

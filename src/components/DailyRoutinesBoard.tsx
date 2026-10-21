@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, KeyboardEvent } from "react";
-import { useHousehold, matchesAssigneeFilter, Assignee, getAssigneeLabel, formatDateKey } from "@/context/HouseholdContext";
+import { useHousehold, matchesAssigneeFilter, Assignee, getAssigneeLabel, formatDateKey, resolveIntentToAssignee } from "@/context/HouseholdContext";
 import {
   useRoutines,
   isRoutineScheduledForDate,
@@ -10,7 +10,7 @@ import {
 } from "@/context/RoutinesContext";
 import { evaluatePartnerDay } from "@/utils/gamification";
 import { useNotifications } from "@/context/NotificationContext";
-import { Check, ArrowUp, ArrowDown, X, Plus, Calendar } from "lucide-react";
+import { Check, ArrowUp, ArrowDown, X, Plus, Calendar, ChevronDown } from "lucide-react";
 import { AddRoutineModal } from "./AddRoutineModal";
 
 export function DailyRoutinesBoard() {
@@ -33,11 +33,14 @@ export function DailyRoutinesBoard() {
   const { addNotification } = useNotifications();
 
   const [newTitle, setNewTitle] = useState("");
-  const [newAssignee, setNewAssignee] = useState<Assignee>("both");
+  const [newAssignee, setNewAssignee] = useState<Assignee>("mine");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalInitialTitle, setModalInitialTitle] = useState("");
+  const [showOtherDays, setShowOtherDays] = useState(false);
 
   const myName = activePartner === "alex" ? partnerNames.alex : partnerNames.sam;
+  const otherPartner = activePartner === "alex" ? "sam" : "alex";
+  const otherPartnerName = activePartner === "alex" ? partnerNames.sam : partnerNames.alex;
 
   // Active partner's day evaluation (evaluates partner's assigned 'mine' + 'both' routines)
   const myEvaluation = evaluatePartnerDay(
@@ -49,7 +52,6 @@ export function DailyRoutinesBoard() {
   );
 
   // Other partner's evaluation
-  const otherPartner = activePartner === "alex" ? "sam" : "alex";
   const otherEvaluation = evaluatePartnerDay(
     otherPartner,
     selectedDate,
@@ -70,6 +72,17 @@ export function DailyRoutinesBoard() {
       assigneeFilter
     );
     return isScheduled && matchesFilter;
+  });
+
+  // Routines applicable to current filter but scheduled for other days of the week
+  const otherDayRoutines = routines.filter((r) => {
+    const isScheduled = isRoutineScheduledForDate(r.frequency, selectedDate);
+    const matchesFilter = matchesAssigneeFilter(
+      r.assignee,
+      activePartner,
+      assigneeFilter
+    );
+    return !isScheduled && matchesFilter;
   });
 
   const [celebrationMsg, setCelebrationMsg] = useState<string | null>(null);
@@ -114,10 +127,19 @@ export function DailyRoutinesBoard() {
     }
   };
 
+  const handleQuickAddSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newTitle.trim()) return;
+    const resolved = resolveIntentToAssignee(newAssignee, activePartner);
+    addRoutine(newTitle.trim(), resolved, "daily");
+    setCelebrationMsg(`✨ Added "${newTitle.trim()}"!`);
+    setTimeout(() => setCelebrationMsg(null), 2500);
+    setNewTitle("");
+  };
+
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && newTitle.trim()) {
-      addRoutine(newTitle.trim(), newAssignee, "daily");
-      setNewTitle("");
+      handleQuickAddSubmit(e);
     }
   };
 
@@ -280,11 +302,72 @@ export function DailyRoutinesBoard() {
             );
           })
         )}
+
+        {/* Other Days Scheduled Routines Accordion */}
+        {otherDayRoutines.length > 0 && (
+          <div className="pt-2 border-t border-dashed border-zinc-200">
+            <button
+              type="button"
+              onClick={() => setShowOtherDays((prev) => !prev)}
+              className="text-[11px] font-heading font-extrabold uppercase text-zinc-500 hover:text-black flex items-center justify-between w-full py-1.5 transition cursor-pointer"
+            >
+              <span className="flex items-center gap-1.5">
+                <Calendar className="w-3.5 h-3.5 text-zinc-400" />
+                <span>
+                  {otherDayRoutines.length} routine{otherDayRoutines.length > 1 ? "s" : ""} on other days
+                </span>
+              </span>
+              <span className="text-[10px] underline">
+                {showOtherDays ? "Hide" : "Show"}
+              </span>
+            </button>
+
+            {showOtherDays && (
+              <div className="space-y-1.5 mt-1.5">
+                {otherDayRoutines.map((r) => (
+                  <div
+                    key={r.id}
+                    className="flex items-center justify-between p-2 rounded-xl border border-dashed border-zinc-300 bg-zinc-50 opacity-80"
+                  >
+                    <div className="flex items-center gap-2 min-w-0 mr-2">
+                      <div className="w-5 h-5 rounded-md border border-zinc-300 bg-zinc-100 flex items-center justify-center text-[10px] text-zinc-400 font-mono">
+                        —
+                      </div>
+                      <span className="text-xs font-medium text-zinc-600 truncate">
+                        {r.title}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <span className="text-[9px] font-heading font-bold text-zinc-500 bg-white px-1.5 py-0.5 rounded border border-zinc-200">
+                        {formatFrequencyLabel(r.frequency)}
+                      </span>
+                      <span className="text-[9px] font-heading font-extrabold uppercase px-1.5 py-0.5 rounded border border-black bg-white text-black">
+                        {getAssigneeLabel(r.assignee, activePartner, partnerNames)}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => deleteRoutine(r.id)}
+                        title="Delete Routine"
+                        aria-label="Delete routine"
+                        className="p-1 hover:text-black text-zinc-400 rounded transition"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Quick Add Routine Bar */}
       <div className="mt-4 pt-3.5 border-t-2 border-dashed border-zinc-300">
-        <div className="flex items-center gap-2 bg-[#f4f4f5] border-2 border-black rounded-2xl px-3 py-2 focus-within:ring-2 focus-within:ring-black transition shadow-sm">
+        <form
+          onSubmit={handleQuickAddSubmit}
+          className="flex items-center gap-1.5 sm:gap-2 bg-[#f4f4f5] border-2 border-black rounded-2xl px-2.5 sm:px-3 py-2 focus-within:ring-2 focus-within:ring-black transition shadow-sm"
+        >
           <Plus className="w-4 h-4 text-zinc-400 shrink-0" />
           <input
             type="text"
@@ -295,8 +378,21 @@ export function DailyRoutinesBoard() {
             onKeyDown={handleKeyDown}
             placeholder="Add daily routine... (Enter)"
             aria-label="New routine title"
-            className="bg-transparent text-xs font-medium text-black placeholder-zinc-400 focus:outline-none w-full"
+            className="bg-transparent text-xs font-medium text-black placeholder-zinc-400 focus:outline-none w-full min-w-0"
           />
+
+          <select
+            id="quick-add-routine-assignee"
+            name="routineAssignee"
+            value={newAssignee}
+            aria-label="Routine assignee"
+            onChange={(e) => setNewAssignee(e.target.value as Assignee)}
+            className="bg-white font-heading font-bold text-[10px] uppercase text-black rounded-lg px-2 py-1 border border-black focus:outline-none shrink-0"
+          >
+            <option value="mine">Me</option>
+            <option value="partner">{otherPartnerName}</option>
+            <option value="both">Both</option>
+          </select>
 
           <button
             type="button"
@@ -308,9 +404,17 @@ export function DailyRoutinesBoard() {
             className="bg-white hover:bg-black hover:text-white font-heading font-extrabold text-[10px] uppercase text-black rounded-xl px-2.5 py-1.5 border border-black transition shrink-0 flex items-center gap-1 shadow-xs whitespace-nowrap"
           >
             <Calendar className="w-3 h-3" />
-            <span>Pick Days</span>
+            <span className="hidden sm:inline">Pick Days</span>
           </button>
-        </div>
+
+          <button
+            type="submit"
+            disabled={!newTitle.trim()}
+            className="bg-black text-white hover:bg-zinc-800 disabled:opacity-30 font-heading font-extrabold text-[10px] uppercase rounded-xl px-3 py-1.5 border border-black transition shrink-0 shadow-xs cursor-pointer"
+          >
+            Add
+          </button>
+        </form>
       </div>
 
       <AddRoutineModal

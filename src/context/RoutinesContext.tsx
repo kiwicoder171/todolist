@@ -190,10 +190,17 @@ export function RoutinesProvider({ children }: { children: ReactNode }) {
     if (!circleId) return;
     const unsub = subscribeToRoutines(circleId, (remoteRoutines) => {
       if (remoteRoutines) {
-        setRoutines(remoteRoutines as Routine[]);
-        try {
-          localStorage.setItem(ROUTINES_STORAGE_KEY, JSON.stringify(remoteRoutines));
-        } catch {}
+        setRoutines((prev) => {
+          const remoteIds = new Set(remoteRoutines.map((r) => r.id));
+          const localOnly = prev.filter(
+            (r) => !remoteIds.has(r.id) && !isSeedRoutines([r])
+          );
+          const merged = [...(remoteRoutines as Routine[]), ...localOnly];
+          try {
+            localStorage.setItem(ROUTINES_STORAGE_KEY, JSON.stringify(merged));
+          } catch {}
+          return merged;
+        });
       }
     });
     return () => unsub();
