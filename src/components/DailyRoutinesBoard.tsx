@@ -1,14 +1,15 @@
 "use client";
 
 import React, { useState, useEffect, KeyboardEvent } from "react";
-import { useHousehold, matchesAssigneeFilter, Assignee, getAssigneeLabel, formatDateKey, resolveIntentToAssignee } from "@/context/HouseholdContext";
+import { useHousehold, matchesAssigneeFilter, Assignee, getAssigneeLabel, formatDateKey, resolveIntentToAssignee, isMockScores } from "@/context/HouseholdContext";
+import { useOptionalAuth } from "@/context/AuthContext";
 import {
   useRoutines,
   isRoutineScheduledForDate,
   formatFrequencyLabel,
   RoutineFrequency,
 } from "@/context/RoutinesContext";
-import { evaluatePartnerDay } from "@/utils/gamification";
+import { evaluatePartnerDay, getConsecutiveMisses } from "@/utils/gamification";
 import { useNotifications } from "@/context/NotificationContext";
 import { Check, ArrowUp, ArrowDown, X, Plus, Calendar, ChevronDown } from "lucide-react";
 import { AddRoutineModal } from "./AddRoutineModal";
@@ -21,7 +22,12 @@ export function DailyRoutinesBoard() {
     partnerNames,
     isDateFrozen,
     updateScore,
+    reconcileDailyPenaltiesAndStreaks,
+    scores,
+    circle,
   } = useHousehold();
+  const authContext = useOptionalAuth();
+  const user = authContext?.user;
   const {
     routines,
     addRoutine,
@@ -62,6 +68,31 @@ export function DailyRoutinesBoard() {
 
   const isMyDayPerfect = myEvaluation.isPerfectDay;
   const isBothHouseholdPerfect = myEvaluation.isPerfectDay && otherEvaluation.isPerfectDay;
+
+  const isMock = !user && !circle && isMockScores(scores);
+
+  const missStatus = isMock
+    ? { consecutiveMisses: 0, totalPenalty: 0 }
+    : getConsecutiveMisses(
+        activePartner,
+        selectedDate,
+        routines,
+        isDateFrozen,
+        isCompleted
+      );
+
+  useEffect(() => {
+    const res = reconcileDailyPenaltiesAndStreaks(routines, isCompleted, selectedDate);
+    if (res && res.deltaPoints && res.deltaPoints[activePartner] < 0) {
+      addNotification({
+        title: "⚠️ Routine Penalty Applied",
+        message: `${myName} missed daily routines for 2 consecutive days. 1 point deducted.`,
+        type: "streak_alert",
+        recipient: "both",
+        points: res.deltaPoints[activePartner],
+      });
+    }
+  }, [routines, selectedDate, activePartner, myName, reconcileDailyPenaltiesAndStreaks, isCompleted, addNotification]);
 
   // Filter routines by schedule date & assignee filter
   const visibleRoutines = routines.filter((r) => {
@@ -204,6 +235,18 @@ export function DailyRoutinesBoard() {
           </div>
           <span className="text-[10px] px-2 py-0.5 rounded-full border border-white bg-white/20">
             Streak Active
+          </span>
+        </div>
+      ) : missStatus.consecutiveMisses >= 2 ? (
+        <div className="mb-3 p-2.5 rounded-2xl border-2 border-black bg-rose-50 text-rose-800 flex items-center justify-between text-xs font-heading font-extrabold shadow-[2px_2px_0_0_#000]">
+          <div className="flex items-center gap-2">
+            <span>⚠️</span>
+            <span>
+              {missStatus.consecutiveMisses} DAYS MISSED ({missStatus.totalPenalty} PT PENALTY APPLIED)
+            </span>
+          </div>
+          <span className="text-[10px] px-2 py-0.5 rounded-full border border-rose-600 bg-rose-100 text-rose-700 font-bold">
+            Complete Today to Recover
           </span>
         </div>
       ) : null}

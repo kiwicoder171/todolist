@@ -1,3 +1,5 @@
+> 🧠 **Obsidian Hub**: [[_Brain/Projects/Todo-List|Todo-List]] · [[Antigravity/Todo-List/CONTEXT|Todo-List/CONTEXT.md]]
+
 # 04: Board 3 — Unified Kanban Board & Two-Way Day View Sync
 
 **What to build:**

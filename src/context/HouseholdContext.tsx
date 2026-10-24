@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
 import {
   saveCircleToFirebase,
   findCircleByJoinCode,
@@ -8,6 +8,7 @@ import {
   updateScoresInFirebase,
 } from "@/lib/firebaseSync";
 import { useOptionalAuth } from "./AuthContext";
+import { reconcileGamificationState } from "@/utils/gamification";
 
 export type Partner = "alex" | "sam";
 export type Assignee = "mine" | "partner" | "both";
@@ -55,6 +56,12 @@ export interface HouseholdContextType {
   updateScore: (partner: Partner, deltaPoints: number, deltaStreak?: number) => void;
   perfectDays: Record<Partner, string[]>;
   reconcilePerfectDays: (partner: Partner, perfectDateKeys: string[]) => void;
+  appliedPenalties: Record<Partner, Record<string, number>>;
+  reconcileDailyPenaltiesAndStreaks: (
+    routineList: any[],
+    isRoutineCompleted: (id: string, date: Date) => boolean,
+    asOfDate?: Date
+  ) => { deltaPoints: Record<Partner, number>; streaks: Record<Partner, number> };
 }
 
 export function formatDateKey(date: Date): string {
@@ -159,13 +166,18 @@ export function sanitizeScores(raw: any): Record<Partner, PartnerScoreState> {
   if (!raw || isMockScores(raw)) {
     return { alex: { points: 0, streak: 0 }, sam: { points: 0, streak: 0 } };
   }
+  const alexRaw = Number(raw?.alex?.points);
+  const samRaw = Number(raw?.sam?.points);
+  const alexPts = Number.isNaN(alexRaw) ? 0 : alexRaw > 500 ? 1 : alexRaw < -500 ? -1 : alexRaw;
+  const samPts = Number.isNaN(samRaw) ? 0 : samRaw > 500 ? 1 : samRaw < -500 ? -1 : samRaw;
+
   return {
     alex: {
-      points: Number(raw?.alex?.points) > 500 ? 1 : Math.max(0, Number(raw?.alex?.points) || 0),
+      points: alexPts,
       streak: Math.max(0, Number(raw?.alex?.streak) || 0),
     },
     sam: {
-      points: Number(raw?.sam?.points) > 500 ? 1 : Math.max(0, Number(raw?.sam?.points) || 0),
+      points: samPts,
       streak: Math.max(0, Number(raw?.sam?.streak) || 0),
     },
   };
@@ -266,6 +278,21 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
     return { alex: [], sam: [] };
   });
 
+  const [appliedPenalties, setAppliedPenalties] = useState<
+    Record<Partner, Record<string, number>>
+  >(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed.appliedPenalties) return parsed.appliedPenalties;
+        }
+      } catch {}
+    }
+    return { alex: {}, sam: {} };
+  });
+
   // Client-side hydration from localStorage (runs after mount, eliminating SSR hydration mismatch)
   useEffect(() => {
     if (isTest || typeof window === "undefined") return;
@@ -276,11 +303,12 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
         if (parsed.circle) setCircle(parsed.circle);
         if (parsed.partnerNames) setPartnerNames(parsed.partnerNames);
         if (parsed.perfectDays) setPerfectDays(parsed.perfectDays);
+        if (parsed.appliedPenalties) setAppliedPenalties(parsed.appliedPenalties);
         if (parsed.scores) {
           if ((user || parsed.circle) && isMockScores(parsed.scores)) {
             const clean = { alex: { points: 0, streak: 0 }, sam: { points: 0, streak: 0 } };
             setScores(clean);
-            saveState(parsed.circle || circle, parsed.partnerNames || partnerNames, clean, parsed.spaceMode || spaceMode);
+            saveState(parsed.circle || circle, parsed.partnerNames || partnerNames, clean, parsed.spaceMode || spaceMode, parsed.perfectDays, parsed.appliedPenalties);
           } else {
             setScores(parsed.scores);
           }
@@ -332,7 +360,8 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
     newNames: Record<Partner, string>,
     newScores: Record<Partner, PartnerScoreState>,
     newMode?: SpaceMode,
-    newPerfectDays?: Record<Partner, string[]>
+    newPerfectDays?: Record<Partner, string[]>,
+    newPenalties?: Record<Partner, Record<string, number>>
   ) => {
     if (typeof window === "undefined") return;
     try {
@@ -344,6 +373,7 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
           scores: newScores,
           spaceMode: newMode !== undefined ? newMode : spaceMode,
           perfectDays: newPerfectDays !== undefined ? newPerfectDays : perfectDays,
+          appliedPenalties: newPenalties !== undefined ? newPenalties : appliedPenalties,
         })
       );
     } catch {}
@@ -420,6 +450,9 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
       }
       if ((remoteCircle as any).perfectDays) {
         setPerfectDays((remoteCircle as any).perfectDays);
+      }
+      if ((remoteCircle as any).appliedPenalties) {
+        setAppliedPenalties((remoteCircle as any).appliedPenalties);
       }
     });
     return () => unsub();
@@ -698,6 +731,74 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  const reconcileDailyPenaltiesAndStreaks = useCallback(
+    (
+      routineList: any[],
+      isRoutineCompleted: (id: string, date: Date) => boolean,
+      asOfDate?: Date
+    ) => {
+      const now = new Date();
+      const targetDate = asOfDate
+        ? asOfDate
+        : selectedDate && selectedDate.getTime() > now.getTime()
+        ? selectedDate
+        : now;
+      const skipMock = !user && !circle && isMockScores(scores);
+
+      const result = reconcileGamificationState({
+        scores,
+        appliedPenalties,
+        perfectDays,
+        routines: routineList,
+        isDateFrozen,
+        isRoutineCompleted,
+        asOfDate: targetDate,
+        earliestAllowedDate: circle?.createdAt ? formatDateKey(new Date(circle.createdAt)) : null,
+        skipMock,
+      });
+
+      if (result.changed) {
+        setScores(result.scores);
+        setAppliedPenalties(result.appliedPenalties);
+        setPerfectDays(result.perfectDays);
+        saveState(
+          circle,
+          partnerNames,
+          result.scores,
+          spaceMode,
+          result.perfectDays,
+          result.appliedPenalties
+        );
+        if (circle?.id) {
+          updateScoresInFirebase(
+            circle.id,
+            result.scores,
+            result.appliedPenalties,
+            result.perfectDays
+          ).catch((err) =>
+            console.warn("Update scores warning:", err?.message || err)
+          );
+        }
+      }
+
+      return {
+        deltaPoints: result.deltaPoints,
+        streaks: { alex: result.scores.alex.streak, sam: result.scores.sam.streak },
+      };
+    },
+    [
+      circle,
+      partnerNames,
+      scores,
+      spaceMode,
+      perfectDays,
+      appliedPenalties,
+      user,
+      selectedDate,
+      isDateFrozen,
+    ]
+  );
+
   const updatePartnerName = (partner: Partner, newName: string) => {
     const clean = newName.trim();
     if (!clean) return;
@@ -749,6 +850,8 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
         updateScore,
         perfectDays,
         reconcilePerfectDays,
+        appliedPenalties,
+        reconcileDailyPenaltiesAndStreaks,
       }}
     >
       {children}

@@ -175,12 +175,17 @@ export async function deleteKanbanCardFromFirebase(
  */
 export async function updateScoresInFirebase(
   circleId: string,
-  scores: Record<Partner, PartnerScoreState>
+  scores: Record<Partner, PartnerScoreState>,
+  appliedPenalties?: Record<Partner, Record<string, number>>,
+  perfectDays?: Record<Partner, string[]>
 ): Promise<void> {
   if (!db || !isFirebaseConfigured()) return;
   const circleRef = doc(db, "circles", circleId);
-  const clean = sanitizeForFirestore(scores);
-  await setDoc(circleRef, { scores: clean }, { merge: true });
+  const cleanScores = sanitizeForFirestore(scores);
+  const payload: any = { scores: cleanScores };
+  if (appliedPenalties) payload.appliedPenalties = sanitizeForFirestore(appliedPenalties);
+  if (perfectDays) payload.perfectDays = sanitizeForFirestore(perfectDays);
+  await setDoc(circleRef, payload, { merge: true });
 }
 
 /**

@@ -1,5 +1,6 @@
 import { Routine, isRoutineScheduledForDate, formatDateKey } from "@/context/RoutinesContext";
-import { Partner, matchesAssigneeFilter } from "@/context/HouseholdContext";
+import type { Partner, PartnerScoreState } from "@/context/HouseholdContext";
+import { matchesAssigneeFilter } from "@/context/HouseholdContext";
 
 export interface DayEvaluation {
   date: string;
@@ -160,5 +161,223 @@ export function calculatePartnerStreakAndScore(
   return {
     points,
     streak: currentStreak,
+  };
+}
+
+export interface MissStatus {
+  consecutiveMisses: number;
+  totalPenalty: number;
+}
+
+/**
+ * Calculates how many consecutive missed days have occurred prior to asOfDate.
+ */
+export function getConsecutiveMisses(
+  partner: Partner,
+  asOfDate: Date,
+  routines: Routine[],
+  isDateFrozen: (d: Date) => boolean,
+  isRoutineCompleted: (id: string, d: Date) => boolean,
+  lookbackDays = 14
+): MissStatus {
+  let consecutiveMisses = 0;
+
+  // Walk backwards from yesterday
+  for (let i = 1; i <= lookbackDays; i++) {
+    const past = new Date(asOfDate);
+    past.setDate(asOfDate.getDate() - i);
+    const ev = evaluatePartnerDay(partner, past, routines, isDateFrozen, isRoutineCompleted);
+
+    if (ev.isFreezeDay || ev.isExempt) {
+      continue;
+    }
+
+    if (ev.isPerfectDay) {
+      break;
+    } else {
+      consecutiveMisses++;
+    }
+  }
+
+  return {
+    consecutiveMisses,
+    totalPenalty: calculatePenaltyForConsecutiveMisses(consecutiveMisses),
+  };
+}
+
+export interface GamificationReconciliationInput {
+  scores: Record<Partner, PartnerScoreState>;
+  appliedPenalties: Record<Partner, Record<string, number>>;
+  perfectDays: Record<Partner, string[]>;
+  routines: Routine[];
+  isDateFrozen: (d: Date) => boolean;
+  isRoutineCompleted: (id: string, d: Date) => boolean;
+  asOfDate: Date;
+  earliestAllowedDate?: string | null;
+  skipMock?: boolean;
+}
+
+export interface GamificationReconciliationResult {
+  scores: Record<Partner, PartnerScoreState>;
+  appliedPenalties: Record<Partner, Record<string, number>>;
+  perfectDays: Record<Partner, string[]>;
+  deltaPoints: Record<Partner, number>;
+  changed: boolean;
+}
+
+export function reconcileGamificationState(
+  input: GamificationReconciliationInput
+): GamificationReconciliationResult {
+  const {
+    scores,
+    appliedPenalties,
+    perfectDays,
+    routines,
+    isDateFrozen,
+    isRoutineCompleted,
+    asOfDate,
+    earliestAllowedDate,
+    skipMock,
+  } = input;
+
+  if (skipMock || !routines || routines.length === 0) {
+    return {
+      scores,
+      appliedPenalties,
+      perfectDays,
+      deltaPoints: { alex: 0, sam: 0 },
+      changed: false,
+    };
+  }
+
+  const asOfKey = formatDateKey(asOfDate);
+
+  // Gather past date keys to evaluate (all past completed dates, recorded penalties, perfect dates, and up to 14 days back)
+  const dateKeysSet = new Set<string>();
+  routines.forEach((r) => {
+    Object.keys(r.completions || {}).forEach((k) => dateKeysSet.add(k));
+  });
+  Object.keys(appliedPenalties.alex || {}).forEach((k) => dateKeysSet.add(k));
+  Object.keys(appliedPenalties.sam || {}).forEach((k) => dateKeysSet.add(k));
+  (perfectDays.alex || []).forEach((k) => dateKeysSet.add(k));
+  (perfectDays.sam || []).forEach((k) => dateKeysSet.add(k));
+
+  for (let i = 1; i <= 14; i++) {
+    const past = new Date(asOfDate);
+    past.setDate(asOfDate.getDate() - i);
+    dateKeysSet.add(formatDateKey(past));
+  }
+
+  const sortedPastDates = Array.from(dateKeysSet)
+    .filter((k) => k < asOfKey && (!earliestAllowedDate || k >= earliestAllowedDate))
+    .sort();
+
+  const partners: Partner[] = ["alex", "sam"];
+  let changed = false;
+
+  const nextScores: Record<Partner, PartnerScoreState> = {
+    alex: { ...scores.alex },
+    sam: { ...scores.sam },
+  };
+  const nextPenalties: Record<Partner, Record<string, number>> = {
+    alex: { ...(appliedPenalties.alex || {}) },
+    sam: { ...(appliedPenalties.sam || {}) },
+  };
+  const nextPerfectDays: Record<Partner, string[]> = {
+    alex: [...(perfectDays.alex || [])],
+    sam: [...(perfectDays.sam || [])],
+  };
+  const deltaPoints: Record<Partner, number> = { alex: 0, sam: 0 };
+
+  for (const partner of partners) {
+    let consecutiveMisses = 0;
+    let previousPenaltyInBlock = 0;
+    let streak = scores[partner].streak;
+    const partnerPerfectDates = new Set<string>();
+    let partnerDelta = 0;
+
+    for (const dateStr of sortedPastDates) {
+      const parts = dateStr.split("-").map(Number);
+      const d = new Date(parts[0], parts[1] - 1, parts[2]);
+
+      const ev = evaluatePartnerDay(partner, d, routines, isDateFrozen, isRoutineCompleted);
+
+      if (ev.isFreezeDay || ev.isExempt) {
+        continue;
+      }
+
+      if (ev.isPerfectDay) {
+        partnerPerfectDates.add(dateStr);
+        streak += 1;
+        consecutiveMisses = 0;
+        previousPenaltyInBlock = 0;
+
+        const previouslyApplied = nextPenalties[partner][dateStr] || 0;
+        if (previouslyApplied !== 0) {
+          partnerDelta -= previouslyApplied; // refund
+          delete nextPenalties[partner][dateStr];
+          changed = true;
+        }
+      } else {
+        streak = 0;
+        consecutiveMisses += 1;
+        const totalPenalty = calculatePenaltyForConsecutiveMisses(consecutiveMisses);
+        const expectedDelta = totalPenalty - previousPenaltyInBlock;
+        previousPenaltyInBlock = totalPenalty;
+
+        const previouslyApplied = nextPenalties[partner][dateStr] || 0;
+        const deltaToApply = expectedDelta - previouslyApplied;
+
+        if (deltaToApply !== 0) {
+          partnerDelta += deltaToApply;
+        }
+
+        if (expectedDelta !== 0) {
+          if (nextPenalties[partner][dateStr] !== expectedDelta) {
+            nextPenalties[partner][dateStr] = expectedDelta;
+            changed = true;
+          }
+        } else if (nextPenalties[partner][dateStr] !== undefined) {
+          delete nextPenalties[partner][dateStr];
+          changed = true;
+        }
+      }
+    }
+
+    // Evaluate today (asOfDate) for completion & streak addition
+    const todayEv = evaluatePartnerDay(partner, asOfDate, routines, isDateFrozen, isRoutineCompleted);
+    if (todayEv.isPerfectDay) {
+      partnerPerfectDates.add(asOfKey);
+      streak += 1;
+    }
+
+    deltaPoints[partner] = partnerDelta;
+
+    const newPoints = scores[partner].points + partnerDelta;
+    if (newPoints !== scores[partner].points || streak !== scores[partner].streak) {
+      nextScores[partner] = {
+        points: newPoints,
+        streak,
+      };
+      changed = true;
+    }
+
+    const updatedPerfectList = Array.from(partnerPerfectDates).sort();
+    const oldPerfectList = (perfectDays[partner] || []).slice().sort();
+    if (
+      updatedPerfectList.length !== oldPerfectList.length ||
+      updatedPerfectList.some((d, idx) => d !== oldPerfectList[idx])
+    ) {
+      nextPerfectDays[partner] = updatedPerfectList;
+      changed = true;
+    }
+  }
+
+  return {
+    scores: nextScores,
+    appliedPenalties: nextPenalties,
+    perfectDays: nextPerfectDays,
+    deltaPoints,
+    changed,
   };
 }

@@ -1,3 +1,5 @@
+> 🧠 **Obsidian Hub**: [[_Brain/Projects/Todo-List|Todo-List]] · [[Antigravity/Todo-List/CONTEXT|Todo-List/CONTEXT.md]]
+
 # Couple Task Hub
 
 A collaborative daily task and workflow web application designed for a couple, combining daily routines, urgent ad-hoc tasks, a Kanban workflow, and calendar-based navigation.

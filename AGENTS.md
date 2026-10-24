@@ -1,4 +1,7 @@
-# AGENTS.md
+> 🧠 **Obsidian Hub**: [[_Brain/Projects/Todo-List|Todo-List]] · [[Antigravity/Todo-List/CONTEXT|Todo-List/CONTEXT.md]]
+
+# Todo-List
+Global rules: `~/.gemini/config/rules/master-orchestrator.md`. Read `CONTEXT.md` first.
 
 ## Agent skills
 

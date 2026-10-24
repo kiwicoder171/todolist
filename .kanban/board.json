@@ -1,0 +1,55 @@
+{
+  "project": "Todo-List (Couple Task Hub)",
+  "path": "/Users/kiwi/Desktop/Developer/Antigravity/Todo-List",
+  "updatedAt": "2026-10-24T16:11:00+07:00",
+  "tasks": [
+    {
+      "id": "cth-1",
+      "title": "Real-time Partner Cheers & Notifications",
+      "desc": "Synced partner cheers and notifications via Firestore subcollection circles/{circleId}/notifications with deterministic task states.",
+      "col": "done",
+      "priority": "high",
+      "tag": "sync"
+    },
+    {
+      "id": "cth-2",
+      "title": "Eliminate Runaway Score Loop",
+      "desc": "Removed automated useEffect recalculating scores, capped score sanitization in HouseholdContext.",
+      "col": "done",
+      "priority": "high",
+      "tag": "bugfix"
+    },
+    {
+      "id": "cth-3",
+      "title": "Preserve Local Routines & Quick-Add Bar",
+      "desc": "Preserved localOnly items on Firestore snapshot arrivals; added form onSubmit and Other Days accordion.",
+      "col": "done",
+      "priority": "high",
+      "tag": "routines"
+    },
+    {
+      "id": "cth-4",
+      "title": "Mobile PWA & Production Health Check",
+      "desc": "Verify build, responsive viewports, and Spark daily quota limits under normal daily usage.",
+      "col": "done",
+      "priority": "medium",
+      "tag": "qa"
+    },
+    {
+      "id": "cth-6",
+      "title": "Routine Miss Penalty Ladder & Streak Break Reconciler",
+      "desc": "Automated penalty ladder (-1 pt on 2 consecutive missed days, -2 on 3, -3 cap) and streak resets in HouseholdContext and DailyRoutinesBoard, supporting negative scores and idempotent retroactive refunds.",
+      "col": "done",
+      "priority": "high",
+      "tag": "gamification"
+    },
+    {
+      "id": "cth-5",
+      "title": "Option B: Mello + YPT Companion App",
+      "desc": "Stand-alone companion app exploration combining virtual study rooms, timer sync, and gamified partner widgets.",
+      "col": "todo",
+      "priority": "low",
+      "tag": "future"
+    }
+  ]
+}

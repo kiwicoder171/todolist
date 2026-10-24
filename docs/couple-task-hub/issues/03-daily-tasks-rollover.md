@@ -1,3 +1,5 @@
+> 🧠 **Obsidian Hub**: [[_Brain/Projects/Todo-List|Todo-List]] · [[Antigravity/Todo-List/CONTEXT|Todo-List/CONTEXT.md]]
+
 # 03: Board 2 — Daily Tasks with Auto-Rollover & Detail Drawer
 
 **What to build:**

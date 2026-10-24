@@ -1,3 +1,5 @@
+> 🧠 **Obsidian Hub**: [[_Brain/Projects/Todo-List|Todo-List]] · [[Antigravity/Todo-List/CONTEXT|Todo-List/CONTEXT.md]]
+
 # 02: Board 1 — Apple Notes Daily Routines & Day-of-Week Scheduling
 
 **What to build:**

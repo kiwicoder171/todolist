@@ -1,3 +1,5 @@
+> 🧠 **Obsidian Hub**: [[_Brain/Projects/Todo-List|Todo-List]] · [[Antigravity/Todo-List/CONTEXT|Todo-List/CONTEXT.md]]
+
 # 06: Gamification — Partner Score, Streaks, Penalty Ladder & Reward Wishlist
 
 **What to build:**

@@ -340,7 +340,7 @@ export function Header({
                 <Flame className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-black shrink-0" />
                 <span>{currentScore.streak} DAYS</span>
               </div>
-              <div className="flex items-center gap-0.5 text-[10px] sm:text-xs">
+              <div className={`flex items-center gap-0.5 text-[10px] sm:text-xs ${currentScore.points < 0 ? "text-rose-600 font-extrabold" : ""}`}>
                 <span>{currentScore.points} PTS</span>
               </div>
               <button
