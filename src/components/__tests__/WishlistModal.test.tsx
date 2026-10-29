@@ -49,7 +49,7 @@ describe("WishlistModal (Seam: Ticket 06 Couple Reward Wishlist)", () => {
     expect(screen.getByText(/Redeemed "Cook Favorite Dinner/i)).toBeInTheDocument();
   });
 
-  it("allows balance to drop into negative numbers when redeeming higher cost reward", () => {
+  it("clamps balance to 0 and does not drop into negative numbers when redeeming higher cost reward", () => {
     render(
       <TestWrapper>
         <WishlistModal isOpen={true} onClose={() => {}} />
@@ -59,8 +59,8 @@ describe("WishlistModal (Seam: Ticket 06 Couple Reward Wishlist)", () => {
     // Alex has 12 pts. Click 15 PTS reward (Back Massage)
     fireEvent.click(screen.getByRole("button", { name: "15 PTS" }));
 
-    // 12 - 15 = -3
-    expect(screen.getByTestId("live-points")).toHaveTextContent("-3");
+    // Clamped to 0 minimum
+    expect(screen.getByTestId("live-points")).toHaveTextContent("0");
   });
 
   it("allows adding a custom couple reward", () => {

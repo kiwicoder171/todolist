@@ -93,7 +93,7 @@ describe("Gamification Penalty Ladder & Missed Routines Reconciliation", () => {
     expect(result.deltaPoints.alex).toBe(0);
   });
 
-  it("supports negative points balances when starting from 0", () => {
+  it("clamps points at 0 and does not go negative when starting from 0", () => {
     const initialScores = {
       alex: { points: 0, streak: 0 },
       sam: { points: 0, streak: 0 },
@@ -110,7 +110,7 @@ describe("Gamification Penalty Ladder & Missed Routines Reconciliation", () => {
       earliestAllowedDate: "2026-10-22",
     });
 
-    expect(result.scores.alex.points).toBe(-1);
+    expect(result.scores.alex.points).toBe(0);
     expect(result.scores.alex.streak).toBe(0);
   });
 

@@ -153,7 +153,7 @@ export function calculatePartnerStreakAndScore(
       const totalPenaltyForMissBlock =
         calculatePenaltyForConsecutiveMisses(consecutiveMisses);
       const deltaPenalty = totalPenaltyForMissBlock - previousPenaltyApplied;
-      points += deltaPenalty;
+      points = Math.max(0, points + deltaPenalty);
       previousPenaltyApplied = totalPenaltyForMissBlock;
     }
   }
@@ -404,7 +404,7 @@ export function reconcileGamificationState(
 
     deltaPoints[partner] = partnerDelta;
 
-    const newPoints = scores[partner].points + partnerDelta;
+    const newPoints = Math.max(0, scores[partner].points + partnerDelta);
     if (newPoints !== scores[partner].points || finalStreak !== scores[partner].streak) {
       nextScores[partner] = {
         points: newPoints,

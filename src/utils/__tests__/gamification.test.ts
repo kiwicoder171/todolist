@@ -167,7 +167,7 @@ describe("Gamification Engine (Seam: Ticket 06 Scoring, Streaks & Penalty Ladder
       expect(result.points).toBe(9);
     });
 
-    it("supports negative points balance", () => {
+    it("clamps points at 0 and does not go negative", () => {
       const dayRecords = [
         { date: "2026-10-01", isPerfect: false, isFreeze: false }, // grace
         { date: "2026-10-02", isPerfect: false, isFreeze: false }, // -1
@@ -175,9 +175,9 @@ describe("Gamification Engine (Seam: Ticket 06 Scoring, Streaks & Penalty Ladder
         { date: "2026-10-04", isPerfect: false, isFreeze: false }, // -3
       ];
 
-      // Initial: 1 pt. Penalty -3 -> Score: -2 pts
+      // Initial: 1 pt. Penalty -3 -> Points clamped to 0 (never negative)
       const result = calculatePartnerStreakAndScore(1, dayRecords);
-      expect(result.points).toBe(-2);
+      expect(result.points).toBe(0);
     });
 
     it("correctly sorts out-of-order date records before computing streak and penalties", () => {

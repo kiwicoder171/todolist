@@ -168,8 +168,8 @@ export function sanitizeScores(raw: any): Record<Partner, PartnerScoreState> {
   }
   const alexRaw = Number(raw?.alex?.points);
   const samRaw = Number(raw?.sam?.points);
-  const alexPts = Number.isFinite(alexRaw) ? alexRaw : 0;
-  const samPts = Number.isFinite(samRaw) ? samRaw : 0;
+  const alexPts = Number.isFinite(alexRaw) ? Math.max(0, alexRaw) : 0;
+  const samPts = Number.isFinite(samRaw) ? Math.max(0, samRaw) : 0;
 
   return {
     alex: {
@@ -651,7 +651,7 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
         (user || circle) && isMockScores(prev)
           ? { alex: { points: 0, streak: 0 }, sam: { points: 0, streak: 0 } }
           : prev;
-      const nextPoints = base[partner].points + deltaPoints;
+      const nextPoints = Math.max(0, base[partner].points + deltaPoints);
       const nextStreak = Math.max(0, base[partner].streak + deltaStreak);
       if (nextPoints === base[partner].points && nextStreak === base[partner].streak) {
         return prev;
