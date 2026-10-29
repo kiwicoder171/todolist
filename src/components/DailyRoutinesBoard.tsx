@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, KeyboardEvent } from "react";
+import React, { useState, useEffect, useRef, KeyboardEvent } from "react";
 import { useHousehold, matchesAssigneeFilter, Assignee, getAssigneeLabel, formatDateKey, resolveIntentToAssignee, isMockScores } from "@/context/HouseholdContext";
 import { useOptionalAuth } from "@/context/AuthContext";
 import {
@@ -81,7 +81,21 @@ export function DailyRoutinesBoard() {
         isCompleted
       );
 
+  const lastEvaluatedKeyRef = useRef<string>("");
+
   useEffect(() => {
+    const selectedKey = formatDateKey(selectedDate);
+    // Create signature based on partner, date, routines count and completions
+    const completionSig = routines
+      .map((r) => `${r.id}:${isCompleted(r.id, selectedDate) ? 1 : 0}`)
+      .join(",");
+    const evalKey = `${activePartner}-${selectedKey}-${routines.length}-${completionSig}`;
+
+    if (lastEvaluatedKeyRef.current === evalKey) {
+      return;
+    }
+    lastEvaluatedKeyRef.current = evalKey;
+
     const res = reconcileDailyPenaltiesAndStreaks(routines, isCompleted, selectedDate);
     if (res && res.deltaPoints && res.deltaPoints[activePartner] < 0) {
       addNotification({

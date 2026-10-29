@@ -168,8 +168,8 @@ export function sanitizeScores(raw: any): Record<Partner, PartnerScoreState> {
   }
   const alexRaw = Number(raw?.alex?.points);
   const samRaw = Number(raw?.sam?.points);
-  const alexPts = Number.isNaN(alexRaw) ? 0 : alexRaw > 500 ? 1 : alexRaw < -500 ? -1 : alexRaw;
-  const samPts = Number.isNaN(samRaw) ? 0 : samRaw > 500 ? 1 : samRaw < -500 ? -1 : samRaw;
+  const alexPts = Number.isFinite(alexRaw) ? alexRaw : 0;
+  const samPts = Number.isFinite(samRaw) ? samRaw : 0;
 
   return {
     alex: {
@@ -418,7 +418,20 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
       if (user.partnerRole) {
         setActivePartner(user.partnerRole);
       }
-      saveState(remoteCircle, names, cleanScores);
+      if ((remoteCircle as any).perfectDays) {
+        setPerfectDays((remoteCircle as any).perfectDays);
+      }
+      if ((remoteCircle as any).appliedPenalties) {
+        setAppliedPenalties((remoteCircle as any).appliedPenalties);
+      }
+      saveState(
+        remoteCircle,
+        names,
+        cleanScores,
+        undefined,
+        (remoteCircle as any).perfectDays,
+        (remoteCircle as any).appliedPenalties
+      );
     });
     return () => unsub();
   }, [user?.circleId, user?.partnerRole]);

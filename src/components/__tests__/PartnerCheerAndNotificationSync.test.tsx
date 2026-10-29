@@ -23,7 +23,7 @@ describe("Partner Cheer & Cross-Device Notification Sync", () => {
       <HouseholdContext.Provider
         value={{
           circle: mockCircle,
-          spaceMode: "duo",
+          spaceMode: "partner",
           setSpaceMode: vi.fn(),
           isConfigured: true,
           isOnboardingOpen: false,
@@ -47,6 +47,8 @@ describe("Partner Cheer & Cross-Device Notification Sync", () => {
           updateScore: vi.fn(),
           perfectDays: { alex: [], sam: [] },
           reconcilePerfectDays: vi.fn(),
+          appliedPenalties: { alex: {}, sam: {} },
+          reconcileDailyPenaltiesAndStreaks: vi.fn(),
         }}
       >
         <NotificationProvider>{children}</NotificationProvider>

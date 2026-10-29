@@ -225,6 +225,48 @@ export interface GamificationReconciliationResult {
   changed: boolean;
 }
 
+/**
+ * Calculates a partner's current streak deterministically by inspecting consecutive perfect days
+ * backwards from asOfDate (including asOfDate if completed today).
+ */
+export function calculateCurrentStreak(
+  partner: Partner,
+  asOfDate: Date,
+  routines: Routine[],
+  isDateFrozen: (d: Date) => boolean,
+  isRoutineCompleted: (id: string, d: Date) => boolean,
+  maxLookbackDays = 60
+): number {
+  let streak = 0;
+
+  // Check today first
+  const todayEv = evaluatePartnerDay(partner, asOfDate, routines, isDateFrozen, isRoutineCompleted);
+  if (todayEv.isPerfectDay) {
+    streak += 1;
+  }
+
+  // Walk backwards from yesterday
+  for (let i = 1; i <= maxLookbackDays; i++) {
+    const past = new Date(asOfDate);
+    past.setDate(asOfDate.getDate() - i);
+    const ev = evaluatePartnerDay(partner, past, routines, isDateFrozen, isRoutineCompleted);
+
+    if (ev.isFreezeDay || ev.isExempt) {
+      // Freezes or exempt days preserve the streak without incrementing it
+      continue;
+    }
+
+    if (ev.isPerfectDay) {
+      streak += 1;
+    } else {
+      // Streak broken
+      break;
+    }
+  }
+
+  return streak;
+}
+
 export function reconcileGamificationState(
   input: GamificationReconciliationInput
 ): GamificationReconciliationResult {
@@ -292,7 +334,6 @@ export function reconcileGamificationState(
   for (const partner of partners) {
     let consecutiveMisses = 0;
     let previousPenaltyInBlock = 0;
-    let streak = scores[partner].streak;
     const partnerPerfectDates = new Set<string>();
     let partnerDelta = 0;
 
@@ -308,7 +349,6 @@ export function reconcileGamificationState(
 
       if (ev.isPerfectDay) {
         partnerPerfectDates.add(dateStr);
-        streak += 1;
         consecutiveMisses = 0;
         previousPenaltyInBlock = 0;
 
@@ -319,7 +359,6 @@ export function reconcileGamificationState(
           changed = true;
         }
       } else {
-        streak = 0;
         consecutiveMisses += 1;
         const totalPenalty = calculatePenaltyForConsecutiveMisses(consecutiveMisses);
         const expectedDelta = totalPenalty - previousPenaltyInBlock;
@@ -348,16 +387,28 @@ export function reconcileGamificationState(
     const todayEv = evaluatePartnerDay(partner, asOfDate, routines, isDateFrozen, isRoutineCompleted);
     if (todayEv.isPerfectDay) {
       partnerPerfectDates.add(asOfKey);
-      streak += 1;
+    }
+
+    // Determine streak deterministically:
+    // 1. If the partner had consecutive misses leading up to today, streak is broken (0).
+    // 2. Walk backwards chronologically through sortedPastDates + today to compute streak from consecutive perfect days.
+    // 3. If no past dates or today broke the streak (e.g. days were frozen/exempt), preserve existing scores[partner].streak.
+    let finalStreak = 0;
+    if (consecutiveMisses > 0) {
+      finalStreak = 0;
+    } else {
+      // Calculate backwards from today
+      const currentBackwardsStreak = calculateCurrentStreak(partner, asOfDate, routines, isDateFrozen, isRoutineCompleted);
+      finalStreak = Math.max(scores[partner].streak || 0, currentBackwardsStreak);
     }
 
     deltaPoints[partner] = partnerDelta;
 
     const newPoints = scores[partner].points + partnerDelta;
-    if (newPoints !== scores[partner].points || streak !== scores[partner].streak) {
+    if (newPoints !== scores[partner].points || finalStreak !== scores[partner].streak) {
       nextScores[partner] = {
         points: newPoints,
-        streak,
+        streak: finalStreak,
       };
       changed = true;
     }

@@ -16,3 +16,4 @@ Part of [[_Brain/00-Master-Orchestrator-MOC|00-Master-Orchestrator-MOC]] · Hub 
 ## 3. Working Memory & Recent Milestones
 - Synchronized with Obsidian Second-Brain Graph using explicit Vault-Root `[[Wikilinks]]`, Zero-Token AST `auto-graphify`, Global Telemetry Badge, and Kanban Board Mod (2026-10-24).
 - Implemented and wired automated daily routine missed penalty ladder (-1 pt on 2 consecutive missed days, -2 on 3, -3 cap) and streak resets in `HouseholdContext`, `gamification.ts`, and `DailyRoutinesBoard`, supporting negative scores and idempotent retroactive refunds (2026-10-24).
+- Resolved runaway streak/point rendering loop: made streak and score reconciliations strictly idempotent, eliminated accumulation-per-render bug in `reconcileGamificationState`, removed the temporary `> 500 ? 1` clamp band-aid, and wrapped `DailyRoutinesBoard` reconciliation calls in an evaluation signature ref guard (2026-10-29).

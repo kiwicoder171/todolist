@@ -139,6 +139,7 @@ describe("App Shell Components (Seam: Header & FilterBar)", () => {
       authModalMode: "login" as const,
       openAuthModal: () => {},
       closeAuthModal: () => {},
+      updateUsername: async () => {},
     };
 
     render(
