@@ -11,7 +11,8 @@ import {
 } from "@/context/RoutinesContext";
 import { evaluatePartnerDay, getConsecutiveMisses } from "@/utils/gamification";
 import { useNotifications } from "@/context/NotificationContext";
-import { Check, ArrowUp, ArrowDown, X, Plus, Calendar, ChevronDown } from "lucide-react";
+import { useFocusTimer } from "@/context/FocusTimerContext";
+import { Check, ArrowUp, ArrowDown, X, Plus, Calendar, ChevronDown, Play } from "lucide-react";
 import { AddRoutineModal } from "./AddRoutineModal";
 
 export function DailyRoutinesBoard() {
@@ -36,6 +37,7 @@ export function DailyRoutinesBoard() {
     isCompleted,
     reorderRoutines,
   } = useRoutines();
+  const { startFocus } = useFocusTimer();
   const { addNotification } = useNotifications();
 
   const [newTitle, setNewTitle] = useState("");
@@ -344,6 +346,15 @@ export function DailyRoutinesBoard() {
                       className="p-1 hover:bg-zinc-100 rounded text-zinc-500 disabled:opacity-30 focus:outline-none focus:ring-1 focus:ring-black"
                     >
                       <ArrowDown className="w-3 h-3" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => startFocus({ id: r.id, title: r.title, type: "routine" })}
+                      title="Focus on this routine"
+                      aria-label="Start Focus"
+                      className="p-1 hover:text-emerald-600 text-zinc-400 rounded transition focus:outline-none focus:ring-1 focus:ring-black"
+                    >
+                      <Play className="w-3 h-3 fill-current" />
                     </button>
                     <button
                       onClick={() => deleteRoutine(r.id)}

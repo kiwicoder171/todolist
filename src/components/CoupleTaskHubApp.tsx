@@ -14,6 +14,10 @@ import { KanbanCardModal } from "@/components/KanbanCardModal";
 import { AddRoutineModal } from "@/components/AddRoutineModal";
 import { CircleOnboardingModal } from "@/components/CircleOnboardingModal";
 import { AuthModal } from "@/components/AuthModal";
+import { FloatingFocusPill } from "@/components/FloatingFocusPill";
+import { PartnerCoFocusBar } from "@/components/PartnerCoFocusBar";
+import { DayTimelineRail } from "@/components/DayTimelineRail";
+import { WeeklyAttendanceMatrix } from "@/components/WeeklyAttendanceMatrix";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
 export interface CoupleTaskHubAppProps {
@@ -82,33 +86,55 @@ export function CoupleTaskHubApp({ forcedIsMobile, initialMobileTab }: CoupleTas
             onQuickAdd={handleMobileQuickAdd}
           >
             {mobileTab === "habits" ? (
-              <DailyRoutinesBoard />
+              <div className="space-y-3">
+                <PartnerCoFocusBar />
+                <DayTimelineRail />
+                <DailyRoutinesBoard />
+              </div>
             ) : mobileTab === "daily" ? (
-              <DailyTasksBoard />
+              <div className="space-y-3">
+                <PartnerCoFocusBar />
+                <DayTimelineRail />
+                <DailyTasksBoard />
+              </div>
             ) : mobileTab === "kanban" ? (
               <KanbanBoard isMobile={true} />
             ) : (
-              <CalendarConsistencySection />
+              <div className="space-y-3">
+                <WeeklyAttendanceMatrix />
+                <CalendarConsistencySection />
+              </div>
             )}
           </MobileShell>
         ) : (
           /* Desktop View: automatically active on screens >= md */
           <DashboardLayout
             dashboardFocus={dashboardFocus}
-            calendarHabitsSlot={<CalendarConsistencySection />}
+            calendarHabitsSlot={
+              <div className="space-y-4">
+                <WeeklyAttendanceMatrix />
+                <CalendarConsistencySection />
+              </div>
+            }
             dailyExecutionSlot={
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 h-full">
-                {/* Board 1: Daily Routines (Apple Notes Style) */}
-                <DailyRoutinesBoard />
+              <div className="flex flex-col gap-4 h-full">
+                <PartnerCoFocusBar />
+                <DayTimelineRail />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 h-full">
+                  {/* Board 1: Daily Routines (Apple Notes Style) */}
+                  <DailyRoutinesBoard />
 
-                {/* Board 2: Daily Tasks with Auto-Rollover */}
-                <DailyTasksBoard />
+                  {/* Board 2: Daily Tasks with Auto-Rollover */}
+                  <DailyTasksBoard />
+                </div>
               </div>
             }
             kanbanSlot={<KanbanBoard />}
           />
         )}
       </main>
+
+      <FloatingFocusPill />
 
       <CircleOnboardingModal />
       <AuthModal />

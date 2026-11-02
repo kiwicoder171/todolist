@@ -122,6 +122,17 @@ A persistent Calendar Panel enables rapid date navigation with completion glance
 - Complex recurring rules beyond day-of-week selections (e.g., no "every 3rd Tuesday of every other month").
 - Rich-text markdown WYSIWYG editors inside task titles (plain text with expandable notes drawer).
 
+## Phase 2: YPT Focus Engine & Cure Minimalist Redesign
+
+### Motivation & Visual Direction
+Inspired by Yeolpumta (YPT), Phase 2 expands Couple Task Hub into an intimate, serene co-focus environment with a "cure / healing minimalist" design language (soft carbon surfaces, hairline borders, calm typography, and zero clutter).
+
+### Phase 2 Tickets
+- **Ticket 08**: Cure Minimalist Aesthetic Redesign & Design System Tokens (`08-cure-minimalist-aesthetic-redesign.md`)
+- **Ticket 09**: Focus Timer Engine & Docked Floating Focus Pill (`09-focus-timer-engine-and-docked-pill.md`)
+- **Ticket 10**: Realtime Co-Focus & Partner Desks (`10-realtime-co-focus-partner-desks.md`)
+- **Ticket 11**: 24-Hour Visual Day Timeline & Attendance Consistency Matrix (`11-visual-day-timeline-and-consistency-matrix.md`)
+
 ## Further Notes
 - Default categories for the Kanban Board: "Home", "Travel", "Groceries", "Wishlist".
 - Default stages for the Kanban Board: "Backlog", "To Do", "In Progress", "Done".

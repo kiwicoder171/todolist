@@ -10,13 +10,15 @@ import {
 import { formatDateKey } from "@/context/RoutinesContext";
 import { useNotifications } from "@/context/NotificationContext";
 import { TaskDetailDrawer } from "./TaskDetailDrawer";
-import { Check, CornerDownRight, X, Plus } from "lucide-react";
+import { useFocusTimer } from "@/context/FocusTimerContext";
+import { Check, CornerDownRight, X, Plus, Play } from "lucide-react";
 
 export function DailyTasksBoard() {
   const { activePartner, assigneeFilter, selectedDate, partnerNames } = useHousehold();
   const { tasks, addDailyTask, toggleDailyTask, updateDailyTask, deleteDailyTask } =
     useDailyTasks();
   const { addNotification } = useNotifications();
+  const { startFocus } = useFocusTimer();
 
   const [newTitle, setNewTitle] = useState("");
   const [newAssignee, setNewAssignee] = useState<Assignee>("mine");
@@ -167,6 +169,19 @@ export function DailyTasksBoard() {
                   >
                     {getAssigneeLabel(t.assignee, activePartner, partnerNames)}
                   </span>
+
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      startFocus({ id: t.id, title: t.title, type: "daily" });
+                    }}
+                    title="Focus on this task"
+                    aria-label="Start Focus"
+                    className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 text-zinc-400 hover:text-emerald-600 font-bold p-1 transition focus:outline-none focus:ring-1 focus:ring-black rounded"
+                  >
+                    <Play className="w-3 h-3 fill-current" />
+                  </button>
 
                   <button
                     onClick={(e) => {

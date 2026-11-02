@@ -6,6 +6,7 @@ import { NotificationProvider } from "@/context/NotificationContext";
 import { RoutinesProvider } from "@/context/RoutinesContext";
 import { DailyTasksProvider } from "@/context/DailyTasksContext";
 import { KanbanProvider } from "@/context/KanbanContext";
+import { FocusTimerProvider } from "@/context/FocusTimerContext";
 import { PWARegistration } from "@/components/PWARegistration";
 import { Analytics } from "@vercel/analytics/next";
 
@@ -60,17 +61,19 @@ export default function RootLayout({
       <body className="antialiased selection:bg-black selection:text-white">
         <AuthProvider>
           <HouseholdProvider>
-            <NotificationProvider>
-              <RoutinesProvider>
-                <DailyTasksProvider>
-                  <KanbanProvider>
-                    <PWARegistration />
-                    {children}
-                    <Analytics />
-                  </KanbanProvider>
-                </DailyTasksProvider>
-              </RoutinesProvider>
-            </NotificationProvider>
+            <FocusTimerProvider>
+              <NotificationProvider>
+                <RoutinesProvider>
+                  <DailyTasksProvider>
+                    <KanbanProvider>
+                      <PWARegistration />
+                      {children}
+                      <Analytics />
+                    </KanbanProvider>
+                  </DailyTasksProvider>
+                </RoutinesProvider>
+              </NotificationProvider>
+            </FocusTimerProvider>
           </HouseholdProvider>
         </AuthProvider>
       </body>
