@@ -3,6 +3,7 @@
 import React, { ReactNode } from "react";
 import { LayoutGrid, CheckSquare, Calendar, BarChart2 } from "lucide-react";
 import { MobileWeekCalendar } from "@/components/MobileWeekCalendar";
+import { useFocusTimer } from "@/context/FocusTimerContext";
 
 export type MobileTab = "habits" | "daily" | "kanban" | "progress";
 
@@ -21,6 +22,8 @@ export function MobileShell({
   onQuickAdd,
   children,
 }: MobileShellProps) {
+  const { activeSession } = useFocusTimer();
+
   return (
     <div className="w-full max-w-md mx-auto min-h-[calc(100vh-80px)] flex flex-col pb-24 relative bg-[#fafafa]">
       {/* 7-Day Week Calendar Strip on Habits and Daily tabs only (redundant on Stats which has its own calendar consistency board) */}
@@ -42,11 +45,13 @@ export function MobileShell({
         {children}
       </div>
 
-      {/* Floating Action Button */}
+      {/* Floating Action Button - smoothly lifts when floating focus pill is active */}
       <button
         onClick={onQuickAdd}
         aria-label="Quick Add"
-        className="fixed bottom-20 right-5 z-30 w-14 h-14 rounded-2xl bg-black text-white text-3xl font-heading font-light flex items-center justify-center shadow-[4px_4px_0_0_#000] active:scale-95 transition"
+        className={`fixed right-5 z-30 w-14 h-14 rounded-2xl bg-black text-white text-3xl font-heading font-light flex items-center justify-center shadow-[4px_4px_0_0_#000] active:scale-95 transition-all duration-300 ${
+          activeSession ? "bottom-36" : "bottom-20"
+        }`}
       >
         ＋
       </button>

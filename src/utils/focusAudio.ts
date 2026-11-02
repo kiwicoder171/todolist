@@ -42,6 +42,29 @@ class WebAudioService {
   }
 
   /**
+   * Play short, subtle tick when user adjusts volume
+   */
+  public playVolumeTick() {
+    if (this.isMuted) return;
+    const ctx = this.getContext();
+    if (!ctx) return;
+    try {
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(800, now);
+      gain.gain.setValueAtTime(0.001, now);
+      gain.gain.linearRampToValueAtTime(0.05, now + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.08);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.09);
+    } catch (_) {}
+  }
+
+  /**
    * Play synthetic bell chime using harmonic sine oscillators (zero external audio file dependency)
    */
   public playChime(type: "pomodoro" | "cheer" | "break") {

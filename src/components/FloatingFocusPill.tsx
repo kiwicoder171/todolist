@@ -1,19 +1,23 @@
 "use client";
 
 import React, { useState } from "react";
-import { useFocusTimer } from "@/context/FocusTimerContext";
+import { useFocusTimer, FocusMode } from "@/context/FocusTimerContext";
+import { useRoutines } from "@/context/RoutinesContext";
+import { useDailyTasks } from "@/context/DailyTasksContext";
+import { useKanban } from "@/context/KanbanContext";
+import { useHousehold } from "@/context/HouseholdContext";
+import { focusAudio } from "@/utils/focusAudio";
 import {
   Play,
   Pause,
-  Square,
   Coffee,
   Check,
-  Flame,
-  ChevronUp,
+  CheckCheck,
   ChevronDown,
   Volume2,
   VolumeX,
-  Music,
+  Timer,
+  Clock,
 } from "lucide-react";
 
 export function formatTimeDisplay(totalSeconds: number): string {
@@ -43,13 +47,37 @@ export function FloatingFocusPill() {
     setAmbientSound,
     ambientVolume,
     setAmbientVolume,
+    updateActiveSessionMode,
+    goalBonusMessage,
+    clearGoalBonusMessage,
   } = useFocusTimer();
 
-  const [isExpanded, setIsExpanded] = useState(false);
+  const { selectedDate } = useHousehold();
+  const { toggleCompletion } = useRoutines();
+  const { toggleDailyTask } = useDailyTasks();
+  const { moveCardStage } = useKanban();
+
   const [showAudioMenu, setShowAudioMenu] = useState(false);
+  const [showModeMenu, setShowModeMenu] = useState(false);
   const [completedSummary, setCompletedSummary] = useState<string | null>(null);
 
   if (!activeSession) {
+    if (goalBonusMessage) {
+      return (
+        <div className="fixed bottom-24 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 animate-fade-in pointer-events-auto">
+          <div className="bg-[#121215] text-white border border-amber-500/50 shadow-2xl rounded-full px-4 py-2 flex items-center gap-2 text-xs font-semibold">
+            <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+            <span>{goalBonusMessage}</span>
+            <button
+              onClick={clearGoalBonusMessage}
+              className="text-zinc-400 hover:text-white ml-1 text-sm font-bold"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      );
+    }
     if (completedSummary) {
       return (
         <div className="fixed bottom-24 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 animate-fade-in pointer-events-auto">
@@ -69,25 +97,51 @@ export function FloatingFocusPill() {
     return null;
   }
 
-  const handleFinish = () => {
+  const handleFinish = (markDone: boolean = false) => {
+    const target = activeSession.target;
+
+    if (markDone && target.id) {
+      if (target.type === "routine") {
+        toggleCompletion(target.id, selectedDate);
+      } else if (target.type === "daily") {
+        toggleDailyTask(target.id);
+      } else if (target.type === "kanban") {
+        moveCardStage(target.id, "done");
+      }
+    }
+
     const log = stopFocus(true);
+
     if (log) {
-      const summary = `Logged ${log.durationMinutes}m on "${log.taskTitle}"`;
+      const summary = markDone
+        ? `✨ Logged ${log.durationMinutes}m & Completed "${log.taskTitle}"!`
+        : `Logged ${log.durationMinutes}m on "${log.taskTitle}"`;
       setCompletedSummary(summary);
       setTimeout(() => setCompletedSummary(null), 4000);
     }
   };
 
-  const remainingPomodoroSec = Math.max(0, activeSession.targetSeconds - displaySeconds);
+  const handleVolumeChange = (vol: number) => {
+    setAmbientVolume(vol);
+    focusAudio.playVolumeTick();
+  };
+
+  const handleSelectModePreset = (mode: FocusMode, minutes?: number) => {
+    updateActiveSessionMode(mode, minutes);
+    setShowModeMenu(false);
+  };
+
+  const remainingPomodoroSec = Math.max(0, (activeSession.targetSeconds || 0) - displaySeconds);
   const isPomodoro = activeSession.mode === "pomodoro";
   const timerText = isPomodoro
     ? formatTimeDisplay(remainingPomodoroSec)
     : formatTimeDisplay(displaySeconds);
+  const hasCompletableItem = Boolean(activeSession.target.id && activeSession.target.type !== "custom");
 
   return (
     <div
       data-testid="floating-focus-pill"
-      className="fixed bottom-24 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 transition-all duration-300 max-w-[92vw] sm:max-w-md w-auto"
+      className="fixed bottom-24 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 transition-all duration-300 max-w-[94vw] sm:max-w-lg w-auto"
     >
       <div className="bg-[#0e0e11] text-zinc-100 border border-zinc-700/80 shadow-[0_8px_32px_rgba(0,0,0,0.45)] rounded-2xl sm:rounded-full p-2 sm:px-4 sm:py-2.5 flex flex-col sm:flex-row items-center gap-2.5 backdrop-blur-md">
         {/* Left: Status pulse & Title */}
@@ -106,16 +160,28 @@ export function FloatingFocusPill() {
 
           <div className="min-w-0 flex flex-col">
             <div className="flex items-center gap-1.5 flex-nowrap">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
-                {isBreak ? "Break" : isPomodoro ? "Pomodoro" : "Focus"}
-              </span>
+              {/* Mode Switcher Popover Trigger */}
+              <button
+                type="button"
+                aria-label="Switch timer mode and duration"
+                onClick={() => {
+                  setShowModeMenu(!showModeMenu);
+                  setShowAudioMenu(false);
+                }}
+                className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 hover:text-white flex items-center gap-0.5 transition"
+                title="Switch Timer Mode & Duration"
+              >
+                <span>{isBreak ? "Break" : isPomodoro ? "Pomodoro" : "Focus"}</span>
+                <ChevronDown className="w-2.5 h-2.5 opacity-70" />
+              </button>
+
               {activeSession.target.category && (
                 <span className="text-[9px] px-1.5 py-0.2 rounded bg-zinc-800 text-zinc-300 font-mono">
                   {activeSession.target.category}
                 </span>
               )}
             </div>
-            <p className="text-xs font-semibold text-zinc-100 truncate max-w-[150px] sm:max-w-[180px]">
+            <p className="text-xs font-semibold text-zinc-100 truncate max-w-[130px] sm:max-w-[170px]">
               {activeSession.target.title}
             </p>
           </div>
@@ -129,7 +195,10 @@ export function FloatingFocusPill() {
         {/* Right: Controls */}
         <div className="flex items-center gap-1.5 shrink-0">
           <button
-            onClick={() => setShowAudioMenu(!showAudioMenu)}
+            onClick={() => {
+              setShowAudioMenu(!showAudioMenu);
+              setShowModeMenu(false);
+            }}
             aria-label="Ambient Sound and Chimes"
             title="Focus Sound & Ambient Noise"
             className={`p-1.5 rounded-full transition ${
@@ -174,25 +243,102 @@ export function FloatingFocusPill() {
             </button>
           )}
 
+          {/* Ticket 17: Finish & Complete synergy */}
+          {hasCompletableItem && (
+            <button
+              onClick={() => handleFinish(true)}
+              aria-label="Finish and Complete Task"
+              title="Finish Focus Session and Mark Item Complete"
+              className="px-2 py-1 rounded-full bg-emerald-500 text-black hover:bg-emerald-400 font-bold flex items-center gap-1 text-[11px] active:scale-95 transition shadow-sm"
+            >
+              <CheckCheck className="w-3 h-3" />
+              <span>Complete</span>
+            </button>
+          )}
+
           <button
-            onClick={handleFinish}
+            onClick={() => handleFinish(false)}
             aria-label="Finish and Save Session"
-            title="Finish & Save Focus Session"
-            className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 border border-emerald-500/30 flex items-center gap-1 text-[11px] font-bold active:scale-95 transition"
+            title="Log Focus Session without marking done"
+            className="px-2.5 py-1 rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-zinc-700 flex items-center gap-1 text-[11px] font-medium active:scale-95 transition"
           >
             <Check className="w-3 h-3" />
-            <span>Done</span>
+            <span>{hasCompletableItem ? "Log Only" : "Done"}</span>
           </button>
         </div>
       </div>
 
-      {/* Ambient Audio & Chimes Popover */}
+      {/* Ticket 19: Mode & Duration Switcher Popover */}
+      {showModeMenu && (
+        <div className="absolute bottom-full mb-2 left-2 w-56 p-2.5 rounded-2xl bg-zinc-950 border border-zinc-800 shadow-2xl text-xs space-y-2 animate-fade-in backdrop-blur-md">
+          <div className="flex items-center justify-between pb-1 border-b border-zinc-800 text-zinc-400 font-semibold text-[11px]">
+            <span>Mode & Duration</span>
+            <button
+              onClick={() => setShowModeMenu(false)}
+              className="text-zinc-500 hover:text-zinc-200"
+            >
+              ×
+            </button>
+          </div>
+
+          <div className="space-y-1">
+            <span className="text-[10px] uppercase font-bold text-zinc-500 block">
+              Pomodoro Targets
+            </span>
+            <div className="grid grid-cols-4 gap-1">
+              {[15, 25, 45, 60].map((mins) => {
+                const isSelected =
+                  isPomodoro && activeSession.targetSeconds === mins * 60;
+                return (
+                  <button
+                    key={mins}
+                    type="button"
+                    onClick={() => handleSelectModePreset("pomodoro", mins)}
+                    className={`py-1 text-center rounded-lg text-[10px] font-semibold transition ${
+                      isSelected
+                        ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/50"
+                        : "bg-zinc-900 text-zinc-300 hover:bg-zinc-800 border border-zinc-800"
+                    }`}
+                  >
+                    {mins}m
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="pt-1 border-t border-zinc-800/80">
+            <button
+              type="button"
+              onClick={() => handleSelectModePreset("stopwatch")}
+              className={`w-full py-1.5 px-2 rounded-lg text-[10px] font-semibold flex items-center justify-between transition ${
+                !isPomodoro
+                  ? "bg-blue-500/20 text-blue-300 border border-blue-500/50"
+                  : "bg-zinc-900 text-zinc-300 hover:bg-zinc-800 border border-zinc-800"
+              }`}
+            >
+              <span className="flex items-center gap-1.5">
+                <Clock className="w-3 h-3" />
+                <span>Open Stopwatch</span>
+              </span>
+              <span className="text-[9px] text-zinc-500 font-mono">Count Up</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Ambient Audio & Chimes Popover (Ticket 20 Audio Feedback) */}
       {showAudioMenu && (
         <div className="absolute bottom-full mb-2 right-0 w-64 p-3 rounded-2xl bg-zinc-950 border border-zinc-800 shadow-2xl text-xs space-y-2.5 animate-fade-in backdrop-blur-md">
           <div className="flex items-center justify-between pb-1.5 border-b border-zinc-800">
             <span className="font-bold text-zinc-200">Focus Audio & Noise</span>
             <button
-              onClick={toggleSound}
+              onClick={() => {
+                toggleSound();
+                if (!soundEnabled) {
+                  focusAudio.playChime("pomodoro");
+                }
+              }}
               className={`text-[10px] px-2 py-0.5 rounded-full border ${
                 soundEnabled
                   ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40"
@@ -245,7 +391,7 @@ export function FloatingFocusPill() {
                 max="1"
                 step="0.05"
                 value={ambientVolume}
-                onChange={(e) => setAmbientVolume(parseFloat(e.target.value))}
+                onChange={(e) => handleVolumeChange(parseFloat(e.target.value))}
                 className="w-full accent-blue-500 h-1 bg-zinc-800 rounded-lg cursor-pointer"
               />
             </div>

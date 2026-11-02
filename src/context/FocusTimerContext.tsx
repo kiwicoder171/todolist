@@ -97,6 +97,9 @@ export interface FocusTimerContextType {
   setAmbientSound: (sound: AmbientSoundType) => void;
   ambientVolume: number;
   setAmbientVolume: (vol: number) => void;
+  updateActiveSessionMode: (mode: FocusMode, targetMinutes?: number) => void;
+  goalBonusMessage: string | null;
+  clearGoalBonusMessage: () => void;
 }
 
 const STORAGE_ACTIVE_KEY = "couple_task_hub_active_focus";
@@ -107,7 +110,7 @@ const CHANNEL_NAME = "couple_focus_sync_channel";
 const FocusTimerContext = createContext<FocusTimerContextType | undefined>(undefined);
 
 export function FocusTimerProvider({ children }: { children: ReactNode }) {
-  const { activePartner, circle } = useHousehold();
+  const { activePartner, circle, updateScore } = useHousehold();
   const [activeSession, setActiveSession] = useState<FocusSession | null>(null);
   const [displaySeconds, setDisplaySeconds] = useState<number>(0);
   const [partnerPresence, setPartnerPresence] = useState<PartnerFocusPresence | null>(null);
@@ -115,6 +118,11 @@ export function FocusTimerProvider({ children }: { children: ReactNode }) {
   const [logs, setLogs] = useState<FocusLogItem[]>([]);
   const broadcastChannelRef = useRef<BroadcastChannel | null>(null);
   const hasChimedPomodoroRef = useRef<boolean>(false);
+  const [goalBonusMessage, setGoalBonusMessage] = useState<string | null>(null);
+
+  const clearGoalBonusMessage = useCallback(() => {
+    setGoalBonusMessage(null);
+  }, []);
 
   const [dailyTargetMinutes, setDailyTargetMinutesState] = useState<number>(() => {
     if (typeof window !== "undefined") {
@@ -402,6 +410,30 @@ export function FocusTimerProvider({ children }: { children: ReactNode }) {
     });
   }, [activeSession, activePartner, broadcastPresence, ambientSound]);
 
+  const updateActiveSessionMode = useCallback(
+    (mode: FocusMode, targetMinutes: number = 25) => {
+      if (!activeSession) return;
+      const targetSeconds = mode === "pomodoro" ? targetMinutes * 60 : activeSession.targetSeconds;
+      const updated: FocusSession = {
+        ...activeSession,
+        mode,
+        targetSeconds,
+      };
+      saveActiveSession(updated);
+      broadcastPresence({
+        partner: activePartner,
+        isFocusing: activeSession.isRunning,
+        taskTitle: activeSession.target.title,
+        category: activeSession.target.category,
+        mode,
+        secondsElapsed: activeSession.accumulatedSeconds,
+        isBreak: activeSession.isBreak,
+        updatedAt: Date.now(),
+      });
+    },
+    [activeSession, activePartner, broadcastPresence]
+  );
+
   const toggleBreak = useCallback(() => {
     if (!activeSession) return;
     const delta = activeSession.isRunning
@@ -453,6 +485,30 @@ export function FocusTimerProvider({ children }: { children: ReactNode }) {
           try {
             localStorage.setItem(STORAGE_LOGS_KEY, JSON.stringify(next));
           } catch (_) {}
+
+          // Daily focus goal check & bonus points
+          const sessionPartner = logItem!.partner;
+          const todayDateKey = logItem!.dateKey;
+          const prevTotalForToday = prev
+            .filter((l) => l.dateKey === todayDateKey && l.partner === sessionPartner)
+            .reduce((sum, l) => sum + l.durationMinutes, 0);
+          const newTotalForToday = prevTotalForToday + logItem!.durationMinutes;
+
+          if (prevTotalForToday < dailyTargetMinutes && newTotalForToday >= dailyTargetMinutes) {
+            const storageAwardKey = `couple_task_hub_goal_awarded_${todayDateKey}_${sessionPartner}`;
+            const alreadyAwarded = typeof window !== "undefined" && localStorage.getItem(storageAwardKey);
+            if (!alreadyAwarded) {
+              if (typeof window !== "undefined") {
+                localStorage.setItem(storageAwardKey, "true");
+              }
+              if (updateScore) {
+                updateScore(sessionPartner, 1);
+              }
+              focusAudio.playChime("cheer");
+              setGoalBonusMessage(`🎯 Daily Focus Goal Achieved! (+1 Point)`);
+            }
+          }
+
           return next;
         });
 
@@ -571,6 +627,9 @@ export function FocusTimerProvider({ children }: { children: ReactNode }) {
         setAmbientSound,
         ambientVolume,
         setAmbientVolume,
+        updateActiveSessionMode,
+        goalBonusMessage,
+        clearGoalBonusMessage,
       }}
     >
       {children}
@@ -602,6 +661,9 @@ const fallbackFocusContext: FocusTimerContextType = {
   setAmbientSound: () => {},
   ambientVolume: 0.4,
   setAmbientVolume: () => {},
+  updateActiveSessionMode: () => {},
+  goalBonusMessage: null,
+  clearGoalBonusMessage: () => {},
 };
 
 export function useFocusTimer() {

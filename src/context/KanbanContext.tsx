@@ -418,7 +418,20 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
 export function useKanban(): KanbanContextType {
   const context = useContext(KanbanContext);
   if (!context) {
-    throw new Error("useKanban must be used within a KanbanProvider");
+    return {
+      cards: [],
+      categories: DEFAULT_CATEGORIES,
+      selectedCategory: "all",
+      setSelectedCategory: () => {},
+      addCard: () => {},
+      updateCard: () => {},
+      deleteCard: () => {},
+      moveCardStage: () => {},
+      toggleCardDoToday: () => {},
+      addCategory: () => {},
+      clearDoneCards: () => {},
+      getFilteredCardsByStage: () => [],
+    };
   }
   return context;
 }

@@ -9,7 +9,7 @@ Part of [[_Brain/00-Master-Orchestrator-MOC|00-Master-Orchestrator-MOC]] · Hub 
 - **Connected Guilds**: [[_Brain/Guilds/Guild-1-Frontend-UX|Guild-1-Frontend-UX]] · [[_Brain/Guilds/Guild-3-Engineering-Delivery|Guild-3-Engineering-Delivery]] · [[_Brain/Guilds/Guild-4-Fullstack-Backend|Guild-4-Fullstack-Backend]]
 
 ## 2. Project Knowledge Graph
-- 29 linked docs → full index in [[_Brain/Projects/Todo-List|Todo-List hub]] (read on demand only)
+- 34 linked docs → full index in [[_Brain/Projects/Todo-List|Todo-List hub]] (read on demand only)
 - Code graph: `graphify-out/GRAPH_REPORT.md`
 
 
@@ -20,3 +20,4 @@ Part of [[_Brain/00-Master-Orchestrator-MOC|00-Master-Orchestrator-MOC]] · Hub 
 - Enforced a hard minimum point floor at 0 across all penalty deductions, reconciliations, manual score updates, and reward redemptions (`Math.max(0, points)`), ensuring user balances never drop into negative values (2026-10-29).
 - Designed and implemented Phase 2 YPT Focus Engine & Cure Minimalist Redesign (Tickets 08-11): added `FocusTimerContext` (stopwatch & Pomodoro modes, drift-free timestamp delta calculations, break toggling, localStorage persistence), docked `FloatingFocusPill` with instant checkoff/logging, `PartnerCoFocusBar` (live co-focus presence & cheers over Realtime), `DayTimelineRail` (24h visual timeline with live time needle indicator), and `WeeklyAttendanceMatrix` (M-T-W-T-F-S-S consistency grid) (2026-11-02).
 - Delivered YPT Advanced Audio & Customization Suite (Tickets 12-15): built `FocusRingGoal` (SVG circular daily focus progress ring with target goal configuration), zero-dependency Web Audio synthesizers in `focusAudio.ts` (Tibetan singing bowl Pomodoro chimes, cheer pings, and procedural rain/brown/white noise generators), and `StudiconModal` (curated cure-minimalist desk avatars with Realtime couple synchronization). Verified via 157 passing tests and 0 TypeScript errors (2026-11-03).
+- Shipped YPT Polish Suite (Tickets 16-20): dynamic mobile FAB avoidance layout (`bottom-36` on session, `bottom-20` on idle in `MobileShell.tsx`), seamless one-tap Focus Finish & Item Auto-Checkoff synergy across routines/tasks/kanban, daily focus goal bonus gamification (+1 score bonus with celebration cue upon hitting daily target), on-the-fly Pomodoro duration & mode switcher (15m, 25m, 45m, 60m, stopwatch), and volume preview feedback ticks. Verified with 161 passing tests, 0 TypeScript errors, clean production Next.js build, and 0 orphan Obsidian docs (2026-11-03).

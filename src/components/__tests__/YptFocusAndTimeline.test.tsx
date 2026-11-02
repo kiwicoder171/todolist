@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import React from "react";
 import { render, screen, fireEvent, act, within } from "@testing-library/react";
-import { HouseholdProvider } from "@/context/HouseholdContext";
-import { RoutinesProvider } from "@/context/RoutinesContext";
+import { HouseholdProvider, useHousehold } from "@/context/HouseholdContext";
+import { RoutinesProvider, useRoutines } from "@/context/RoutinesContext";
 import { FocusTimerProvider, useFocusTimer } from "@/context/FocusTimerContext";
 import { FloatingFocusPill } from "@/components/FloatingFocusPill";
 import { PartnerCoFocusBar } from "@/components/PartnerCoFocusBar";
@@ -238,5 +238,103 @@ describe("YPT Focus, Timeline & Attendance Components (Tickets 08, 09, 10, 11)",
 
     // Volume slider renders
     expect(screen.getByText("Volume")).toBeInTheDocument();
+  });
+
+  it("supports mode switching between pomodoro targets and stopwatch in FloatingFocusPill (Ticket 19)", () => {
+    function SwitcherDemo() {
+      const { startFocus } = useFocusTimer();
+      return (
+        <div>
+          <button
+            onClick={() =>
+              startFocus({ id: "t-switch", title: "Review Chemistry" }, "pomodoro", 25)
+            }
+          >
+            Start Pomodoro
+          </button>
+          <FloatingFocusPill />
+        </div>
+      );
+    }
+
+    render(
+      <TestWrapper>
+        <SwitcherDemo />
+      </TestWrapper>
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Start Pomodoro" }));
+
+    // Click mode switch trigger
+    const modeTrigger = screen.getByRole("button", { name: /switch timer mode/i });
+    fireEvent.click(modeTrigger);
+
+    expect(screen.getByText("Mode & Duration")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "45m" })).toBeInTheDocument();
+
+    // Select 45m preset
+    fireEvent.click(screen.getByRole("button", { name: "45m" }));
+
+    // Verify timer updated to 45:00
+    const pill = screen.getByTestId("floating-focus-pill");
+    expect(within(pill).getByText("45:00")).toBeInTheDocument();
+
+    // Switch to Open Stopwatch
+    fireEvent.click(screen.getByRole("button", { name: /switch timer mode/i }));
+    fireEvent.click(screen.getByRole("button", { name: /open stopwatch/i }));
+
+    expect(within(pill).getByText("Focus")).toBeInTheDocument();
+  });
+
+  it("provides Complete button for linked tasks and auto-completes item on finish (Ticket 17)", () => {
+    function LinkedFinishDemo() {
+      const { startFocus } = useFocusTimer();
+      const { isCompleted } = useRoutines();
+      const { selectedDate } = useHousehold();
+
+      return (
+        <div>
+          <button
+            onClick={() =>
+              startFocus({
+                id: "routine-5",
+                title: "Evening walk together in park",
+                type: "routine",
+                category: "Household",
+              })
+            }
+          >
+            Focus Routine
+          </button>
+          <div data-testid="routine-status">
+            {isCompleted("routine-5", selectedDate) ? "DONE" : "PENDING"}
+          </div>
+          <FloatingFocusPill />
+        </div>
+      );
+    }
+
+    render(
+      <TestWrapper>
+        <LinkedFinishDemo />
+      </TestWrapper>
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Focus Routine" }));
+
+    // Routine is initially pending
+    expect(screen.getByTestId("routine-status")).toHaveTextContent("PENDING");
+
+    // Complete button is displayed for linked routine
+    const completeBtn = screen.getByRole("button", { name: "Finish and Complete Task" });
+    expect(completeBtn).toBeInTheDocument();
+
+    // Click Complete
+    fireEvent.click(completeBtn);
+
+    // Verify routine status marked DONE
+    expect(screen.getByTestId("routine-status")).toHaveTextContent("DONE");
+    // Verify toast summary appears
+    expect(screen.getByText(/✨ Logged/)).toBeInTheDocument();
   });
 });

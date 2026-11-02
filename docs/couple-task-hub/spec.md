@@ -136,6 +136,11 @@ Inspired by Yeolpumta (YPT), Phase 2 expands Couple Task Hub into an intimate, s
 - **Ticket 13**: Pomodoro Completion Chimes & Web Audio Cues (`13-pomodoro-completion-chimes-and-audio.md`)
 - **Ticket 14**: Ambient White Noise & Focus Sound Generator (`14-ambient-white-noise-focus-sounds.md`)
 - **Ticket 15**: Custom Studicons & Couple Focus Avatars (`15-custom-studicons-and-couple-avatars.md`)
+- **Ticket 16**: Mobile FAB & Floating Focus Pill Ergonomic Layout (`16-mobile-fab-pill-avoidance-layout.md`)
+- **Ticket 17**: Focus Finish & Item Auto-Checkoff Synergy (`17-focus-finish-auto-checkoff-synergy.md`)
+- **Ticket 18**: Daily Focus Goal Gamification & Bonus Point (`18-daily-focus-goal-bonus-gamification.md`)
+- **Ticket 19**: On-the-Fly Pomodoro Duration & Mode Switcher (`19-pomodoro-duration-mode-switcher.md`)
+- **Ticket 20**: Audio Volume Feedback & Chime Preview (`20-audio-volume-chime-preview.md`)
 
 ## Further Notes
 - Default categories for the Kanban Board: "Home", "Travel", "Groceries", "Wishlist".
