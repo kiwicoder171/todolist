@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import React from "react";
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import { render, screen, fireEvent, act, within } from "@testing-library/react";
 import { HouseholdProvider } from "@/context/HouseholdContext";
 import { RoutinesProvider } from "@/context/RoutinesContext";
 import { FocusTimerProvider, useFocusTimer } from "@/context/FocusTimerContext";
@@ -131,5 +131,30 @@ describe("YPT Focus, Timeline & Attendance Components (Tickets 08, 09, 10, 11)",
 
     // Pill clears active session
     expect(screen.queryByTestId("floating-focus-pill")).not.toBeInTheDocument();
+  });
+
+  it("allows quick starting a focus session from presets in PartnerCoFocusBar", () => {
+    render(
+      <TestWrapper>
+        <PartnerCoFocusBar />
+        <FloatingFocusPill />
+      </TestWrapper>
+    );
+
+    // Click "+ Focus" button on Desk 1
+    const plusFocusBtn = screen.getByRole("button", { name: "+ Focus" });
+    expect(plusFocusBtn).toBeInTheDocument();
+    fireEvent.click(plusFocusBtn);
+
+    // Presets popup appears
+    expect(screen.getByText("Quick Start Focus")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Deep Work" })).toBeInTheDocument();
+
+    // Click "Deep Work" preset
+    fireEvent.click(screen.getByRole("button", { name: "Deep Work" }));
+
+    // Floating pill appears with "Deep Work"
+    expect(screen.getByTestId("floating-focus-pill")).toBeInTheDocument();
+    expect(within(screen.getByTestId("floating-focus-pill")).getByText("Deep Work")).toBeInTheDocument();
   });
 });

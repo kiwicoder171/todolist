@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useHousehold, Partner } from "@/context/HouseholdContext";
 import { useFocusTimer, formatTimeDisplay } from "@/context/FocusTimerContext";
-import { Coffee, Flame, Heart, Sparkles, Zap, Laptop, Bed } from "lucide-react";
+import { Coffee, Flame, Heart, Sparkles, Zap, Laptop, Bed, Play, X } from "lucide-react";
 
 export function PartnerCoFocusBar() {
   const { activePartner, partnerNames } = useHousehold();
@@ -13,9 +13,20 @@ export function PartnerCoFocusBar() {
     partnerPresence,
     sendCheerToPartner,
     cheerReceived,
+    startFocus,
   } = useFocusTimer();
 
   const [cheerAnim, setCheerAnim] = useState<string | null>(null);
+  const [isLauncherOpen, setIsLauncherOpen] = useState(false);
+  const [customTitle, setCustomTitle] = useState("");
+
+  const presets = ["Deep Work", "Reading", "Study", "Chores"];
+
+  const handleStartPreset = (title: string) => {
+    startFocus({ id: `quick_${Date.now()}`, title, type: "custom", category: "Focus" });
+    setIsLauncherOpen(false);
+    setCustomTitle("");
+  };
 
   // Animate cheers when received
   useEffect(() => {
@@ -84,13 +95,24 @@ export function PartnerCoFocusBar() {
                 </span>
               )}
             </div>
-            <p className="text-[10px] text-zinc-400 truncate">
-              {activeSession?.isRunning
-                ? activeSession.target.title
-                : activeSession?.isBreak
-                ? "Resting / Break"
-                : "Idle"}
-            </p>
+            {activeSession?.isRunning ? (
+              <p className="text-[10px] text-zinc-400 truncate">
+                {activeSession.target.title}
+              </p>
+            ) : (
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <span className="text-[10px] text-zinc-500">
+                  {activeSession?.isBreak ? "Break" : "Idle"}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setIsLauncherOpen((prev) => !prev)}
+                  className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-zinc-800 text-emerald-400 hover:bg-zinc-700 transition"
+                >
+                  + Focus
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
@@ -149,6 +171,56 @@ export function PartnerCoFocusBar() {
           )}
         </div>
       </div>
+
+      {isLauncherOpen && (
+        <div className="mt-2.5 p-2.5 rounded-xl bg-zinc-900 border border-zinc-800 space-y-2 animate-fade-in">
+          <div className="flex items-center justify-between text-[11px] font-bold text-zinc-300">
+            <span>Quick Start Focus</span>
+            <button
+              onClick={() => setIsLauncherOpen(false)}
+              className="text-zinc-500 hover:text-zinc-200"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          <div className="flex flex-wrap gap-1.5">
+            {presets.map((preset) => (
+              <button
+                key={preset}
+                type="button"
+                onClick={() => handleStartPreset(preset)}
+                className="text-[10px] px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-300 hover:bg-emerald-500/20 hover:text-emerald-300 hover:border-emerald-500/40 border border-zinc-700 transition"
+              >
+                {preset}
+              </button>
+            ))}
+          </div>
+
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (customTitle.trim()) handleStartPreset(customTitle.trim());
+            }}
+            className="flex items-center gap-1.5"
+          >
+            <input
+              type="text"
+              placeholder="Or enter custom task..."
+              value={customTitle}
+              onChange={(e) => setCustomTitle(e.target.value)}
+              className="flex-1 text-[11px] bg-zinc-950 border border-zinc-800 rounded-lg px-2 py-1 text-zinc-200 focus:outline-none focus:border-emerald-500"
+            />
+            <button
+              type="submit"
+              disabled={!customTitle.trim()}
+              className="px-2.5 py-1 rounded-lg bg-emerald-500 text-black font-bold text-[10px] uppercase hover:bg-emerald-400 disabled:opacity-40 transition"
+            >
+              Start
+            </button>
+          </form>
+        </div>
+      )}
     </div>
   );
 }

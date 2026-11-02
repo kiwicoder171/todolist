@@ -3,8 +3,9 @@
 import React, { useState, DragEvent } from "react";
 import { useHousehold, getAssigneeLabel } from "@/context/HouseholdContext";
 import { KanbanStage, KanbanCard, useKanban } from "@/context/KanbanContext";
+import { useFocusTimer } from "@/context/FocusTimerContext";
 import { KanbanCardModal } from "./KanbanCardModal";
-import { Plus, Check, ArrowRight, ArrowLeft, RotateCcw, Trash2 } from "lucide-react";
+import { Plus, Check, ArrowRight, ArrowLeft, RotateCcw, Trash2, Play } from "lucide-react";
 
 export interface KanbanBoardProps {
   isMobile?: boolean;
@@ -22,6 +23,7 @@ export function KanbanBoard({ isMobile = false }: KanbanBoardProps = {}) {
     deleteCard,
     clearDoneCards,
   } = useKanban();
+  const { startFocus } = useFocusTimer();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalInitialStage, setModalInitialStage] = useState<KanbanStage>("todo");
@@ -99,6 +101,23 @@ export function KanbanBoard({ isMobile = false }: KanbanBoardProps = {}) {
             <span className="text-[9px] font-heading font-extrabold uppercase px-1.5 py-0.5 rounded border border-black bg-[#f4f4f5] text-black">
               {card.category}
             </span>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                startFocus({
+                  id: card.id,
+                  title: card.title,
+                  type: "kanban",
+                  category: card.category,
+                });
+              }}
+              className="opacity-70 md:opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 text-zinc-400 hover:text-emerald-600 p-0.5 transition rounded focus:outline-none focus:ring-1 focus:ring-black"
+              title="Focus on this card"
+              aria-label={`Focus on ${card.title}`}
+            >
+              <Play className="w-3 h-3 fill-current" />
+            </button>
             <button
               type="button"
               onClick={() => deleteCard(card.id)}

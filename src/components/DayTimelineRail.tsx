@@ -82,16 +82,31 @@ export function DayTimelineRail() {
             );
           })}
 
-          {/* Render logged focus intervals */}
+          {/* Render logged focus intervals at their exact time of day */}
           {logs.map((log) => {
-            // Rough placement across day
-            const durationPct = Math.max(3, (log.durationMinutes / totalSpanMinutes) * 100);
+            let leftPct = 0;
+            if (log.startedAtTimestamp) {
+              const d = new Date(log.startedAtTimestamp);
+              const m = d.getHours() * 60 + d.getMinutes();
+              leftPct = Math.max(0, Math.min(98, ((m - startHour * 60) / totalSpanMinutes) * 100));
+            } else {
+              const parts = log.startedAt?.split(":") || [];
+              if (parts.length >= 2) {
+                const hour = parseInt(parts[0], 10);
+                const min = parseInt(parts[1], 10);
+                if (!isNaN(hour) && !isNaN(min)) {
+                  const m = hour * 60 + min;
+                  leftPct = Math.max(0, Math.min(98, ((m - startHour * 60) / totalSpanMinutes) * 100));
+                }
+              }
+            }
+            const durationPct = Math.max(2, (log.durationMinutes / totalSpanMinutes) * 100);
             return (
               <div
                 key={log.id}
-                title={`${log.taskTitle} (${log.durationMinutes}m)`}
-                className="h-full bg-emerald-500/40 border-r border-emerald-400/80 hover:bg-emerald-500/60 transition cursor-pointer"
-                style={{ width: `${durationPct}%` }}
+                title={`${log.taskTitle} (${log.durationMinutes}m at ${log.startedAt})`}
+                className="absolute top-0 bottom-0 bg-emerald-500/50 border border-emerald-400 rounded-xs hover:bg-emerald-500/80 transition cursor-pointer z-5"
+                style={{ left: `${leftPct}%`, width: `${durationPct}%` }}
               />
             );
           })}

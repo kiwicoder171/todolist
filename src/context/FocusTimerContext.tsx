@@ -23,6 +23,7 @@ export interface FocusTarget {
 
 export interface FocusSession {
   id: string;
+  partner?: Partner;
   target: FocusTarget;
   mode: FocusMode;
   startedAt: number; // Date.now() timestamp
@@ -41,6 +42,7 @@ export interface FocusLogItem {
   durationSeconds: number;
   durationMinutes: number;
   startedAt: string;
+  startedAtTimestamp?: number;
   completedAt: string;
   dateKey: string;
   mode: FocusMode;
@@ -231,6 +233,7 @@ export function FocusTimerProvider({ children }: { children: ReactNode }) {
     (target: FocusTarget, mode: FocusMode = "stopwatch", targetMinutes: number = 25) => {
       const newSession: FocusSession = {
         id: `focus_${Date.now()}`,
+        partner: activePartner,
         target,
         mode,
         startedAt: Date.now(),
@@ -337,7 +340,7 @@ export function FocusTimerProvider({ children }: { children: ReactNode }) {
         const now = new Date();
         logItem = {
           id: `log_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
-          partner: activePartner,
+          partner: activeSession.partner || activePartner,
           taskTitle: activeSession.target.title,
           category: activeSession.target.category,
           durationSeconds: finalDuration,
@@ -346,6 +349,7 @@ export function FocusTimerProvider({ children }: { children: ReactNode }) {
             hour: "2-digit",
             minute: "2-digit",
           }),
+          startedAtTimestamp: activeSession.startedAt,
           completedAt: now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
           dateKey: formatDateKey(now),
           mode: activeSession.mode,
@@ -424,19 +428,42 @@ export function FocusTimerProvider({ children }: { children: ReactNode }) {
     [logs]
   );
 
+  const effectivePartnerPresence: PartnerFocusPresence | null =
+    activeSession &&
+    activeSession.partner &&
+    activeSession.partner !== activePartner &&
+    activeSession.isRunning
+      ? {
+          partner: activeSession.partner,
+          isFocusing: true,
+          taskTitle: activeSession.target.title,
+          category: activeSession.target.category,
+          mode: activeSession.mode,
+          secondsElapsed: displaySeconds,
+          isBreak: activeSession.isBreak,
+          updatedAt: Date.now(),
+        }
+      : partnerPresence;
+
   return (
     <FocusTimerContext.Provider
       value={{
-        activeSession,
+        activeSession:
+          activeSession?.partner && activeSession.partner !== activePartner
+            ? null
+            : activeSession,
         displaySeconds,
-        isRunning: Boolean(activeSession?.isRunning),
+        isRunning: Boolean(
+          activeSession?.isRunning &&
+            (!activeSession.partner || activeSession.partner === activePartner)
+        ),
         isBreak: Boolean(activeSession?.isBreak),
         startFocus,
         pauseFocus,
         resumeFocus,
         toggleBreak,
         stopFocus,
-        partnerPresence,
+        partnerPresence: effectivePartnerPresence,
         sendCheerToPartner,
         cheerReceived,
         logs,
