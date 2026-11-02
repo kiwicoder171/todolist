@@ -33,6 +33,8 @@ describe("Partner Cheer & Cross-Device Notification Sync", () => {
           leaveCircle: vi.fn(),
           partnerNames: { alex: "Alex", sam: "Sam" },
           updatePartnerName: vi.fn(),
+          partnerAvatars: { alex: "💻", sam: "📚" },
+          updatePartnerAvatar: vi.fn(),
           activePartner,
           setActivePartner: vi.fn(),
           assigneeFilter: "all" as AssigneeFilter,

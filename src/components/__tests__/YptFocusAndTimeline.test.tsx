@@ -157,4 +157,86 @@ describe("YPT Focus, Timeline & Attendance Components (Tickets 08, 09, 10, 11)",
     expect(screen.getByTestId("floating-focus-pill")).toBeInTheDocument();
     expect(within(screen.getByTestId("floating-focus-pill")).getByText("Deep Work")).toBeInTheDocument();
   });
+
+  it("renders FocusRingGoal and allows changing daily target minutes", () => {
+    render(
+      <TestWrapper>
+        <PartnerCoFocusBar />
+      </TestWrapper>
+    );
+
+    expect(screen.getByTestId("focus-ring-goal")).toBeInTheDocument();
+
+    // Click daily focus goal button to open popover
+    fireEvent.click(screen.getByRole("button", { name: "Daily focus goal" }));
+
+    expect(screen.getByText("Set Daily Focus Goal")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "90m" })).toBeInTheDocument();
+
+    // Change target to 90m
+    fireEvent.click(screen.getByRole("button", { name: "90m" }));
+
+    // Recheck updated target text
+    expect(screen.getByText(/90m/i)).toBeInTheDocument();
+  });
+
+  it("opens StudiconModal and updates partner desk avatar", () => {
+    render(
+      <TestWrapper>
+        <PartnerCoFocusBar />
+      </TestWrapper>
+    );
+
+    // Desk 1 has avatar change button
+    const avatarBtn = screen.getByRole("button", { name: "Change desk avatar" });
+    expect(avatarBtn).toBeInTheDocument();
+    fireEvent.click(avatarBtn);
+
+    // Studicon modal appears
+    expect(screen.getByTestId("studicon-modal")).toBeInTheDocument();
+    expect(screen.getByText("Select Desk Studicon")).toBeInTheDocument();
+
+    // Click cozy kitten avatar 🐱
+    const catOption = screen.getByRole("button", { name: /🐱/i });
+    fireEvent.click(catOption);
+
+    // Modal closes and desk reflects new avatar
+    expect(screen.queryByTestId("studicon-modal")).not.toBeInTheDocument();
+    expect(avatarBtn).toHaveTextContent("🐱");
+  });
+
+  it("allows switching ambient focus noise and volume in FloatingFocusPill", () => {
+    function AudioStarter() {
+      const { startFocus } = useFocusTimer();
+      return (
+        <div>
+          <button onClick={() => startFocus({ id: "t-audio", title: "Study Audio" })}>
+            Launch
+          </button>
+          <FloatingFocusPill />
+        </div>
+      );
+    }
+
+    render(
+      <TestWrapper>
+        <AudioStarter />
+      </TestWrapper>
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Launch" }));
+
+    // Click audio controls button
+    const audioBtn = screen.getByRole("button", { name: "Ambient Sound and Chimes" });
+    fireEvent.click(audioBtn);
+
+    expect(screen.getByText("Focus Audio & Noise")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "🌧️ Rain" })).toBeInTheDocument();
+
+    // Select Rain sound
+    fireEvent.click(screen.getByRole("button", { name: "🌧️ Rain" }));
+
+    // Volume slider renders
+    expect(screen.getByText("Volume")).toBeInTheDocument();
+  });
 });

@@ -42,6 +42,8 @@ export interface HouseholdContextType {
   leaveCircle: () => void;
   partnerNames: Record<Partner, string>;
   updatePartnerName: (partner: Partner, newName: string) => void;
+  partnerAvatars: Record<Partner, string>;
+  updatePartnerAvatar: (partner: Partner, newAvatar: string) => void;
   activePartner: Partner;
   setActivePartner: (partner: Partner) => void;
   assigneeFilter: AssigneeFilter;
@@ -220,6 +222,28 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
     }
     return { alex: "Alex", sam: "Sam" };
   });
+
+  const [partnerAvatars, setPartnerAvatars] = useState<Record<Partner, string>>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem("couple_task_hub_avatars");
+        if (stored) return JSON.parse(stored);
+      } catch {}
+    }
+    return { alex: "💻", sam: "📚" };
+  });
+
+  const updatePartnerAvatar = (partner: Partner, newAvatar: string) => {
+    setPartnerAvatars((prev) => {
+      const next = { ...prev, [partner]: newAvatar };
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem("couple_task_hub_avatars", JSON.stringify(next));
+        } catch {}
+      }
+      return next;
+    });
+  };
 
   const [activePartner, setActivePartner] = useState<Partner>("alex");
   const [assigneeFilter, setAssigneeFilter] = useState<AssigneeFilter>("all");
@@ -849,6 +873,8 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
         leaveCircle,
         partnerNames,
         updatePartnerName,
+        partnerAvatars,
+        updatePartnerAvatar,
         activePartner,
         setActivePartner,
         assigneeFilter,

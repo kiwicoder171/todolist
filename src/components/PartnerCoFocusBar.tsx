@@ -3,10 +3,12 @@
 import React, { useState, useEffect } from "react";
 import { useHousehold, Partner } from "@/context/HouseholdContext";
 import { useFocusTimer, formatTimeDisplay } from "@/context/FocusTimerContext";
-import { Coffee, Flame, Heart, Sparkles, Zap, Laptop, Bed, Play, X } from "lucide-react";
+import { Coffee, Flame, Heart, Sparkles, Zap, Laptop, Bed, Play, X, User } from "lucide-react";
+import { StudiconModal } from "./StudiconModal";
+import { FocusRingGoal } from "./FocusRingGoal";
 
 export function PartnerCoFocusBar() {
-  const { activePartner, partnerNames } = useHousehold();
+  const { activePartner, partnerNames, partnerAvatars } = useHousehold();
   const {
     activeSession,
     displaySeconds,
@@ -18,6 +20,7 @@ export function PartnerCoFocusBar() {
 
   const [cheerAnim, setCheerAnim] = useState<string | null>(null);
   const [isLauncherOpen, setIsLauncherOpen] = useState(false);
+  const [isStudiconOpen, setIsStudiconOpen] = useState(false);
   const [customTitle, setCustomTitle] = useState("");
 
   const presets = ["Deep Work", "Reading", "Study", "Chores"];
@@ -61,30 +64,33 @@ export function PartnerCoFocusBar() {
           </span>
         </div>
 
-        {cheerAnim && (
-          <div className="animate-bounce flex items-center gap-1 text-xs font-semibold text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/30">
-            <span>{cheerAnim}</span>
-            <span>{partnerName} sent cheer!</span>
-          </div>
-        )}
+        <div className="flex items-center gap-2">
+          {cheerAnim && (
+            <div className="animate-bounce flex items-center gap-1 text-xs font-semibold text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/30">
+              <span>{cheerAnim}</span>
+              <span>{partnerName} sent cheer!</span>
+            </div>
+          )}
+          <FocusRingGoal />
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-2 sm:gap-3">
         {/* Desk 1: You */}
         <div className="flex items-center gap-2.5 p-2 rounded-xl bg-zinc-900/60 border border-zinc-800/60">
-          <div
-            className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
+          <button
+            type="button"
+            onClick={() => setIsStudiconOpen(true)}
+            title="Change desk Studicon avatar"
+            aria-label="Change desk avatar"
+            className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-lg transition hover:scale-105 cursor-pointer ${
               activeSession?.isRunning
-                ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
-                : "bg-zinc-800 text-zinc-400"
+                ? "bg-emerald-500/20 border border-emerald-500/40 ring-1 ring-emerald-400/40"
+                : "bg-zinc-800 border border-zinc-700"
             }`}
           >
-            {activeSession?.isRunning ? (
-              <Laptop className="w-4 h-4 animate-pulse" />
-            ) : (
-              <Bed className="w-4 h-4" />
-            )}
-          </div>
+            <span>{partnerAvatars?.[activePartner] || "💻"}</span>
+          </button>
 
           <div className="min-w-0 flex-1">
             <div className="flex items-center justify-between">
@@ -119,17 +125,13 @@ export function PartnerCoFocusBar() {
         {/* Desk 2: Partner */}
         <div className="flex items-center gap-2.5 p-2 rounded-xl bg-zinc-900/60 border border-zinc-800/60">
           <div
-            className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
+            className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-lg ${
               isPartnerOnlineAndFocusing
-                ? "bg-amber-500/20 text-amber-300 border border-amber-500/30"
-                : "bg-zinc-800 text-zinc-400"
+                ? "bg-amber-500/20 border border-amber-500/40 ring-1 ring-amber-400/40"
+                : "bg-zinc-800 border border-zinc-700"
             }`}
           >
-            {isPartnerOnlineAndFocusing ? (
-              <Laptop className="w-4 h-4" />
-            ) : (
-              <Bed className="w-4 h-4" />
-            )}
+            <span>{partnerAvatars?.[otherPartner] || "📚"}</span>
           </div>
 
           <div className="min-w-0 flex-1">
@@ -221,6 +223,11 @@ export function PartnerCoFocusBar() {
           </form>
         </div>
       )}
+
+      <StudiconModal
+        isOpen={isStudiconOpen}
+        onClose={() => setIsStudiconOpen(false)}
+      />
     </div>
   );
 }

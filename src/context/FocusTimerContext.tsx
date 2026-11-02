@@ -11,6 +11,9 @@ import React, {
 } from "react";
 import { useHousehold, Partner, formatDateKey } from "./HouseholdContext";
 import { supabase } from "@/lib/supabase";
+import { focusAudio, AmbientSoundType } from "@/utils/focusAudio";
+
+export type { AmbientSoundType };
 
 export type FocusMode = "stopwatch" | "pomodoro";
 
@@ -86,6 +89,14 @@ export interface FocusTimerContextType {
   logs: FocusLogItem[];
   getLogsForDate: (date: Date) => FocusLogItem[];
   getTotalFocusMinutesForDate: (date: Date, partner?: Partner) => number;
+  dailyTargetMinutes: number;
+  setDailyTargetMinutes: (mins: number) => void;
+  soundEnabled: boolean;
+  toggleSound: () => void;
+  ambientSound: AmbientSoundType;
+  setAmbientSound: (sound: AmbientSoundType) => void;
+  ambientVolume: number;
+  setAmbientVolume: (vol: number) => void;
 }
 
 const STORAGE_ACTIVE_KEY = "couple_task_hub_active_focus";
@@ -103,6 +114,67 @@ export function FocusTimerProvider({ children }: { children: ReactNode }) {
   const [cheerReceived, setCheerReceived] = useState<{ emoji: string; from: Partner; id: string } | null>(null);
   const [logs, setLogs] = useState<FocusLogItem[]>([]);
   const broadcastChannelRef = useRef<BroadcastChannel | null>(null);
+  const hasChimedPomodoroRef = useRef<boolean>(false);
+
+  const [dailyTargetMinutes, setDailyTargetMinutesState] = useState<number>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem("couple_task_hub_daily_target");
+        if (stored) return parseInt(stored, 10) || 60;
+      } catch {}
+    }
+    return 60;
+  });
+
+  const setDailyTargetMinutes = (mins: number) => {
+    setDailyTargetMinutesState(mins);
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("couple_task_hub_daily_target", String(mins));
+      } catch {}
+    }
+  };
+
+  const [soundEnabled, setSoundEnabled] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const enabled = localStorage.getItem("couple_task_hub_sound_enabled") !== "false";
+        focusAudio.setMuted(!enabled);
+        return enabled;
+      } catch {}
+    }
+    return true;
+  });
+
+  const toggleSound = () => {
+    setSoundEnabled((prev) => {
+      const next = !prev;
+      focusAudio.setMuted(!next);
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem("couple_task_hub_sound_enabled", String(next));
+        } catch {}
+      }
+      return next;
+    });
+  };
+
+  const [ambientSound, setAmbientSoundState] = useState<AmbientSoundType>("off");
+  const [ambientVolume, setAmbientVolumeState] = useState<number>(0.4);
+
+  const setAmbientSound = (sound: AmbientSoundType) => {
+    setAmbientSoundState(sound);
+    if (activeSession?.isRunning && sound !== "off") {
+      focusAudio.startAmbient(sound);
+    } else {
+      focusAudio.stopAmbient();
+    }
+  };
+
+  const setAmbientVolume = (vol: number) => {
+    setAmbientVolumeState(vol);
+    focusAudio.setVolume(vol);
+  };
 
   // Load logs and active session on mount
   useEffect(() => {
@@ -152,6 +224,7 @@ export function FocusTimerProvider({ children }: { children: ReactNode }) {
       } else if (data.type === "CHEER") {
         if (data.to === activePartner) {
           setCheerReceived({ emoji: data.emoji, from: data.from, id: String(Date.now()) });
+          focusAudio.playChime("cheer");
         }
       } else if (data.type === "LOG_ADDED") {
         setLogs((prev) => [data.log, ...prev.filter((l) => l.id !== data.log.id)]);
@@ -200,6 +273,16 @@ export function FocusTimerProvider({ children }: { children: ReactNode }) {
       const totalSec = activeSession.accumulatedSeconds + Math.max(0, delta);
       setDisplaySeconds(totalSec);
 
+      // Pomodoro completion chime check
+      if (
+        activeSession.mode === "pomodoro" &&
+        totalSec >= activeSession.targetSeconds &&
+        !hasChimedPomodoroRef.current
+      ) {
+        hasChimedPomodoroRef.current = true;
+        focusAudio.playChime("pomodoro");
+      }
+
       // Periodically update presence
       broadcastPresence({
         partner: activePartner,
@@ -231,6 +314,7 @@ export function FocusTimerProvider({ children }: { children: ReactNode }) {
 
   const startFocus = useCallback(
     (target: FocusTarget, mode: FocusMode = "stopwatch", targetMinutes: number = 25) => {
+      hasChimedPomodoroRef.current = false;
       const newSession: FocusSession = {
         id: `focus_${Date.now()}`,
         partner: activePartner,
@@ -247,6 +331,10 @@ export function FocusTimerProvider({ children }: { children: ReactNode }) {
       saveActiveSession(newSession);
       setDisplaySeconds(0);
 
+      if (ambientSound !== "off") {
+        focusAudio.startAmbient(ambientSound);
+      }
+
       broadcastPresence({
         partner: activePartner,
         isFocusing: true,
@@ -258,7 +346,7 @@ export function FocusTimerProvider({ children }: { children: ReactNode }) {
         updatedAt: Date.now(),
       });
     },
-    [activePartner, broadcastPresence]
+    [activePartner, broadcastPresence, ambientSound]
   );
 
   const pauseFocus = useCallback(() => {
@@ -274,6 +362,7 @@ export function FocusTimerProvider({ children }: { children: ReactNode }) {
 
     saveActiveSession(pausedSession);
     setDisplaySeconds(updatedSec);
+    focusAudio.stopAmbient();
 
     broadcastPresence({
       partner: activePartner,
@@ -297,6 +386,10 @@ export function FocusTimerProvider({ children }: { children: ReactNode }) {
 
     saveActiveSession(resumedSession);
 
+    if (ambientSound !== "off") {
+      focusAudio.startAmbient(ambientSound);
+    }
+
     broadcastPresence({
       partner: activePartner,
       isFocusing: true,
@@ -307,7 +400,7 @@ export function FocusTimerProvider({ children }: { children: ReactNode }) {
       isBreak: activeSession.isBreak,
       updatedAt: Date.now(),
     });
-  }, [activeSession, activePartner, broadcastPresence]);
+  }, [activeSession, activePartner, broadcastPresence, ambientSound]);
 
   const toggleBreak = useCallback(() => {
     if (!activeSession) return;
@@ -371,6 +464,7 @@ export function FocusTimerProvider({ children }: { children: ReactNode }) {
 
       saveActiveSession(null);
       setDisplaySeconds(0);
+      focusAudio.stopAmbient();
 
       broadcastPresence({
         partner: activePartner,
@@ -469,6 +563,14 @@ export function FocusTimerProvider({ children }: { children: ReactNode }) {
         logs,
         getLogsForDate,
         getTotalFocusMinutesForDate,
+        dailyTargetMinutes,
+        setDailyTargetMinutes,
+        soundEnabled,
+        toggleSound,
+        ambientSound,
+        setAmbientSound,
+        ambientVolume,
+        setAmbientVolume,
       }}
     >
       {children}
@@ -492,6 +594,14 @@ const fallbackFocusContext: FocusTimerContextType = {
   logs: [],
   getLogsForDate: () => [],
   getTotalFocusMinutesForDate: () => 0,
+  dailyTargetMinutes: 60,
+  setDailyTargetMinutes: () => {},
+  soundEnabled: true,
+  toggleSound: () => {},
+  ambientSound: "off",
+  setAmbientSound: () => {},
+  ambientVolume: 0.4,
+  setAmbientVolume: () => {},
 };
 
 export function useFocusTimer() {

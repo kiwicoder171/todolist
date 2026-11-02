@@ -132,6 +132,10 @@ Inspired by Yeolpumta (YPT), Phase 2 expands Couple Task Hub into an intimate, s
 - **Ticket 09**: Focus Timer Engine & Docked Floating Focus Pill (`09-focus-timer-engine-and-docked-pill.md`)
 - **Ticket 10**: Realtime Co-Focus & Partner Desks (`10-realtime-co-focus-partner-desks.md`)
 - **Ticket 11**: 24-Hour Visual Day Timeline & Attendance Consistency Matrix (`11-visual-day-timeline-and-consistency-matrix.md`)
+- **Ticket 12**: Daily Focus Target & Circular Progress Ring Goal (`12-daily-focus-target-and-ring-goal.md`)
+- **Ticket 13**: Pomodoro Completion Chimes & Web Audio Cues (`13-pomodoro-completion-chimes-and-audio.md`)
+- **Ticket 14**: Ambient White Noise & Focus Sound Generator (`14-ambient-white-noise-focus-sounds.md`)
+- **Ticket 15**: Custom Studicons & Couple Focus Avatars (`15-custom-studicons-and-couple-avatars.md`)
 
 ## Further Notes
 - Default categories for the Kanban Board: "Home", "Travel", "Groceries", "Wishlist".

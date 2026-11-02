@@ -2,7 +2,19 @@
 
 import React, { useState } from "react";
 import { useFocusTimer } from "@/context/FocusTimerContext";
-import { Play, Pause, Square, Coffee, Check, Flame, ChevronUp, ChevronDown } from "lucide-react";
+import {
+  Play,
+  Pause,
+  Square,
+  Coffee,
+  Check,
+  Flame,
+  ChevronUp,
+  ChevronDown,
+  Volume2,
+  VolumeX,
+  Music,
+} from "lucide-react";
 
 export function formatTimeDisplay(totalSeconds: number): string {
   const hours = Math.floor(totalSeconds / 3600);
@@ -25,9 +37,16 @@ export function FloatingFocusPill() {
     resumeFocus,
     toggleBreak,
     stopFocus,
+    soundEnabled,
+    toggleSound,
+    ambientSound,
+    setAmbientSound,
+    ambientVolume,
+    setAmbientVolume,
   } = useFocusTimer();
 
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showAudioMenu, setShowAudioMenu] = useState(false);
   const [completedSummary, setCompletedSummary] = useState<string | null>(null);
 
   if (!activeSession) {
@@ -110,6 +129,21 @@ export function FloatingFocusPill() {
         {/* Right: Controls */}
         <div className="flex items-center gap-1.5 shrink-0">
           <button
+            onClick={() => setShowAudioMenu(!showAudioMenu)}
+            aria-label="Ambient Sound and Chimes"
+            title="Focus Sound & Ambient Noise"
+            className={`p-1.5 rounded-full transition ${
+              ambientSound !== "off"
+                ? "bg-blue-500/20 text-blue-300 border border-blue-500/40"
+                : soundEnabled
+                ? "bg-zinc-800 text-zinc-300 hover:text-white"
+                : "bg-zinc-900 text-zinc-600"
+            }`}
+          >
+            {soundEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
+          </button>
+
+          <button
             onClick={toggleBreak}
             aria-label="Toggle Break"
             title={isBreak ? "Switch to Focus" : "Take Short Break"}
@@ -151,6 +185,73 @@ export function FloatingFocusPill() {
           </button>
         </div>
       </div>
+
+      {/* Ambient Audio & Chimes Popover */}
+      {showAudioMenu && (
+        <div className="absolute bottom-full mb-2 right-0 w-64 p-3 rounded-2xl bg-zinc-950 border border-zinc-800 shadow-2xl text-xs space-y-2.5 animate-fade-in backdrop-blur-md">
+          <div className="flex items-center justify-between pb-1.5 border-b border-zinc-800">
+            <span className="font-bold text-zinc-200">Focus Audio & Noise</span>
+            <button
+              onClick={toggleSound}
+              className={`text-[10px] px-2 py-0.5 rounded-full border ${
+                soundEnabled
+                  ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40"
+                  : "bg-zinc-800 text-zinc-500 border-zinc-700"
+              }`}
+            >
+              Chimes: {soundEnabled ? "On" : "Muted"}
+            </button>
+          </div>
+
+          <div>
+            <span className="text-[10px] uppercase font-bold text-zinc-500 block mb-1">
+              Ambient Background
+            </span>
+            <div className="grid grid-cols-2 gap-1.5">
+              {(
+                [
+                  { id: "off", label: "Off" },
+                  { id: "rain", label: "🌧️ Rain" },
+                  { id: "brown", label: "🌊 Brown Noise" },
+                  { id: "white", label: "💨 White Noise" },
+                  { id: "stream", label: "🌿 Stream" },
+                ] as const
+              ).map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => setAmbientSound(item.id)}
+                  className={`py-1 px-2 rounded-lg text-[10px] text-left transition ${
+                    ambientSound === item.id
+                      ? "bg-blue-500/20 text-blue-300 border border-blue-500/50 font-bold"
+                      : "bg-zinc-900 text-zinc-300 hover:bg-zinc-800 border border-zinc-800/80"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {ambientSound !== "off" && (
+            <div className="pt-1">
+              <div className="flex justify-between text-[10px] text-zinc-400 mb-1">
+                <span>Volume</span>
+                <span>{Math.round(ambientVolume * 100)}%</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.05"
+                value={ambientVolume}
+                onChange={(e) => setAmbientVolume(parseFloat(e.target.value))}
+                className="w-full accent-blue-500 h-1 bg-zinc-800 rounded-lg cursor-pointer"
+              />
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
