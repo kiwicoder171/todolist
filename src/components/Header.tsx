@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { useHousehold, Partner } from "@/context/HouseholdContext";
 import { useAuth } from "@/context/AuthContext";
@@ -57,7 +58,22 @@ export function Header({
   const [isWidgetOpen, setIsWidgetOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
+  const [menuCoords, setMenuCoords] = useState<{ top: number; right: number } | null>(null);
   const moreMenuRef = useRef<HTMLDivElement>(null);
+  const menuPopoverRef = useRef<HTMLDivElement>(null);
+
+  const toggleMoreMenu = () => {
+    if (!isMoreMenuOpen && moreMenuRef.current) {
+      const rect = moreMenuRef.current.getBoundingClientRect();
+      setMenuCoords({
+        top: rect.bottom + 8,
+        right: Math.max(16, window.innerWidth - rect.right),
+      });
+      setIsMoreMenuOpen(true);
+    } else {
+      setIsMoreMenuOpen(false);
+    }
+  };
 
   const currentScore = scores[activePartner] || { points: 0, streak: 0 };
 
@@ -69,15 +85,30 @@ export function Header({
   };
   const modeInfo = spaceModeConfig[spaceMode || "partner"];
 
-  // Close "more" popover when clicking outside
+  // Close "more" popover when clicking outside or scrolling
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (moreMenuRef.current && !moreMenuRef.current.contains(event.target as Node)) {
+      const target = event.target as Node;
+      if (
+        moreMenuRef.current &&
+        !moreMenuRef.current.contains(target) &&
+        menuPopoverRef.current &&
+        !menuPopoverRef.current.contains(target)
+      ) {
         setIsMoreMenuOpen(false);
       }
     }
+    function handleScrollOrResize() {
+      setIsMoreMenuOpen(false);
+    }
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    window.addEventListener("scroll", handleScrollOrResize, { passive: true });
+    window.addEventListener("resize", handleScrollOrResize);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", handleScrollOrResize);
+      window.removeEventListener("resize", handleScrollOrResize);
+    };
   }, []);
 
   return (
@@ -324,7 +355,7 @@ export function Header({
               <div className="relative" ref={moreMenuRef}>
                 <button
                   type="button"
-                  onClick={() => setIsMoreMenuOpen((prev) => !prev)}
+                  onClick={toggleMoreMenu}
                   className={`w-8 h-8 rounded-xl flex items-center justify-center transition cursor-pointer outline-none apple-press ${
                     isMoreMenuOpen
                       ? "bg-black/[0.08] dark:bg-white/[0.12] text-zinc-900 dark:text-white"
@@ -335,64 +366,6 @@ export function Header({
                 >
                   <MoreHorizontal className="w-4 h-4" />
                 </button>
-
-                {/* Popover Menu */}
-                {isMoreMenuOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-48 rounded-2xl bg-white dark:bg-[#1c1c1e] border border-black/10 dark:border-white/15 p-1.5 shadow-[0_12px_36px_rgba(0,0,0,0.2)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.7)] z-50 flex flex-col gap-0.5 select-none">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsWidgetOpen(true);
-                        setIsMoreMenuOpen(false);
-                      }}
-                      className="w-full px-3 py-2 rounded-xl text-left text-xs font-medium text-zinc-800 dark:text-zinc-200 hover:bg-black/[0.04] dark:hover:bg-white/[0.08] flex items-center gap-2 transition apple-press"
-                    >
-                      <Smartphone className="w-3.5 h-3.5 text-zinc-500" />
-                      <span>Home Widgets</span>
-                    </button>
-
-                    <Link
-                      href="/docs"
-                      onClick={() => setIsMoreMenuOpen(false)}
-                      className="w-full px-3 py-2 rounded-xl text-left text-xs font-medium text-zinc-800 dark:text-zinc-200 hover:bg-black/[0.04] dark:hover:bg-white/[0.08] flex items-center gap-2 transition apple-press"
-                    >
-                      <BookOpen className="w-3.5 h-3.5 text-zinc-500" />
-                      <span>Documentation</span>
-                    </Link>
-
-                    {circle ? (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setIsInviteOpen(true);
-                          setIsMoreMenuOpen(false);
-                        }}
-                        aria-label="Circle Details"
-                        className="w-full px-3 py-2 rounded-xl text-left text-xs font-medium text-zinc-800 dark:text-zinc-200 hover:bg-black/[0.04] dark:hover:bg-white/[0.08] flex items-center justify-between transition apple-press"
-                      >
-                        <div className="flex items-center gap-2">
-                          <Users className="w-3.5 h-3.5 text-zinc-500" />
-                          <span>Circle Invite</span>
-                        </div>
-                        <span className="font-mono text-[10px] text-zinc-400">{circle.joinCode}</span>
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setIsMoreMenuOpen(false);
-                          if (!user) openAuthModal("register");
-                          else setIsOnboardingOpen(true);
-                        }}
-                        aria-label="Join Circle"
-                        className="w-full px-3 py-2 rounded-xl text-left text-xs font-medium text-zinc-800 dark:text-zinc-200 hover:bg-black/[0.04] dark:hover:bg-white/[0.08] flex items-center gap-2 transition apple-press"
-                      >
-                        <Users className="w-3.5 h-3.5 text-zinc-500" />
-                        <span>Join Circle</span>
-                      </button>
-                    )}
-                  </div>
-                )}
               </div>
 
               {/* Profile or Login */}
@@ -440,6 +413,77 @@ export function Header({
         isOpen={isProfileOpen}
         onClose={() => setIsProfileOpen(false)}
       />
+
+      {/* Control Center Popover (Mounted in Root Portal to eliminate any ancestor overflow or backdrop clipping) */}
+      {isMoreMenuOpen &&
+        typeof document !== "undefined" &&
+        menuCoords &&
+        createPortal(
+          <div
+            ref={menuPopoverRef}
+            style={{
+              position: "fixed",
+              top: `${menuCoords.top}px`,
+              right: `${menuCoords.right}px`,
+              zIndex: 99999,
+            }}
+            className="w-48 rounded-2xl bg-white dark:bg-[#1c1c1e] border border-black/10 dark:border-white/15 p-1.5 shadow-[0_12px_36px_rgba(0,0,0,0.2)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.7)] flex flex-col gap-0.5 select-none animate-in fade-in duration-150"
+          >
+            <button
+              type="button"
+              onClick={() => {
+                setIsWidgetOpen(true);
+                setIsMoreMenuOpen(false);
+              }}
+              className="w-full px-3 py-2 rounded-xl text-left text-xs font-medium text-zinc-800 dark:text-zinc-200 hover:bg-black/[0.04] dark:hover:bg-white/[0.08] flex items-center gap-2 transition apple-press cursor-pointer"
+            >
+              <Smartphone className="w-3.5 h-3.5 text-zinc-500" />
+              <span>Home Widgets</span>
+            </button>
+
+            <Link
+              href="/docs"
+              onClick={() => setIsMoreMenuOpen(false)}
+              className="w-full px-3 py-2 rounded-xl text-left text-xs font-medium text-zinc-800 dark:text-zinc-200 hover:bg-black/[0.04] dark:hover:bg-white/[0.08] flex items-center gap-2 transition apple-press"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-zinc-500" />
+              <span>Documentation</span>
+            </Link>
+
+            {circle ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setIsInviteOpen(true);
+                  setIsMoreMenuOpen(false);
+                }}
+                aria-label="Circle Details"
+                className="w-full px-3 py-2 rounded-xl text-left text-xs font-medium text-zinc-800 dark:text-zinc-200 hover:bg-black/[0.04] dark:hover:bg-white/[0.08] flex items-center justify-between transition apple-press cursor-pointer"
+              >
+                <div className="flex items-center gap-2">
+                  <Users className="w-3.5 h-3.5 text-zinc-500" />
+                  <span>Circle Invite</span>
+                </div>
+                <span className="font-mono text-[10px] text-zinc-400">{circle.joinCode}</span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => {
+                  setIsMoreMenuOpen(false);
+                  if (!user) openAuthModal("register");
+                  else setIsOnboardingOpen(true);
+                }}
+                aria-label="Join Circle"
+                className="w-full px-3 py-2 rounded-xl text-left text-xs font-medium text-zinc-800 dark:text-zinc-200 hover:bg-black/[0.04] dark:hover:bg-white/[0.08] flex items-center gap-2 transition apple-press cursor-pointer"
+              >
+                <Users className="w-3.5 h-3.5 text-zinc-500" />
+                <span>Join Circle</span>
+              </button>
+            )}
+          </div>,
+          document.body
+        )}
     </>
   );
 }
