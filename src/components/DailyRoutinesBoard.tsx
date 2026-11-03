@@ -282,12 +282,12 @@ export function DailyRoutinesBoard() {
                 {missStatus.consecutiveMisses} Days Missed · Penalty Ladder Active
               </p>
               <p className="text-[11px] text-rose-700/80 dark:text-rose-300/80 font-normal truncate">
-                -{missStatus.totalPenalty} pt deduction applied · Complete today to recover streak
+                -{Math.abs(missStatus.totalPenalty)} pt deduction applied · Complete today to recover streak
               </p>
             </div>
           </div>
           <span className="shrink-0 text-[10px] font-mono font-bold px-2.5 py-1 rounded-xl border border-rose-500/30 bg-white/80 dark:bg-zinc-900/80 text-rose-600 dark:text-rose-300 shadow-2xs">
-            -{missStatus.totalPenalty} PTS
+            -{Math.abs(missStatus.totalPenalty)} PTS
           </span>
         </div>
       ) : null}
