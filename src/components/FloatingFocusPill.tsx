@@ -65,7 +65,7 @@ export function FloatingFocusPill() {
     if (goalBonusMessage) {
       return (
         <div className="fixed bottom-24 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 animate-fade-in pointer-events-auto">
-          <div className="bg-[#121215] text-white border border-amber-500/50 shadow-2xl rounded-full px-4 py-2 flex items-center gap-2 text-xs font-semibold">
+          <div className="bg-zinc-900/95 dark:bg-zinc-950/95 text-white border border-amber-500/50 shadow-2xl rounded-full px-4 py-2 flex items-center gap-2 text-xs font-semibold backdrop-blur-md">
             <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
             <span>{goalBonusMessage}</span>
             <button
@@ -81,7 +81,7 @@ export function FloatingFocusPill() {
     if (completedSummary) {
       return (
         <div className="fixed bottom-24 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 animate-fade-in pointer-events-auto">
-          <div className="bg-[#121215] text-white border border-zinc-700/60 shadow-xl rounded-full px-4 py-2 flex items-center gap-2 text-xs font-medium">
+          <div className="bg-zinc-900/95 dark:bg-zinc-950/95 text-white border border-zinc-700/60 shadow-xl rounded-full px-4 py-2 flex items-center gap-2 text-xs font-medium backdrop-blur-md">
             <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
             <span>{completedSummary}</span>
             <button

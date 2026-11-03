@@ -43,26 +43,26 @@ export function StudiconModal({ isOpen, onClose }: StudiconModalProps) {
       data-testid="studicon-modal"
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in"
     >
-      <div className="bg-[#121215] text-zinc-100 border border-zinc-800 rounded-3xl p-5 max-w-sm w-full shadow-2xl space-y-4">
+      <div className="bg-white dark:bg-[#121215] text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-5 max-w-sm w-full shadow-2xl space-y-4">
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-zinc-800">
+        <div className="flex items-center justify-between pb-3 border-b border-zinc-100 dark:border-zinc-800">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-amber-400" />
-            <h3 className="font-heading font-extrabold text-sm uppercase tracking-wide text-zinc-100">
+            <Sparkles className="w-4 h-4 text-amber-500 dark:text-amber-400" />
+            <h3 className="font-heading font-extrabold text-sm uppercase tracking-wide text-zinc-900 dark:text-zinc-100">
               Select Desk Studicon
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="text-zinc-400 hover:text-white p-1 rounded-lg transition"
+            className="text-zinc-400 hover:text-zinc-700 dark:hover:text-white p-1 rounded-lg transition"
             aria-label="Close"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        <p className="text-xs text-zinc-400">
-          Choose a focus icon for <strong className="text-zinc-200">{myName}</strong>. Your partner will see this avatar at your desk in real time.
+        <p className="text-xs text-zinc-500 dark:text-zinc-400">
+          Choose a focus icon for <strong className="text-zinc-800 dark:text-zinc-200">{myName}</strong>. Your partner will see this avatar at your desk in real time.
         </p>
 
         {/* Grid of Avatars */}
@@ -79,12 +79,12 @@ export function StudiconModal({ isOpen, onClose }: StudiconModalProps) {
                 }}
                 className={`p-3 rounded-2xl flex flex-col items-center gap-1.5 transition ${
                   isSelected
-                    ? "bg-zinc-800 border-2 border-emerald-400 scale-105 shadow-sm"
-                    : "bg-zinc-900/80 border border-zinc-800 hover:bg-zinc-850 hover:border-zinc-700"
+                    ? "bg-emerald-50 dark:bg-zinc-800 border-2 border-emerald-500 scale-105 shadow-xs"
+                    : "bg-zinc-50 dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700"
                 }`}
               >
                 <span className="text-2xl">{option.emoji}</span>
-                <span className="text-[9px] text-zinc-400 truncate max-w-full font-medium">
+                <span className="text-[9px] text-zinc-600 dark:text-zinc-400 truncate max-w-full font-medium">
                   {option.label.split(" ")[0]}
                 </span>
               </button>

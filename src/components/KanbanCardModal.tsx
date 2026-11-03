@@ -79,19 +79,19 @@ export function KanbanCardModal({
       onClick={onClose}
     >
       <div
-        className="bg-white border-2 border-black rounded-3xl p-6 shadow-[6px_6px_0_0_#000] w-full max-w-md relative"
+        className="bg-white dark:bg-[#121215] border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 shadow-2xl w-full max-w-md relative transition-colors duration-200"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between pb-3 border-b-2 border-black mb-4">
+        <div className="flex items-center justify-between pb-3 border-b border-zinc-100 dark:border-zinc-800 mb-4">
           <h3
             id="kanban-modal-title"
-            className="font-heading font-black text-sm uppercase tracking-wide text-black"
+            className="font-heading font-bold text-sm uppercase tracking-wide text-zinc-900 dark:text-zinc-100"
           >
             New Kanban Card
           </h3>
           <button
             onClick={onClose}
-            className="w-7 h-7 rounded-lg border border-black hover:bg-black hover:text-white flex items-center justify-center transition"
+            className="w-7 h-7 rounded-lg border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100 flex items-center justify-center transition"
             aria-label="Close"
           >
             <X className="w-4 h-4" />
@@ -100,7 +100,7 @@ export function KanbanCardModal({
 
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">
           <div>
-            <label className="block font-heading font-bold uppercase text-[11px] text-black mb-1">
+            <label className="block font-heading font-bold uppercase text-[11px] text-zinc-700 dark:text-zinc-300 mb-1">
               Card Title *
             </label>
             <input
@@ -109,14 +109,14 @@ export function KanbanCardModal({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Research Hakone ryokans..."
-              className="w-full px-3 py-2 border-2 border-black rounded-xl text-black font-medium focus:outline-none focus:ring-2 focus:ring-black"
+              className="w-full px-3 py-2 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 rounded-xl text-zinc-900 dark:text-zinc-100 font-medium focus:outline-none focus:border-zinc-400 dark:focus:border-zinc-600 transition"
               autoFocus
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block font-heading font-bold uppercase text-[11px] text-black mb-1">
+              <label className="block font-heading font-bold uppercase text-[11px] text-zinc-700 dark:text-zinc-300 mb-1">
                 Category
               </label>
               {!isAddingCategory ? (
@@ -124,7 +124,7 @@ export function KanbanCardModal({
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full px-2.5 py-2 border-2 border-black rounded-xl bg-white font-heading font-bold text-xs"
+                    className="w-full px-2.5 py-2 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 rounded-xl font-heading font-medium text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none"
                   >
                     {categories
                       .filter((c) => c.id !== "all")
@@ -138,7 +138,7 @@ export function KanbanCardModal({
                   <button
                     type="button"
                     onClick={() => setIsAddingCategory(true)}
-                    className="p-2 border-2 border-black rounded-xl hover:bg-black hover:text-white transition"
+                    className="p-2 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 transition"
                     title="Add Category"
                   >
                     <Plus className="w-3.5 h-3.5" />
@@ -150,27 +150,27 @@ export function KanbanCardModal({
                     type="text"
                     value={newCatEmoji}
                     onChange={(e) => setNewCatEmoji(e.target.value)}
-                    className="w-8 px-1 py-1.5 border-2 border-black rounded-lg text-center"
+                    className="w-8 px-1 py-1.5 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 rounded-lg text-center text-zinc-900 dark:text-zinc-100"
                     placeholder="Emoji"
                   />
                   <input
                     type="text"
                     value={newCatName}
                     onChange={(e) => setNewCatName(e.target.value)}
-                    className="w-full px-2 py-1.5 border-2 border-black rounded-lg text-xs"
+                    className="w-full px-2 py-1.5 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 rounded-lg text-xs text-zinc-900 dark:text-zinc-100"
                     placeholder="Cat Name"
                   />
                   <button
                     type="button"
                     onClick={handleCreateCategory}
-                    className="px-2 py-1.5 bg-black text-white rounded-lg font-bold"
+                    className="px-2 py-1.5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-lg font-bold"
                   >
                     ✓
                   </button>
                   <button
                     type="button"
                     onClick={() => setIsAddingCategory(false)}
-                    className="px-1.5 py-1.5 border border-zinc-300 rounded-lg text-zinc-500"
+                    className="px-1.5 py-1.5 border border-zinc-200 dark:border-zinc-800 rounded-lg text-zinc-400"
                   >
                     ✕
                   </button>
@@ -179,13 +179,13 @@ export function KanbanCardModal({
             </div>
 
             <div>
-              <label className="block font-heading font-bold uppercase text-[11px] text-black mb-1">
+              <label className="block font-heading font-bold uppercase text-[11px] text-zinc-700 dark:text-zinc-300 mb-1">
                 Stage
               </label>
               <select
                 value={stage}
                 onChange={(e) => setStage(e.target.value as KanbanStage)}
-                className="w-full px-2.5 py-2 border-2 border-black rounded-xl bg-white font-heading font-bold text-xs"
+                className="w-full px-2.5 py-2 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 rounded-xl font-heading font-medium text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none"
               >
                 <option value="todo">To Do</option>
                 <option value="inprogress">In Progress</option>
@@ -195,7 +195,7 @@ export function KanbanCardModal({
           </div>
 
           <div>
-            <label className="block font-heading font-bold uppercase text-[11px] text-black mb-1">
+            <label className="block font-heading font-bold uppercase text-[11px] text-zinc-700 dark:text-zinc-300 mb-1">
               Assignee
             </label>
             <div className="grid grid-cols-3 gap-2">
@@ -204,10 +204,10 @@ export function KanbanCardModal({
                   key={opt}
                   type="button"
                   onClick={() => setAssignee(opt)}
-                  className={`py-1.5 px-2 rounded-xl font-heading font-bold text-xs uppercase border-2 transition ${
+                  className={`py-1.5 px-2 rounded-xl font-heading font-bold text-xs uppercase border transition ${
                     assignee === opt
-                      ? "border-black bg-black text-white"
-                      : "border-black bg-white text-black hover:bg-zinc-100"
+                      ? "border-zinc-900 dark:border-zinc-100 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 shadow-xs"
+                      : "border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800"
                   }`}
                 >
                   {opt === "mine" ? "Me" : opt === "partner" ? partnerName : "Both"}
@@ -217,7 +217,7 @@ export function KanbanCardModal({
           </div>
 
           <div>
-            <label className="block font-heading font-bold uppercase text-[11px] text-black mb-1">
+            <label className="block font-heading font-bold uppercase text-[11px] text-zinc-700 dark:text-zinc-300 mb-1">
               Description / Notes (Optional)
             </label>
             <textarea
@@ -225,21 +225,21 @@ export function KanbanCardModal({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Add key links, details or sub-items..."
-              className="w-full px-3 py-2 border-2 border-black rounded-xl text-black font-medium focus:outline-none focus:ring-2 focus:ring-black"
+              className="w-full px-3 py-2 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 rounded-xl text-zinc-900 dark:text-zinc-100 font-medium focus:outline-none focus:border-zinc-400 dark:focus:border-zinc-600 transition"
             />
           </div>
 
-          <div className="pt-2 flex items-center justify-end gap-2 border-t-2 border-dashed border-zinc-200">
+          <div className="pt-2 flex items-center justify-end gap-2 border-t border-zinc-100 dark:border-zinc-800">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 border border-zinc-300 rounded-xl font-heading font-bold uppercase text-zinc-600 hover:text-black"
+              className="px-4 py-2 border border-zinc-200 dark:border-zinc-800 rounded-xl font-heading font-bold uppercase text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-black text-white border-2 border-black rounded-xl font-heading font-extrabold uppercase hover:bg-zinc-800 transition"
+              className="px-4 py-2 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-xl font-heading font-bold uppercase hover:opacity-90 transition shadow-xs"
             >
               Create Card
             </button>

@@ -104,23 +104,23 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
       onClick={onClose}
     >
       <div
-        className="bg-white border-2 border-black rounded-3xl w-full max-w-md p-6 shadow-[8px_8px_0_0_#000] space-y-4 relative"
+        className="bg-white dark:bg-[#121215] border border-zinc-200 dark:border-zinc-800 rounded-3xl w-full max-w-md p-6 shadow-2xl space-y-4 relative transition-colors duration-200"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between pb-3.5 border-b-2 border-black">
+        <div className="flex items-center justify-between pb-3.5 border-b border-zinc-100 dark:border-zinc-800">
           <div>
             <h3
               id="wishlist-modal-title"
-              className="font-heading font-black text-sm uppercase tracking-wide text-black flex items-center gap-1.5"
+              className="font-heading font-bold text-sm uppercase tracking-wide text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5"
             >
               <span>Couple Wishlist Shop</span>
-              <Sparkles className="w-3.5 h-3.5" />
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
             </h3>
-            <p className="text-xs text-zinc-500 font-medium">
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
               {currentPartnerName}&apos;s Balance:{" "}
               <strong
                 className={`font-heading font-extrabold ${
-                  currentScore.points < 0 ? "text-red-600" : "text-black"
+                  currentScore.points < 0 ? "text-red-500" : "text-zinc-900 dark:text-zinc-100"
                 }`}
               >
                 {currentScore.points} PTS
@@ -129,7 +129,7 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
           </div>
           <button
             onClick={onClose}
-            className="w-7 h-7 rounded-lg border border-black flex items-center justify-center font-bold text-sm hover:bg-black hover:text-white transition"
+            className="w-7 h-7 rounded-lg border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 flex items-center justify-center font-bold text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100 transition"
             aria-label="Close"
           >
             <X className="w-4 h-4" />
@@ -137,7 +137,7 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
         </div>
 
         {redeemedNotice && (
-          <div className="p-2.5 rounded-xl border-2 border-black bg-zinc-100 text-xs font-heading font-bold text-black flex items-center gap-2 animate-bounce">
+          <div className="p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-50 dark:bg-emerald-950/30 text-xs font-heading font-bold text-emerald-800 dark:text-emerald-300 flex items-center gap-2 animate-bounce">
             <Check className="w-4 h-4 stroke-[3]" />
             <span>{redeemedNotice}</span>
           </div>
@@ -151,7 +151,7 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
               <button
                 type="button"
                 onClick={() => saveRewards(DEFAULT_REWARDS)}
-                className="mt-2 text-[11px] font-heading font-bold underline text-black hover:text-zinc-600 cursor-pointer"
+                className="mt-2 text-[11px] font-heading font-bold underline text-zinc-900 dark:text-zinc-100 hover:text-zinc-600 dark:hover:text-zinc-300 cursor-pointer"
               >
                 Restore default rewards
               </button>
@@ -160,19 +160,19 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
             rewards.map((r) => (
               <div
                 key={r.id}
-                className="border-2 border-black rounded-2xl p-3 flex items-center justify-between bg-zinc-50 squircle-card hover:border-black transition gap-2"
+                className="border border-zinc-200 dark:border-zinc-800 rounded-2xl p-3 flex items-center justify-between bg-zinc-50 dark:bg-zinc-900/60 squircle-card hover:border-zinc-300 dark:hover:border-zinc-700 transition gap-2"
               >
                 <div className="pr-1 min-w-0 flex-1">
-                  <h4 className="font-heading font-bold text-xs text-black truncate">
+                  <h4 className="font-heading font-bold text-xs text-zinc-900 dark:text-zinc-100 truncate">
                     {r.title}
                   </h4>
-                  <p className="text-[11px] text-zinc-500 truncate">{r.desc}</p>
+                  <p className="text-[11px] text-zinc-500 dark:text-zinc-400 truncate">{r.desc}</p>
                 </div>
                 <div className="flex items-center gap-1.5 shrink-0">
                   <button
                     type="button"
                     onClick={() => handleRedeem(r)}
-                    className="bg-black text-white text-xs font-heading font-extrabold px-3.5 py-1.5 rounded-full hover:bg-zinc-800 transition shrink-0 active:scale-95 cursor-pointer shadow-xs"
+                    className="bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-xs font-heading font-bold px-3.5 py-1.5 rounded-full hover:opacity-90 transition shrink-0 active:scale-95 cursor-pointer shadow-xs"
                   >
                     {r.cost} PTS
                   </button>
@@ -181,7 +181,7 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
                     onClick={() => handleDeleteReward(r.id)}
                     aria-label={`Delete ${r.title}`}
                     title="Delete reward"
-                    className="w-7 h-7 rounded-full border border-zinc-200 hover:border-red-500 hover:bg-red-50 text-zinc-400 hover:text-red-600 flex items-center justify-center transition active:scale-90 cursor-pointer shrink-0"
+                    className="w-7 h-7 rounded-full border border-zinc-200 dark:border-zinc-800 hover:border-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 text-zinc-400 hover:text-red-600 flex items-center justify-center transition active:scale-90 cursor-pointer shrink-0"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -195,16 +195,16 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
         {isAddingCustom ? (
           <form
             onSubmit={handleAddCustomReward}
-            className="p-3 border-2 border-dashed border-black rounded-2xl space-y-2 bg-zinc-50"
+            className="p-3 border border-zinc-200 dark:border-zinc-800 rounded-2xl space-y-2 bg-zinc-50 dark:bg-zinc-900/60"
           >
             <div className="flex items-center justify-between">
-              <span className="font-heading font-bold text-xs text-black uppercase">
+              <span className="font-heading font-bold text-xs text-zinc-900 dark:text-zinc-100 uppercase">
                 New Custom Reward
               </span>
               <button
                 type="button"
                 onClick={() => setIsAddingCustom(false)}
-                className="text-xs text-zinc-400 hover:text-black font-bold"
+                className="text-xs text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 font-bold"
               >
                 ✕
               </button>
@@ -217,7 +217,7 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
               placeholder="e.g. Foot massage 🦶"
               value={newTitle}
               onChange={(e) => setNewTitle(e.target.value)}
-              className="w-full px-2.5 py-1.5 border border-black rounded-lg text-xs"
+              className="w-full px-2.5 py-1.5 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 rounded-lg text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none"
             />
             <div className="flex gap-2">
               <input
@@ -227,7 +227,7 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
                 placeholder="Description / details"
                 value={newDesc}
                 onChange={(e) => setNewDesc(e.target.value)}
-                className="flex-1 px-2.5 py-1.5 border border-black rounded-lg text-xs"
+                className="flex-1 px-2.5 py-1.5 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 rounded-lg text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none"
               />
               <input
                 type="number"
@@ -237,13 +237,13 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
                 max="100"
                 value={newCost}
                 onChange={(e) => setNewCost(Number(e.target.value))}
-                className="w-16 px-2 py-1.5 border border-black rounded-lg text-xs text-center font-bold"
+                className="w-16 px-2 py-1.5 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 rounded-lg text-xs text-center font-bold text-zinc-900 dark:text-zinc-100 focus:outline-none"
                 placeholder="PTS"
               />
             </div>
             <button
               type="submit"
-              className="w-full py-1.5 bg-black text-white rounded-lg font-heading font-bold text-xs uppercase"
+              className="w-full py-1.5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-lg font-heading font-bold text-xs uppercase hover:opacity-90 transition shadow-xs"
             >
               Add Reward
             </button>
@@ -251,7 +251,7 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
         ) : (
           <button
             onClick={() => setIsAddingCustom(true)}
-            className="w-full py-2 border-2 border-dashed border-zinc-400 hover:border-black rounded-xl text-zinc-600 hover:text-black font-heading font-bold text-xs uppercase transition flex items-center justify-center gap-1.5 bg-white"
+            className="w-full py-2 border border-dashed border-zinc-300 dark:border-zinc-700 hover:border-zinc-500 rounded-xl text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 font-heading font-bold text-xs uppercase transition flex items-center justify-center gap-1.5 bg-zinc-50 dark:bg-zinc-900"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Add Custom Couple Reward</span>

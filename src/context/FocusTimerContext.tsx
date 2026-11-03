@@ -124,15 +124,19 @@ export function FocusTimerProvider({ children }: { children: ReactNode }) {
     setGoalBonusMessage(null);
   }, []);
 
-  const [dailyTargetMinutes, setDailyTargetMinutesState] = useState<number>(() => {
-    if (typeof window !== "undefined") {
-      try {
-        const stored = localStorage.getItem("couple_task_hub_daily_target");
-        if (stored) return parseInt(stored, 10) || 60;
-      } catch {}
-    }
-    return 60;
-  });
+  const [dailyTargetMinutes, setDailyTargetMinutesState] = useState<number>(60);
+
+  // Client hydration for stored daily target
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const stored = localStorage.getItem("couple_task_hub_daily_target");
+      if (stored) {
+        const val = parseInt(stored, 10);
+        if (val) setDailyTargetMinutesState(val);
+      }
+    } catch {}
+  }, []);
 
   const setDailyTargetMinutes = (mins: number) => {
     setDailyTargetMinutesState(mins);

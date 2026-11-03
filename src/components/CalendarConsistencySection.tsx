@@ -123,23 +123,23 @@ export function CalendarConsistencySection() {
   return (
     <div className="flex flex-col gap-4">
       {/* 1. Interactive Calendar Card */}
-      <div className="bg-white border-2 border-black rounded-3xl p-5 shadow-[4px_4px_0_0_#000]">
-        <div className="flex items-center justify-between mb-4 pb-2 border-b-2 border-black">
-          <h2 className="font-heading font-black text-sm uppercase tracking-wider text-black flex items-center gap-1.5">
+      <div className="bg-white dark:bg-[#121215] border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-5 shadow-xs transition-colors duration-200">
+        <div className="flex items-center justify-between mb-4 pb-2 border-b border-zinc-100 dark:border-zinc-800/80">
+          <h2 className="font-heading font-bold text-sm uppercase tracking-wider text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
             {monthNames[viewMonth]} {viewYear}
           </h2>
           <div className="flex items-center gap-1">
             <button
               onClick={handlePrevMonth}
               aria-label="Previous month"
-              className="w-7 h-7 rounded-lg border border-black flex items-center justify-center font-bold text-xs hover:bg-black hover:text-white transition"
+              className="w-7 h-7 rounded-lg border border-zinc-200 dark:border-zinc-700/80 text-zinc-600 dark:text-zinc-300 flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
             >
               <ChevronLeft className="w-3.5 h-3.5" />
             </button>
             <button
               onClick={handleNextMonth}
               aria-label="Next month"
-              className="w-7 h-7 rounded-lg border border-black flex items-center justify-center font-bold text-xs hover:bg-black hover:text-white transition"
+              className="w-7 h-7 rounded-lg border border-zinc-200 dark:border-zinc-700/80 text-zinc-600 dark:text-zinc-300 flex items-center justify-center font-bold text-xs hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
             >
               <ChevronRight className="w-3.5 h-3.5" />
             </button>
@@ -147,7 +147,7 @@ export function CalendarConsistencySection() {
         </div>
 
         {/* Day of Week Headers */}
-        <div className="grid grid-cols-7 gap-1 text-center font-heading font-bold text-[11px] text-zinc-400 mb-2">
+        <div className="grid grid-cols-7 gap-1 text-center font-heading font-bold text-[11px] text-zinc-400 dark:text-zinc-500 mb-2">
           <span>S</span>
           <span>M</span>
           <span>T</span>
@@ -175,10 +175,10 @@ export function CalendarConsistencySection() {
                 aria-label={`Day ${date.getDate()}`}
                 className={`h-9 rounded-xl flex flex-col items-center justify-center relative transition-all group ${
                   selected
-                    ? "bg-black text-white font-extrabold shadow-[2px_2px_0_0_#000]"
+                    ? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-bold shadow-xs"
                     : today
-                    ? "border-2 border-black font-bold bg-zinc-50 hover:bg-zinc-100 text-black"
-                    : "hover:bg-zinc-100 text-zinc-800"
+                    ? "border border-zinc-900 dark:border-zinc-100 font-bold bg-zinc-50 dark:bg-zinc-850 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-900 dark:text-zinc-100"
+                    : "hover:bg-zinc-100 dark:hover:bg-zinc-800/60 text-zinc-700 dark:text-zinc-300"
                 }`}
               >
                 <span className="text-[11px] font-heading leading-none">
@@ -191,21 +191,27 @@ export function CalendarConsistencySection() {
                     <span
                       title="Freeze Day"
                       className={`w-2 h-2 rounded-full border border-dashed ${
-                        selected ? "border-white" : "border-black"
+                        selected
+                          ? "border-white dark:border-zinc-900"
+                          : "border-zinc-400 dark:border-zinc-500"
                       }`}
                     />
                   ) : status === "done" ? (
                     <span
                       title="100% Routines Completed"
                       className={`w-1.5 h-1.5 rounded-full ${
-                        selected ? "bg-white" : "bg-black"
+                        selected
+                          ? "bg-white dark:bg-zinc-900"
+                          : "bg-emerald-500 dark:bg-emerald-400"
                       }`}
                     />
                   ) : status === "pending" ? (
                     <span
                       title="Pending Tasks"
                       className={`w-1.5 h-1.5 rounded-full border ${
-                        selected ? "border-white bg-transparent" : "border-zinc-400 bg-white"
+                        selected
+                          ? "border-white dark:border-zinc-900 bg-transparent"
+                          : "border-zinc-400 dark:border-zinc-500 bg-transparent"
                       }`}
                     />
                   ) : null}
@@ -216,30 +222,30 @@ export function CalendarConsistencySection() {
         </div>
 
         {/* Legend */}
-        <div className="mt-4 pt-3.5 border-t-2 border-dashed border-zinc-200 flex items-center justify-between text-[11px] font-heading font-bold text-zinc-500">
+        <div className="mt-4 pt-3.5 border-t border-zinc-100 dark:border-zinc-800/80 flex items-center justify-between text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-black" />
+            <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400" />
             <span>100% Done</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full border border-black bg-white" />
+            <span className="w-2 h-2 rounded-full border border-zinc-400 dark:border-zinc-500" />
             <span>Pending</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full border border-dashed border-black" />
+            <span className="w-2 h-2 rounded-full border border-dashed border-zinc-500 dark:border-zinc-400" />
             <span>Freeze Day</span>
           </div>
         </div>
       </div>
 
-      {/* 2. Consistency Dials Card (Direct from 4810889.jpg) */}
-      <div className="bg-white border-2 border-black rounded-3xl p-5 shadow-[4px_4px_0_0_#000] flex flex-col justify-between">
+      {/* 2. Consistency Dials Card */}
+      <div className="bg-white dark:bg-[#121215] border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-5 shadow-xs transition-colors duration-200 flex flex-col justify-between">
         <div>
-          <div className="flex items-center justify-between mb-3 pb-2 border-b-2 border-dashed border-zinc-200">
-            <h3 className="font-heading font-black text-xs uppercase tracking-wider text-black">
+          <div className="flex items-center justify-between mb-3 pb-2 border-b border-zinc-100 dark:border-zinc-800/80">
+            <h3 className="font-heading font-bold text-xs uppercase tracking-wider text-zinc-900 dark:text-zinc-100">
               Consistency Dials
             </h3>
-            <span className="text-[10px] font-bold uppercase text-zinc-400">
+            <span className="text-[10px] font-semibold uppercase text-zinc-400 dark:text-zinc-500">
               Past 7 Days
             </span>
           </div>
@@ -250,10 +256,10 @@ export function CalendarConsistencySection() {
               const label = r.title.split("/")[0].split("(")[0].trim();
               return (
                 <div key={r.id} className="flex flex-col items-center">
-                  <div className="w-14 h-14 rounded-full border-2 border-dotted border-black flex items-center justify-center font-heading font-extrabold text-xs shadow-inner bg-zinc-50">
+                  <div className="w-14 h-14 rounded-full border border-zinc-200 dark:border-zinc-800 flex items-center justify-center font-mono font-bold text-xs bg-zinc-50 dark:bg-zinc-900/80 text-zinc-800 dark:text-zinc-200">
                     {count}/7
                   </div>
-                  <span className="text-[11px] font-heading font-bold mt-1 text-black truncate max-w-[80px]">
+                  <span className="text-[11px] font-heading font-medium mt-1 text-zinc-700 dark:text-zinc-300 truncate max-w-[80px]">
                     {label}
                   </span>
                 </div>
@@ -263,16 +269,16 @@ export function CalendarConsistencySection() {
         </div>
 
         {/* Bottom Couple Cheer Section */}
-        <div className="mt-4 pt-3 border-t-2 border-dashed border-zinc-200 flex items-center justify-between">
+        <div className="mt-4 pt-3 border-t border-zinc-100 dark:border-zinc-800/80 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl border border-black flex items-center justify-center bg-[#fafafa]">
-              <Heart className="w-4 h-4 text-black fill-black" />
+            <div className="w-8 h-8 rounded-xl border border-rose-200 dark:border-rose-900/40 flex items-center justify-center bg-rose-50 dark:bg-rose-950/30">
+              <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />
             </div>
             <div>
-              <p className="text-xs font-heading font-bold text-black">
+              <p className="text-xs font-heading font-bold text-zinc-900 dark:text-zinc-100">
                 Couple Momentum
               </p>
-              <p className="text-[11px] text-zinc-500">In sync today!</p>
+              <p className="text-[11px] text-zinc-500 dark:text-zinc-400">In sync today!</p>
             </div>
           </div>
 
@@ -284,10 +290,10 @@ export function CalendarConsistencySection() {
               sendCheer(sender, "sent you love & momentum! Keep rocking it! ❤️", otherPartner);
               setTimeout(() => setHasCheered(false), 3000);
             }}
-            className={`px-3 py-1.5 border-2 border-black rounded-xl text-xs font-bold font-heading transition cursor-pointer active:translate-x-0.5 active:translate-y-0.5 ${
+            className={`px-3 py-1.5 border rounded-xl text-xs font-bold font-heading transition cursor-pointer active:scale-95 ${
               hasCheered
-                ? "bg-black text-white"
-                : "bg-white text-black hover:bg-black hover:text-white"
+                ? "bg-rose-500 text-white border-rose-500"
+                : "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 hover:opacity-90 border-zinc-900 dark:border-zinc-100"
             }`}
           >
             {hasCheered ? "Cheered! ❤️" : "Cheer ❤️"}
