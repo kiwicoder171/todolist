@@ -25,7 +25,7 @@ export function MobileShell({
   const { activeSession } = useFocusTimer();
 
   return (
-    <div className="w-full max-w-md mx-auto min-h-[calc(100vh-80px)] flex flex-col pb-24 relative bg-[#fafafa]">
+    <div className="w-full max-w-md mx-auto min-h-[calc(100vh-80px)] flex flex-col pb-24 relative bg-[#fcfcfd] dark:bg-[#0c0c0e] text-zinc-900 dark:text-zinc-100 transition-colors duration-200">
       {/* 7-Day Week Calendar Strip on Habits and Daily tabs only (redundant on Stats which has its own calendar consistency board) */}
       {(activeTab === "habits" || activeTab === "daily") && (
         <div className="px-3.5 pt-2 pb-1">
@@ -35,7 +35,7 @@ export function MobileShell({
 
       {/* Mobile Active View Pill */}
       <div className="py-1.5 px-4 flex items-center justify-center">
-        <div className="bg-black text-white px-4 py-1 rounded-full font-heading font-extrabold text-[11px] tracking-wider uppercase shadow-xs">
+        <div className="bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 px-3.5 py-1 rounded-full font-heading font-bold text-[11px] tracking-wider uppercase shadow-xs">
           {pillTitle}
         </div>
       </div>
@@ -49,7 +49,7 @@ export function MobileShell({
       <button
         onClick={onQuickAdd}
         aria-label="Quick Add"
-        className={`fixed right-5 z-30 w-14 h-14 rounded-2xl bg-black text-white text-3xl font-heading font-light flex items-center justify-center shadow-[4px_4px_0_0_#000] active:scale-95 transition-all duration-300 ${
+        className={`fixed right-5 z-30 w-13 h-13 rounded-2xl bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 text-2xl font-heading font-light flex items-center justify-center shadow-lg active:scale-95 transition-all duration-300 border border-zinc-800/10 dark:border-zinc-200/20 ${
           activeSession ? "bottom-36" : "bottom-20"
         }`}
       >
@@ -57,18 +57,18 @@ export function MobileShell({
       </button>
 
       {/* Bottom Navigation: 1. Habits, 2. Daily, 3. Kanban, 4. Stats */}
-      <div className="fixed bottom-0 left-0 right-0 z-20 h-16 border-t-2 border-black bg-white flex items-center justify-around px-4 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] max-w-md mx-auto">
+      <div className="fixed bottom-0 left-0 right-0 z-20 h-16 border-t border-zinc-200 dark:border-zinc-800 bg-white/90 dark:bg-[#121215]/90 backdrop-blur-md flex items-center justify-around px-4 shadow-[0_-2px_10px_rgba(0,0,0,0.03)] max-w-md mx-auto">
         <button
           onClick={() => onTabChange("habits")}
-          className={`flex flex-col items-center gap-1 font-heading font-extrabold text-[10px] uppercase transition ${
-            activeTab === "habits" ? "text-black" : "text-zinc-400 hover:text-black"
+          className={`flex flex-col items-center gap-1 font-heading font-bold text-[10px] uppercase transition ${
+            activeTab === "habits" ? "text-zinc-900 dark:text-zinc-100" : "text-zinc-400 dark:text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
           }`}
         >
           <div
-            className={`w-7 h-7 rounded-xl flex items-center justify-center ${
+            className={`w-7 h-7 rounded-xl flex items-center justify-center transition-all ${
               activeTab === "habits"
-                ? "border border-black bg-black text-white"
-                : "border border-zinc-300 text-black"
+                ? "border border-zinc-900 dark:border-zinc-100 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 shadow-xs"
+                : "border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 bg-zinc-50 dark:bg-zinc-900/60"
             }`}
           >
             <Calendar className="w-3.5 h-3.5" />
@@ -78,15 +78,15 @@ export function MobileShell({
 
         <button
           onClick={() => onTabChange("daily")}
-          className={`flex flex-col items-center gap-1 font-heading font-extrabold text-[10px] uppercase transition ${
-            activeTab === "daily" ? "text-black" : "text-zinc-400 hover:text-black"
+          className={`flex flex-col items-center gap-1 font-heading font-bold text-[10px] uppercase transition ${
+            activeTab === "daily" ? "text-zinc-900 dark:text-zinc-100" : "text-zinc-400 dark:text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
           }`}
         >
           <div
-            className={`w-7 h-7 rounded-xl flex items-center justify-center ${
+            className={`w-7 h-7 rounded-xl flex items-center justify-center transition-all ${
               activeTab === "daily"
-                ? "border border-black bg-black text-white"
-                : "border border-zinc-300 text-black"
+                ? "border border-zinc-900 dark:border-zinc-100 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 shadow-xs"
+                : "border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 bg-zinc-50 dark:bg-zinc-900/60"
             }`}
           >
             <CheckSquare className="w-3.5 h-3.5" />
@@ -96,15 +96,15 @@ export function MobileShell({
 
         <button
           onClick={() => onTabChange("kanban")}
-          className={`flex flex-col items-center gap-1 font-heading font-extrabold text-[10px] uppercase transition ${
-            activeTab === "kanban" ? "text-black" : "text-zinc-400 hover:text-black"
+          className={`flex flex-col items-center gap-1 font-heading font-bold text-[10px] uppercase transition ${
+            activeTab === "kanban" ? "text-zinc-900 dark:text-zinc-100" : "text-zinc-400 dark:text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
           }`}
         >
           <div
-            className={`w-7 h-7 rounded-xl flex items-center justify-center ${
+            className={`w-7 h-7 rounded-xl flex items-center justify-center transition-all ${
               activeTab === "kanban"
-                ? "border border-black bg-black text-white"
-                : "border border-zinc-300 text-black"
+                ? "border border-zinc-900 dark:border-zinc-100 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 shadow-xs"
+                : "border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 bg-zinc-50 dark:bg-zinc-900/60"
             }`}
           >
             <LayoutGrid className="w-3.5 h-3.5" />
@@ -114,15 +114,15 @@ export function MobileShell({
 
         <button
           onClick={() => onTabChange("progress")}
-          className={`flex flex-col items-center gap-1 font-heading font-extrabold text-[10px] uppercase transition ${
-            activeTab === "progress" ? "text-black" : "text-zinc-400 hover:text-black"
+          className={`flex flex-col items-center gap-1 font-heading font-bold text-[10px] uppercase transition ${
+            activeTab === "progress" ? "text-zinc-900 dark:text-zinc-100" : "text-zinc-400 dark:text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
           }`}
         >
           <div
-            className={`w-7 h-7 rounded-xl flex items-center justify-center ${
+            className={`w-7 h-7 rounded-xl flex items-center justify-center transition-all ${
               activeTab === "progress"
-                ? "border border-black bg-black text-white"
-                : "border border-zinc-300 text-black"
+                ? "border border-zinc-900 dark:border-zinc-100 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 shadow-xs"
+                : "border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 bg-zinc-50 dark:bg-zinc-900/60"
             }`}
           >
             <BarChart2 className="w-3.5 h-3.5" />
