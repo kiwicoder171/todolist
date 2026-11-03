@@ -82,7 +82,7 @@ export function Header({
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full max-w-full overflow-x-clip px-3 sm:px-6 pt-3 pb-2 transition-all">
+      <header className="sticky top-0 z-40 w-full max-w-full px-3 sm:px-6 pt-3 pb-2 transition-all">
         {/* Floating Apple Island Command Bar */}
         <div className="apple-card rounded-3xl p-1.5 sm:p-2 sm:px-4 flex items-center justify-between gap-2 shadow-[0_4px_24px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)] border border-black/[0.06] dark:border-white/[0.08] backdrop-blur-2xl">
           
@@ -338,7 +338,7 @@ export function Header({
 
                 {/* Popover Menu */}
                 {isMoreMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 rounded-2xl bg-white/95 dark:bg-[#1c1c1e]/95 backdrop-blur-2xl border border-black/[0.08] dark:border-white/[0.1] p-1.5 shadow-[0_12px_36px_rgba(0,0,0,0.15)] dark:shadow-[0_12px_36px_rgba(0,0,0,0.6)] z-50 flex flex-col gap-0.5 animate-in fade-in zoom-in-95 duration-100">
+                  <div className="absolute right-0 top-full mt-2 w-48 rounded-2xl bg-white dark:bg-[#1c1c1e] border border-black/10 dark:border-white/15 p-1.5 shadow-[0_12px_36px_rgba(0,0,0,0.2)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.7)] z-50 flex flex-col gap-0.5 select-none">
                     <button
                       type="button"
                       onClick={() => {
