@@ -54,8 +54,8 @@ export const INITIAL_NOTIFICATIONS: AppNotification[] = [
   {
     id: "notif-1",
     type: "streak_alert",
-    title: "🔥 4-Day Streak Active!",
-    message: "You and your partner are in sync! Keep the flame alive today.",
+    title: "4-Day Streak 🔥",
+    message: "In sync! Keep the flame burning.",
     timestamp: "Just now",
     createdAt: Date.now() - 60000,
     read: false,
@@ -64,8 +64,8 @@ export const INITIAL_NOTIFICATIONS: AppNotification[] = [
   {
     id: "notif-2",
     type: "cheer",
-    title: "❤️ Partner Cheer Received",
-    message: "Alex sent you a cheer: 'You're doing amazing today!'",
+    title: "Cheer Received ❤️",
+    message: "Alex: “Doing amazing today!”",
     timestamp: "10m ago",
     createdAt: Date.now() - 600000,
     read: false,
@@ -74,8 +74,8 @@ export const INITIAL_NOTIFICATIONS: AppNotification[] = [
   {
     id: "notif-3",
     type: "task_completed",
-    title: "✅ Task Completed",
-    message: "Pick up dry cleaning & winter coats marked done (+3 PTS).",
+    title: "Task Done ✅",
+    message: "Dry cleaning & coats (+3 PTS).",
     timestamp: "1h ago",
     createdAt: Date.now() - 3600000,
     read: true,
@@ -278,8 +278,8 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
     const cheerNotif: AppNotification = {
       id: `notif-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
       type: "cheer",
-      title: "❤️ Partner Cheer Received",
-      message: `${fromName} sent you a cheer: "${message || "Keep up the great momentum today! Love you!"}"`,
+      title: "Cheer Received ❤️",
+      message: `${fromName}: "${message || "Keep it up!"}"`,
       timestamp: "Just now",
       createdAt: Date.now(),
       read: false,

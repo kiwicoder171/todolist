@@ -41,10 +41,7 @@ export function DailyRoutinesBoard() {
   const { startFocus } = useFocusTimer();
   const { addNotification } = useNotifications();
 
-  const [newTitle, setNewTitle] = useState("");
-  const [newAssignee, setNewAssignee] = useState<Assignee>("mine");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalInitialTitle, setModalInitialTitle] = useState("");
   const [showOtherDays, setShowOtherDays] = useState(false);
 
   const myName = activePartner === "alex" ? partnerNames.alex : partnerNames.sam;
@@ -102,8 +99,8 @@ export function DailyRoutinesBoard() {
     const res = reconcileDailyPenaltiesAndStreaks(routines, isCompleted, selectedDate);
     if (res && res.deltaPoints && res.deltaPoints[activePartner] < 0) {
       addNotification({
-        title: "⚠️ Routine Penalty Applied",
-        message: `${myName} missed daily routines for 2 consecutive days. 1 point deducted.`,
+        title: "Penalty Applied ⚠️",
+        message: `${myName}: 2 missed days (-1 PT)`,
         type: "streak_alert",
         recipient: "both",
         points: res.deltaPoints[activePartner],
@@ -144,8 +141,8 @@ export function DailyRoutinesBoard() {
     if (!wasCompleted) {
       const otherPartner = activePartner === "alex" ? "sam" : "alex";
       addNotification({
-        title: "Routine Complete! 🎯",
-        message: routine ? `${myName} completed "${routine.title}"` : `${myName} checked off a routine`,
+        title: "Routine Done 🎯",
+        message: routine ? `${myName}: ${routine.title}` : `${myName} finished routine`,
         type: "routine_completed",
         partner: activePartner,
         recipient: otherPartner,
@@ -156,8 +153,8 @@ export function DailyRoutinesBoard() {
         setCelebrationMsg("🔥 Perfect Day! +1 PT Earned!");
         updateScore(activePartner, 1, 1);
         addNotification({
-          title: "🔥 Perfect Day Achieved!",
-          message: `${myName} completed all assigned routines for today! (+1 Point earned)`,
+          title: "Perfect Day 🔥",
+          message: `${myName} completed all routines (+1 PT)`,
           type: "streak_alert",
           partner: activePartner,
           recipient: "both",
@@ -172,22 +169,6 @@ export function DailyRoutinesBoard() {
       if (wasMyDayPerfect) {
         updateScore(activePartner, -1, -1);
       }
-    }
-  };
-
-  const handleQuickAddSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newTitle.trim()) return;
-    const resolved = resolveIntentToAssignee(newAssignee, activePartner);
-    addRoutine(newTitle.trim(), resolved, "daily");
-    setCelebrationMsg(`✨ Added "${newTitle.trim()}"!`);
-    setTimeout(() => setCelebrationMsg(null), 2500);
-    setNewTitle("");
-  };
-
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && newTitle.trim()) {
-      handleQuickAddSubmit(e);
     }
   };
 
@@ -222,11 +203,8 @@ export function DailyRoutinesBoard() {
           </span>
           <button
             type="button"
-            onClick={() => {
-              setModalInitialTitle(newTitle);
-              setIsModalOpen(true);
-            }}
-            className="hidden sm:flex px-3 py-1 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:opacity-90 rounded-full font-semibold text-[10px] items-center gap-1 apple-press transition shadow-2xs"
+            onClick={() => setIsModalOpen(true)}
+            className="flex px-3 py-1 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:opacity-90 rounded-full font-semibold text-[10px] items-center gap-1 apple-press transition shadow-2xs cursor-pointer"
           >
             <Plus className="w-3 h-3" />
             <span>Add Routine</span>
@@ -298,14 +276,6 @@ export function DailyRoutinesBoard() {
           </span>
         </div>
       ) : null}
-
-      <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-3 leading-relaxed">
-        Apple Notes style. Press{" "}
-        <kbd className="px-1.5 py-0.5 bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.08] rounded-md font-mono text-[10px] text-zinc-700 dark:text-zinc-300">
-          Enter
-        </kbd>{" "}
-        to add new routine.
-      </p>
 
       {/* Routine Items Container */}
       <div className="space-y-2 flex-1 overflow-y-auto pt-1 pb-1 pr-1 min-h-[220px]">
@@ -462,68 +432,9 @@ export function DailyRoutinesBoard() {
         )}
       </div>
 
-      {/* Quick Add Routine Bar */}
-      <div className="mt-4 pt-3 border-t border-black/[0.05] dark:border-white/[0.06]">
-        <form
-          onSubmit={handleQuickAddSubmit}
-          className="flex items-center gap-1.5 sm:gap-2 bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.06] dark:border-white/[0.08] rounded-2xl px-2.5 sm:px-3 py-1.5 focus-within:ring-2 focus-within:ring-black/10 dark:focus-within:ring-white/10 transition shadow-2xs"
-        >
-          <Plus className="w-4 h-4 text-zinc-400 shrink-0" />
-          <input
-            type="text"
-            id="quick-add-routine-input"
-            name="routineTitle"
-            value={newTitle}
-            onChange={(e) => setNewTitle(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Add daily routine... (Enter)"
-            aria-label="New routine title"
-            className="bg-transparent text-xs font-medium text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none w-full min-w-0"
-          />
-
-          <select
-            id="quick-add-routine-assignee"
-            name="routineAssignee"
-            value={newAssignee}
-            aria-label="Routine assignee"
-            onChange={(e) => setNewAssignee(e.target.value as Assignee)}
-            className="bg-white/90 dark:bg-zinc-800/90 font-semibold text-[10px] uppercase text-zinc-800 dark:text-zinc-200 rounded-xl px-2.5 py-1.5 border border-black/[0.08] dark:border-white/[0.1] focus:outline-none shrink-0"
-          >
-            <option value="mine">Me</option>
-            <option value="partner">{otherPartnerName}</option>
-            <option value="both">Both</option>
-          </select>
-
-          <button
-            type="button"
-            onClick={() => {
-              setModalInitialTitle(newTitle);
-              setIsModalOpen(true);
-            }}
-            title="Pick specific days of the week"
-            className="bg-white/90 dark:bg-zinc-800/90 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black font-semibold text-[10px] uppercase text-zinc-800 dark:text-zinc-200 rounded-xl px-2.5 py-1.5 border border-black/[0.08] dark:border-white/[0.1] apple-press transition shrink-0 flex items-center gap-1 shadow-2xs whitespace-nowrap cursor-pointer"
-          >
-            <Calendar className="w-3 h-3" />
-            <span className="hidden sm:inline">Pick Days</span>
-          </button>
-
-          <button
-            type="submit"
-            disabled={!newTitle.trim()}
-            className="bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:opacity-90 disabled:opacity-30 font-semibold text-[10px] uppercase rounded-xl px-3.5 py-1.5 apple-press transition shrink-0 shadow-2xs cursor-pointer"
-          >
-            Add
-          </button>
-        </form>
-      </div>
-
       <AddRoutineModal
         isOpen={isModalOpen}
-        initialTitle={modalInitialTitle || newTitle}
-        onClose={() => {
-          setIsModalOpen(false);
-          setModalInitialTitle("");
-        }}
+        onClose={() => setIsModalOpen(false)}
       />
     </div>
   );

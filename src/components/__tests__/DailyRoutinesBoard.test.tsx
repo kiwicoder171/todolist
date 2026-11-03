@@ -38,13 +38,13 @@ describe("DailyRoutinesBoard (Seam: Board 1 Apple Notes Checklist)", () => {
     }
   });
 
-  it("adds a new routine when pressing Enter in the quick add input", () => {
+  it("opens add routine modal when clicking Add Routine button", () => {
     renderBoard();
 
-    const input = screen.getByPlaceholderText(/Add daily routine.../i);
-    fireEvent.change(input, { target: { value: "Take multivitamins" } });
-    fireEvent.keyDown(input, { key: "Enter", code: "Enter" });
+    const addRoutineBtn = screen.getByRole("button", { name: /Add Routine/i });
+    fireEvent.click(addRoutineBtn);
 
-    expect(screen.getAllByText(/Take multivitamins/i).length).toBeGreaterThan(0);
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(screen.getByText("New Daily Routine")).toBeInTheDocument();
   });
 });

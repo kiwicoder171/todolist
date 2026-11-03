@@ -49,8 +49,8 @@ export function DailyTasksBoard() {
       const targetTask = tasks.find((t) => t.id === id);
       const otherPartner = activePartner === "alex" ? "sam" : "alex";
       addNotification({
-        title: "Task Done! 🎉",
-        message: targetTask ? `${myName} checked off "${targetTask.title}"` : `${myName} checked off a daily task`,
+        title: "Task Done 🎉",
+        message: targetTask ? `${myName}: ${targetTask.title}` : `${myName} finished a task`,
         type: "task_completed",
         partner: activePartner,
         recipient: otherPartner,
@@ -212,7 +212,7 @@ export function DailyTasksBoard() {
             value={newTitle}
             onChange={(e) => setNewTitle(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="What gotta finish today? (Enter)"
+            placeholder="What gotta finish today?"
             aria-label="What gotta finish today"
             className="bg-transparent text-xs font-medium text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none w-full"
           />

@@ -251,7 +251,7 @@ export function KanbanBoard({ isMobile = false }: KanbanBoardProps = {}) {
 
           <button
             onClick={() => openAddCard("todo")}
-            className="px-3.5 py-1 rounded-full font-semibold uppercase bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:opacity-90 transition whitespace-nowrap flex items-center gap-1 shrink-0 text-xs apple-press shadow-2xs cursor-pointer"
+            className="hidden sm:flex px-3.5 py-1 rounded-full font-semibold uppercase bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:opacity-90 transition whitespace-nowrap items-center gap-1 shrink-0 text-xs apple-press shadow-2xs cursor-pointer"
           >
             <Plus className="w-3 h-3" />
             <span>Card</span>
@@ -369,15 +369,6 @@ export function KanbanBoard({ isMobile = false }: KanbanBoardProps = {}) {
               )}
             </div>
           </div>
-
-          <button
-            type="button"
-            onClick={() => openAddCard("todo")}
-            className="mt-3.5 w-full py-2 border border-dashed border-black/[0.15] dark:border-white/[0.15] hover:border-black/30 dark:hover:border-white/30 rounded-2xl text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 font-semibold text-xs uppercase apple-press transition flex items-center justify-center gap-1.5 bg-black/[0.01] dark:bg-white/[0.02] cursor-pointer"
-          >
-            <Plus className="w-3 h-3" />
-            <span>Add To Do</span>
-          </button>
         </div>
 
         {/* SECTION 2: IN PROGRESS */}
@@ -414,15 +405,6 @@ export function KanbanBoard({ isMobile = false }: KanbanBoardProps = {}) {
               )}
             </div>
           </div>
-
-          <button
-            type="button"
-            onClick={() => openAddCard("inprogress")}
-            className="mt-3.5 w-full py-2 border border-dashed border-blue-500/30 hover:border-blue-500/50 rounded-2xl text-blue-600 dark:text-blue-400 font-semibold text-xs uppercase apple-press transition flex items-center justify-center gap-1.5 bg-blue-500/[0.03] cursor-pointer"
-          >
-            <Plus className="w-3 h-3" />
-            <span>Add Active Task</span>
-          </button>
         </div>
 
         {/* SECTION 3: DONE */}
@@ -462,13 +444,15 @@ export function KanbanBoard({ isMobile = false }: KanbanBoardProps = {}) {
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={clearDoneCards}
-            className="mt-3.5 w-full py-2 border border-black/[0.08] dark:border-white/[0.1] hover:border-black/20 rounded-2xl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 font-semibold text-xs uppercase apple-press transition text-center bg-black/[0.02] dark:bg-white/[0.03] cursor-pointer"
-          >
-            Archive Done
-          </button>
+          {doneCards.length > 0 && (
+            <button
+              type="button"
+              onClick={clearDoneCards}
+              className="mt-3.5 w-full py-2 border border-black/[0.08] dark:border-white/[0.1] hover:border-black/20 rounded-2xl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 font-semibold text-xs uppercase apple-press transition text-center bg-black/[0.02] dark:bg-white/[0.03] cursor-pointer"
+            >
+              Archive Done
+            </button>
+          )}
         </div>
       </div>
 

@@ -195,10 +195,10 @@ export function NotificationDrawer() {
               <div
                 key={notif.id}
                 onClick={() => markAsRead(notif.id)}
-                className={`p-3.5 rounded-2xl border transition cursor-pointer relative ${
+                className={`p-3 sm:p-3.5 rounded-2xl border transition cursor-pointer relative ${
                   notif.read
                     ? "bg-black/[0.01] dark:bg-white/[0.02] border-black/[0.04] dark:border-white/[0.06]"
-                    : "bg-white/80 dark:bg-zinc-800/80 border-black/[0.08] dark:border-white/[0.1] shadow-xs"
+                    : "bg-white/90 dark:bg-zinc-800/90 border-black/[0.08] dark:border-white/[0.1] shadow-xs"
                 }`}
               >
                 {!notif.read && (
@@ -214,10 +214,10 @@ export function NotificationDrawer() {
                         {notif.title}
                       </h3>
                     </div>
-                    <p className="text-xs text-zinc-600 dark:text-zinc-400 font-medium mt-0.5 leading-snug">
+                    <p className="text-xs text-zinc-600 dark:text-zinc-400 font-medium mt-1 leading-relaxed break-words">
                       {notif.message}
                     </p>
-                    <span className="text-[10px] text-zinc-400 font-mono mt-1.5 block">
+                    <span className="text-[10px] text-zinc-400 font-mono mt-1.5 block tracking-tight">
                       {notif.timestamp}
                     </span>
                   </div>
