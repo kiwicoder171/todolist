@@ -158,7 +158,7 @@ export function WidgetModal({ isOpen, onClose }: WidgetModalProps) {
                 <div className="w-[160px] h-[160px] bg-gradient-to-br from-amber-500/20 via-amber-500/10 to-transparent dark:from-amber-400/20 dark:via-zinc-900 dark:to-zinc-900 border border-amber-500/30 rounded-[28px] p-3.5 shadow-[0_12px_36px_rgba(0,0,0,0.12)] flex flex-col justify-between select-none backdrop-blur-xl">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-300">
-                      {spaceMode === "solo" ? "Streak" : "Duo Streak"}
+                      {spaceMode === "solo" ? "Solo Streak" : "Hub Streak"}
                     </span>
                     <span className="w-5 h-5 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold text-[10px] shadow-xs">
                       {currentPartnerName[0]}

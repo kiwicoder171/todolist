@@ -4,7 +4,7 @@ import { useRoutines, isRoutineScheduledForDate } from "@/context/RoutinesContex
 import { useNotifications } from "@/context/NotificationContext";
 import { DateCalendar } from "@/components/base/date-picker/date-calendar";
 import { CalendarDate } from "@internationalized/date";
-import { Heart } from "lucide-react";
+import { Heart, Users, Home, Sparkles } from "lucide-react";
 
 export function CalendarConsistencySection() {
   const {
@@ -13,6 +13,7 @@ export function CalendarConsistencySection() {
     isDateFrozen,
     activePartner,
     partnerNames,
+    spaceMode,
   } = useHousehold();
 
   const { routines, isCompleted } = useRoutines();
@@ -208,37 +209,85 @@ export function CalendarConsistencySection() {
           </div>
         </div>
 
-        {/* Bottom Couple Cheer Section */}
-        <div className="mt-4 pt-3 border-t border-black/[0.05] dark:border-white/[0.06] flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-2xl border border-rose-200/80 dark:border-rose-900/40 flex items-center justify-center bg-rose-500/10">
-              <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />
-            </div>
-            <div>
-              <p className="text-xs font-semibold text-zinc-900 dark:text-zinc-100">
-                Couple Momentum
-              </p>
-              <p className="text-[11px] text-zinc-500 dark:text-zinc-400">In sync today!</p>
-            </div>
-          </div>
+        {/* Bottom Momentum Cheer Section (Adapts to Circle Space Mode) */}
+        {(() => {
+          const cheerConfig = {
+            partner: {
+              title: "Couple Momentum",
+              subtitle: "In sync today!",
+              icon: <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />,
+              iconBox: "border-rose-200/80 dark:border-rose-900/40 bg-rose-500/10",
+              activeBtn: "bg-rose-500 text-white shadow-xs",
+              btnText: "Cheer ❤️",
+              cheeredText: "Cheered! ❤️",
+              defaultMessage: "sent you love & momentum! Keep rocking it! ❤️",
+            },
+            friends: {
+              title: "Friends Momentum",
+              subtitle: "Crew in sync today!",
+              icon: <Users className="w-4 h-4 text-sky-500" />,
+              iconBox: "border-sky-200/80 dark:border-sky-900/40 bg-sky-500/10",
+              activeBtn: "bg-sky-500 text-white shadow-xs",
+              btnText: "Cheer 🔥",
+              cheeredText: "Cheered! 🔥",
+              defaultMessage: "sent you a high-five & momentum! Keep crushing it! 🔥",
+            },
+            family: {
+              title: "Family Momentum",
+              subtitle: "Household in sync today!",
+              icon: <Home className="w-4 h-4 text-emerald-500" />,
+              iconBox: "border-emerald-200/80 dark:border-emerald-900/40 bg-emerald-500/10",
+              activeBtn: "bg-emerald-500 text-white shadow-xs",
+              btnText: "Cheer 🏡",
+              cheeredText: "Cheered! 🏡",
+              defaultMessage: "sent family cheer & momentum! You got this! 🏡",
+            },
+            solo: {
+              title: "Personal Momentum",
+              subtitle: "Crushing habits today!",
+              icon: <Sparkles className="w-4 h-4 text-amber-500" />,
+              iconBox: "border-amber-200/80 dark:border-amber-900/40 bg-amber-500/10",
+              activeBtn: "bg-amber-500 text-white shadow-xs",
+              btnText: "Boost ⚡",
+              cheeredText: "Boosted! ⚡",
+              defaultMessage: "boosted personal momentum! Keep the fire burning! ⚡",
+            },
+          };
+          const currentCheer = cheerConfig[spaceMode || "partner"];
 
-          <button
-            onClick={() => {
-              setHasCheered(true);
-              const sender = partnerNames[activePartner] || "You";
-              const otherPartner: Partner = activePartner === "alex" ? "sam" : "alex";
-              sendCheer(sender, "sent you love & momentum! Keep rocking it! ❤️", otherPartner);
-              setTimeout(() => setHasCheered(false), 3000);
-            }}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-semibold apple-press transition cursor-pointer ${
-              hasCheered
-                ? "bg-rose-500 text-white shadow-xs"
-                : "bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 hover:opacity-90 shadow-2xs"
-            }`}
-          >
-            {hasCheered ? "Cheered! ❤️" : "Cheer ❤️"}
-          </button>
-        </div>
+          return (
+            <div className="mt-4 pt-3 border-t border-black/[0.05] dark:border-white/[0.06] flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className={`w-8 h-8 rounded-2xl border flex items-center justify-center ${currentCheer.iconBox}`}>
+                  {currentCheer.icon}
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-zinc-900 dark:text-zinc-100">
+                    {currentCheer.title}
+                  </p>
+                  <p className="text-[11px] text-zinc-500 dark:text-zinc-400">{currentCheer.subtitle}</p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => {
+                  setHasCheered(true);
+                  const sender = partnerNames[activePartner] || "You";
+                  const otherPartner: Partner = activePartner === "alex" ? "sam" : "alex";
+                  sendCheer(sender, currentCheer.defaultMessage, otherPartner);
+                  setTimeout(() => setHasCheered(false), 3000);
+                }}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold apple-press transition cursor-pointer ${
+                  hasCheered
+                    ? currentCheer.activeBtn
+                    : "bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 hover:opacity-90 shadow-2xs"
+                }`}
+              >
+                {hasCheered ? currentCheer.cheeredText : currentCheer.btnText}
+              </button>
+            </div>
+          );
+        })()}
       </div>
     </div>
   );

@@ -7,7 +7,7 @@ import { useRoutines } from "@/context/RoutinesContext";
 import { Trophy, CheckCircle, Clock } from "lucide-react";
 
 export function WeeklyAttendanceMatrix() {
-  const { partnerNames, perfectDays, scores } = useHousehold();
+  const { partnerNames, perfectDays, scores, spaceMode, activePartner } = useHousehold();
   const { getTotalFocusMinutesForDate } = useFocusTimer();
   const { routines, isCompleted } = useRoutines();
 
@@ -26,7 +26,7 @@ export function WeeklyAttendanceMatrix() {
   const weekStartStr = `${weekDays[0].getMonth() + 1}/${weekDays[0].getDate()}`;
   const weekEndStr = `${weekDays[6].getMonth() + 1}/${weekDays[6].getDate()}`;
 
-  const partners: Partner[] = ["alex", "sam"];
+  const partners: Partner[] = spaceMode === "solo" ? [activePartner] : ["alex", "sam"];
 
   return (
     <div

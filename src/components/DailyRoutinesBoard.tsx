@@ -26,6 +26,7 @@ export function DailyRoutinesBoard() {
     reconcileDailyPenaltiesAndStreaks,
     scores,
     circle,
+    spaceMode,
   } = useHousehold();
   const authContext = useOptionalAuth();
   const user = authContext?.user;
@@ -244,7 +245,13 @@ export function DailyRoutinesBoard() {
                 100% Household Routines Completed
               </p>
               <p className="text-[11px] text-emerald-700/80 dark:text-emerald-300/80 font-normal truncate">
-                Perfect Day! +1 point bonus awarded to both partner desks
+                {spaceMode === "family"
+                  ? "Perfect Day! +1 point bonus awarded to all family desks"
+                  : spaceMode === "friends"
+                  ? "Perfect Day! +1 point bonus awarded to all desks"
+                  : spaceMode === "solo"
+                  ? "Perfect Day! +1 point bonus awarded to your desk"
+                  : "Perfect Day! +1 point bonus awarded to both partner desks"}
               </p>
             </div>
           </div>

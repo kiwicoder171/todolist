@@ -11,7 +11,7 @@ export interface WishlistModalProps {
 }
 
 export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
-  const { activePartner, scores, updateScore, partnerNames } = useHousehold();
+  const { activePartner, scores, updateScore, partnerNames, spaceMode } = useHousehold();
   const currentScore = scores[activePartner] || { points: 0, streak: 0 };
 
   const isTest = typeof process !== "undefined" && process.env.NODE_ENV === "test";
@@ -79,10 +79,19 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
     e.preventDefault();
     if (!newTitle.trim()) return;
 
+    const defaultCustomDesc =
+      spaceMode === "family"
+        ? "Custom family reward"
+        : spaceMode === "friends"
+        ? "Custom friend reward"
+        : spaceMode === "solo"
+        ? "Personal reward"
+        : "Custom couple reward";
+
     const newReward: RewardItem = {
       id: `reward-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
       title: newTitle.trim(),
-      desc: newDesc.trim() || "Custom couple reward",
+      desc: newDesc.trim() || defaultCustomDesc,
       cost: Number(newCost) || 5,
     };
 
@@ -94,6 +103,15 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
   };
 
   const currentPartnerName = activePartner === "alex" ? partnerNames.alex : partnerNames.sam;
+
+  const shopTitle =
+    spaceMode === "family"
+      ? "Family Wishlist Shop"
+      : spaceMode === "friends"
+      ? "Friends Wishlist Shop"
+      : spaceMode === "solo"
+      ? "Personal Wishlist Shop"
+      : "Couple Wishlist Shop";
 
   return (
     <div
@@ -113,7 +131,7 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
               id="wishlist-modal-title"
               className="font-semibold text-sm uppercase tracking-wide text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5"
             >
-              <span>Couple Wishlist Shop</span>
+              <span>{shopTitle}</span>
               <Sparkles className="w-3.5 h-3.5 text-amber-500" />
             </h3>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
@@ -254,7 +272,15 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
             className="w-full py-2 border border-dashed border-zinc-300 dark:border-zinc-700 hover:border-zinc-500 rounded-xl text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 font-heading font-bold text-xs uppercase transition flex items-center justify-center gap-1.5 bg-zinc-50 dark:bg-zinc-900"
           >
             <Plus className="w-3.5 h-3.5" />
-            <span>Add Custom Couple Reward</span>
+            <span>
+              {spaceMode === "family"
+                ? "Add Custom Family Reward"
+                : spaceMode === "friends"
+                ? "Add Custom Friend Reward"
+                : spaceMode === "solo"
+                ? "Add Custom Reward"
+                : "Add Custom Couple Reward"}
+            </span>
           </button>
         )}
 

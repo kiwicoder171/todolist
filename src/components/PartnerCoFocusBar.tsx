@@ -8,7 +8,7 @@ import { StudiconModal } from "./StudiconModal";
 import { FocusRingGoal } from "./FocusRingGoal";
 
 export function PartnerCoFocusBar() {
-  const { activePartner, partnerNames, partnerAvatars } = useHousehold();
+  const { activePartner, partnerNames, partnerAvatars, spaceMode } = useHousehold();
   const {
     activeSession,
     displaySeconds,
@@ -60,7 +60,13 @@ export function PartnerCoFocusBar() {
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
           <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-            Co-Focus Desks
+            {spaceMode === "solo"
+              ? "Focus Desk"
+              : spaceMode === "friends"
+              ? "Friends Co-Focus Desks"
+              : spaceMode === "family"
+              ? "Family Co-Focus Desks"
+              : "Co-Focus Desks"}
           </span>
         </div>
 
@@ -75,7 +81,7 @@ export function PartnerCoFocusBar() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 sm:gap-3">
+      <div className={`grid ${spaceMode === "solo" ? "grid-cols-1" : "grid-cols-2"} gap-2 sm:gap-3`}>
         {/* Desk 1: You */}
         <div className="flex items-center gap-2.5 p-2.5 sm:p-3 rounded-2xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.04] dark:border-white/[0.06] transition hover:bg-black/[0.04] dark:hover:bg-white/[0.05]">
           <button
@@ -122,56 +128,64 @@ export function PartnerCoFocusBar() {
           </div>
         </div>
 
-        {/* Desk 2: Partner */}
-        <div className="flex items-center gap-2.5 p-2.5 sm:p-3 rounded-2xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.04] dark:border-white/[0.06] transition hover:bg-black/[0.04] dark:hover:bg-white/[0.05]">
-          <div
-            className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 text-xl transition-all ${
-              isPartnerOnlineAndFocusing
-                ? "bg-amber-500/15 dark:bg-amber-500/25 border border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.2)]"
-                : "bg-white/60 dark:bg-zinc-800/60 border border-black/[0.06] dark:border-white/[0.08] opacity-60 shadow-xs"
-            }`}
-          >
-            <span>{partnerAvatars?.[otherPartner] || "📚"}</span>
-          </div>
-
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center justify-between">
-              <span className="text-[12px] font-semibold text-zinc-900 dark:text-zinc-100 truncate">{partnerName}</span>
-              {isPartnerOnlineAndFocusing && (
-                <span className="font-mono text-[11px] font-bold text-amber-600 dark:text-amber-400">
-                  {formatTimeDisplay(partnerPresence?.secondsElapsed || 0)}
-                </span>
-              )}
+        {/* Desk 2: Partner / Family / Friend (Hidden in Solo mode) */}
+        {spaceMode !== "solo" && (
+          <div className="flex items-center gap-2.5 p-2.5 sm:p-3 rounded-2xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.04] dark:border-white/[0.06] transition hover:bg-black/[0.04] dark:hover:bg-white/[0.05]">
+            <div
+              className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 text-xl transition-all ${
+                isPartnerOnlineAndFocusing
+                  ? "bg-amber-500/15 dark:bg-amber-500/25 border border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.2)]"
+                  : "bg-white/60 dark:bg-zinc-800/60 border border-black/[0.06] dark:border-white/[0.08] opacity-60 shadow-xs"
+              }`}
+            >
+              <span>{partnerAvatars?.[otherPartner] || "📚"}</span>
             </div>
-            <p className="text-[11px] text-zinc-500 dark:text-zinc-400 truncate">
-              {isPartnerOnlineAndFocusing
-                ? partnerPresence?.taskTitle || "Focusing"
-                : "Idle"}
-            </p>
-          </div>
 
-          {/* Quick cheer buttons when partner is focusing */}
-          {isPartnerOnlineAndFocusing && (
-            <div className="flex items-center gap-1 shrink-0">
-              <button
-                onClick={() => sendCheerToPartner("❤️")}
-                aria-label="Send Love"
-                title="Send Cheer ❤️"
-                className="w-7 h-7 rounded-full flex items-center justify-center bg-black/[0.04] dark:bg-white/[0.06] hover:bg-black/[0.08] dark:hover:bg-white/[0.1] text-xs apple-press transition cursor-pointer"
-              >
-                ❤️
-              </button>
-              <button
-                onClick={() => sendCheerToPartner("👏")}
-                aria-label="Send Clap"
-                title="Send Cheer 👏"
-                className="w-7 h-7 rounded-full flex items-center justify-center bg-black/[0.04] dark:bg-white/[0.06] hover:bg-black/[0.08] dark:hover:bg-white/[0.1] text-xs apple-press transition cursor-pointer"
-              >
-                👏
-              </button>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center justify-between">
+                <span className="text-[12px] font-semibold text-zinc-900 dark:text-zinc-100 truncate">{partnerName}</span>
+                {isPartnerOnlineAndFocusing && (
+                  <span className="font-mono text-[11px] font-bold text-amber-600 dark:text-amber-400">
+                    {formatTimeDisplay(partnerPresence?.secondsElapsed || 0)}
+                  </span>
+                )}
+              </div>
+              <p className="text-[11px] text-zinc-500 dark:text-zinc-400 truncate">
+                {isPartnerOnlineAndFocusing
+                  ? partnerPresence?.taskTitle || "Focusing"
+                  : "Idle"}
+              </p>
             </div>
-          )}
-        </div>
+
+            {/* Quick cheer buttons when partner is focusing */}
+            {isPartnerOnlineAndFocusing && (
+              <div className="flex items-center gap-1 shrink-0">
+                <button
+                  onClick={() =>
+                    sendCheerToPartner(
+                      spaceMode === "partner" ? "❤️" : spaceMode === "friends" ? "🔥" : "🏡"
+                    )
+                  }
+                  aria-label="Send Cheer"
+                  title={`Send Cheer ${
+                    spaceMode === "partner" ? "❤️" : spaceMode === "friends" ? "🔥" : "🏡"
+                  }`}
+                  className="w-7 h-7 rounded-full flex items-center justify-center bg-black/[0.04] dark:bg-white/[0.06] hover:bg-black/[0.08] dark:hover:bg-white/[0.1] text-xs apple-press transition cursor-pointer"
+                >
+                  {spaceMode === "partner" ? "❤️" : spaceMode === "friends" ? "🔥" : "🏡"}
+                </button>
+                <button
+                  onClick={() => sendCheerToPartner("👏")}
+                  aria-label="Send Clap"
+                  title="Send Cheer 👏"
+                  className="w-7 h-7 rounded-full flex items-center justify-center bg-black/[0.04] dark:bg-white/[0.06] hover:bg-black/[0.08] dark:hover:bg-white/[0.1] text-xs apple-press transition cursor-pointer"
+                >
+                  👏
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {isLauncherOpen && (
