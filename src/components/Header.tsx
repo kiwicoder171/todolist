@@ -82,9 +82,9 @@ export function Header({
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full max-w-full overflow-x-clip overflow-y-visible px-3 sm:px-6 pt-3 pb-2 transition-all">
+      <header className="sticky top-0 z-40 w-full max-w-full overflow-x-clip px-3 sm:px-6 pt-3 pb-2 transition-all">
         {/* Floating Apple Island Command Bar */}
-        <div className="apple-card rounded-3xl p-1.5 sm:p-2 sm:px-4 flex items-center justify-between gap-2 shadow-[0_4px_24px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)] border border-black/[0.06] dark:border-white/[0.08] backdrop-blur-2xl">
+        <div className="rounded-3xl p-1.5 sm:p-2 sm:px-4 flex items-center justify-between gap-2 bg-white/85 dark:bg-[#1c1c1e]/85 backdrop-blur-2xl border border-black/[0.06] dark:border-white/[0.08] shadow-[0_4px_24px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
           
           {/* SECTION 1: Brand & Space Identity */}
           <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
