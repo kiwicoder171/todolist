@@ -133,7 +133,7 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
   const isTest = typeof process !== "undefined" && process.env.NODE_ENV === "test";
 
   const [cards, setCards] = useState<KanbanCard[]>(() => {
-    if (typeof window !== "undefined") {
+    if (isTest && typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem("couple_task_hub_kanban_cards");
         if (stored) {

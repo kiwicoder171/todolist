@@ -12,7 +12,7 @@ import {
 import { evaluatePartnerDay, getConsecutiveMisses } from "@/utils/gamification";
 import { useNotifications } from "@/context/NotificationContext";
 import { useFocusTimer } from "@/context/FocusTimerContext";
-import { Check, ArrowUp, ArrowDown, X, Plus, Calendar, ChevronDown, Play } from "lucide-react";
+import { Check, ArrowUp, ArrowDown, X, Plus, Calendar, ChevronDown, Play, AlertTriangle, Sparkles } from "lucide-react";
 import { AddRoutineModal } from "./AddRoutineModal";
 
 export function DailyRoutinesBoard() {
@@ -198,17 +198,17 @@ export function DailyRoutinesBoard() {
   };
 
   return (
-    <div className="bg-white dark:bg-[#121215] border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-4 sm:p-5 shadow-xs flex flex-col flex-1 relative transition-colors duration-200">
+    <div className="apple-card rounded-3xl p-4 sm:p-5 flex flex-col flex-1 relative">
       {celebrationMsg && (
-        <div className="absolute top-2 right-4 z-20 px-3 py-1 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-950 text-[11px] font-semibold rounded-full animate-bounce shadow-md">
+        <div className="absolute top-3 right-5 z-20 px-3 py-1 bg-zinc-900/90 dark:bg-white/90 text-white dark:text-zinc-900 text-[11px] font-semibold rounded-full animate-scale-in backdrop-blur-md shadow-lg">
           {celebrationMsg}
         </div>
       )}
 
       {/* Header */}
-      <div className="flex items-center justify-between pb-3.5 border-b border-zinc-100 dark:border-zinc-800 mb-3 gap-2">
+      <div className="flex items-center justify-between pb-3.5 border-b border-black/[0.05] dark:border-white/[0.06] mb-3 gap-2">
         <div className="flex items-center gap-2.5">
-          <div className="w-6 h-6 rounded-lg bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-950 flex items-center justify-center font-bold text-xs shrink-0">
+          <div className="w-6 h-6 rounded-xl bg-black/[0.05] dark:bg-white/[0.08] text-zinc-900 dark:text-zinc-100 flex items-center justify-center font-bold text-xs shrink-0">
             1
           </div>
           <h2 className="font-semibold text-sm tracking-wide text-zinc-900 dark:text-zinc-100">
@@ -216,7 +216,7 @@ export function DailyRoutinesBoard() {
           </h2>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-[10px] font-medium uppercase px-2 py-0.5 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 text-zinc-500 hidden sm:inline-block">
+          <span className="text-[10px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.04] text-zinc-500 dark:text-zinc-400 hidden sm:inline-block">
             Recurring
           </span>
           <button
@@ -225,7 +225,7 @@ export function DailyRoutinesBoard() {
               setModalInitialTitle(newTitle);
               setIsModalOpen(true);
             }}
-            className="px-2.5 py-1 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-950 hover:opacity-85 rounded-full font-medium text-[10px] flex items-center gap-1 transition shadow-xs"
+            className="hidden sm:flex px-3 py-1 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:opacity-90 rounded-full font-semibold text-[10px] items-center gap-1 apple-press transition shadow-2xs"
           >
             <Plus className="w-3 h-3" />
             <span>Add Routine</span>
@@ -234,51 +234,76 @@ export function DailyRoutinesBoard() {
       </div>
 
       {isBothHouseholdPerfect ? (
-        <div className="mb-3 p-2.5 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-900 dark:text-emerald-200 flex items-center justify-between text-xs font-semibold">
-          <div className="flex items-center gap-2">
-            <span>🎉</span>
-            <span>100% HOUSEHOLD ROUTINES DONE! PERFECT DAY (+1 PT EACH)</span>
+        <div className="mb-3.5 p-3 sm:p-3.5 rounded-2xl border border-emerald-500/25 dark:border-emerald-500/35 bg-emerald-500/[0.08] dark:bg-emerald-500/[0.14] backdrop-blur-xl flex items-center justify-between gap-3 text-xs shadow-xs animate-in fade-in duration-200">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 shadow-2xs">
+              <Sparkles className="w-4 h-4" />
+            </div>
+            <div className="min-w-0">
+              <p className="font-semibold text-emerald-950 dark:text-emerald-100 text-xs truncate">
+                100% Household Routines Completed
+              </p>
+              <p className="text-[11px] text-emerald-700/80 dark:text-emerald-300/80 font-normal truncate">
+                Perfect Day! +1 point bonus awarded to both partner desks
+              </p>
+            </div>
           </div>
-          <span className="text-[10px] px-2 py-0.5 rounded-full border border-emerald-500/40 bg-emerald-500/20 text-emerald-700 dark:text-emerald-300">
-            Streak Active
+          <span className="shrink-0 text-[10px] font-mono font-bold px-2.5 py-1 rounded-xl border border-emerald-500/30 bg-white/80 dark:bg-zinc-900/80 text-emerald-600 dark:text-emerald-400 shadow-2xs">
+            +1 PT
           </span>
         </div>
       ) : isMyDayPerfect ? (
-        <div className="mb-3 p-2.5 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-900 dark:text-emerald-200 flex items-center justify-between text-xs font-semibold">
-          <div className="flex items-center gap-2">
-            <span>🔥</span>
-            <span>ALL YOUR ROUTINES DONE! PERFECT DAY (+1 PT)</span>
+        <div className="mb-3.5 p-3 sm:p-3.5 rounded-2xl border border-emerald-500/25 dark:border-emerald-500/35 bg-emerald-500/[0.08] dark:bg-emerald-500/[0.14] backdrop-blur-xl flex items-center justify-between gap-3 text-xs shadow-xs animate-in fade-in duration-200">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 shadow-2xs">
+              <Sparkles className="w-4 h-4" />
+            </div>
+            <div className="min-w-0">
+              <p className="font-semibold text-emerald-950 dark:text-emerald-100 text-xs truncate">
+                All Daily Routines Completed
+              </p>
+              <p className="text-[11px] text-emerald-700/80 dark:text-emerald-300/80 font-normal truncate">
+                Perfect Day! +1 point bonus awarded to your desk
+              </p>
+            </div>
           </div>
-          <span className="text-[10px] px-2 py-0.5 rounded-full border border-emerald-500/40 bg-emerald-500/20 text-emerald-700 dark:text-emerald-300">
-            Streak Active
+          <span className="shrink-0 text-[10px] font-mono font-bold px-2.5 py-1 rounded-xl border border-emerald-500/30 bg-white/80 dark:bg-zinc-900/80 text-emerald-600 dark:text-emerald-400 shadow-2xs">
+            +1 PT
           </span>
         </div>
       ) : missStatus.consecutiveMisses >= 2 ? (
-        <div className="mb-3 p-2.5 rounded-2xl border border-rose-500/30 bg-rose-50 dark:bg-rose-950/20 text-rose-800 dark:text-rose-300 flex items-center justify-between text-xs font-semibold">
-          <div className="flex items-center gap-2">
-            <span>⚠️</span>
-            <span>
-              {missStatus.consecutiveMisses} DAYS MISSED ({missStatus.totalPenalty} PT PENALTY APPLIED)
-            </span>
+        <div className="mb-3.5 p-3 sm:p-3.5 rounded-2xl border border-rose-500/25 dark:border-rose-500/35 bg-rose-500/[0.08] dark:bg-rose-500/[0.14] backdrop-blur-xl flex items-center justify-between gap-3 text-xs shadow-xs animate-in fade-in duration-200">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-rose-500/20 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0 shadow-2xs">
+              <AlertTriangle className="w-4 h-4" />
+            </div>
+            <div className="min-w-0">
+              <p className="font-semibold text-rose-950 dark:text-rose-100 text-xs truncate">
+                {missStatus.consecutiveMisses} Days Missed · Penalty Ladder Active
+              </p>
+              <p className="text-[11px] text-rose-700/80 dark:text-rose-300/80 font-normal truncate">
+                -{missStatus.totalPenalty} pt deduction applied · Complete today to recover streak
+              </p>
+            </div>
           </div>
-          <span className="text-[10px] px-2 py-0.5 rounded-full border border-rose-300 dark:border-rose-800 bg-rose-100 dark:bg-rose-900/40 text-rose-700 dark:text-rose-300 font-bold">
-            Complete Today to Recover
+          <span className="shrink-0 text-[10px] font-mono font-bold px-2.5 py-1 rounded-xl border border-rose-500/30 bg-white/80 dark:bg-zinc-900/80 text-rose-600 dark:text-rose-300 shadow-2xs">
+            -{missStatus.totalPenalty} PTS
           </span>
         </div>
       ) : null}
 
       <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-3 leading-relaxed">
         Apple Notes style. Press{" "}
-        <kbd className="px-1.5 py-0.5 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded font-mono text-[10px] text-zinc-700 dark:text-zinc-300">
+        <kbd className="px-1.5 py-0.5 bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.08] rounded-md font-mono text-[10px] text-zinc-700 dark:text-zinc-300">
           Enter
         </kbd>{" "}
         to add new routine.
       </p>
 
       {/* Routine Items Container */}
-      <div className="space-y-2 flex-1 overflow-y-auto pt-1.5 pb-1 pr-1 min-h-[220px]">
+      <div className="space-y-2 flex-1 overflow-y-auto pt-1 pb-1 pr-1 min-h-[220px]">
         {visibleRoutines.length === 0 ? (
-          <div className="h-28 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-2xl flex items-center justify-center text-xs text-zinc-400">
+          <div className="h-28 border border-dashed border-black/[0.08] dark:border-white/[0.1] rounded-2xl flex items-center justify-center text-xs text-zinc-400">
             No routines scheduled for this day
           </div>
         ) : (
@@ -288,19 +313,19 @@ export function DailyRoutinesBoard() {
             return (
               <div
                 key={r.id}
-                className="flex items-center justify-between p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800/80 bg-zinc-50/60 dark:bg-zinc-900/40 hover:bg-zinc-50 dark:hover:bg-zinc-900 group transition"
+                className="flex items-center justify-between p-2.5 sm:p-3 rounded-2xl border border-black/[0.04] dark:border-white/[0.06] bg-black/[0.02] dark:bg-white/[0.03] hover:bg-black/[0.04] dark:hover:bg-white/[0.05] group transition"
               >
                 <div className="flex items-center gap-3 flex-1 min-w-0 mr-2">
                   <button
                     onClick={() => handleToggle(r.id)}
                     aria-label={`Toggle ${r.title}`}
-                    className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all ${
+                    className={`w-5 h-5 rounded-full border flex items-center justify-center transition-all apple-press cursor-pointer ${
                       completed
-                        ? "bg-zinc-900 dark:bg-zinc-100 border-zinc-900 dark:border-zinc-100 text-white dark:text-zinc-950"
-                        : "border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 hover:border-zinc-500 text-transparent"
+                        ? "bg-emerald-500 border-emerald-500 text-white shadow-xs"
+                        : "border-black/20 dark:border-white/20 bg-white/60 dark:bg-zinc-800/60 hover:border-black/40 dark:hover:border-white/40 text-transparent"
                     }`}
                   >
-                    <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+                    <Check className="w-3 h-3 stroke-[2.5]" />
                   </button>
 
                   <span
@@ -318,10 +343,10 @@ export function DailyRoutinesBoard() {
                   </span>
 
                   <span
-                    className={`text-[9px] font-medium uppercase px-1.5 py-0.5 rounded ${
+                    className={`text-[9px] font-semibold uppercase px-2 py-0.5 rounded-full ${
                       r.assignee === "both"
-                        ? "bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-950"
-                        : "border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-850 text-zinc-700 dark:text-zinc-300"
+                        ? "bg-zinc-900 dark:bg-white text-white dark:text-zinc-900"
+                        : "border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.03] dark:bg-white/[0.05] text-zinc-700 dark:text-zinc-300"
                     }`}
                   >
                     {getAssigneeLabel(r.assignee, activePartner, partnerNames)}
@@ -334,7 +359,7 @@ export function DailyRoutinesBoard() {
                       disabled={idx === 0}
                       title="Move Up"
                       aria-label="Move routine up"
-                      className="p-1 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded text-zinc-400 disabled:opacity-30 focus:outline-none"
+                      className="p-1 hover:bg-black/[0.05] dark:hover:bg-white/[0.1] rounded-lg text-zinc-400 disabled:opacity-20 focus:outline-none transition"
                     >
                       <ArrowUp className="w-3 h-3" />
                     </button>
@@ -343,7 +368,7 @@ export function DailyRoutinesBoard() {
                       disabled={idx === visibleRoutines.length - 1}
                       title="Move Down"
                       aria-label="Move routine down"
-                      className="p-1 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded text-zinc-400 disabled:opacity-30 focus:outline-none"
+                      className="p-1 hover:bg-black/[0.05] dark:hover:bg-white/[0.1] rounded-lg text-zinc-400 disabled:opacity-20 focus:outline-none transition"
                     >
                       <ArrowDown className="w-3 h-3" />
                     </button>
@@ -352,7 +377,7 @@ export function DailyRoutinesBoard() {
                       onClick={() => startFocus({ id: r.id, title: r.title, type: "routine" })}
                       title="Focus on this routine"
                       aria-label="Start Focus"
-                      className="p-1 hover:text-emerald-500 text-zinc-400 rounded transition focus:outline-none"
+                      className="p-1 hover:text-emerald-500 text-zinc-400 rounded-lg transition focus:outline-none"
                     >
                       <Play className="w-3 h-3 fill-current" />
                     </button>
@@ -360,7 +385,7 @@ export function DailyRoutinesBoard() {
                       onClick={() => deleteRoutine(r.id)}
                       title="Delete Routine"
                       aria-label="Delete routine"
-                      className="p-1 hover:text-rose-500 text-zinc-400 rounded transition focus:outline-none"
+                      className="p-1 hover:text-rose-500 text-zinc-400 rounded-lg transition focus:outline-none"
                     >
                       <X className="w-3 h-3" />
                     </button>
@@ -373,11 +398,11 @@ export function DailyRoutinesBoard() {
 
         {/* Other Days Scheduled Routines Accordion */}
         {otherDayRoutines.length > 0 && (
-          <div className="pt-2 border-t border-dashed border-zinc-200">
+          <div className="pt-2 border-t border-dashed border-black/[0.08] dark:border-white/[0.1]">
             <button
               type="button"
               onClick={() => setShowOtherDays((prev) => !prev)}
-              className="text-[11px] font-heading font-extrabold uppercase text-zinc-500 hover:text-black flex items-center justify-between w-full py-1.5 transition cursor-pointer"
+              className="text-[11px] font-semibold uppercase text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 flex items-center justify-between w-full py-1.5 transition cursor-pointer"
             >
               <span className="flex items-center gap-1.5">
                 <Calendar className="w-3.5 h-3.5 text-zinc-400" />
@@ -395,21 +420,21 @@ export function DailyRoutinesBoard() {
                 {otherDayRoutines.map((r) => (
                   <div
                     key={r.id}
-                    className="flex items-center justify-between p-2 rounded-xl border border-dashed border-zinc-300 bg-zinc-50 opacity-80"
+                    className="flex items-center justify-between p-2 rounded-2xl border border-dashed border-black/[0.08] dark:border-white/[0.1] bg-black/[0.01] dark:bg-white/[0.02] opacity-80"
                   >
                     <div className="flex items-center gap-2 min-w-0 mr-2">
-                      <div className="w-5 h-5 rounded-md border border-zinc-300 bg-zinc-100 flex items-center justify-center text-[10px] text-zinc-400 font-mono">
+                      <div className="w-5 h-5 rounded-full border border-black/10 dark:border-white/10 bg-black/[0.02] dark:bg-white/[0.03] flex items-center justify-center text-[10px] text-zinc-400 font-mono">
                         —
                       </div>
-                      <span className="text-xs font-medium text-zinc-600 truncate">
+                      <span className="text-xs font-medium text-zinc-600 dark:text-zinc-300 truncate">
                         {r.title}
                       </span>
                     </div>
                     <div className="flex items-center gap-1.5 shrink-0">
-                      <span className="text-[9px] font-heading font-bold text-zinc-500 bg-white px-1.5 py-0.5 rounded border border-zinc-200">
+                      <span className="text-[9px] font-medium text-zinc-500 dark:text-zinc-400 bg-white/80 dark:bg-zinc-800 px-2 py-0.5 rounded-full border border-black/[0.06] dark:border-white/[0.08]">
                         {formatFrequencyLabel(r.frequency)}
                       </span>
-                      <span className="text-[9px] font-heading font-extrabold uppercase px-1.5 py-0.5 rounded border border-black bg-white text-black">
+                      <span className="text-[9px] font-semibold uppercase px-2 py-0.5 rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.04] dark:bg-white/[0.06] text-zinc-800 dark:text-zinc-200">
                         {getAssigneeLabel(r.assignee, activePartner, partnerNames)}
                       </span>
                       <button
@@ -417,7 +442,7 @@ export function DailyRoutinesBoard() {
                         onClick={() => deleteRoutine(r.id)}
                         title="Delete Routine"
                         aria-label="Delete routine"
-                        className="p-1 hover:text-black text-zinc-400 rounded transition"
+                        className="p-1 hover:text-rose-500 text-zinc-400 rounded-lg transition"
                       >
                         <X className="w-3 h-3" />
                       </button>
@@ -431,10 +456,10 @@ export function DailyRoutinesBoard() {
       </div>
 
       {/* Quick Add Routine Bar */}
-      <div className="mt-4 pt-3.5 border-t-2 border-dashed border-zinc-300">
+      <div className="mt-4 pt-3 border-t border-black/[0.05] dark:border-white/[0.06]">
         <form
           onSubmit={handleQuickAddSubmit}
-          className="flex items-center gap-1.5 sm:gap-2 bg-[#f4f4f5] border-2 border-black rounded-2xl px-2.5 sm:px-3 py-2 focus-within:ring-2 focus-within:ring-black transition shadow-sm"
+          className="flex items-center gap-1.5 sm:gap-2 bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.06] dark:border-white/[0.08] rounded-2xl px-2.5 sm:px-3 py-1.5 focus-within:ring-2 focus-within:ring-black/10 dark:focus-within:ring-white/10 transition shadow-2xs"
         >
           <Plus className="w-4 h-4 text-zinc-400 shrink-0" />
           <input
@@ -446,7 +471,7 @@ export function DailyRoutinesBoard() {
             onKeyDown={handleKeyDown}
             placeholder="Add daily routine... (Enter)"
             aria-label="New routine title"
-            className="bg-transparent text-xs font-medium text-black placeholder-zinc-400 focus:outline-none w-full min-w-0"
+            className="bg-transparent text-xs font-medium text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none w-full min-w-0"
           />
 
           <select
@@ -455,7 +480,7 @@ export function DailyRoutinesBoard() {
             value={newAssignee}
             aria-label="Routine assignee"
             onChange={(e) => setNewAssignee(e.target.value as Assignee)}
-            className="bg-white font-heading font-bold text-[10px] uppercase text-black rounded-lg px-2 py-1 border border-black focus:outline-none shrink-0"
+            className="bg-white/90 dark:bg-zinc-800/90 font-semibold text-[10px] uppercase text-zinc-800 dark:text-zinc-200 rounded-xl px-2.5 py-1.5 border border-black/[0.08] dark:border-white/[0.1] focus:outline-none shrink-0"
           >
             <option value="mine">Me</option>
             <option value="partner">{otherPartnerName}</option>
@@ -469,7 +494,7 @@ export function DailyRoutinesBoard() {
               setIsModalOpen(true);
             }}
             title="Pick specific days of the week"
-            className="bg-white hover:bg-black hover:text-white font-heading font-extrabold text-[10px] uppercase text-black rounded-xl px-2.5 py-1.5 border border-black transition shrink-0 flex items-center gap-1 shadow-xs whitespace-nowrap"
+            className="bg-white/90 dark:bg-zinc-800/90 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black font-semibold text-[10px] uppercase text-zinc-800 dark:text-zinc-200 rounded-xl px-2.5 py-1.5 border border-black/[0.08] dark:border-white/[0.1] apple-press transition shrink-0 flex items-center gap-1 shadow-2xs whitespace-nowrap cursor-pointer"
           >
             <Calendar className="w-3 h-3" />
             <span className="hidden sm:inline">Pick Days</span>
@@ -478,7 +503,7 @@ export function DailyRoutinesBoard() {
           <button
             type="submit"
             disabled={!newTitle.trim()}
-            className="bg-black text-white hover:bg-zinc-800 disabled:opacity-30 font-heading font-extrabold text-[10px] uppercase rounded-xl px-3 py-1.5 border border-black transition shrink-0 shadow-xs cursor-pointer"
+            className="bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:opacity-90 disabled:opacity-30 font-semibold text-[10px] uppercase rounded-xl px-3.5 py-1.5 apple-press transition shrink-0 shadow-2xs cursor-pointer"
           >
             Add
           </button>

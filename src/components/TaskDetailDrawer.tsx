@@ -78,7 +78,7 @@ export function TaskDetailDrawer({
     <>
       {/* Backdrop Overlay */}
       <div
-        className="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 animate-in fade-in"
+        className="fixed inset-0 bg-black/30 backdrop-blur-md z-50 animate-fade-in"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -87,124 +87,124 @@ export function TaskDetailDrawer({
         role="dialog"
         aria-modal="true"
         aria-labelledby="drawer-heading"
-        className="fixed inset-y-0 right-0 w-88 max-w-full bg-white dark:bg-[#121215] border-l border-zinc-200 dark:border-zinc-800 shadow-2xl p-6 z-50 flex flex-col justify-between transition-transform duration-300"
+        className="fixed inset-y-0 right-0 w-88 max-w-full bg-white/95 dark:bg-[#18181b]/95 backdrop-blur-3xl border-l border-black/[0.08] dark:border-white/[0.12] shadow-2xl p-6 z-50 flex flex-col justify-between transition-transform duration-300"
       >
         <div>
-          <div className="flex items-center justify-between pb-3.5 border-b border-zinc-100 dark:border-zinc-800 mb-5">
+          <div className="flex items-center justify-between pb-3.5 border-b border-black/[0.05] dark:border-white/[0.06] mb-5">
             <h3
               id="drawer-heading"
-              className="font-heading font-bold text-xs uppercase tracking-wider text-zinc-900 dark:text-zinc-100"
+              className="font-semibold text-xs uppercase tracking-wider text-zinc-900 dark:text-zinc-100"
             >
               Task Details
             </h3>
+            <button
+              onClick={onClose}
+              aria-label="Close Drawer"
+              className="w-7 h-7 rounded-xl border border-black/[0.06] dark:border-white/[0.08] text-zinc-500 dark:text-zinc-400 flex items-center justify-center font-bold text-sm hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-zinc-900 dark:hover:text-zinc-100 apple-press transition cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <label
+                htmlFor="drawer-task-title"
+                className="block font-semibold text-[11px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5"
+              >
+                Task Title
+              </label>
+              <input
+                id="drawer-task-title"
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full bg-black/[0.02] dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.1] rounded-2xl p-2.5 text-xs font-semibold text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="drawer-task-assignee"
+                className="block font-semibold text-[11px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5"
+              >
+                Assignee
+              </label>
+              <select
+                id="drawer-task-assignee"
+                value={assigneeIntent}
+                onChange={(e) => setAssigneeIntent(e.target.value as "mine" | "partner" | "both")}
+                className="w-full bg-black/[0.02] dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.1] rounded-2xl p-2.5 text-xs font-semibold uppercase text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition"
+              >
+                <option value="mine">{myName} (You)</option>
+                <option value="partner">{partnerName}</option>
+                <option value="both">Both</option>
+              </select>
+            </div>
+
+            {isRolledOver && (
+              <div>
+                <span className="block font-semibold text-[11px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5">
+                  Origin Log (Rollover)
+                </span>
+                <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-2.5 text-xs font-semibold text-amber-700 dark:text-amber-300 flex items-center gap-2">
+                  <CornerDownRight className="w-3.5 h-3.5" />
+                  <span>Rolled over from {task.originDate}</span>
+                </div>
+              </div>
+            )}
+
+            {task.isKanbanSynced && (
+              <div>
+                <span className="block font-semibold text-[11px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5">
+                  Kanban Synchronization
+                </span>
+                <div className="bg-black/[0.02] dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.1] rounded-2xl p-2.5 text-xs font-semibold text-zinc-800 dark:text-zinc-200 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <RefreshCw className="w-3.5 h-3.5 text-zinc-600 dark:text-zinc-400 animate-spin-slow" />
+                    <span>Synced with Kanban Board</span>
+                  </div>
+                  <span className="text-[9px] uppercase px-2 py-0.5 rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-bold tracking-wider">
+                    2-Way
+                  </span>
+                </div>
+              </div>
+            )}
+
+            <div>
+              <label
+                htmlFor="drawer-task-notes"
+                className="block font-semibold text-[11px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5"
+              >
+                Notes &amp; Links
+              </label>
+              <textarea
+                id="drawer-task-notes"
+                rows={4}
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                placeholder="Add specific notes, links, or instructions..."
+                className="w-full bg-black/[0.02] dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.1] rounded-2xl p-3 text-xs text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="pt-5 border-t border-black/[0.05] dark:border-white/[0.06] flex gap-2">
           <button
-            onClick={onClose}
-            aria-label="Close Drawer"
-            className="w-7 h-7 rounded-lg border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 flex items-center justify-center font-bold text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100 transition"
+            onClick={handleSave}
+            className="flex-1 bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 font-semibold uppercase text-xs py-3 rounded-2xl hover:opacity-90 apple-press transition shadow-2xs cursor-pointer"
           >
-            <X className="w-4 h-4" />
+            Save Changes
+          </button>
+          <button
+            onClick={handleDelete}
+            className="border border-rose-500/30 text-rose-600 dark:text-rose-400 font-semibold uppercase text-xs px-4 py-3 rounded-2xl hover:bg-rose-500/10 apple-press transition cursor-pointer"
+          >
+            Delete
           </button>
         </div>
-
-        <div className="space-y-4">
-          <div>
-            <label
-              htmlFor="drawer-task-title"
-              className="block font-heading font-bold text-[11px] uppercase text-zinc-500 dark:text-zinc-400 mb-1.5"
-            >
-              Task Title
-            </label>
-            <input
-              id="drawer-task-title"
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-2.5 text-xs font-semibold text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-zinc-400 dark:focus:border-zinc-600 transition"
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="drawer-task-assignee"
-              className="block font-heading font-bold text-[11px] uppercase text-zinc-500 dark:text-zinc-400 mb-1.5"
-            >
-              Assignee
-            </label>
-            <select
-              id="drawer-task-assignee"
-              value={assigneeIntent}
-              onChange={(e) => setAssigneeIntent(e.target.value as "mine" | "partner" | "both")}
-              className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-2.5 text-xs font-heading font-bold uppercase text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-zinc-400 dark:focus:border-zinc-600 transition"
-            >
-              <option value="mine">{myName} (You)</option>
-              <option value="partner">{partnerName}</option>
-              <option value="both">Both</option>
-            </select>
-          </div>
-
-          {isRolledOver && (
-            <div>
-              <span className="block font-heading font-bold text-[11px] uppercase text-zinc-500 dark:text-zinc-400 mb-1.5">
-                Origin Log (Rollover)
-              </span>
-              <div className="bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 rounded-xl p-2.5 text-xs font-heading font-bold text-zinc-800 dark:text-zinc-200 flex items-center gap-2">
-                <CornerDownRight className="w-3.5 h-3.5" />
-                <span>Rolled over from {task.originDate}</span>
-              </div>
-            </div>
-          )}
-
-          {task.isKanbanSynced && (
-            <div>
-              <span className="block font-heading font-bold text-[11px] uppercase text-zinc-500 dark:text-zinc-400 mb-1.5">
-                Kanban Synchronization
-              </span>
-              <div className="bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 rounded-xl p-2.5 text-xs font-heading font-bold text-zinc-800 dark:text-zinc-200 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <RefreshCw className="w-3.5 h-3.5 text-zinc-600 dark:text-zinc-400 animate-spin-slow" />
-                  <span>Synced with Kanban Board</span>
-                </div>
-                <span className="text-[9px] uppercase px-2 py-0.5 rounded-full bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 font-extrabold tracking-wider">
-                  2-Way
-                </span>
-              </div>
-            </div>
-          )}
-
-          <div>
-            <label
-              htmlFor="drawer-task-notes"
-              className="block font-heading font-bold text-[11px] uppercase text-zinc-500 dark:text-zinc-400 mb-1.5"
-            >
-              Notes &amp; Links
-            </label>
-            <textarea
-              id="drawer-task-notes"
-              rows={4}
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              placeholder="Add specific notes, links, or instructions..."
-              className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3 text-xs text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-zinc-400 dark:focus:border-zinc-600 transition"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="pt-5 border-t border-zinc-100 dark:border-zinc-800 flex gap-2">
-        <button
-          onClick={handleSave}
-          className="flex-1 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-heading font-bold uppercase text-xs py-3 rounded-2xl hover:opacity-90 transition shadow-xs"
-        >
-          Save Changes
-        </button>
-        <button
-          onClick={handleDelete}
-          className="border border-zinc-200 dark:border-zinc-800 text-rose-600 dark:text-rose-400 font-heading font-bold uppercase text-xs px-4 py-3 rounded-2xl hover:bg-rose-50 dark:hover:bg-rose-950/30 transition"
-        >
-          Delete
-        </button>
-      </div>
-    </aside>
+      </aside>
     </>
   );
 }

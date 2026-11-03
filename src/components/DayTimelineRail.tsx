@@ -44,22 +44,22 @@ export function DayTimelineRail() {
   return (
     <div
       data-testid="day-timeline-rail"
-      className="w-full bg-white dark:bg-[#121215] text-zinc-900 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl p-3 sm:p-4 mb-4 shadow-xs transition-colors duration-200"
+      className="w-full apple-card p-3.5 sm:p-4 mb-4 rounded-3xl"
     >
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex items-center justify-between gap-2 pb-2.5 mb-2.5 border-b border-black/[0.05] dark:border-white/[0.06]">
         <div className="flex items-center gap-2">
-          <Clock className="w-3.5 h-3.5 text-zinc-400" />
-          <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300">
+          <Clock className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-500" />
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
             24h Focus Timeline
           </span>
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-emerald-600 dark:text-emerald-400 border border-zinc-200 dark:border-zinc-700/60 font-semibold">
+          <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-semibold">
             {totalMinutes}m logged
           </span>
         </div>
 
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="text-xs text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 flex items-center gap-1 p-1 rounded-md transition"
+          className="text-xs text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 flex items-center gap-1 px-2 py-1 rounded-xl apple-press transition cursor-pointer"
         >
           <span>{isExpanded ? "Collapse" : "Details"}</span>
           {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -67,16 +67,16 @@ export function DayTimelineRail() {
       </div>
 
       {/* Visual Horizontal Timeline Bar (Always visible) */}
-      <div className="mt-3 relative">
+      <div className="mt-2.5 relative">
         {/* Timeline Axis Track */}
-        <div className="h-6 w-full bg-zinc-50 dark:bg-zinc-900/90 rounded-xl relative overflow-hidden border border-zinc-200 dark:border-zinc-800/80 flex items-center">
+        <div className="h-7 w-full bg-black/[0.03] dark:bg-white/[0.04] rounded-2xl relative overflow-hidden border border-black/[0.05] dark:border-white/[0.08] flex items-center">
           {/* Hour subdivisions */}
           {hoursMarks.map((h) => {
             const leftPct = ((h - startHour) / (endHour - startHour)) * 100;
             return (
               <div
                 key={h}
-                className="absolute top-0 bottom-0 border-l border-zinc-200/80 dark:border-zinc-800/60 pointer-events-none"
+                className="absolute top-0 bottom-0 border-l border-black/[0.05] dark:border-white/[0.08] pointer-events-none"
                 style={{ left: `${leftPct}%` }}
               />
             );
@@ -105,7 +105,7 @@ export function DayTimelineRail() {
               <div
                 key={log.id}
                 title={`${log.taskTitle} (${log.durationMinutes}m at ${log.startedAt})`}
-                className="absolute top-0 bottom-0 bg-emerald-500/40 dark:bg-emerald-500/50 border border-emerald-500/80 dark:border-emerald-400 rounded-xs hover:bg-emerald-500/70 dark:hover:bg-emerald-500/80 transition cursor-pointer z-5"
+                className="absolute top-1 bottom-1 bg-emerald-500/35 dark:bg-emerald-500/45 border border-emerald-500/70 dark:border-emerald-400 rounded-lg hover:bg-emerald-500/60 transition cursor-pointer z-5"
                 style={{ left: `${leftPct}%`, width: `${durationPct}%` }}
               />
             );
@@ -114,16 +114,16 @@ export function DayTimelineRail() {
           {/* Current Time Needle (if today) */}
           {isSelectedDateToday && (
             <div
-              className="absolute top-0 bottom-0 w-0.5 bg-blue-500 dark:bg-blue-400 shadow-[0_0_8px_#60a5fa] z-10"
+              className="absolute top-0 bottom-0 w-0.5 bg-blue-500 dark:bg-blue-400 shadow-[0_0_8px_#3b82f6] z-10"
               style={{ left: `${currentNeedlePercentage}%` }}
             >
-              <div className="w-1.5 h-1.5 rounded-full bg-blue-500 dark:bg-blue-400 -translate-x-[2px] -translate-y-0.5" />
+              <div className="w-2 h-2 rounded-full bg-blue-500 dark:bg-blue-400 -translate-x-[3px] -translate-y-0.5 shadow-sm" />
             </div>
           )}
         </div>
 
         {/* Hour Axis Labels */}
-        <div className="flex justify-between items-center text-[9px] font-mono text-zinc-400 dark:text-zinc-500 mt-1 px-1">
+        <div className="flex justify-between items-center text-[10px] font-mono text-zinc-400 dark:text-zinc-500 mt-1.5 px-1.5">
           <span>6 AM</span>
           <span>9 AM</span>
           <span>12 PM</span>
@@ -136,22 +136,22 @@ export function DayTimelineRail() {
 
       {/* Expanded Logs Breakdown */}
       {isExpanded && (
-        <div className="mt-3.5 pt-3 border-t border-zinc-200 dark:border-zinc-800/80 space-y-2">
+        <div className="mt-3 pt-3 border-t border-black/[0.05] dark:border-white/[0.06] space-y-2 animate-fade-in">
           {logs.length === 0 ? (
-            <p className="text-xs text-zinc-500 italic text-center py-2">
+            <p className="text-xs text-zinc-400 dark:text-zinc-500 italic text-center py-2">
               No focus blocks logged yet for this date.
             </p>
           ) : (
             logs.map((log) => (
               <div
                 key={log.id}
-                className="flex items-center justify-between text-xs py-1.5 px-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800/60"
+                className="flex items-center justify-between text-xs py-2 px-3 rounded-2xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.04] dark:border-white/[0.06]"
               >
                 <div className="flex items-center gap-2 truncate">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0 shadow-[0_0_6px_rgba(16,185,129,0.5)]" />
                   <span className="font-semibold text-zinc-800 dark:text-zinc-200 truncate">{log.taskTitle}</span>
                   {log.category && (
-                    <span className="text-[10px] text-zinc-600 dark:text-zinc-400 bg-zinc-200 dark:bg-zinc-800 px-1.5 py-0.2 rounded font-mono">
+                    <span className="text-[10px] text-zinc-600 dark:text-zinc-400 bg-black/[0.05] dark:bg-white/[0.08] px-2 py-0.5 rounded-full font-mono">
                       {log.category}
                     </span>
                   )}

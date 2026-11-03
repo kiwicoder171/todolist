@@ -67,67 +67,67 @@ export function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="bg-white border-2 border-black rounded-3xl p-5 sm:p-7 w-[calc(100vw-28px)] max-w-sm sm:max-w-md shadow-[4px_4px_0_0_#000] sm:shadow-[6px_6px_0_0_#000] relative box-border">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/40 backdrop-blur-md animate-fade-in duration-200">
+      <div className="bg-white/95 dark:bg-[#18181b]/95 backdrop-blur-3xl border border-black/[0.08] dark:border-white/[0.12] rounded-3xl p-5 sm:p-7 w-[calc(100vw-28px)] max-w-sm sm:max-w-md shadow-2xl relative box-border animate-scale-in">
         {/* Close Button */}
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-black flex items-center justify-center bg-white hover:bg-zinc-100 transition cursor-pointer z-20 shadow-xs"
+          className="absolute top-5 right-5 w-8 h-8 rounded-full border border-black/[0.08] dark:border-white/[0.1] flex items-center justify-center bg-black/[0.02] dark:bg-white/[0.04] hover:bg-black/[0.05] dark:hover:bg-white/[0.08] apple-press transition cursor-pointer z-20"
           aria-label="Close modal"
         >
-          <X className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-black" />
+          <X className="w-4 h-4 text-zinc-600 dark:text-zinc-400" />
         </button>
 
         {/* Modal Header */}
-        <div className="flex items-center gap-2.5 sm:gap-3 mb-4 sm:mb-5">
-          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-black text-white flex items-center justify-center border-2 border-black shadow-[2px_2px_0_0_#000] shrink-0">
-            <UserIcon className="w-5 h-5 text-white" />
+        <div className="flex items-center gap-3 mb-5">
+          <div className="w-11 h-11 rounded-2xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 flex items-center justify-center border border-black/[0.08] dark:border-white/[0.12] shadow-2xs shrink-0">
+            <UserIcon className="w-5 h-5 text-current" />
           </div>
           <div>
-            <h2 className="text-base sm:text-lg font-heading font-extrabold uppercase tracking-tight text-black flex items-center gap-1.5">
+            <h2 className="text-base sm:text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
               <span>Edit Profile</span>
               <Sparkles className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
             </h2>
-            <p className="text-[11px] sm:text-xs text-zinc-500 font-medium">
+            <p className="text-[11px] sm:text-xs text-zinc-500 dark:text-zinc-400 font-medium">
               Update your username &amp; how you appear in your circle
             </p>
           </div>
         </div>
 
         {error && (
-          <div className="mb-4 p-2.5 bg-rose-50 border-2 border-rose-300 rounded-xl text-rose-700 text-xs font-medium flex items-center gap-2">
+          <div className="mb-4 p-3.5 rounded-2xl bg-rose-500/[0.08] dark:bg-rose-500/[0.15] border border-rose-500/20 dark:border-rose-500/30 text-rose-700 dark:text-rose-300 text-xs font-medium flex items-center gap-2.5 shadow-xs animate-in fade-in slide-in-from-top-1 duration-200">
             <AlertCircle className="w-4 h-4 shrink-0 text-rose-500" />
-            <span>{error}</span>
+            <span className="leading-snug flex-1">{error}</span>
           </div>
         )}
 
         {success && (
-          <div className="mb-4 p-2.5 bg-emerald-50 border-2 border-emerald-300 rounded-xl text-emerald-700 text-xs font-medium flex items-center gap-2">
+          <div className="mb-4 p-3.5 rounded-2xl bg-emerald-500/[0.08] dark:bg-emerald-500/[0.15] border border-emerald-500/20 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-xs font-medium flex items-center gap-2.5 shadow-xs animate-in fade-in slide-in-from-top-1 duration-200">
             <Check className="w-4 h-4 shrink-0 text-emerald-500" />
-            <span>{success}</span>
+            <span className="leading-snug flex-1">{success}</span>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-3.5 sm:space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {/* Username Field */}
           {user && (
             <div>
-              <label className="block text-xs font-heading font-extrabold text-black uppercase mb-1">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5">
                 Account Username
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-2.5 text-zinc-400 font-bold text-sm">@</span>
+                <span className="absolute left-3.5 top-2.5 text-zinc-400 font-bold text-sm">@</span>
                 <input
                   type="text"
                   value={usernameInput}
                   onChange={(e) => setUsernameInput(e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ""))}
                   placeholder="e.g. guyver"
                   maxLength={18}
-                  className="w-full pl-7 pr-3 py-2 border-2 border-black rounded-xl font-heading text-sm focus:outline-none focus:ring-2 focus:ring-black"
+                  className="w-full pl-8 pr-3.5 py-2.5 border border-black/[0.08] dark:border-white/[0.1] rounded-2xl bg-black/[0.02] dark:bg-white/[0.04] text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                 />
               </div>
-              <p className="text-[10px] text-zinc-400 mt-1">
+              <p className="text-[10px] text-zinc-400 dark:text-zinc-500 mt-1">
                 Used to log in and identify your account. Must be unique.
               </p>
             </div>
@@ -135,7 +135,7 @@ export function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
 
           {/* Circle Display Name Field */}
           <div>
-            <label className="block text-xs font-heading font-extrabold text-black uppercase mb-1">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5">
               Circle Display Name
             </label>
             <input
@@ -144,36 +144,36 @@ export function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
               onChange={(e) => setPartnerNameInput(e.target.value)}
               placeholder="e.g. Guyver or Honey"
               maxLength={20}
-              className="w-full px-3 py-2 border-2 border-black rounded-xl font-heading text-sm focus:outline-none focus:ring-2 focus:ring-black"
+              className="w-full px-3.5 py-2.5 border border-black/[0.08] dark:border-white/[0.1] rounded-2xl bg-black/[0.02] dark:bg-white/[0.04] text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
             />
-            <p className="text-[10px] text-zinc-400 mt-1">
+            <p className="text-[10px] text-zinc-400 dark:text-zinc-500 mt-1">
               The name shown to your partner on task cards, routines, and filters.
             </p>
           </div>
 
           {circle && (
-            <div className="p-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-[11px] text-zinc-600 space-y-0.5">
-              <p className="font-heading font-bold text-zinc-800">
-                Active Circle: <span className="text-black font-extrabold">{circle.name || "Our Shared Space"}</span>
+            <div className="p-3 bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.06] dark:border-white/[0.08] rounded-2xl text-[11px] text-zinc-600 dark:text-zinc-400 space-y-0.5">
+              <p className="font-semibold text-zinc-800 dark:text-zinc-200">
+                Active Circle: <span className="text-zinc-900 dark:text-white font-bold">{circle.name || "Our Shared Space"}</span>
               </p>
               <p className="text-[10px] text-zinc-500">
-                Code: <span className="font-mono font-bold text-black">{circle.joinCode}</span>
+                Code: <span className="font-mono font-bold text-zinc-900 dark:text-zinc-100">{circle.joinCode}</span>
               </p>
             </div>
           )}
 
-          <div className="pt-1 flex gap-2">
+          <div className="pt-2 flex gap-2">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2 sm:py-2.5 border-2 border-zinc-300 hover:border-black rounded-xl font-heading font-bold text-xs uppercase transition cursor-pointer"
+              className="flex-1 py-2.5 border border-black/[0.08] dark:border-white/[0.1] rounded-2xl font-semibold text-xs uppercase text-zinc-600 dark:text-zinc-400 hover:bg-black/[0.04] dark:hover:bg-white/[0.08] apple-press transition cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 py-2 sm:py-2.5 bg-black hover:bg-zinc-800 text-white border-2 border-black rounded-xl font-heading font-bold text-xs uppercase shadow-[2px_2px_0_0_#000] active:translate-x-0.5 active:translate-y-0.5 transition cursor-pointer disabled:opacity-50"
+              className="flex-1 py-2.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-2xl font-semibold text-xs uppercase apple-press hover:opacity-90 transition cursor-pointer shadow-2xs disabled:opacity-50"
             >
               {loading ? "Saving..." : "Save Changes"}
             </button>

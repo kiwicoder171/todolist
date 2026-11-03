@@ -100,18 +100,18 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
       role="dialog"
       aria-modal="true"
       aria-labelledby="wishlist-modal-title"
-      className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 animate-in fade-in"
+      className="fixed inset-0 bg-black/40 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fade-in"
       onClick={onClose}
     >
       <div
-        className="bg-white dark:bg-[#121215] border border-zinc-200 dark:border-zinc-800 rounded-3xl w-full max-w-md p-6 shadow-2xl space-y-4 relative transition-colors duration-200"
+        className="bg-white/95 dark:bg-[#18181b]/95 backdrop-blur-3xl border border-black/[0.08] dark:border-white/[0.12] rounded-3xl w-full max-w-md p-6 shadow-2xl space-y-4 relative animate-scale-in"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between pb-3.5 border-b border-zinc-100 dark:border-zinc-800">
+        <div className="flex items-center justify-between pb-3.5 border-b border-black/[0.05] dark:border-white/[0.06]">
           <div>
             <h3
               id="wishlist-modal-title"
-              className="font-heading font-bold text-sm uppercase tracking-wide text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5"
+              className="font-semibold text-sm uppercase tracking-wide text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5"
             >
               <span>Couple Wishlist Shop</span>
               <Sparkles className="w-3.5 h-3.5 text-amber-500" />
@@ -119,7 +119,7 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
             <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
               {currentPartnerName}&apos;s Balance:{" "}
               <strong
-                className={`font-heading font-extrabold ${
+                className={`font-mono font-bold ${
                   currentScore.points < 0 ? "text-red-500" : "text-zinc-900 dark:text-zinc-100"
                 }`}
               >
@@ -129,7 +129,7 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
           </div>
           <button
             onClick={onClose}
-            className="w-7 h-7 rounded-lg border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 flex items-center justify-center font-bold text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100 transition"
+            className="w-7 h-7 rounded-xl border border-black/[0.06] dark:border-white/[0.08] text-zinc-500 hover:bg-black/[0.04] dark:hover:bg-white/[0.08] flex items-center justify-center apple-press transition cursor-pointer"
             aria-label="Close"
           >
             <X className="w-4 h-4" />
@@ -137,21 +137,21 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
         </div>
 
         {redeemedNotice && (
-          <div className="p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-50 dark:bg-emerald-950/30 text-xs font-heading font-bold text-emerald-800 dark:text-emerald-300 flex items-center gap-2 animate-bounce">
+          <div className="p-3 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 text-xs font-semibold text-emerald-800 dark:text-emerald-300 flex items-center gap-2 animate-bounce backdrop-blur-xs">
             <Check className="w-4 h-4 stroke-[3]" />
             <span>{redeemedNotice}</span>
           </div>
         )}
 
         {/* Scroll list with top headroom so hover elevation (translateY(-2px)) never clips under border */}
-        <div className="space-y-2.5 max-h-72 overflow-y-auto pt-2 pb-1.5 px-1 -mx-1">
+        <div className="space-y-2.5 max-h-72 overflow-y-auto pt-1 pb-1.5 px-1 -mx-1">
           {rewards.length === 0 ? (
             <div className="py-6 text-center text-xs text-zinc-400 font-medium">
               <p>No rewards yet in your wishlist.</p>
               <button
                 type="button"
                 onClick={() => saveRewards(DEFAULT_REWARDS)}
-                className="mt-2 text-[11px] font-heading font-bold underline text-zinc-900 dark:text-zinc-100 hover:text-zinc-600 dark:hover:text-zinc-300 cursor-pointer"
+                className="mt-2 text-[11px] font-semibold underline text-zinc-900 dark:text-zinc-100 hover:opacity-70 cursor-pointer"
               >
                 Restore default rewards
               </button>
@@ -160,10 +160,10 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
             rewards.map((r) => (
               <div
                 key={r.id}
-                className="border border-zinc-200 dark:border-zinc-800 rounded-2xl p-3 flex items-center justify-between bg-zinc-50 dark:bg-zinc-900/60 squircle-card hover:border-zinc-300 dark:hover:border-zinc-700 transition gap-2"
+                className="border border-black/[0.06] dark:border-white/[0.08] rounded-2xl p-3 flex items-center justify-between bg-black/[0.02] dark:bg-white/[0.03] hover:bg-black/[0.04] dark:hover:bg-white/[0.05] transition gap-2"
               >
                 <div className="pr-1 min-w-0 flex-1">
-                  <h4 className="font-heading font-bold text-xs text-zinc-900 dark:text-zinc-100 truncate">
+                  <h4 className="font-semibold text-xs text-zinc-900 dark:text-zinc-100 truncate">
                     {r.title}
                   </h4>
                   <p className="text-[11px] text-zinc-500 dark:text-zinc-400 truncate">{r.desc}</p>
@@ -172,7 +172,7 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
                   <button
                     type="button"
                     onClick={() => handleRedeem(r)}
-                    className="bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-xs font-heading font-bold px-3.5 py-1.5 rounded-full hover:opacity-90 transition shrink-0 active:scale-95 cursor-pointer shadow-xs"
+                    className="bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-xs font-semibold px-3.5 py-1.5 rounded-full hover:opacity-90 apple-press transition shrink-0 cursor-pointer shadow-2xs"
                   >
                     {r.cost} PTS
                   </button>
@@ -181,7 +181,7 @@ export function WishlistModal({ isOpen, onClose }: WishlistModalProps) {
                     onClick={() => handleDeleteReward(r.id)}
                     aria-label={`Delete ${r.title}`}
                     title="Delete reward"
-                    className="w-7 h-7 rounded-full border border-zinc-200 dark:border-zinc-800 hover:border-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 text-zinc-400 hover:text-red-600 flex items-center justify-center transition active:scale-90 cursor-pointer shrink-0"
+                    className="w-7 h-7 rounded-full border border-black/[0.06] dark:border-white/[0.08] hover:border-red-500 hover:bg-red-500/10 text-zinc-400 hover:text-red-500 flex items-center justify-center apple-press transition cursor-pointer shrink-0"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>

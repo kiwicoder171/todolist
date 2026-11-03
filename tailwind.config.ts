@@ -16,6 +16,17 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        apple: {
+          blue: "#0071e3",
+          emerald: "#34c759",
+          amber: "#ff9500",
+          pink: "#ff2d55",
+          indigo: "#5856d6",
+          teal: "#00c7be",
+        },
+      },
+      borderRadius: {
+        "4xl": "2rem",
       },
     },
   },

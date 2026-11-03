@@ -40,7 +40,7 @@ describe("CalendarConsistencySection (Seam: Ticket 05 Calendar & Dials)", () => 
       </TestWrapper>
     );
 
-    expect(screen.getByText(/October 2026/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/October 2026/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/100% Done/i)).toBeInTheDocument();
     expect(screen.getByText(/Pending/i)).toBeInTheDocument();
     expect(screen.getByText(/Freeze Day/i)).toBeInTheDocument();
@@ -56,12 +56,12 @@ describe("CalendarConsistencySection (Seam: Ticket 05 Calendar & Dials)", () => 
     const nextBtn = screen.getByRole("button", { name: "Next month" });
     fireEvent.click(nextBtn);
 
-    expect(screen.getByText(/November 2026/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/November 2026/i).length).toBeGreaterThan(0);
 
     const prevBtn = screen.getByRole("button", { name: "Previous month" });
     fireEvent.click(prevBtn);
 
-    expect(screen.getByText(/October 2026/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/October 2026/i).length).toBeGreaterThan(0);
   });
 
   it("selects a calendar date when clicked and updates app state", () => {

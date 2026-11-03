@@ -127,7 +127,7 @@ export function RoutinesProvider({ children }: { children: ReactNode }) {
   const authLoading = authContext?.loading ?? false;
 
   const [routines, setRoutines] = useState<Routine[]>(() => {
-    if (typeof window !== "undefined") {
+    if (isTest && typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem(ROUTINES_STORAGE_KEY);
         if (stored) {

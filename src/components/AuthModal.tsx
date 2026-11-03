@@ -117,13 +117,13 @@ export function AuthModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-md bg-white border-4 border-black rounded-3xl p-6 sm:p-7 shadow-[8px_8px_0_0_#000] relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-md animate-fade-in duration-200">
+      <div className="w-full max-w-md bg-white/95 dark:bg-[#18181b]/95 backdrop-blur-3xl border border-black/[0.08] dark:border-white/[0.12] rounded-3xl p-6 sm:p-7 shadow-2xl relative animate-scale-in">
         {/* Close Button */}
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 w-9 h-9 rounded-full border-2 border-black bg-zinc-100 hover:bg-black hover:text-white transition flex items-center justify-center cursor-pointer shadow-[2px_2px_0_0_#000]"
+          className="absolute top-5 right-5 w-8 h-8 rounded-xl border border-black/[0.06] dark:border-white/[0.08] text-zinc-500 hover:bg-black/[0.04] dark:hover:bg-white/[0.08] transition flex items-center justify-center cursor-pointer apple-press"
           title="Close"
         >
           <X className="w-4 h-4" />
@@ -131,15 +131,15 @@ export function AuthModal({
 
         {/* Modal Header */}
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-12 h-12 rounded-2xl bg-black text-white flex items-center justify-center border-2 border-black shadow-[3px_3px_0_0_#000] p-1.5 shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 flex items-center justify-center border border-black/[0.08] dark:border-white/[0.12] shadow-xs p-1.5 shrink-0">
             <Logo size={28} inverted />
           </div>
           <div>
-            <h2 className="text-xl font-heading font-extrabold uppercase tracking-tight text-black flex items-center gap-1.5">
+            <h2 className="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
               <span>Couple Task Hub</span>
               <Sparkles className="w-4 h-4 text-amber-500 fill-amber-500" />
             </h2>
-            <p className="text-xs text-zinc-600 font-medium">
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
               Multi-device sync across phone, laptop & tablet
             </p>
           </div>
@@ -150,7 +150,7 @@ export function AuthModal({
           type="button"
           onClick={handleGoogleSignIn}
           disabled={loading}
-          className="w-full py-2.5 px-4 rounded-xl border-2 border-black bg-white hover:bg-zinc-50 font-heading font-extrabold text-xs uppercase transition flex items-center justify-center gap-2.5 shadow-[3px_3px_0_0_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0_0_#000] cursor-pointer mb-4.5"
+          className="w-full py-2.5 px-4 rounded-2xl border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.04] hover:bg-black/[0.05] dark:hover:bg-white/[0.08] font-semibold text-xs text-zinc-800 dark:text-zinc-200 transition flex items-center justify-center gap-2.5 apple-press cursor-pointer mb-4"
         >
           <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
             <path
@@ -173,26 +173,26 @@ export function AuthModal({
           <span>Continue with Google</span>
         </button>
 
-        <div className="relative flex py-1.5 items-center mb-4">
-          <div className="flex-grow border-t border-zinc-200"></div>
-          <span className="flex-shrink mx-3 text-[10px] uppercase font-bold text-zinc-400 font-heading">
+        <div className="relative flex py-1 items-center mb-4">
+          <div className="flex-grow border-t border-black/[0.05] dark:border-white/[0.08]"></div>
+          <span className="flex-shrink mx-3 text-[10px] uppercase font-semibold text-zinc-400">
             Or with Username & Password
           </span>
-          <div className="flex-grow border-t border-zinc-200"></div>
+          <div className="flex-grow border-t border-black/[0.05] dark:border-white/[0.08]"></div>
         </div>
 
         {/* Mode Switcher Tabs */}
-        <div className="grid grid-cols-2 gap-2 p-1.5 bg-zinc-100 border-2 border-black rounded-2xl mb-5 shadow-[2px_2px_0_0_#000]">
+        <div className="grid grid-cols-2 gap-1 p-1 apple-segmented-track rounded-2xl mb-5">
           <button
             type="button"
             onClick={() => {
               setMode("login");
               setError(null);
             }}
-            className={`py-2 text-xs font-heading font-extrabold rounded-xl transition ${
+            className={`py-2 text-xs font-semibold rounded-xl apple-press transition ${
               mode === "login"
-                ? "bg-black text-white shadow-sm"
-                : "text-zinc-600 hover:text-black"
+                ? "bg-white dark:bg-[#2c2c2e] text-zinc-900 dark:text-white shadow-xs"
+                : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
             }`}
           >
             Log In (Username)
@@ -203,10 +203,10 @@ export function AuthModal({
               setMode("register");
               setError(null);
             }}
-            className={`py-2 text-xs font-heading font-extrabold rounded-xl transition ${
+            className={`py-2 text-xs font-semibold rounded-xl apple-press transition ${
               mode === "register"
-                ? "bg-black text-white shadow-sm"
-                : "text-zinc-600 hover:text-black"
+                ? "bg-white dark:bg-[#2c2c2e] text-zinc-900 dark:text-white shadow-xs"
+                : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
             }`}
           >
             Register (Gmail)
@@ -215,9 +215,9 @@ export function AuthModal({
 
         {/* Error Alert */}
         {error && (
-          <div className="mb-4 p-3 bg-red-50 border-2 border-red-500 rounded-xl text-red-700 text-xs font-medium flex items-start gap-2 shadow-[2px_2px_0_0_rgba(239,68,68,0.3)]">
-            <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-red-600" />
-            <p className="leading-snug">{error}</p>
+          <div className="mb-4 p-3.5 rounded-2xl bg-rose-500/[0.08] dark:bg-rose-500/[0.15] border border-rose-500/20 dark:border-rose-500/30 text-rose-700 dark:text-rose-300 text-xs font-medium flex items-start gap-2.5 shadow-xs animate-in fade-in slide-in-from-top-1 duration-200">
+            <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-rose-500" />
+            <p className="leading-snug flex-1">{error}</p>
           </div>
         )}
 
@@ -225,7 +225,7 @@ export function AuthModal({
         {mode === "login" ? (
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-xs font-heading font-extrabold uppercase mb-1.5 text-zinc-800">
+              <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5 text-zinc-700 dark:text-zinc-300">
                 Username or Email
               </label>
               <div className="relative">
@@ -235,14 +235,14 @@ export function AuthModal({
                   placeholder="e.g. alex_smith or alex@gmail.com"
                   value={loginIdentifier}
                   onChange={(e) => setLoginIdentifier(e.target.value)}
-                  className="w-full px-3.5 py-2.5 pl-10 rounded-xl border-2 border-black text-sm bg-white focus:outline-none focus:ring-2 focus:ring-black shadow-[2px_2px_0_0_#000]"
+                  className="w-full px-3.5 py-2.5 pl-10 rounded-2xl border border-black/[0.08] dark:border-white/[0.1] text-sm bg-black/[0.02] dark:bg-white/[0.04] text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                 />
                 <User className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3.5" />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-heading font-extrabold uppercase mb-1.5 text-zinc-800">
+              <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5 text-zinc-700 dark:text-zinc-300">
                 Password
               </label>
               <div className="relative">
@@ -252,7 +252,7 @@ export function AuthModal({
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-3.5 py-2.5 pl-10 rounded-xl border-2 border-black text-sm bg-white focus:outline-none focus:ring-2 focus:ring-black shadow-[2px_2px_0_0_#000]"
+                  className="w-full px-3.5 py-2.5 pl-10 rounded-2xl border border-black/[0.08] dark:border-white/[0.1] text-sm bg-black/[0.02] dark:bg-white/[0.04] text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                 />
                 <Lock className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3.5" />
               </div>
@@ -261,7 +261,7 @@ export function AuthModal({
             <button
               type="submit"
               disabled={loading}
-              className="w-full mt-2 py-3 px-4 rounded-xl border-2 border-black bg-black text-white hover:bg-zinc-800 font-heading font-extrabold text-sm uppercase transition flex items-center justify-center gap-2 shadow-[4px_4px_0_0_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[2px_2px_0_0_#000] disabled:opacity-60 cursor-pointer"
+              className="w-full mt-2 py-3 px-4 rounded-2xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:opacity-90 font-semibold text-sm uppercase transition flex items-center justify-center gap-2 apple-press shadow-2xs disabled:opacity-60 cursor-pointer"
             >
               {loading ? (
                 <>
@@ -280,7 +280,7 @@ export function AuthModal({
           /* Register Form */
           <form onSubmit={handleRegister} className="space-y-3.5">
             <div>
-              <label className="block text-xs font-heading font-extrabold uppercase mb-1 text-zinc-800">
+              <label className="block text-xs font-semibold uppercase tracking-wider mb-1 text-zinc-700 dark:text-zinc-300">
                 Choose a Username
               </label>
               <div className="relative">
@@ -290,15 +290,15 @@ export function AuthModal({
                   placeholder="e.g. alex_smith"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="w-full px-3.5 py-2 pl-10 rounded-xl border-2 border-black text-sm bg-white focus:outline-none focus:ring-2 focus:ring-black shadow-[2px_2px_0_0_#000]"
+                  className="w-full px-3.5 py-2.5 pl-10 rounded-2xl border border-black/[0.08] dark:border-white/[0.1] text-sm bg-black/[0.02] dark:bg-white/[0.04] text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                 />
-                <User className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3" />
+                <User className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3.5" />
               </div>
-              <p className="text-[10px] text-zinc-500 mt-1">You will use this username to log in on other devices.</p>
+              <p className="text-[10px] text-zinc-500 dark:text-zinc-400 mt-1">You will use this username to log in on other devices.</p>
             </div>
 
             <div>
-              <label className="block text-xs font-heading font-extrabold uppercase mb-1 text-zinc-800">
+              <label className="block text-xs font-semibold uppercase tracking-wider mb-1 text-zinc-700 dark:text-zinc-300">
                 Gmail or Email
               </label>
               <div className="relative">
@@ -308,14 +308,14 @@ export function AuthModal({
                   placeholder="yourname@gmail.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-3.5 py-2 pl-10 rounded-xl border-2 border-black text-sm bg-white focus:outline-none focus:ring-2 focus:ring-black shadow-[2px_2px_0_0_#000]"
+                  className="w-full px-3.5 py-2.5 pl-10 rounded-2xl border border-black/[0.08] dark:border-white/[0.1] text-sm bg-black/[0.02] dark:bg-white/[0.04] text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                 />
-                <Mail className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3" />
+                <Mail className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3.5" />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-heading font-extrabold uppercase mb-1 text-zinc-800">
+              <label className="block text-xs font-semibold uppercase tracking-wider mb-1 text-zinc-700 dark:text-zinc-300">
                 Password
               </label>
               <div className="relative">
@@ -325,16 +325,16 @@ export function AuthModal({
                   placeholder="At least 6 characters"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-3.5 py-2 pl-10 rounded-xl border-2 border-black text-sm bg-white focus:outline-none focus:ring-2 focus:ring-black shadow-[2px_2px_0_0_#000]"
+                  className="w-full px-3.5 py-2.5 pl-10 rounded-2xl border border-black/[0.08] dark:border-white/[0.1] text-sm bg-black/[0.02] dark:bg-white/[0.04] text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                 />
-                <Lock className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3" />
+                <Lock className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3.5" />
               </div>
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full mt-2 py-3 px-4 rounded-xl border-2 border-black bg-black text-white hover:bg-zinc-800 font-heading font-extrabold text-sm uppercase transition flex items-center justify-center gap-2 shadow-[4px_4px_0_0_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[2px_2px_0_0_#000] disabled:opacity-60 cursor-pointer"
+              className="w-full mt-2 py-3 px-4 rounded-2xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:opacity-90 font-semibold text-sm uppercase transition flex items-center justify-center gap-2 apple-press shadow-2xs disabled:opacity-60 cursor-pointer"
             >
               {loading ? (
                 <>
@@ -351,11 +351,11 @@ export function AuthModal({
           </form>
         )}
 
-        <div className="mt-5 pt-4 border-t border-zinc-200 text-center">
+        <div className="mt-5 pt-4 border-t border-black/[0.05] dark:border-white/[0.06] text-center">
           <button
             type="button"
             onClick={onClose}
-            className="text-xs font-heading font-bold text-zinc-500 hover:text-black underline"
+            className="text-xs font-medium text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 underline apple-press transition"
           >
             Continue as Guest / Explore Demo
           </button>

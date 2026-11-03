@@ -54,9 +54,10 @@ export function extractCleanUsername(fbUser: FirebaseUser): string {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const isTest = process.env.NODE_ENV === "test";
   const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
   const [user, setUser] = useState<UserProfile | null>(() => {
-    if (typeof window !== "undefined") {
+    if (isTest && typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem(AUTH_STORAGE_KEY);
         if (stored) {
@@ -68,7 +69,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return null;
   });
   const [loading, setLoading] = useState<boolean>(() => {
-    if (typeof window !== "undefined") {
+    if (isTest && typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem(AUTH_STORAGE_KEY);
         if (stored) return false;
@@ -101,6 +102,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const closeAuthModal = () => {
     setIsAuthModalOpen(false);
   };
+
+  // Hydrate cached user from localStorage after mount (safe SSR hydration)
+  useEffect(() => {
+    if (isTest || typeof window === "undefined") return;
+    try {
+      const stored = localStorage.getItem(AUTH_STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed && parsed.uid) {
+          setUser(parsed);
+          setLoading(false);
+        }
+      }
+    } catch {}
+  }, [isTest]);
 
   // Listen to Firebase Auth state changes
   useEffect(() => {

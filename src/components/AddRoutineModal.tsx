@@ -148,23 +148,23 @@ export function AddRoutineModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="routine-modal-title"
-      className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in"
+      className="fixed inset-0 z-50 bg-black/40 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in"
       onClick={onClose}
     >
       <div
-        className="bg-white dark:bg-[#121215] border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 shadow-2xl w-full max-w-md relative transition-colors duration-200"
+        className="bg-white/95 dark:bg-[#18181b]/95 backdrop-blur-3xl border border-black/[0.08] dark:border-white/[0.12] rounded-3xl p-6 shadow-2xl w-full max-w-md relative animate-scale-in"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-zinc-100 dark:border-zinc-800 mb-4">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 flex items-center justify-center">
-              <Calendar className="w-4 h-4" />
+        <div className="flex items-center justify-between pb-3.5 border-b border-black/[0.05] dark:border-white/[0.06] mb-4">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-2xl bg-black/[0.04] dark:bg-white/[0.08] text-zinc-900 dark:text-zinc-100 flex items-center justify-center">
+              <Calendar className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             </div>
             <div>
               <h3
                 id="routine-modal-title"
-                className="font-heading font-bold text-sm uppercase tracking-wide text-zinc-900 dark:text-zinc-100"
+                className="font-semibold text-sm uppercase tracking-wide text-zinc-900 dark:text-zinc-100"
               >
                 New Daily Routine
               </h3>
@@ -177,7 +177,7 @@ export function AddRoutineModal({
           <button
             type="button"
             onClick={onClose}
-            className="w-7 h-7 rounded-lg border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100 flex items-center justify-center transition"
+            className="w-7 h-7 rounded-xl border border-black/[0.06] dark:border-white/[0.08] text-zinc-500 hover:bg-black/[0.04] dark:hover:bg-white/[0.08] flex items-center justify-center apple-press transition cursor-pointer"
             aria-label="Close"
           >
             <X className="w-4 h-4" />
@@ -187,7 +187,7 @@ export function AddRoutineModal({
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">
           {/* Routine Title */}
           <div>
-            <label className="block font-heading font-bold uppercase text-[11px] text-zinc-700 dark:text-zinc-300 mb-1">
+            <label className="block font-semibold uppercase text-[11px] text-zinc-600 dark:text-zinc-400 mb-1.5">
               Routine Title *
             </label>
             <input
@@ -196,24 +196,24 @@ export function AddRoutineModal({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Clean my room, 15-min sync, Water plants..."
-              className="w-full px-3 py-2 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 rounded-xl text-zinc-900 dark:text-zinc-100 font-medium focus:outline-none focus:border-zinc-400 dark:focus:border-zinc-600 placeholder-zinc-400 dark:placeholder-zinc-500 transition"
+              className="w-full px-3.5 py-2.5 border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.04] rounded-2xl text-zinc-900 dark:text-zinc-100 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/20 placeholder-zinc-400 dark:placeholder-zinc-500 transition"
               autoFocus
             />
           </div>
 
           {/* Assignee Selection */}
           <div>
-            <label className="block font-heading font-bold uppercase text-[11px] text-zinc-700 dark:text-zinc-300 mb-1.5">
+            <label className="block font-semibold uppercase text-[11px] text-zinc-600 dark:text-zinc-400 mb-1.5">
               Assigned To
             </label>
             <div className="grid grid-cols-3 gap-2">
               <button
                 type="button"
                 onClick={() => setAssignee("mine")}
-                className={`py-2 px-3 rounded-xl border font-heading font-bold text-xs transition ${
+                className={`py-2 px-3 rounded-2xl border font-semibold text-xs apple-press transition cursor-pointer ${
                   assignee === "mine"
-                    ? "border-zinc-900 dark:border-zinc-100 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 shadow-xs"
-                    : "border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 bg-white dark:bg-zinc-900"
+                    ? "border-zinc-900 dark:border-white bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 shadow-2xs"
+                    : "border-black/[0.06] dark:border-white/[0.08] text-zinc-700 dark:text-zinc-300 hover:bg-black/[0.03] dark:hover:bg-white/[0.05] bg-black/[0.01] dark:bg-white/[0.02]"
                 }`}
               >
                 Me
@@ -221,10 +221,10 @@ export function AddRoutineModal({
               <button
                 type="button"
                 onClick={() => setAssignee("partner")}
-                className={`py-2 px-3 rounded-xl border font-heading font-bold text-xs transition ${
+                className={`py-2 px-3 rounded-2xl border font-semibold text-xs apple-press transition cursor-pointer ${
                   assignee === "partner"
-                    ? "border-zinc-900 dark:border-zinc-100 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 shadow-xs"
-                    : "border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 bg-white dark:bg-zinc-900"
+                    ? "border-zinc-900 dark:border-white bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 shadow-2xs"
+                    : "border-black/[0.06] dark:border-white/[0.08] text-zinc-700 dark:text-zinc-300 hover:bg-black/[0.03] dark:hover:bg-white/[0.05] bg-black/[0.01] dark:bg-white/[0.02]"
                 }`}
               >
                 {partnerName}
@@ -232,10 +232,10 @@ export function AddRoutineModal({
               <button
                 type="button"
                 onClick={() => setAssignee("both")}
-                className={`py-2 px-3 rounded-xl border font-heading font-bold text-xs transition ${
+                className={`py-2 px-3 rounded-2xl border font-semibold text-xs apple-press transition cursor-pointer ${
                   assignee === "both"
-                    ? "border-zinc-900 dark:border-zinc-100 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 shadow-xs"
-                    : "border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 bg-white dark:bg-zinc-900"
+                    ? "border-zinc-900 dark:border-white bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 shadow-2xs"
+                    : "border-black/[0.06] dark:border-white/[0.08] text-zinc-700 dark:text-zinc-300 hover:bg-black/[0.03] dark:hover:bg-white/[0.05] bg-black/[0.01] dark:bg-white/[0.02]"
                 }`}
               >
                 Both of Us
@@ -244,9 +244,9 @@ export function AddRoutineModal({
           </div>
 
           {/* Schedule Days Picker */}
-          <div className="space-y-2 pt-1 border-t border-zinc-100 dark:border-zinc-800">
+          <div className="space-y-2 pt-2 border-t border-black/[0.05] dark:border-white/[0.06]">
             <div className="flex items-center justify-between">
-              <label className="block font-heading font-bold uppercase text-[11px] text-zinc-700 dark:text-zinc-300">
+              <label className="block font-semibold uppercase text-[11px] text-zinc-600 dark:text-zinc-400">
                 Repeat On Days
               </label>
               {/* Quick Presets */}
@@ -254,21 +254,21 @@ export function AddRoutineModal({
                 <button
                   type="button"
                   onClick={() => setPreset([1, 2, 3, 4, 5, 6, 0])}
-                  className="text-[10px] font-heading font-bold px-2 py-0.5 rounded border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 transition"
+                  className="text-[10px] font-semibold px-2 py-0.5 rounded-full border border-black/[0.06] dark:border-white/[0.08] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] text-zinc-600 dark:text-zinc-400 apple-press transition cursor-pointer"
                 >
                   All
                 </button>
                 <button
                   type="button"
                   onClick={() => setPreset([1, 2, 3, 4, 5])}
-                  className="text-[10px] font-heading font-bold px-2 py-0.5 rounded border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 transition"
+                  className="text-[10px] font-semibold px-2 py-0.5 rounded-full border border-black/[0.06] dark:border-white/[0.08] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] text-zinc-600 dark:text-zinc-400 apple-press transition cursor-pointer"
                 >
                   Weekdays
                 </button>
                 <button
                   type="button"
                   onClick={() => setPreset([6, 0])}
-                  className="text-[10px] font-heading font-bold px-2 py-0.5 rounded border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 transition"
+                  className="text-[10px] font-semibold px-2 py-0.5 rounded-full border border-black/[0.06] dark:border-white/[0.08] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] text-zinc-600 dark:text-zinc-400 apple-press transition cursor-pointer"
                 >
                   Weekends
                 </button>
@@ -286,15 +286,15 @@ export function AddRoutineModal({
                     onClick={() => toggleDay(day.id)}
                     aria-label={day.name}
                     aria-pressed={isSelected}
-                    className={`h-11 rounded-xl border flex flex-col items-center justify-center transition font-heading ${
+                    className={`h-11 rounded-2xl border flex flex-col items-center justify-center transition apple-press cursor-pointer ${
                       isSelected
-                        ? "border-zinc-900 dark:border-zinc-100 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 shadow-xs"
-                        : "border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 bg-zinc-50 dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                        ? "border-emerald-500 bg-emerald-500 text-white font-bold shadow-xs"
+                        : "border-black/[0.06] dark:border-white/[0.08] text-zinc-600 dark:text-zinc-400 bg-black/[0.02] dark:bg-white/[0.03] hover:bg-black/[0.04] dark:hover:bg-white/[0.06]"
                     }`}
                   >
-                    <span className="text-[11px] font-extrabold">{day.label}</span>
+                    <span className="text-[11px] font-bold">{day.label}</span>
                     {isSelected && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-white dark:bg-zinc-900 mt-0.5" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-white mt-0.5 shadow-xs" />
                     )}
                   </button>
                 );
@@ -302,16 +302,16 @@ export function AddRoutineModal({
             </div>
 
             {/* Smart Auto-Detection Status Callout */}
-            <div className="mt-2.5 p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 flex items-center justify-between">
+            <div className="mt-2.5 p-3 rounded-2xl border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.03] flex items-center justify-between">
               <div className="flex flex-col">
-                <span className="text-[10px] font-heading font-bold uppercase text-zinc-500 dark:text-zinc-400">
+                <span className="text-[10px] font-semibold uppercase text-zinc-400 dark:text-zinc-500">
                   Auto-Detected Frequency
                 </span>
-                <span className="text-xs font-heading font-bold text-zinc-900 dark:text-zinc-100">
+                <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100">
                   {label}
                 </span>
               </div>
-              <span className="text-[10px] font-heading font-bold uppercase px-2.5 py-1 rounded-full border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 shrink-0">
+              <span className="text-[10px] font-semibold uppercase px-2.5 py-1 rounded-full border border-black/[0.06] dark:border-white/[0.08] bg-white/80 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 shrink-0">
                 {badge}
               </span>
             </div>
@@ -322,7 +322,7 @@ export function AddRoutineModal({
             <button
               type="submit"
               disabled={!title.trim() || selectedDays.length === 0}
-              className="w-full py-2.5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl font-heading font-bold text-xs uppercase tracking-wider transition flex items-center justify-center gap-1.5 shadow-xs active:translate-y-0.5"
+              className="w-full py-3 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed rounded-2xl font-semibold text-xs uppercase tracking-wider apple-press transition flex items-center justify-center gap-1.5 shadow-2xs cursor-pointer"
             >
               <Check className="w-4 h-4" />
               <span>Save Routine</span>

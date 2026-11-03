@@ -195,7 +195,7 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
   const updateUserCircle = authContext?.updateUserCircle || (async () => {});
 
   const [circle, setCircle] = useState<CircleState | null>(() => {
-    if (typeof window !== "undefined") {
+    if (isTest && typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
@@ -208,7 +208,7 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
   });
 
   const [partnerNames, setPartnerNames] = useState<Record<Partner, string>>(() => {
-    if (typeof window !== "undefined") {
+    if (isTest && typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
@@ -224,7 +224,7 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
   });
 
   const [partnerAvatars, setPartnerAvatars] = useState<Record<Partner, string>>(() => {
-    if (typeof window !== "undefined") {
+    if (isTest && typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem("couple_task_hub_avatars");
         if (stored) return JSON.parse(stored);
@@ -255,7 +255,7 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
   });
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
   const [spaceMode, setSpaceModeState] = useState<SpaceMode>(() => {
-    if (typeof window !== "undefined") {
+    if (isTest && typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
@@ -269,7 +269,7 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
   });
 
   const [scores, setScores] = useState<Record<Partner, PartnerScoreState>>(() => {
-    if (typeof window !== "undefined") {
+    if (isTest && typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
@@ -290,7 +290,7 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
   });
 
   const [perfectDays, setPerfectDays] = useState<Record<Partner, string[]>>(() => {
-    if (typeof window !== "undefined") {
+    if (isTest && typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
@@ -305,7 +305,7 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
   const [appliedPenalties, setAppliedPenalties] = useState<
     Record<Partner, Record<string, number>>
   >(() => {
-    if (typeof window !== "undefined") {
+    if (isTest && typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {

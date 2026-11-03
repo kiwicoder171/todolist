@@ -147,8 +147,9 @@ export function FocusTimerProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const isTest = typeof process !== "undefined" && process.env.NODE_ENV === "test";
   const [soundEnabled, setSoundEnabled] = useState<boolean>(() => {
-    if (typeof window !== "undefined") {
+    if (isTest && typeof window !== "undefined") {
       try {
         const enabled = localStorage.getItem("couple_task_hub_sound_enabled") !== "false";
         focusAudio.setMuted(!enabled);
@@ -195,6 +196,13 @@ export function FocusTimerProvider({ children }: { children: ReactNode }) {
       const savedLogs = localStorage.getItem(STORAGE_LOGS_KEY);
       if (savedLogs) {
         setLogs(JSON.parse(savedLogs));
+      }
+
+      const soundStored = localStorage.getItem("couple_task_hub_sound_enabled");
+      if (soundStored !== null) {
+        const enabled = soundStored !== "false";
+        setSoundEnabled(enabled);
+        focusAudio.setMuted(!enabled);
       }
 
       const savedActive = localStorage.getItem(STORAGE_ACTIVE_KEY);

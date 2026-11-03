@@ -16,19 +16,18 @@ const STORAGE_KEY = "couple_task_hub_theme";
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<ThemeMode>(() => {
-    if (typeof window !== "undefined") {
-      try {
-        const stored = localStorage.getItem(STORAGE_KEY) as ThemeMode | null;
-        if (stored === "light" || stored === "dark" || stored === "system") {
-          return stored;
-        }
-      } catch {}
-    }
-    return "system";
-  });
-
+  const [theme, setThemeState] = useState<ThemeMode>("system");
   const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("dark");
+
+  // Sync theme from localStorage once mounted on client to prevent SSR hydration mismatch
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY) as ThemeMode | null;
+      if (stored === "light" || stored === "dark" || stored === "system") {
+        setThemeState(stored);
+      }
+    } catch {}
+  }, []);
 
   useEffect(() => {
     const root = document.documentElement;

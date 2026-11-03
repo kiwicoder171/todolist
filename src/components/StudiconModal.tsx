@@ -41,20 +41,20 @@ export function StudiconModal({ isOpen, onClose }: StudiconModalProps) {
   return (
     <div
       data-testid="studicon-modal"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-md animate-fade-in"
     >
-      <div className="bg-white dark:bg-[#121215] text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-5 max-w-sm w-full shadow-2xl space-y-4">
+      <div className="bg-white/95 dark:bg-[#18181b]/95 backdrop-blur-3xl text-zinc-900 dark:text-zinc-100 border border-black/[0.08] dark:border-white/[0.12] rounded-3xl p-5 max-w-sm w-full shadow-2xl space-y-4 animate-scale-in">
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-zinc-100 dark:border-zinc-800">
+        <div className="flex items-center justify-between pb-3 border-b border-black/[0.05] dark:border-white/[0.06]">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-amber-500 dark:text-amber-400" />
-            <h3 className="font-heading font-extrabold text-sm uppercase tracking-wide text-zinc-900 dark:text-zinc-100">
+            <Sparkles className="w-4 h-4 text-amber-500" />
+            <h3 className="font-semibold text-sm uppercase tracking-wide text-zinc-900 dark:text-zinc-100">
               Select Desk Studicon
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="text-zinc-400 hover:text-zinc-700 dark:hover:text-white p-1 rounded-lg transition"
+            className="w-7 h-7 rounded-xl border border-black/[0.06] dark:border-white/[0.08] text-zinc-500 hover:bg-black/[0.04] dark:hover:bg-white/[0.08] flex items-center justify-center apple-press transition cursor-pointer"
             aria-label="Close"
           >
             <X className="w-4 h-4" />
@@ -77,14 +77,14 @@ export function StudiconModal({ isOpen, onClose }: StudiconModalProps) {
                   updatePartnerAvatar(activePartner, option.emoji);
                   onClose();
                 }}
-                className={`p-3 rounded-2xl flex flex-col items-center gap-1.5 transition ${
+                className={`p-3 rounded-2xl flex flex-col items-center gap-1.5 transition apple-press cursor-pointer ${
                   isSelected
-                    ? "bg-emerald-50 dark:bg-zinc-800 border-2 border-emerald-500 scale-105 shadow-xs"
-                    : "bg-zinc-50 dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700"
+                    ? "bg-emerald-500/15 dark:bg-emerald-500/25 border-2 border-emerald-500 shadow-xs"
+                    : "bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.06] dark:border-white/[0.08] hover:bg-black/[0.05] dark:hover:bg-white/[0.06]"
                 }`}
               >
                 <span className="text-2xl">{option.emoji}</span>
-                <span className="text-[9px] text-zinc-600 dark:text-zinc-400 truncate max-w-full font-medium">
+                <span className="text-[10px] text-zinc-600 dark:text-zinc-400 truncate max-w-full font-medium">
                   {option.label.split(" ")[0]}
                 </span>
               </button>

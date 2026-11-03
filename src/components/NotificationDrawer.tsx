@@ -62,19 +62,19 @@ export function NotificationDrawer() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-black/50 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="w-full max-w-md bg-white h-full border-l-2 sm:border-l-3 border-black shadow-[-6px_0_0_0_#000] flex flex-col justify-between animate-in slide-in-from-right duration-200">
+    <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-md animate-fade-in duration-200">
+      <div className="w-full max-w-md bg-white/95 dark:bg-[#18181b]/95 backdrop-blur-3xl h-full border-l border-black/[0.08] dark:border-white/[0.12] shadow-2xl flex flex-col justify-between animate-in slide-in-from-right duration-200">
         {/* Drawer Header */}
-        <div className="p-4 sm:p-5 border-b-2 border-black bg-amber-300 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-black text-white flex items-center justify-center font-bold text-xs shadow-[2px_2px_0_0_#000]">
+        <div className="p-4 sm:p-5 border-b border-black/[0.05] dark:border-white/[0.06] bg-black/[0.02] dark:bg-white/[0.03] flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 flex items-center justify-center font-bold text-xs shadow-2xs">
               <Bell className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="font-heading font-black text-base uppercase tracking-tight text-black flex items-center gap-2">
+              <h2 className="font-semibold text-base uppercase tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
                 <span>Notifications</span>
                 {unreadCount > 0 && (
-                  <span className="px-2 py-0.5 rounded-full bg-black text-white text-[10px] font-mono font-bold">
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-500 text-white text-[10px] font-mono font-bold shadow-xs">
                     {unreadCount} NEW
                   </span>
                 )}
@@ -85,21 +85,21 @@ export function NotificationDrawer() {
           <button
             type="button"
             onClick={() => setIsDrawerOpen(false)}
-            className="w-8 h-8 rounded-full border-2 border-black bg-white hover:bg-zinc-100 flex items-center justify-center transition shadow-xs cursor-pointer"
+            className="w-8 h-8 rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.04] hover:bg-black/[0.06] dark:hover:bg-white/[0.08] flex items-center justify-center transition apple-press cursor-pointer"
             aria-label="Close notification drawer"
           >
-            <X className="w-4 h-4 text-black" />
+            <X className="w-4 h-4 text-zinc-700 dark:text-zinc-300" />
           </button>
         </div>
 
         {/* Action Subbar */}
-        <div className="px-4 py-2.5 bg-zinc-50 border-b border-zinc-200 flex items-center justify-between text-xs font-heading font-bold">
+        <div className="px-4 py-2.5 bg-black/[0.01] dark:bg-white/[0.02] border-b border-black/[0.04] dark:border-white/[0.06] flex items-center justify-between text-xs font-semibold">
           <button
             type="button"
             onClick={markAllAsRead}
             disabled={unreadCount === 0}
-            className={`flex items-center gap-1 transition cursor-pointer ${
-              unreadCount > 0 ? "text-zinc-700 hover:text-black" : "text-zinc-400 cursor-not-allowed"
+            className={`flex items-center gap-1 transition cursor-pointer apple-press ${
+              unreadCount > 0 ? "text-zinc-700 dark:text-zinc-300 hover:text-black dark:hover:text-white" : "text-zinc-400 dark:text-zinc-600 cursor-not-allowed"
             }`}
           >
             <CheckCheck className="w-3.5 h-3.5" />
@@ -110,8 +110,8 @@ export function NotificationDrawer() {
             type="button"
             onClick={clearAll}
             disabled={notifications.length === 0}
-            className={`flex items-center gap-1 transition cursor-pointer ${
-              notifications.length > 0 ? "text-zinc-500 hover:text-red-600" : "text-zinc-300 cursor-not-allowed"
+            className={`flex items-center gap-1 transition cursor-pointer apple-press ${
+              notifications.length > 0 ? "text-zinc-500 hover:text-red-600" : "text-zinc-300 dark:text-zinc-700 cursor-not-allowed"
             }`}
           >
             <Trash2 className="w-3.5 h-3.5" />
@@ -123,19 +123,19 @@ export function NotificationDrawer() {
         <div className="flex-1 overflow-y-auto p-4 space-y-3">
           {/* Web Notification Banner */}
           {browserPermission !== "granted" && (
-            <div className="p-3.5 rounded-2xl border-2 border-black bg-cyan-100 shadow-[3px_3px_0_0_#000] flex items-center justify-between gap-3">
+            <div className="p-3.5 rounded-2xl border border-blue-500/30 bg-blue-500/10 flex items-center justify-between gap-3">
               <div className="min-w-0">
-                <span className="font-heading font-black text-xs uppercase block text-black">
+                <span className="font-semibold text-xs uppercase block text-blue-700 dark:text-blue-300">
                   Desktop &amp; Mobile Alerts
                 </span>
-                <p className="text-[11px] text-zinc-700 font-medium leading-tight">
+                <p className="text-[11px] text-zinc-600 dark:text-zinc-400 font-medium leading-tight">
                   Enable device push to get instant cheers &amp; task updates.
                 </p>
               </div>
               <button
                 type="button"
                 onClick={requestBrowserPermission}
-                className="px-3 py-1.5 rounded-xl border-2 border-black bg-black text-white hover:bg-zinc-800 font-heading font-extrabold text-[10px] uppercase shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-blue-600 text-white hover:bg-blue-700 font-semibold text-[10px] uppercase shadow-xs shrink-0 cursor-pointer apple-press"
               >
                 Enable
               </button>
@@ -143,8 +143,8 @@ export function NotificationDrawer() {
           )}
 
           {/* Quick Cheer Box */}
-          <div className="p-3.5 rounded-2xl border-2 border-black bg-white shadow-[3px_3px_0_0_#000]">
-            <span className="font-heading font-extrabold text-xs uppercase block text-black mb-1.5 flex items-center gap-1.5">
+          <div className="p-3.5 rounded-2xl border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.03]">
+            <span className="font-semibold text-xs uppercase block text-zinc-800 dark:text-zinc-200 mb-1.5 flex items-center gap-1.5">
               <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" />
               <span>
                 {spaceMode === "solo"
@@ -166,11 +166,11 @@ export function NotificationDrawer() {
                 }
                 value={cheerMsg}
                 onChange={(e) => setCheerMsg(e.target.value)}
-                className="flex-1 px-3 py-1.5 text-xs font-medium border-2 border-black rounded-xl focus:outline-none focus:ring-1 focus:ring-black bg-[#fafafa]"
+                className="flex-1 px-3 py-1.5 text-xs font-medium border border-black/[0.08] dark:border-white/[0.1] rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500/20 bg-black/[0.02] dark:bg-white/[0.04] text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500"
               />
               <button
                 type="submit"
-                className="px-3 py-1.5 rounded-xl border-2 border-black bg-rose-300 hover:bg-rose-400 text-black font-heading font-extrabold text-xs uppercase shadow-[1.5px_1.5px_0_0_#000] cursor-pointer flex items-center gap-1"
+                className="px-3.5 py-1.5 rounded-xl bg-rose-500 hover:bg-rose-600 text-white font-semibold text-xs uppercase apple-press cursor-pointer flex items-center gap-1 shadow-2xs"
               >
                 {cheerSent ? <Check className="w-3.5 h-3.5" /> : <span>Cheer</span>}
               </button>
@@ -180,13 +180,13 @@ export function NotificationDrawer() {
           {/* Notifications List */}
           {notifications.length === 0 ? (
             <div className="py-12 text-center space-y-2">
-              <div className="w-12 h-12 rounded-2xl bg-zinc-100 border-2 border-dashed border-zinc-400 mx-auto flex items-center justify-center">
+              <div className="w-12 h-12 rounded-2xl bg-black/[0.03] dark:bg-white/[0.05] border border-black/[0.06] dark:border-white/[0.08] mx-auto flex items-center justify-center">
                 <Volume2 className="w-6 h-6 text-zinc-400" />
               </div>
-              <p className="font-heading font-extrabold text-sm uppercase text-black">
+              <p className="font-semibold text-sm uppercase text-zinc-800 dark:text-zinc-200">
                 All Caught Up!
               </p>
-              <p className="text-xs text-zinc-500 font-medium max-w-xs mx-auto">
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium max-w-xs mx-auto">
                 No new notifications right now. Check back when tasks are completed or streaks update.
               </p>
             </div>
@@ -195,29 +195,29 @@ export function NotificationDrawer() {
               <div
                 key={notif.id}
                 onClick={() => markAsRead(notif.id)}
-                className={`p-3.5 rounded-2xl border-2 border-black transition cursor-pointer relative ${
+                className={`p-3.5 rounded-2xl border transition cursor-pointer relative ${
                   notif.read
-                    ? "bg-[#fafafa] shadow-[2px_2px_0_0_#000]"
-                    : "bg-white shadow-[4px_4px_0_0_#000] ring-1 ring-black"
+                    ? "bg-black/[0.01] dark:bg-white/[0.02] border-black/[0.04] dark:border-white/[0.06]"
+                    : "bg-white/80 dark:bg-zinc-800/80 border-black/[0.08] dark:border-white/[0.1] shadow-xs"
                 }`}
               >
                 {!notif.read && (
-                  <span className="absolute top-3 right-3 w-2 h-2 rounded-full bg-emerald-500 border border-black" />
+                  <span className="absolute top-3 right-3 w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.6)]" />
                 )}
                 <div className="flex items-start gap-2.5">
-                  <div className="p-1.5 rounded-xl border border-black bg-zinc-100 shrink-0 mt-0.5">
+                  <div className="p-1.5 rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.03] dark:bg-white/[0.05] shrink-0 mt-0.5">
                     {getIconForType(notif.type)}
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center justify-between gap-2 pr-3">
-                      <h3 className="font-heading font-extrabold text-xs uppercase text-black truncate">
+                      <h3 className="font-semibold text-xs text-zinc-900 dark:text-zinc-100 truncate">
                         {notif.title}
                       </h3>
                     </div>
-                    <p className="text-xs text-zinc-600 font-medium mt-0.5 leading-snug">
+                    <p className="text-xs text-zinc-600 dark:text-zinc-400 font-medium mt-0.5 leading-snug">
                       {notif.message}
                     </p>
-                    <span className="text-[10px] text-zinc-400 font-mono font-bold mt-1.5 block">
+                    <span className="text-[10px] text-zinc-400 font-mono mt-1.5 block">
                       {notif.timestamp}
                     </span>
                   </div>
@@ -228,11 +228,11 @@ export function NotificationDrawer() {
         </div>
 
         {/* Drawer Footer */}
-        <div className="p-3 border-t-2 border-black bg-zinc-50 text-center">
+        <div className="p-3 border-t border-black/[0.05] dark:border-white/[0.06] bg-black/[0.02] dark:bg-white/[0.03] text-center">
           <button
             type="button"
             onClick={() => setIsDrawerOpen(false)}
-            className="w-full py-2.5 px-4 rounded-xl border-2 border-black bg-black text-white hover:bg-zinc-800 font-heading font-extrabold text-xs uppercase transition shadow-[2px_2px_0_0_#000] cursor-pointer"
+            className="w-full py-2.5 px-4 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:opacity-90 font-semibold text-xs uppercase transition apple-press shadow-2xs cursor-pointer"
           >
             Close Notifications
           </button>

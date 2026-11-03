@@ -27,14 +27,14 @@ export function EmojiCelebration({
   if (!visible) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 animate-bounce pointer-events-none">
-      <div className="bg-black text-white border-2 border-black rounded-2xl px-4 py-2.5 shadow-[4px_4px_0_0_#fff] flex items-center gap-2.5">
+    <div className="fixed bottom-6 right-6 z-50 pointer-events-none animate-in fade-in slide-in-from-bottom-2 duration-300">
+      <div className="apple-card bg-zinc-900/90 dark:bg-zinc-800/90 text-white border border-white/10 rounded-2xl px-4 py-2.5 shadow-[0_8px_32px_rgba(0,0,0,0.36)] flex items-center gap-2.5 backdrop-blur-2xl">
         {type === "perfect" ? (
-          <Flame className="w-5 h-5 text-white animate-pulse" />
+          <Flame className="w-4 h-4 text-amber-400 animate-pulse" />
         ) : (
-          <Sparkles className="w-4 h-4 text-white" />
+          <Sparkles className="w-4 h-4 text-emerald-400" />
         )}
-        <span className="font-heading font-extrabold text-xs uppercase tracking-wide">
+        <span className="font-semibold text-xs tracking-tight">
           {message}
         </span>
       </div>

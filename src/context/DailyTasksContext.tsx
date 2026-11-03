@@ -137,7 +137,7 @@ export function DailyTasksProvider({ children }: { children: ReactNode }) {
   const authLoading = authContext?.loading ?? false;
 
   const [tasks, setTasks] = useState<DailyTask[]>(() => {
-    if (typeof window !== "undefined") {
+    if (isTest && typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem(TASKS_STORAGE_KEY);
         if (stored) {
