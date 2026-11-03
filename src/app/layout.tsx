@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { ThemeProvider } from "@/context/ThemeContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { HouseholdProvider } from "@/context/HouseholdContext";
 import { NotificationProvider } from "@/context/NotificationContext";
@@ -38,6 +39,21 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                var theme = localStorage.getItem('couple_task_hub_theme');
+                var isDark = theme === 'dark' || (!theme || theme === 'system') && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (isDark) {
+                  document.documentElement.classList.add('dark');
+                } else {
+                  document.documentElement.classList.remove('dark');
+                }
+              } catch (_) {}
+            `,
+          }}
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
@@ -58,24 +74,26 @@ export default function RootLayout({
           />
         )}
       </head>
-      <body className="antialiased selection:bg-black selection:text-white">
-        <AuthProvider>
-          <HouseholdProvider>
-            <FocusTimerProvider>
-              <NotificationProvider>
-                <RoutinesProvider>
-                  <DailyTasksProvider>
-                    <KanbanProvider>
-                      <PWARegistration />
-                      {children}
-                      <Analytics />
-                    </KanbanProvider>
-                  </DailyTasksProvider>
-                </RoutinesProvider>
-              </NotificationProvider>
-            </FocusTimerProvider>
-          </HouseholdProvider>
-        </AuthProvider>
+      <body className="antialiased selection:bg-zinc-800 selection:text-white bg-background text-foreground transition-colors duration-300">
+        <ThemeProvider>
+          <AuthProvider>
+            <HouseholdProvider>
+              <FocusTimerProvider>
+                <NotificationProvider>
+                  <RoutinesProvider>
+                    <DailyTasksProvider>
+                      <KanbanProvider>
+                        <PWARegistration />
+                        {children}
+                        <Analytics />
+                      </KanbanProvider>
+                    </DailyTasksProvider>
+                  </RoutinesProvider>
+                </NotificationProvider>
+              </FocusTimerProvider>
+            </HouseholdProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

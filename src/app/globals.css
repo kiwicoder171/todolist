@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --background: #fbfbfb;
+  --background: #f8f9fa;
   --foreground: #18181b;
   --surface-card: #ffffff;
-  --surface-subtle: #f4f4f5;
+  --surface-subtle: #f1f3f5;
   --border-subtle: #e4e4e7;
   --border-hairline: rgba(0, 0, 0, 0.08);
   --accent-focus: #18181b;
@@ -22,6 +22,8 @@
   --border-subtle: #27272a;
   --border-hairline: rgba(255, 255, 255, 0.08);
   --accent-focus: #f4f4f5;
+  --accent-amber: #fbbf24;
+  --accent-emerald: #34d399;
 }
 
 html, body {

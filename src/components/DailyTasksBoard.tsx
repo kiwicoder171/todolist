@@ -67,35 +67,35 @@ export function DailyTasksBoard() {
   };
 
   return (
-    <div className="bg-white border-2 border-black rounded-3xl p-5 shadow-[4px_4px_0_0_#000] flex flex-col flex-1 relative">
+    <div className="bg-white dark:bg-[#121215] border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-4 sm:p-5 shadow-xs flex flex-col flex-1 relative transition-colors duration-200">
       {celebrationMsg && (
-        <div className="absolute top-2 right-4 z-20 px-3 py-1 bg-black text-white text-[11px] font-heading font-extrabold rounded-full animate-bounce border border-white">
+        <div className="absolute top-2 right-4 z-20 px-3 py-1 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-950 text-[11px] font-semibold rounded-full animate-bounce shadow-md">
           {celebrationMsg}
         </div>
       )}
       {/* Header */}
-      <div className="flex items-center justify-between pb-3.5 border-b-2 border-black mb-3">
+      <div className="flex items-center justify-between pb-3.5 border-b border-zinc-100 dark:border-zinc-800 mb-3">
         <div className="flex items-center gap-2.5">
-          <div className="w-6 h-6 rounded-lg bg-black text-white flex items-center justify-center font-heading font-bold text-xs">
+          <div className="w-6 h-6 rounded-lg bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-950 flex items-center justify-center font-bold text-xs">
             2
           </div>
-          <h2 className="font-heading font-black text-sm uppercase tracking-wide text-black">
+          <h2 className="font-semibold text-sm tracking-wide text-zinc-900 dark:text-zinc-100">
             Daily Tasks
           </h2>
         </div>
-        <span className="text-[10px] font-heading font-bold uppercase px-2 py-0.5 rounded-full border border-black bg-black text-white">
+        <span className="text-[10px] font-medium uppercase px-2 py-0.5 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 text-zinc-500">
           Immediate
         </span>
       </div>
 
-      <p className="text-xs text-zinc-500 mb-3 leading-relaxed">
+      <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-3 leading-relaxed">
         Urgent to-dos &amp; uncompleted tasks automatically rolled over from past days.
       </p>
 
       {/* Task List Container */}
       <div className="space-y-2.5 flex-1 overflow-y-auto pt-1.5 pb-1 pr-1 min-h-[220px]">
         {visibleTasks.length === 0 ? (
-          <div className="h-28 border-2 border-dashed border-zinc-200 rounded-2xl flex items-center justify-center text-xs text-zinc-400 font-heading">
+          <div className="h-28 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-2xl flex items-center justify-center text-xs text-zinc-400">
             No daily tasks for this day
           </div>
         ) : (
@@ -108,7 +108,7 @@ export function DailyTasksBoard() {
                 tabIndex={0}
                 role="button"
                 aria-label={`View details for ${t.title}`}
-                className="flex items-start justify-between p-3 rounded-2xl border-2 border-black bg-white squircle-card cursor-pointer group transition focus:outline-none focus:ring-2 focus:ring-black"
+                className="flex items-start justify-between p-3 rounded-xl border border-zinc-200 dark:border-zinc-800/80 bg-zinc-50/60 dark:bg-zinc-900/40 hover:bg-zinc-50 dark:hover:bg-zinc-900 cursor-pointer group transition focus:outline-none"
                 onClick={() => setSelectedTaskForDrawer(t)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" || e.key === " ") {
@@ -124,19 +124,19 @@ export function DailyTasksBoard() {
                       handleToggle(t.id, t.completed);
                     }}
                     aria-label={`Toggle ${t.title}`}
-                    className={`mt-0.5 w-6 h-6 rounded-lg border-2 border-black flex items-center justify-center transition-all ${
+                    className={`mt-0.5 w-5 h-5 rounded-md border flex items-center justify-center transition-all ${
                       t.completed
-                        ? "bg-black text-white"
-                        : "bg-white hover:bg-zinc-100 text-transparent"
+                        ? "bg-zinc-900 dark:bg-zinc-100 border-zinc-900 dark:border-zinc-100 text-white dark:text-zinc-950"
+                        : "border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 hover:border-zinc-500 text-transparent"
                     }`}
                   >
-                    <Check className="w-3.5 h-3.5 stroke-[3]" />
+                    <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                   </button>
 
                   <div className="flex flex-col gap-1 min-w-0">
                     <span
-                      className={`text-xs font-bold ink-strikethrough ${
-                        t.completed ? "done" : "text-black"
+                      className={`text-xs font-semibold ink-strikethrough ${
+                        t.completed ? "done" : "text-zinc-900 dark:text-zinc-100"
                       } truncate`}
                     >
                       {t.title}
@@ -144,14 +144,14 @@ export function DailyTasksBoard() {
 
                     <div className="flex items-center gap-1.5 flex-wrap">
                       {isRolledOver && (
-                        <span className="text-[9px] font-heading font-extrabold uppercase bg-black text-white px-1.5 py-0.5 rounded-full flex items-center gap-1">
+                        <span className="text-[9px] font-medium uppercase bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 px-1.5 py-0.5 rounded-full flex items-center gap-1">
                           <CornerDownRight className="w-2.5 h-2.5" />
                           <span>Rolled from {t.originDate}</span>
                         </span>
                       )}
 
                       {t.isKanbanSynced && (
-                        <span className="text-[9px] font-heading font-bold uppercase border border-black bg-zinc-100 text-black px-1.5 py-0.5 rounded-full">
+                        <span className="text-[9px] font-medium uppercase border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-850 text-zinc-600 dark:text-zinc-400 px-1.5 py-0.5 rounded-full">
                           Kanban
                         </span>
                       )}

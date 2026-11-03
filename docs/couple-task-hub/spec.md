@@ -141,6 +141,9 @@ Inspired by Yeolpumta (YPT), Phase 2 expands Couple Task Hub into an intimate, s
 - **Ticket 18**: Daily Focus Goal Gamification & Bonus Point (`18-daily-focus-goal-bonus-gamification.md`)
 - **Ticket 19**: On-the-Fly Pomodoro Duration & Mode Switcher (`19-pomodoro-duration-mode-switcher.md`)
 - **Ticket 20**: Audio Volume Feedback & Chime Preview (`20-audio-volume-chime-preview.md`)
+- **Ticket 21**: System-Aware Cure Minimalist Theme Engine (Light & Dark) (`21-theme-engine-system-light-dark.md`)
+- **Ticket 22**: Header & Global Navigation Cure Minimalist Refactor (`22-header-and-filter-cure-redesign.md`)
+- **Ticket 23**: Boards & Kanban Cure Minimalist Harmonization (`23-boards-kanban-cure-harmonization.md`)
 
 ## Further Notes
 - Default categories for the Kanban Board: "Home", "Travel", "Groceries", "Wishlist".

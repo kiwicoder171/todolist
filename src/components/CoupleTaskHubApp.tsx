@@ -61,7 +61,7 @@ export function CoupleTaskHubApp({ forcedIsMobile, initialMobileTab }: CoupleTas
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#fafafa] text-[#18181b] overflow-x-hidden max-w-full">
+    <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-300 overflow-x-hidden max-w-full">
       <Header
         dashboardFocus={dashboardFocus}
         onDashboardFocusChange={(focus) => {

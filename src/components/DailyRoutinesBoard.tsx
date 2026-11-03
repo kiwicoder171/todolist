@@ -198,25 +198,25 @@ export function DailyRoutinesBoard() {
   };
 
   return (
-    <div className="bg-white border-2 border-black rounded-3xl p-5 shadow-[4px_4px_0_0_#000] flex flex-col flex-1 relative">
+    <div className="bg-white dark:bg-[#121215] border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-4 sm:p-5 shadow-xs flex flex-col flex-1 relative transition-colors duration-200">
       {celebrationMsg && (
-        <div className="absolute top-2 right-4 z-20 px-3 py-1 bg-black text-white text-[11px] font-heading font-extrabold rounded-full animate-bounce border border-white">
+        <div className="absolute top-2 right-4 z-20 px-3 py-1 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-950 text-[11px] font-semibold rounded-full animate-bounce shadow-md">
           {celebrationMsg}
         </div>
       )}
 
       {/* Header */}
-      <div className="flex items-center justify-between pb-3.5 border-b-2 border-black mb-3 gap-2">
+      <div className="flex items-center justify-between pb-3.5 border-b border-zinc-100 dark:border-zinc-800 mb-3 gap-2">
         <div className="flex items-center gap-2.5">
-          <div className="w-6 h-6 rounded-lg bg-black text-white flex items-center justify-center font-heading font-bold text-xs shrink-0">
+          <div className="w-6 h-6 rounded-lg bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-950 flex items-center justify-center font-bold text-xs shrink-0">
             1
           </div>
-          <h2 className="font-heading font-black text-sm uppercase tracking-wide text-black">
+          <h2 className="font-semibold text-sm tracking-wide text-zinc-900 dark:text-zinc-100">
             Daily Routines
           </h2>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-[10px] font-heading font-bold uppercase px-2 py-0.5 rounded-full border border-black bg-zinc-100 hidden sm:inline-block">
+          <span className="text-[10px] font-medium uppercase px-2 py-0.5 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 text-zinc-500 hidden sm:inline-block">
             Recurring
           </span>
           <button
@@ -225,7 +225,7 @@ export function DailyRoutinesBoard() {
               setModalInitialTitle(newTitle);
               setIsModalOpen(true);
             }}
-            className="px-2.5 py-1 bg-black text-white hover:bg-zinc-800 rounded-full font-heading font-extrabold text-[10px] uppercase flex items-center gap-1 transition shadow-xs"
+            className="px-2.5 py-1 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-950 hover:opacity-85 rounded-full font-medium text-[10px] flex items-center gap-1 transition shadow-xs"
           >
             <Plus className="w-3 h-3" />
             <span>Add Routine</span>
@@ -234,42 +234,42 @@ export function DailyRoutinesBoard() {
       </div>
 
       {isBothHouseholdPerfect ? (
-        <div className="mb-3 p-2.5 rounded-2xl border-2 border-black bg-black text-white flex items-center justify-between text-xs font-heading font-extrabold shadow-[2px_2px_0_0_#000]">
+        <div className="mb-3 p-2.5 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-900 dark:text-emerald-200 flex items-center justify-between text-xs font-semibold">
           <div className="flex items-center gap-2">
             <span>🎉</span>
-            <span>100% HOUSEHOLD ROUTINES DONE! PERFECT DAY FOR BOTH (+1 PT EACH)</span>
+            <span>100% HOUSEHOLD ROUTINES DONE! PERFECT DAY (+1 PT EACH)</span>
           </div>
-          <span className="text-[10px] px-2 py-0.5 rounded-full border border-white bg-white/20">
+          <span className="text-[10px] px-2 py-0.5 rounded-full border border-emerald-500/40 bg-emerald-500/20 text-emerald-700 dark:text-emerald-300">
             Streak Active
           </span>
         </div>
       ) : isMyDayPerfect ? (
-        <div className="mb-3 p-2.5 rounded-2xl border-2 border-black bg-emerald-600 text-white flex items-center justify-between text-xs font-heading font-extrabold shadow-[2px_2px_0_0_#000]">
+        <div className="mb-3 p-2.5 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-900 dark:text-emerald-200 flex items-center justify-between text-xs font-semibold">
           <div className="flex items-center gap-2">
             <span>🔥</span>
             <span>ALL YOUR ROUTINES DONE! PERFECT DAY (+1 PT)</span>
           </div>
-          <span className="text-[10px] px-2 py-0.5 rounded-full border border-white bg-white/20">
+          <span className="text-[10px] px-2 py-0.5 rounded-full border border-emerald-500/40 bg-emerald-500/20 text-emerald-700 dark:text-emerald-300">
             Streak Active
           </span>
         </div>
       ) : missStatus.consecutiveMisses >= 2 ? (
-        <div className="mb-3 p-2.5 rounded-2xl border-2 border-black bg-rose-50 text-rose-800 flex items-center justify-between text-xs font-heading font-extrabold shadow-[2px_2px_0_0_#000]">
+        <div className="mb-3 p-2.5 rounded-2xl border border-rose-500/30 bg-rose-50 dark:bg-rose-950/20 text-rose-800 dark:text-rose-300 flex items-center justify-between text-xs font-semibold">
           <div className="flex items-center gap-2">
             <span>⚠️</span>
             <span>
               {missStatus.consecutiveMisses} DAYS MISSED ({missStatus.totalPenalty} PT PENALTY APPLIED)
             </span>
           </div>
-          <span className="text-[10px] px-2 py-0.5 rounded-full border border-rose-600 bg-rose-100 text-rose-700 font-bold">
+          <span className="text-[10px] px-2 py-0.5 rounded-full border border-rose-300 dark:border-rose-800 bg-rose-100 dark:bg-rose-900/40 text-rose-700 dark:text-rose-300 font-bold">
             Complete Today to Recover
           </span>
         </div>
       ) : null}
 
-      <p className="text-xs text-zinc-500 mb-3 leading-relaxed">
+      <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-3 leading-relaxed">
         Apple Notes style. Press{" "}
-        <kbd className="px-1.5 py-0.5 bg-zinc-100 border border-zinc-300 rounded font-mono text-[10px] text-black">
+        <kbd className="px-1.5 py-0.5 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded font-mono text-[10px] text-zinc-700 dark:text-zinc-300">
           Enter
         </kbd>{" "}
         to add new routine.
@@ -278,7 +278,7 @@ export function DailyRoutinesBoard() {
       {/* Routine Items Container */}
       <div className="space-y-2 flex-1 overflow-y-auto pt-1.5 pb-1 pr-1 min-h-[220px]">
         {visibleRoutines.length === 0 ? (
-          <div className="h-28 border-2 border-dashed border-zinc-200 rounded-2xl flex items-center justify-center text-xs text-zinc-400 font-heading">
+          <div className="h-28 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-2xl flex items-center justify-center text-xs text-zinc-400">
             No routines scheduled for this day
           </div>
         ) : (
@@ -288,24 +288,24 @@ export function DailyRoutinesBoard() {
             return (
               <div
                 key={r.id}
-                className="flex items-center justify-between p-2.5 rounded-2xl border-2 border-black bg-white squircle-card group transition"
+                className="flex items-center justify-between p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800/80 bg-zinc-50/60 dark:bg-zinc-900/40 hover:bg-zinc-50 dark:hover:bg-zinc-900 group transition"
               >
                 <div className="flex items-center gap-3 flex-1 min-w-0 mr-2">
                   <button
                     onClick={() => handleToggle(r.id)}
                     aria-label={`Toggle ${r.title}`}
-                    className={`w-6 h-6 rounded-lg border-2 border-black flex items-center justify-center transition-all ${
+                    className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all ${
                       completed
-                        ? "bg-black text-white"
-                        : "bg-white hover:bg-zinc-100 text-transparent"
+                        ? "bg-zinc-900 dark:bg-zinc-100 border-zinc-900 dark:border-zinc-100 text-white dark:text-zinc-950"
+                        : "border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 hover:border-zinc-500 text-transparent"
                     }`}
                   >
-                    <Check className="w-3.5 h-3.5 stroke-[3]" />
+                    <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                   </button>
 
                   <span
-                    className={`text-xs font-semibold ink-strikethrough ${
-                      completed ? "done" : "text-black"
+                    className={`text-xs font-medium ink-strikethrough ${
+                      completed ? "done" : "text-zinc-900 dark:text-zinc-100"
                     } truncate`}
                   >
                     {r.title}
@@ -313,15 +313,15 @@ export function DailyRoutinesBoard() {
                 </div>
 
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[10px] font-heading font-bold text-zinc-400">
+                  <span className="text-[10px] text-zinc-400 font-mono">
                     {formatFrequencyLabel(r.frequency)}
                   </span>
 
                   <span
-                    className={`text-[9px] font-heading font-extrabold uppercase px-1.5 py-0.5 rounded ${
+                    className={`text-[9px] font-medium uppercase px-1.5 py-0.5 rounded ${
                       r.assignee === "both"
-                        ? "bg-black text-white"
-                        : "border border-black bg-[#f4f4f5] text-black"
+                        ? "bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-950"
+                        : "border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-850 text-zinc-700 dark:text-zinc-300"
                     }`}
                   >
                     {getAssigneeLabel(r.assignee, activePartner, partnerNames)}
@@ -334,7 +334,7 @@ export function DailyRoutinesBoard() {
                       disabled={idx === 0}
                       title="Move Up"
                       aria-label="Move routine up"
-                      className="p-1 hover:bg-zinc-100 rounded text-zinc-500 disabled:opacity-30 focus:outline-none focus:ring-1 focus:ring-black"
+                      className="p-1 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded text-zinc-400 disabled:opacity-30 focus:outline-none"
                     >
                       <ArrowUp className="w-3 h-3" />
                     </button>
@@ -343,7 +343,7 @@ export function DailyRoutinesBoard() {
                       disabled={idx === visibleRoutines.length - 1}
                       title="Move Down"
                       aria-label="Move routine down"
-                      className="p-1 hover:bg-zinc-100 rounded text-zinc-500 disabled:opacity-30 focus:outline-none focus:ring-1 focus:ring-black"
+                      className="p-1 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded text-zinc-400 disabled:opacity-30 focus:outline-none"
                     >
                       <ArrowDown className="w-3 h-3" />
                     </button>
@@ -352,7 +352,7 @@ export function DailyRoutinesBoard() {
                       onClick={() => startFocus({ id: r.id, title: r.title, type: "routine" })}
                       title="Focus on this routine"
                       aria-label="Start Focus"
-                      className="p-1 hover:text-emerald-600 text-zinc-400 rounded transition focus:outline-none focus:ring-1 focus:ring-black"
+                      className="p-1 hover:text-emerald-500 text-zinc-400 rounded transition focus:outline-none"
                     >
                       <Play className="w-3 h-3 fill-current" />
                     </button>
@@ -360,7 +360,7 @@ export function DailyRoutinesBoard() {
                       onClick={() => deleteRoutine(r.id)}
                       title="Delete Routine"
                       aria-label="Delete routine"
-                      className="p-1 hover:text-black text-zinc-400 rounded transition focus:outline-none focus:ring-1 focus:ring-black"
+                      className="p-1 hover:text-rose-500 text-zinc-400 rounded transition focus:outline-none"
                     >
                       <X className="w-3 h-3" />
                     </button>

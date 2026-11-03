@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useHousehold, Partner } from "@/context/HouseholdContext";
 import { useAuth } from "@/context/AuthContext";
 import { useNotifications } from "@/context/NotificationContext";
+import { useTheme } from "@/context/ThemeContext";
 import {
   Flame,
   Users,
@@ -14,6 +15,9 @@ import {
   BookOpen,
   Bell,
   Smartphone,
+  Sun,
+  Moon,
+  Laptop,
 } from "lucide-react";
 import { CircleInviteModal } from "./CircleInviteModal";
 import { NotificationDrawer } from "./NotificationDrawer";
@@ -45,35 +49,36 @@ export function Header({
   } = useHousehold();
   const { user, logout, openAuthModal } = useAuth();
   const { unreadCount, setIsDrawerOpen } = useNotifications();
+  const { theme, resolvedTheme, setTheme, toggleTheme } = useTheme();
   const [isInviteOpen, setIsInviteOpen] = useState(false);
   const [isWidgetOpen, setIsWidgetOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const currentScore = scores[activePartner] || { points: 0, streak: 0 };
 
   const spaceModeConfig = {
-    solo: { label: "Solo", icon: "🧍", bg: "bg-[#FEF08A]" },
-    partner: { label: "Duo", icon: "💕", bg: "bg-[#FBCFE8]" },
-    friends: { label: "Friends", icon: "🧑‍🤝‍🧑", bg: "bg-[#BAE6FD]" },
-    family: { label: "Family", icon: "🏡", bg: "bg-[#A7F3D0]" },
+    solo: { label: "Solo", icon: "🧍", bg: "bg-amber-100 dark:bg-amber-950/40 text-amber-900 dark:text-amber-300 border-amber-300 dark:border-amber-800" },
+    partner: { label: "Duo", icon: "💕", bg: "bg-rose-100 dark:bg-rose-950/40 text-rose-900 dark:text-rose-300 border-rose-300 dark:border-rose-800" },
+    friends: { label: "Friends", icon: "🧑‍🤝‍🧑", bg: "bg-sky-100 dark:bg-sky-950/40 text-sky-900 dark:text-sky-300 border-sky-300 dark:border-sky-800" },
+    family: { label: "Family", icon: "🏡", bg: "bg-emerald-100 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800" },
   };
   const modeInfo = spaceModeConfig[spaceMode || "partner"];
 
   return (
     <>
-      <header className="border-b-2 border-black bg-white sticky top-0 z-40 shadow-[0_2px_0_0_rgba(0,0,0,0.05)] w-full max-w-full overflow-x-clip">
+      <header className="border-b border-zinc-200 dark:border-zinc-800/80 bg-white/80 dark:bg-[#0c0c0e]/80 backdrop-blur-md sticky top-0 z-40 transition-colors duration-200 w-full max-w-full overflow-x-clip">
         {/* Tier 1: Brand Identity & Global Actions Dock */}
-        <div className="px-3 sm:px-5 py-2 sm:py-2.5 flex items-center justify-between gap-2 sm:gap-3 border-b border-zinc-100">
+        <div className="px-3 sm:px-5 py-2 sm:py-2.5 flex items-center justify-between gap-2 sm:gap-3 border-b border-zinc-100 dark:border-zinc-850">
           {/* Brand & Space Mode */}
           <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-2xl bg-black text-white flex items-center justify-center border-2 border-black shadow-[2px_2px_0_0_#000] p-1.5 transition-transform hover:scale-105 shrink-0">
-              <Logo size={20} inverted />
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-950 flex items-center justify-center p-1.5 transition-transform hover:scale-105 shrink-0 shadow-sm">
+              <Logo size={18} inverted={resolvedTheme !== "dark"} />
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-1.5 flex-nowrap">
-                <h1 className="font-heading font-extrabold text-xs sm:text-base tracking-tight text-black uppercase truncate">
+                <h1 className="font-semibold text-xs sm:text-sm tracking-tight text-zinc-900 dark:text-zinc-100 truncate">
                   Couple Task Hub
                 </h1>
-                <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full border border-black bg-[#f4f4f5] text-black shrink-0">
+                <span className="text-[9px] sm:text-[10px] font-mono px-1.5 py-0.5 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 shrink-0">
                   v0.6.1
                 </span>
                 <button
@@ -82,7 +87,7 @@ export function Header({
                     if (circle) setIsInviteOpen(true);
                     else if (user) setIsOnboardingOpen(true);
                   }}
-                  className={`hidden sm:inline-flex text-[9px] sm:text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full border border-black ${modeInfo.bg} text-black shrink-0 cursor-pointer shadow-xs hover:opacity-85 transition`}
+                  className={`hidden sm:inline-flex text-[9px] sm:text-[10px] font-semibold px-2 py-0.5 rounded-full border ${modeInfo.bg} shrink-0 cursor-pointer hover:opacity-80 transition`}
                   title="Active Space Mode (Click to Change)"
                 >
                   {modeInfo.icon} {modeInfo.label}
@@ -90,7 +95,7 @@ export function Header({
               </div>
               <p
                 suppressHydrationWarning
-                className="text-[10px] sm:text-xs text-zinc-500 font-medium truncate max-w-[140px] sm:max-w-xs"
+                className="text-[10px] sm:text-xs text-zinc-400 dark:text-zinc-500 font-normal truncate max-w-[140px] sm:max-w-xs"
               >
                 {circle
                   ? circle.name ||
@@ -106,34 +111,50 @@ export function Header({
             </div>
           </div>
 
-          {/* Quick Action Dock (Alerts, Widgets, Circle, Docs, Profile) */}
+          {/* Quick Action Dock (Alerts, Widgets, Circle, Docs, Theme Switcher, Profile) */}
           <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
+            {/* Theme Toggle Button */}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="p-1.5 sm:px-2.5 sm:py-1 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/80 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 transition text-xs font-medium flex items-center gap-1 shrink-0"
+              title={`Switch Theme (Current: ${theme})`}
+              aria-label="Toggle Color Theme"
+            >
+              {resolvedTheme === "dark" ? (
+                <Sun className="w-3.5 h-3.5 text-amber-400" />
+              ) : (
+                <Moon className="w-3.5 h-3.5 text-zinc-600" />
+              )}
+              <span className="hidden md:inline text-[11px] capitalize">{theme}</span>
+            </button>
+
             {/* Notification Bell */}
             <button
               type="button"
               onClick={() => setIsDrawerOpen(true)}
-              className="relative p-1.5 sm:px-2.5 sm:py-1 rounded-full border-2 border-black bg-white hover:bg-zinc-100 transition text-xs font-heading font-extrabold flex items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer active:translate-x-0.5 active:translate-y-0.5"
+              className="relative p-1.5 sm:px-2.5 sm:py-1 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/80 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 transition text-xs font-medium flex items-center gap-1 shrink-0"
               title="Notifications & Cheers"
               aria-label="Open notifications"
             >
-              <Bell className="w-3.5 h-3.5 text-black" />
+              <Bell className="w-3.5 h-3.5" />
               <span className="hidden md:inline text-[11px]">Alerts</span>
               {unreadCount > 0 && (
-                <span className="min-w-[16px] h-[16px] px-0.5 rounded-full bg-rose-500 text-white text-[9px] font-black flex items-center justify-center border border-black shadow-xs">
+                <span className="min-w-[16px] h-[16px] px-0.5 rounded-full bg-rose-500 text-white text-[9px] font-bold flex items-center justify-center">
                   {unreadCount > 9 ? "9+" : unreadCount}
                 </span>
               )}
             </button>
 
-            {/* Widgets Preview - Desktop only to preserve mobile header space */}
+            {/* Widgets Preview */}
             <button
               type="button"
               onClick={() => setIsWidgetOpen(true)}
-              className="hidden sm:flex p-1.5 sm:px-2.5 sm:py-1 rounded-full border-2 border-black bg-white hover:bg-zinc-100 transition text-xs font-heading font-extrabold items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer active:translate-x-0.5 active:translate-y-0.5"
+              className="hidden sm:flex p-1.5 sm:px-2.5 sm:py-1 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/80 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 transition text-xs font-medium items-center gap-1 shrink-0"
               title="Home Screen Widgets"
               aria-label="Open widgets"
             >
-              <Smartphone className="w-3.5 h-3.5 text-black" />
+              <Smartphone className="w-3.5 h-3.5" />
               <span className="hidden md:inline text-[11px]">Widgets</span>
             </button>
 
@@ -142,12 +163,12 @@ export function Header({
               <button
                 type="button"
                 onClick={() => setIsInviteOpen(true)}
-                className="p-1.5 sm:px-2.5 sm:py-1 rounded-full border-2 border-black bg-zinc-100 hover:bg-black hover:text-white transition text-xs font-heading font-extrabold flex items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer max-w-[85px] sm:max-w-none"
+                className="p-1.5 sm:px-2.5 sm:py-1 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-850 hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-900 dark:text-zinc-100 transition text-xs font-medium flex items-center gap-1 shrink-0 max-w-[85px] sm:max-w-none"
                 title="Circle Details & Invite Members"
                 aria-label="Circle Details"
               >
                 <Users className="w-3.5 h-3.5 shrink-0" />
-                <span className="text-[10px] sm:text-[11px] font-black truncate">{circle.joinCode || "Invite"}</span>
+                <span className="text-[10px] sm:text-[11px] font-mono truncate">{circle.joinCode || "Invite"}</span>
               </button>
             ) : (
               <button
@@ -159,19 +180,19 @@ export function Header({
                     setIsOnboardingOpen(true);
                   }
                 }}
-                className="px-2 sm:px-2.5 py-1 rounded-full border-2 border-black bg-white hover:bg-zinc-100 transition text-xs font-heading font-extrabold flex items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer text-zinc-900"
+                className="px-2 sm:px-2.5 py-1 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition text-xs font-medium flex items-center gap-1 shrink-0 text-zinc-800 dark:text-zinc-200"
                 title={user ? "Join or Create a Space" : "Sign up or Log in to create or join a circle"}
                 aria-label="Join Circle"
               >
-                <Users className="w-3.5 h-3.5 text-zinc-600 shrink-0" />
-                <span className="text-[10px] sm:text-[11px] font-black">Join</span>
+                <Users className="w-3.5 h-3.5 text-zinc-500 shrink-0" />
+                <span className="text-[10px] sm:text-[11px] font-medium">Join</span>
               </button>
             )}
 
             {/* Docs & Changelog - Desktop only */}
             <Link
               href="/docs"
-              className="hidden sm:flex p-1.5 sm:px-2.5 sm:py-1 rounded-full border-2 border-black bg-white hover:bg-black hover:text-white transition text-xs font-heading font-extrabold items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer active:translate-x-0.5 active:translate-y-0.5"
+              className="hidden sm:flex p-1.5 sm:px-2.5 sm:py-1 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/80 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 transition text-xs font-medium items-center gap-1 shrink-0"
               title="Documentation & Guide"
               aria-label="Documentation"
             >
@@ -181,15 +202,15 @@ export function Header({
 
             {/* Account Profile or Log In */}
             {user ? (
-              <div className="flex items-center gap-1 bg-[#f4f4f5] px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full border border-zinc-300 text-xs shrink-0 font-heading shadow-xs">
+              <div className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-900 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full border border-zinc-200 dark:border-zinc-800 text-xs shrink-0">
                 <button
                   type="button"
                   onClick={() => setIsProfileOpen(true)}
-                  className="flex items-center gap-1 hover:text-amber-600 transition cursor-pointer"
+                  className="flex items-center gap-1 hover:text-amber-500 transition cursor-pointer"
                   title="Edit your username & circle display name"
                 >
-                  <UserIcon className="w-3 h-3 text-zinc-700 shrink-0" />
-                  <span className="font-extrabold text-black max-w-[55px] sm:max-w-[90px] truncate text-[10px] sm:text-[11px]">
+                  <UserIcon className="w-3 h-3 text-zinc-500 shrink-0" />
+                  <span className="font-medium text-zinc-900 dark:text-zinc-100 max-w-[55px] sm:max-w-[90px] truncate text-[10px] sm:text-[11px]">
                     @{user.username}
                   </span>
                 </button>
@@ -197,7 +218,7 @@ export function Header({
                   type="button"
                   onClick={() => logout()}
                   title="Sign out of account"
-                  className="text-zinc-400 hover:text-red-600 transition ml-0.5 cursor-pointer"
+                  className="text-zinc-400 hover:text-rose-500 transition ml-0.5 cursor-pointer"
                   aria-label="Sign out"
                 >
                   <LogOut className="w-3 h-3" />
@@ -207,7 +228,7 @@ export function Header({
               <button
                 type="button"
                 onClick={() => openAuthModal("login")}
-                className="px-2 sm:px-2.5 py-1 rounded-full border-2 border-black bg-amber-300 hover:bg-amber-400 text-black text-xs font-heading font-extrabold flex items-center gap-1 shadow-[1.5px_1.5px_0_0_#000] shrink-0 cursor-pointer transition active:translate-x-0.5 active:translate-y-0.5"
+                className="px-2.5 sm:px-3 py-1 rounded-full border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-800 dark:text-amber-300 text-xs font-medium flex items-center gap-1 shrink-0 cursor-pointer transition"
                 title="Sign In or Register"
                 aria-label="Log In"
               >
@@ -219,39 +240,39 @@ export function Header({
         </div>
 
         {/* Tier 2: Workspace View & Context Controls Bar */}
-        <div className="px-2.5 sm:px-5 py-1.5 bg-[#fafafa] flex items-center justify-between gap-1.5 sm:gap-2 border-t border-black/5 w-full max-w-full overflow-hidden">
-          {/* Left: Desktop Board Focus Selector (Hidden on mobile where bottom navigation handles tab switching) */}
+        <div className="px-2.5 sm:px-5 py-1.5 bg-zinc-50/60 dark:bg-zinc-900/40 flex items-center justify-between gap-1.5 sm:gap-2 border-t border-zinc-100 dark:border-zinc-850 w-full max-w-full overflow-hidden">
+          {/* Left: Desktop Board Focus Selector */}
           <div className="hidden md:flex items-center gap-1.5 shrink-0 overflow-x-auto py-0.5">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 font-heading shrink-0 mr-0.5 hidden xs:inline">
+            <span className="text-[10px] font-medium uppercase tracking-wider text-zinc-400 shrink-0 mr-0.5 hidden xs:inline">
               View:
             </span>
-            <div className="flex items-center bg-[#f4f4f5] p-0.5 rounded-2xl border border-zinc-300 text-[11px] font-heading font-bold shadow-xs">
+            <div className="flex items-center bg-zinc-200/60 dark:bg-zinc-800/60 p-0.5 rounded-full border border-zinc-200 dark:border-zinc-700/60 text-[11px] font-medium">
               <button
                 onClick={() => onDashboardFocusChange("all")}
-                className={`px-2.5 py-1 rounded-xl transition cursor-pointer ${
+                className={`px-3 py-1 rounded-full transition cursor-pointer ${
                   dashboardFocus === "all"
-                    ? "bg-black text-white shadow-xs"
-                    : "text-zinc-600 hover:text-black"
+                    ? "bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 shadow-xs"
+                    : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200"
                 }`}
               >
                 All Boards
               </button>
               <button
                 onClick={() => onDashboardFocusChange("day")}
-                className={`px-2.5 py-1 rounded-xl transition cursor-pointer ${
+                className={`px-3 py-1 rounded-full transition cursor-pointer ${
                   dashboardFocus === "day"
-                    ? "bg-black text-white shadow-xs"
-                    : "text-zinc-600 hover:text-black"
+                    ? "bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 shadow-xs"
+                    : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200"
                 }`}
               >
                 Day &amp; Habits
               </button>
               <button
                 onClick={() => onDashboardFocusChange("kanban")}
-                className={`px-2.5 py-1 rounded-xl transition cursor-pointer ${
+                className={`px-3 py-1 rounded-full transition cursor-pointer ${
                   dashboardFocus === "kanban"
-                    ? "bg-black text-white shadow-xs"
-                    : "text-zinc-600 hover:text-black"
+                    ? "bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 shadow-xs"
+                    : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200"
                 }`}
               >
                 Kanban Focus
@@ -265,12 +286,12 @@ export function Header({
             {spaceMode === "solo" ? (
               <div
                 suppressHydrationWarning
-                className="flex items-center bg-white px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-2xl border border-zinc-300 text-xs shrink min-w-0 shadow-xs"
+                className="flex items-center bg-white dark:bg-zinc-900 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full border border-zinc-200 dark:border-zinc-800 text-xs shrink min-w-0"
               >
-                <span className="text-zinc-400 pr-1 text-[9px] sm:text-[10px] font-bold uppercase font-heading shrink-0">
+                <span className="text-zinc-400 pr-1 text-[9px] sm:text-[10px] font-medium uppercase shrink-0">
                   Solo:
                 </span>
-                <span className="font-bold font-heading text-xs text-black flex items-center gap-1 truncate">
+                <span className="font-semibold text-xs text-zinc-900 dark:text-zinc-100 flex items-center gap-1 truncate">
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
                   <span className="truncate">{partnerNames.alex || user?.username || "You"}</span>
                 </span>
@@ -278,12 +299,12 @@ export function Header({
             ) : user && !circle ? (
               <div
                 suppressHydrationWarning
-                className="flex items-center bg-white px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-2xl border border-zinc-300 text-xs shrink min-w-0 shadow-xs"
+                className="flex items-center bg-white dark:bg-zinc-900 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full border border-zinc-200 dark:border-zinc-800 text-xs shrink min-w-0"
               >
-                <span className="text-zinc-400 pr-1 text-[9px] sm:text-[10px] font-bold uppercase font-heading shrink-0">
+                <span className="text-zinc-400 pr-1 text-[9px] sm:text-[10px] font-medium uppercase shrink-0">
                   User:
                 </span>
-                <span className="font-bold font-heading text-xs text-black flex items-center gap-1 truncate">
+                <span className="font-semibold text-xs text-zinc-900 dark:text-zinc-100 flex items-center gap-1 truncate">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
                   <span className="truncate">@{user.username}</span>
                 </span>
@@ -291,39 +312,39 @@ export function Header({
             ) : (
               <div
                 suppressHydrationWarning
-                className="flex items-center bg-[#f4f4f5] p-0.5 rounded-2xl border border-zinc-300 text-xs shrink min-w-0 shadow-xs"
+                className="flex items-center bg-zinc-200/60 dark:bg-zinc-800/60 p-0.5 rounded-full border border-zinc-200 dark:border-zinc-700/60 text-xs shrink min-w-0"
               >
-                <span className="text-zinc-400 px-1 text-[9px] sm:text-[10px] font-bold uppercase font-heading shrink-0">
+                <span className="text-zinc-500 dark:text-zinc-400 px-1 text-[9px] sm:text-[10px] font-medium uppercase shrink-0">
                   User:
                 </span>
                 <button
                   onClick={() => setActivePartner("alex")}
-                  className={`px-1.5 py-0.5 sm:px-2.5 sm:py-0.5 rounded-xl font-bold font-heading text-[11px] sm:text-xs transition-all flex items-center gap-1 cursor-pointer min-w-0 max-w-[75px] xs:max-w-[95px] sm:max-w-[125px] ${
+                  className={`px-2 py-0.5 sm:px-3 sm:py-0.5 rounded-full font-medium text-[11px] sm:text-xs transition-all flex items-center gap-1 cursor-pointer min-w-0 max-w-[75px] xs:max-w-[95px] sm:max-w-[125px] ${
                     activePartner === "alex"
-                      ? "bg-black text-white shadow-xs"
-                      : "text-zinc-600 hover:text-black"
+                      ? "bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 shadow-xs"
+                      : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200"
                   }`}
                   title={partnerNames.alex}
                 >
                   <span
                     className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                      activePartner === "alex" ? "bg-white" : "bg-zinc-400"
+                      activePartner === "alex" ? "bg-emerald-500" : "bg-zinc-400"
                     }`}
                   />
                   <span className="truncate">{partnerNames.alex}</span>
                 </button>
                 <button
                   onClick={() => setActivePartner("sam")}
-                  className={`px-1.5 py-0.5 sm:px-2.5 sm:py-0.5 rounded-xl font-bold font-heading text-[11px] sm:text-xs transition-all flex items-center gap-1 cursor-pointer min-w-0 max-w-[75px] xs:max-w-[95px] sm:max-w-[125px] ${
+                  className={`px-2 py-0.5 sm:px-3 sm:py-0.5 rounded-full font-medium text-[11px] sm:text-xs transition-all flex items-center gap-1 cursor-pointer min-w-0 max-w-[75px] xs:max-w-[95px] sm:max-w-[125px] ${
                     activePartner === "sam"
-                      ? "bg-black text-white shadow-xs"
-                      : "text-zinc-600 hover:text-black"
+                      ? "bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 shadow-xs"
+                      : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200"
                   }`}
                   title={partnerNames.sam}
                 >
                   <span
                     className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                      activePartner === "sam" ? "bg-white" : "bg-zinc-400"
+                      activePartner === "sam" ? "bg-emerald-500" : "bg-zinc-400"
                     }`}
                   />
                   <span className="truncate">{partnerNames.sam}</span>
@@ -334,18 +355,18 @@ export function Header({
             {/* Streaks & Points Pill */}
             <div
               suppressHydrationWarning
-              className="flex items-center gap-1 sm:gap-1.5 bg-white px-1.5 sm:px-2.5 py-1 rounded-full border-2 border-black text-xs font-heading font-bold shadow-[1.5px_1.5px_0_0_#000] shrink-0"
+              className="flex items-center gap-1 sm:gap-1.5 bg-white dark:bg-zinc-900 px-2 sm:px-3 py-1 rounded-full border border-zinc-200 dark:border-zinc-800 text-xs font-medium shrink-0"
             >
-              <div className="flex items-center gap-0.5 sm:gap-1 border-r border-zinc-200 pr-1 text-[10px] sm:text-xs">
-                <Flame className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-black shrink-0" />
+              <div className="flex items-center gap-0.5 sm:gap-1 border-r border-zinc-200 dark:border-zinc-800 pr-1.5 text-[10px] sm:text-xs text-zinc-700 dark:text-zinc-300">
+                <Flame className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-500 shrink-0" />
                 <span>{currentScore.streak} DAYS</span>
               </div>
-              <div className={`flex items-center gap-0.5 text-[10px] sm:text-xs ${currentScore.points < 0 ? "text-rose-600 font-extrabold" : ""}`}>
+              <div className={`flex items-center gap-0.5 text-[10px] sm:text-xs font-mono ${currentScore.points < 0 ? "text-rose-500 font-bold" : "text-zinc-700 dark:text-zinc-300"}`}>
                 <span>{currentScore.points} PTS</span>
               </div>
               <button
                 onClick={onOpenWishlist}
-                className="ml-0.5 bg-black text-white text-[8px] sm:text-[9px] uppercase font-bold px-1.5 py-0.5 rounded-full hover:bg-zinc-800 transition cursor-pointer shrink-0"
+                className="ml-1 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-950 text-[8px] sm:text-[9px] uppercase font-bold px-2 py-0.5 rounded-full hover:opacity-85 transition cursor-pointer shrink-0"
               >
                 Wishlist
               </button>
