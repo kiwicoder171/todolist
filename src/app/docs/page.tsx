@@ -38,33 +38,35 @@ export default function DocsPage() {
   return (
     <div className="min-h-screen bg-[#f5f5f7] dark:bg-black text-[#1d1d1f] dark:text-[#f5f5f7] flex flex-col font-sans selection:bg-[#0071e3] selection:text-white transition-colors duration-200">
       {/* Top Glass Navigation Bar */}
-      <nav className="sticky top-0 z-40 bg-white/80 dark:bg-black/80 backdrop-blur-2xl border-b border-black/[0.06] dark:border-white/[0.08] px-4 sm:px-8 py-3.5 flex items-center justify-between transition-colors">
-        <div className="flex items-center gap-3">
-          <Link
-            href="/"
-            className="w-10 h-10 rounded-2xl bg-zinc-900 dark:bg-zinc-100 flex items-center justify-center border border-black/10 dark:border-white/20 shadow-xs p-1.5 transition-transform hover:scale-105 shrink-0 apple-press"
-            title="Return to App"
-          >
-            <Logo size={22} className="text-white dark:text-zinc-950" />
-          </Link>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-heading font-bold text-base tracking-tight text-foreground">
-                Couple Task Hub
-              </span>
-              <span className="text-[10px] font-semibold tracking-wide px-2 py-0.5 rounded-full bg-blue-500/10 dark:bg-blue-400/15 text-blue-600 dark:text-blue-400 border border-blue-500/20">
-                v0.7.0 Docs
-              </span>
+      <nav className="sticky top-0 z-40 bg-white/80 dark:bg-black/80 backdrop-blur-2xl border-b border-black/[0.06] dark:border-white/[0.08] transition-colors">
+        {/* Primary Header Row */}
+        <div className="max-w-5xl w-full mx-auto px-4 sm:px-8 py-2.5 sm:py-3.5 flex items-center justify-between gap-3">
+          {/* Brand Identity */}
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <Link
+              href="/"
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-2xl bg-zinc-900 dark:bg-zinc-100 flex items-center justify-center border border-black/10 dark:border-white/20 shadow-xs p-1 transition-transform hover:scale-105 shrink-0 apple-press"
+              title="Return to App"
+            >
+              <Logo size={20} className="text-white dark:text-zinc-950" />
+            </Link>
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5 flex-nowrap">
+                <span className="font-heading font-bold text-sm sm:text-base tracking-tight text-foreground truncate">
+                  Couple Task Hub
+                </span>
+                <span className="text-[9px] sm:text-[10px] font-semibold tracking-wide px-1.5 py-0.2 rounded-full bg-blue-500/10 dark:bg-blue-400/15 text-blue-600 dark:text-blue-400 border border-blue-500/20 shrink-0">
+                  Docs
+                </span>
+              </div>
+              <p className="hidden sm:block text-xs text-neutral-500 dark:text-neutral-400 font-medium">
+                Feature Manual &amp; Version History
+              </p>
             </div>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">
-              Feature Manual &amp; Version History
-            </p>
           </div>
-        </div>
 
-        <div className="flex items-center gap-2 sm:gap-3">
-          {/* Guide / Changelog Switcher */}
-          <div className="flex items-center bg-black/[0.04] dark:bg-white/[0.08] p-1 rounded-2xl border border-black/[0.04] dark:border-white/[0.06] text-xs font-heading font-medium">
+          {/* Desktop Center Segmented Switcher */}
+          <div className="hidden sm:flex items-center bg-black/[0.04] dark:bg-white/[0.08] p-1 rounded-2xl border border-black/[0.04] dark:border-white/[0.06] text-xs font-heading font-medium">
             <button
               onClick={() => setActiveTab("guide")}
               className={`px-3 py-1.5 rounded-xl transition cursor-pointer apple-press ${
@@ -88,25 +90,57 @@ export default function DocsPage() {
             </button>
           </div>
 
-          {/* Theme Toggle */}
-          <button
-            onClick={toggleTheme}
-            className="w-9 h-9 rounded-full flex items-center justify-center border border-black/[0.08] dark:border-white/[0.1] bg-white/70 dark:bg-white/5 hover:bg-black/5 dark:hover:bg-white/10 text-neutral-600 dark:text-neutral-300 transition-colors apple-press cursor-pointer shrink-0"
-            title="Toggle Theme"
-            aria-label="Toggle Theme"
-          >
-            {theme === "dark" ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-neutral-700" />}
-          </button>
+          {/* Right Action Cluster */}
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center border border-black/[0.08] dark:border-white/[0.1] bg-white/70 dark:bg-white/5 hover:bg-black/5 dark:hover:bg-white/10 text-neutral-600 dark:text-neutral-300 transition-colors apple-press cursor-pointer shrink-0"
+              title="Toggle Theme"
+              aria-label="Toggle Theme"
+            >
+              {theme === "dark" ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-neutral-700" />}
+            </button>
 
-          {/* Back to App */}
-          <Link
-            href="/"
-            className="px-3.5 py-1.5 rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white/80 dark:bg-white/5 hover:bg-black/5 dark:hover:bg-white/10 text-foreground transition text-xs font-heading font-semibold flex items-center gap-1.5 shadow-xs cursor-pointer shrink-0 apple-press"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Back to Hub</span>
-            <span className="sm:hidden">App</span>
-          </Link>
+            {/* Back to App */}
+            <Link
+              href="/"
+              className="h-8 sm:h-9 px-2.5 sm:px-3.5 rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white/80 dark:bg-white/5 hover:bg-black/5 dark:hover:bg-white/10 text-foreground transition text-xs font-heading font-semibold flex items-center gap-1.5 shadow-xs cursor-pointer shrink-0 apple-press"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Back to Hub</span>
+              <span className="sm:hidden font-medium">Hub</span>
+            </Link>
+          </div>
+        </div>
+
+        {/* Mobile Sub-Header: Touch-Friendly Segmented Track */}
+        <div className="sm:hidden px-4 pb-2.5 pt-0.5">
+          <div className="apple-segmented-track grid grid-cols-2 p-1 rounded-2xl bg-black/[0.04] dark:bg-white/[0.08] border border-black/[0.04] dark:border-white/[0.06] text-xs font-heading font-medium">
+            <button
+              onClick={() => setActiveTab("guide")}
+              className={`py-1.5 rounded-xl transition cursor-pointer apple-press flex items-center justify-center gap-1.5 ${
+                activeTab === "guide"
+                  ? "bg-white dark:bg-[#1c1c1e] text-foreground shadow-xs font-semibold"
+                  : "text-neutral-500 hover:text-foreground"
+              }`}
+            >
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>Feature Guide</span>
+            </button>
+            <button
+              onClick={() => setActiveTab("changelog")}
+              className={`py-1.5 rounded-xl transition cursor-pointer flex items-center justify-center gap-1.5 apple-press ${
+                activeTab === "changelog"
+                  ? "bg-white dark:bg-[#1c1c1e] text-foreground shadow-xs font-semibold"
+                  : "text-neutral-500 hover:text-foreground"
+              }`}
+            >
+              <Clock className="w-3.5 h-3.5" />
+              <span>Changelog</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            </button>
+          </div>
         </div>
       </nav>
 
