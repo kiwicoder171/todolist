@@ -78,4 +78,15 @@ describe("KanbanBoard (Seam: Board 3 Unified 3-Column Vertical Kanban UI)", () =
     // Now there should be another "⚡ Do Today"
     expect(screen.getAllByText(/⚡ Do Today/i).length).toBeGreaterThan(1);
   });
+
+  it("opens card detail drawer when clicking a Kanban card and allows editing details", () => {
+    renderWithProviders(<KanbanBoard />);
+
+    const card = screen.getByText(/Research Hakone onsens/i);
+    fireEvent.click(card);
+
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(screen.getByText("Kanban Card Details")).toBeInTheDocument();
+    expect(screen.getByDisplayValue(/Research Hakone onsens & ryokan/i)).toBeInTheDocument();
+  });
 });

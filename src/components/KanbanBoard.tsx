@@ -5,6 +5,7 @@ import { useHousehold, getAssigneeLabel } from "@/context/HouseholdContext";
 import { KanbanStage, KanbanCard, useKanban } from "@/context/KanbanContext";
 import { useFocusTimer } from "@/context/FocusTimerContext";
 import { KanbanCardModal } from "./KanbanCardModal";
+import { KanbanCardDetailDrawer } from "./KanbanCardDetailDrawer";
 import { Plus, Check, ArrowRight, ArrowLeft, RotateCcw, Trash2, Play } from "lucide-react";
 
 export interface KanbanBoardProps {
@@ -20,6 +21,7 @@ export function KanbanBoard({ isMobile = false }: KanbanBoardProps = {}) {
     getFilteredCardsByStage,
     moveCardStage,
     toggleCardDoToday,
+    updateCard,
     deleteCard,
     clearDoneCards,
   } = useKanban();
@@ -27,6 +29,7 @@ export function KanbanBoard({ isMobile = false }: KanbanBoardProps = {}) {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalInitialStage, setModalInitialStage] = useState<KanbanStage>("todo");
+  const [selectedCardForDrawer, setSelectedCardForDrawer] = useState<KanbanCard | null>(null);
   const [mobileTab, setMobileTab] = useState<KanbanStage>("todo");
   const [draggedCardId, setDraggedCardId] = useState<string | null>(null);
   const [dragOverStage, setDragOverStage] = useState<KanbanStage | null>(null);
@@ -79,7 +82,8 @@ export function KanbanBoard({ isMobile = false }: KanbanBoardProps = {}) {
         key={card.id}
         draggable
         onDragStart={(e) => handleDragStart(e, card.id)}
-        className="p-3.5 rounded-2xl border border-black/[0.06] dark:border-white/[0.08] bg-white/90 dark:bg-[#18181b]/90 text-xs flex flex-col gap-2.5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] dark:shadow-[0_4px_16px_rgba(0,0,0,0.3)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_6px_20px_rgba(0,0,0,0.4)] cursor-grab active:cursor-grabbing transition-all duration-200 group"
+        onClick={() => setSelectedCardForDrawer(card)}
+        className="p-3.5 rounded-2xl border border-black/[0.06] dark:border-white/[0.08] bg-white/90 dark:bg-[#18181b]/90 text-xs flex flex-col gap-2.5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] dark:shadow-[0_4px_16px_rgba(0,0,0,0.3)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_6px_20px_rgba(0,0,0,0.4)] cursor-pointer active:scale-[0.99] transition-all duration-200 group"
       >
         <div className="flex items-start justify-between gap-2">
           <div className="flex flex-col gap-1 min-w-0 flex-1">
@@ -120,7 +124,10 @@ export function KanbanBoard({ isMobile = false }: KanbanBoardProps = {}) {
             </button>
             <button
               type="button"
-              onClick={() => deleteCard(card.id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                deleteCard(card.id);
+              }}
               className="opacity-70 md:opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 text-zinc-400 hover:text-rose-500 p-1 transition rounded-lg focus:outline-none"
               title="Delete Card"
               aria-label="Delete Card"
@@ -130,7 +137,10 @@ export function KanbanBoard({ isMobile = false }: KanbanBoardProps = {}) {
           </div>
         </div>
 
-        <div className="flex items-center justify-between pt-2 border-t border-black/[0.04] dark:border-white/[0.06] gap-1.5">
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="flex items-center justify-between pt-2 border-t border-black/[0.04] dark:border-white/[0.06] gap-1.5"
+        >
           <div className="flex items-center gap-1.5 min-w-0">
             <span className="text-[10px] font-semibold text-zinc-500 dark:text-zinc-400 truncate max-w-[70px] sm:max-w-none">
               {getAssigneeLabel(card.assignee, activePartner, partnerNames)}
@@ -461,6 +471,14 @@ export function KanbanBoard({ isMobile = false }: KanbanBoardProps = {}) {
         isOpen={isModalOpen}
         initialStage={modalInitialStage}
         onClose={() => setIsModalOpen(false)}
+      />
+
+      <KanbanCardDetailDrawer
+        card={selectedCardForDrawer}
+        isOpen={Boolean(selectedCardForDrawer)}
+        onClose={() => setSelectedCardForDrawer(null)}
+        onSave={(id, updates) => updateCard(id, updates)}
+        onDelete={(id) => deleteCard(id)}
       />
     </div>
   );
