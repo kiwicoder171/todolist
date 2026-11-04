@@ -142,9 +142,6 @@ describe("UX/UI Interaction & Accessibility Tests", () => {
         </HouseholdProvider>
       );
 
-      // Verify phone status bar & pill header defaults to Habits (DAILY ROUTINES)
-      expect(screen.getByText("DAILY ROUTINES")).toBeInTheDocument();
-
       // Verify bottom navigation bar buttons exist and in correct visual order
       const habitsBtn = screen.getByRole("button", { name: /^Habits$/i });
       const dailyBtn = screen.getByRole("button", { name: /^Daily$/i });
@@ -179,8 +176,6 @@ describe("UX/UI Interaction & Accessibility Tests", () => {
       // Switch to Kanban (third tab)
       const kanbanNavBtn = screen.getByRole("button", { name: /^Kanban$/i });
       fireEvent.click(kanbanNavBtn);
-
-      expect(screen.getByText("3-COL KANBAN")).toBeInTheDocument();
 
       // Look for mobile column tab switcher buttons
       const inProgressTab = screen.getByRole("button", { name: /In Progress/i });

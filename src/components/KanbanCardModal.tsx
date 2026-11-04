@@ -22,7 +22,7 @@ export function KanbanCardModal({
 
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState(
-    categories.find((c) => c.id !== "all")?.id || "home"
+    categories.find((c) => c.id !== "all")?.id || ""
   );
   const [stage, setStage] = useState<KanbanStage>(initialStage);
   const [assignee, setAssignee] = useState<Assignee>("both");
@@ -126,6 +126,7 @@ export function KanbanCardModal({
                     onChange={(e) => setCategory(e.target.value)}
                     className="w-full px-3 py-2 border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.04] rounded-2xl font-semibold text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none"
                   >
+                    <option value="">None</option>
                     {categories
                       .filter((c) => c.id !== "all")
                       .map((c) => (

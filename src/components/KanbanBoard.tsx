@@ -234,20 +234,21 @@ export function KanbanBoard({ isMobile = false }: KanbanBoardProps = {}) {
 
         {/* Category Filter Pills & Add Card */}
         <div className="flex items-center gap-1.5 overflow-x-auto text-[11px] pb-1 no-scrollbar">
-          {categories.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setSelectedCategory(cat.id)}
-              className={`px-3 py-1 rounded-full font-medium transition whitespace-nowrap text-xs apple-press ${
-                selectedCategory === cat.id
-                  ? "bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 shadow-2xs font-semibold"
-                  : "border border-black/[0.06] dark:border-white/[0.08] text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 bg-black/[0.02] dark:bg-white/[0.04]"
-              }`}
-            >
-              {cat.emoji ? `${cat.emoji} ` : ""}
-              {cat.name}
-            </button>
-          ))}
+          {categories.length > 1 &&
+            categories.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`px-3 py-1 rounded-full font-medium transition whitespace-nowrap text-xs apple-press ${
+                  selectedCategory === cat.id
+                    ? "bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 shadow-2xs font-semibold"
+                    : "border border-black/[0.06] dark:border-white/[0.08] text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 bg-black/[0.02] dark:bg-white/[0.04]"
+                }`}
+              >
+                {cat.emoji ? `${cat.emoji} ` : ""}
+                {cat.name}
+              </button>
+            ))}
 
           <button
             onClick={() => openAddCard("todo")}

@@ -82,7 +82,6 @@ export function CoupleTaskHubApp({ forcedIsMobile, initialMobileTab }: CoupleTas
           <MobileShell
             activeTab={mobileTab}
             onTabChange={setMobileTab}
-            pillTitle={getMobilePillTitle(mobileTab)}
             onQuickAdd={handleMobileQuickAdd}
           >
             {mobileTab === "habits" ? (

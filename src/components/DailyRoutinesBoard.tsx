@@ -204,7 +204,7 @@ export function DailyRoutinesBoard() {
           <button
             type="button"
             onClick={() => setIsModalOpen(true)}
-            className="flex px-3 py-1 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:opacity-90 rounded-full font-semibold text-[10px] items-center gap-1 apple-press transition shadow-2xs cursor-pointer"
+            className="hidden sm:flex px-3 py-1 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:opacity-90 rounded-full font-semibold text-[10px] items-center gap-1 apple-press transition shadow-2xs cursor-pointer"
           >
             <Plus className="w-3 h-3" />
             <span>Add Routine</span>

@@ -10,7 +10,7 @@ export type MobileTab = "habits" | "daily" | "kanban" | "progress";
 export interface MobileShellProps {
   activeTab: MobileTab;
   onTabChange: (tab: MobileTab) => void;
-  pillTitle: string;
+  pillTitle?: string;
   onQuickAdd: () => void;
   children: ReactNode;
 }
@@ -18,7 +18,6 @@ export interface MobileShellProps {
 export function MobileShell({
   activeTab,
   onTabChange,
-  pillTitle,
   onQuickAdd,
   children,
 }: MobileShellProps) {
@@ -32,13 +31,6 @@ export function MobileShell({
           <MobileWeekCalendar />
         </div>
       )}
-
-      {/* Mobile Active View Pill */}
-      <div className="py-1.5 px-4 flex items-center justify-center">
-        <div className="bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 px-3.5 py-1 rounded-full font-heading font-bold text-[11px] tracking-wider uppercase shadow-xs">
-          {pillTitle}
-        </div>
-      </div>
 
       {/* Dynamic Body */}
       <div className="flex-1 overflow-y-auto px-3.5 py-1 space-y-4">
