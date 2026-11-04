@@ -653,33 +653,147 @@ export default function DocsPage() {
               </ul>
             </article>
 
-            {/* Roadmap */}
-            <article className="apple-card p-6 sm:p-8 space-y-4 border-dashed border-purple-500/30 bg-purple-500/[0.02]">
+            {/* Roadmap & Completed Milestones */}
+            <article className="apple-card p-6 sm:p-8 space-y-6 border-dashed border-purple-500/30 bg-purple-500/[0.02]">
               <div className="flex items-center justify-between flex-wrap gap-2">
                 <div className="flex items-center gap-2.5">
                   <span className="px-2.5 py-1 rounded-full bg-purple-500/15 text-purple-600 dark:text-purple-400 font-heading font-bold text-xs border border-purple-500/20">
-                    NEXT UP
+                    ROADMAP AUDIT
                   </span>
-                  <h3 className="font-heading font-bold text-base text-foreground">
-                    Roadmap &amp; Future Milestones
+                  <h3 className="font-heading font-bold text-base sm:text-lg text-foreground">
+                    Roadmap &amp; Delivery Status
                   </h3>
                 </div>
-                <span className="text-xs text-neutral-400 font-medium">Under active development</span>
+                <span className="text-xs text-neutral-400 font-medium">Tracking progress against product goals</span>
               </div>
-              <ul className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 space-y-2 list-disc list-inside font-normal leading-relaxed pt-1">
-                <li>
-                  <strong>Multi-Circle Architecture:</strong> Join multiple circles simultaneously (e.g. Partner space + Family circle) with instant space switching and unified personal task synchronization.
-                </li>
-                <li>
-                  <strong>Live Floating Toasts (&ldquo;Momentum Floaters&rdquo;):</strong> Real-time dynamic toast pills gliding across the screen when a partner completes a task or sends love.
-                </li>
-                <li>
-                  <strong>Partner Scratch Cards:</strong> Gamified surprise vouchers and scratch-off reward vouchers in the Wishlist.
-                </li>
-                <li>
-                  <strong>Calendar Synchronization:</strong> Two-way Google and Apple Calendar integration for scheduled routines and shared deadlines.
-                </li>
-              </ul>
+
+              {/* Shipped from Roadmap */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  <h4 className="font-semibold text-xs uppercase tracking-wide text-emerald-600 dark:text-emerald-400">
+                    Already Shipped &amp; Delivered
+                  </h4>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                  <div className="p-3.5 rounded-2xl bg-white/60 dark:bg-white/5 border border-black/[0.04] dark:border-white/[0.06] space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-foreground flex items-center gap-1.5">
+                        <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 stroke-[3]" />
+                        <span>Multi-Mode Spaces</span>
+                      </span>
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                        v0.6.2
+                      </span>
+                    </div>
+                    <p className="text-neutral-500 leading-normal">
+                      &ldquo;Your space, your way&rdquo; with 4 modes (Solo, Duo, Friends, Family) and mode-adaptive Momentum Cheers.
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 rounded-2xl bg-white/60 dark:bg-white/5 border border-black/[0.04] dark:border-white/[0.06] space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-foreground flex items-center gap-1.5">
+                        <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 stroke-[3]" />
+                        <span>Home Screen Widgets</span>
+                      </span>
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                        v0.6.0
+                      </span>
+                    </div>
+                    <p className="text-neutral-500 leading-normal">
+                      Small, Medium, and Large widgets with live routine check toggles and dedicated <code className="font-semibold">/widget</code> route for iOS/Android.
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 rounded-2xl bg-white/60 dark:bg-white/5 border border-black/[0.04] dark:border-white/[0.06] space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-foreground flex items-center gap-1.5">
+                        <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 stroke-[3]" />
+                        <span>Cloud Notifications &amp; Cheers</span>
+                      </span>
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                        v0.6.1
+                      </span>
+                    </div>
+                    <p className="text-neutral-500 leading-normal">
+                      In-app notification drawer, Firestore circle subcollections, real-time partner cheer pings, and Web Push.
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 rounded-2xl bg-white/60 dark:bg-white/5 border border-black/[0.04] dark:border-white/[0.06] space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-foreground flex items-center gap-1.5">
+                        <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 stroke-[3]" />
+                        <span>Kanban Card Detail Drawer</span>
+                      </span>
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                        v0.7.0
+                      </span>
+                    </div>
+                    <p className="text-neutral-500 leading-normal">
+                      Slide-over inspector for subtask checklists with live progress meters, project markdown notes, and emoji tags.
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 rounded-2xl bg-white/60 dark:bg-white/5 border border-black/[0.04] dark:border-white/[0.06] space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-foreground flex items-center gap-1.5">
+                        <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 stroke-[3]" />
+                        <span>Mobile &ldquo;Less is More&rdquo; Polish</span>
+                      </span>
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                        v0.7.0
+                      </span>
+                    </div>
+                    <p className="text-neutral-500 leading-normal">
+                      Removed duplicate buttons, simplified placeholders, and portal-mounted dropdowns to prevent clipping.
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 rounded-2xl bg-white/60 dark:bg-white/5 border border-black/[0.04] dark:border-white/[0.06] space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-foreground flex items-center gap-1.5">
+                        <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 stroke-[3]" />
+                        <span>Co-Focus Desks &amp; Pomodoro</span>
+                      </span>
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                        v0.6.2
+                      </span>
+                    </div>
+                    <p className="text-neutral-500 leading-normal">
+                      Live partner desk presence, focus timer with ambient sounds, daily goal ring, and 24h timeline rail.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Upcoming Milestones */}
+              <div className="space-y-3 pt-2">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></span>
+                  <h4 className="font-semibold text-xs uppercase tracking-wide text-purple-600 dark:text-purple-400">
+                    Next Up &amp; In Design
+                  </h4>
+                </div>
+                <ul className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 space-y-2 list-disc list-inside font-normal leading-relaxed pl-1">
+                  <li>
+                    <strong>Multi-Circle Architecture &amp; Unified Personal Sync:</strong> Join multiple spaces simultaneously (e.g. Partner space + Family circle + Roommates) with 1-click space switching and unified personal tasks (<code className="font-semibold">Mine</code>) automatically synchronized across all circles.
+                  </li>
+                  <li>
+                    <strong>Live Floating Toasts (&ldquo;Momentum Floaters&rdquo;):</strong> Real-time dynamic toast pills gliding across the screen when a partner completes a task, hits a streak, or sends love, with a 1-tap &ldquo;Cheer Back ❤️&rdquo; micro-reaction.
+                  </li>
+                  <li>
+                    <strong>Partner Scratch Cards:</strong> Gamified surprise vouchers and scratch-off reward cards in the Wishlist Shop.
+                  </li>
+                  <li>
+                    <strong>Two-Way Calendar Sync:</strong> Google Calendar &amp; Apple Calendar two-way synchronization for time-blocked routines and shared deadlines.
+                  </li>
+                  <li>
+                    <strong>Voice Task Dictation:</strong> 1-tap micro-dictation to quickly capture to-dos and habit reminders on the go.
+                  </li>
+                </ul>
+              </div>
             </article>
           </div>
         )}
