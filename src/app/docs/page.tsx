@@ -42,10 +42,10 @@ export default function DocsPage() {
         <div className="flex items-center gap-3">
           <Link
             href="/"
-            className="w-10 h-10 rounded-2xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center border border-black/10 dark:border-white/20 shadow-xs p-1.5 transition-transform hover:scale-105 shrink-0 apple-press"
+            className="w-10 h-10 rounded-2xl bg-zinc-900 dark:bg-zinc-100 flex items-center justify-center border border-black/10 dark:border-white/20 shadow-xs p-1.5 transition-transform hover:scale-105 shrink-0 apple-press"
             title="Return to App"
           >
-            <Logo size={24} inverted />
+            <Logo size={22} className="text-white dark:text-zinc-950" />
           </Link>
           <div>
             <div className="flex items-center gap-2">
@@ -803,7 +803,7 @@ export default function DocsPage() {
       <footer className="border-t border-black/[0.06] dark:border-white/[0.08] bg-white/50 dark:bg-black/50 backdrop-blur-xl px-4 sm:px-8 py-6 text-center text-xs text-neutral-500 font-medium transition-colors">
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <Logo size={18} />
+            <Logo size={18} className="text-zinc-900 dark:text-zinc-100 shrink-0" />
             <span className="font-heading font-bold text-foreground">Couple Task Hub</span>
             <span>&bull; Collaborative Home OS</span>
           </div>
