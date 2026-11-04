@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import {
   ArrowLeft,
   BookOpen,
@@ -22,56 +21,66 @@ import {
   Clock,
   Heart,
   Check,
+  Sun,
+  Moon,
+  Timer,
+  Layers,
+  Compass,
+  ListChecks,
 } from "lucide-react";
 import { Logo } from "@/components/Logo";
+import { useTheme } from "@/context/ThemeContext";
 
 export default function DocsPage() {
   const [activeTab, setActiveTab] = useState<"guide" | "changelog">("guide");
+  const { theme, toggleTheme } = useTheme();
 
   return (
-    <div className="min-h-screen bg-[#fafafa] text-[#18181b] flex flex-col font-sans selection:bg-black selection:text-white">
-      {/* Top Navigation Bar */}
-      <nav className="sticky top-0 z-40 bg-white border-b-2 border-black px-4 sm:px-8 py-3.5 flex items-center justify-between shadow-[0_2px_0_0_rgba(0,0,0,0.05)]">
+    <div className="min-h-screen bg-[#f5f5f7] dark:bg-black text-[#1d1d1f] dark:text-[#f5f5f7] flex flex-col font-sans selection:bg-[#0071e3] selection:text-white transition-colors duration-200">
+      {/* Top Glass Navigation Bar */}
+      <nav className="sticky top-0 z-40 bg-white/80 dark:bg-black/80 backdrop-blur-2xl border-b border-black/[0.06] dark:border-white/[0.08] px-4 sm:px-8 py-3.5 flex items-center justify-between transition-colors">
         <div className="flex items-center gap-3">
           <Link
             href="/"
-            className="w-10 h-10 rounded-2xl bg-black text-white flex items-center justify-center border-2 border-black shadow-[2px_2px_0_0_#000] p-1.5 transition-transform hover:scale-105 shrink-0"
+            className="w-10 h-10 rounded-2xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center border border-black/10 dark:border-white/20 shadow-xs p-1.5 transition-transform hover:scale-105 shrink-0 apple-press"
             title="Return to App"
           >
             <Logo size={24} inverted />
           </Link>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-heading font-extrabold text-base tracking-tight text-black uppercase">
+              <span className="font-heading font-bold text-base tracking-tight text-foreground">
                 Couple Task Hub
               </span>
-              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border border-black bg-amber-300 text-black">
-                Docs &amp; Guide
+              <span className="text-[10px] font-semibold tracking-wide px-2 py-0.5 rounded-full bg-blue-500/10 dark:bg-blue-400/15 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                v0.7.0 Docs
               </span>
             </div>
-            <p className="text-xs text-zinc-500 font-medium">User Manual &amp; Version History</p>
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">
+              Feature Manual &amp; Version History
+            </p>
           </div>
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
           {/* Guide / Changelog Switcher */}
-          <div className="flex items-center bg-[#f4f4f5] p-1 rounded-2xl border border-zinc-200 text-xs font-heading font-bold">
+          <div className="flex items-center bg-black/[0.04] dark:bg-white/[0.08] p-1 rounded-2xl border border-black/[0.04] dark:border-white/[0.06] text-xs font-heading font-medium">
             <button
               onClick={() => setActiveTab("guide")}
-              className={`px-3 py-1.5 rounded-xl transition cursor-pointer ${
+              className={`px-3 py-1.5 rounded-xl transition cursor-pointer apple-press ${
                 activeTab === "guide"
-                  ? "bg-black text-white shadow-sm"
-                  : "text-zinc-600 hover:text-black"
+                  ? "bg-white dark:bg-[#1c1c1e] text-foreground shadow-xs font-semibold"
+                  : "text-neutral-500 hover:text-foreground"
               }`}
             >
               Feature Guide
             </button>
             <button
               onClick={() => setActiveTab("changelog")}
-              className={`px-3 py-1.5 rounded-xl transition cursor-pointer flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 rounded-xl transition cursor-pointer flex items-center gap-1.5 apple-press ${
                 activeTab === "changelog"
-                  ? "bg-black text-white shadow-sm"
-                  : "text-zinc-600 hover:text-black"
+                  ? "bg-white dark:bg-[#1c1c1e] text-foreground shadow-xs font-semibold"
+                  : "text-neutral-500 hover:text-foreground"
               }`}
             >
               <span>Changelog</span>
@@ -79,12 +88,23 @@ export default function DocsPage() {
             </button>
           </div>
 
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="w-9 h-9 rounded-full flex items-center justify-center border border-black/[0.08] dark:border-white/[0.1] bg-white/70 dark:bg-white/5 hover:bg-black/5 dark:hover:bg-white/10 text-neutral-600 dark:text-neutral-300 transition-colors apple-press cursor-pointer shrink-0"
+            title="Toggle Theme"
+            aria-label="Toggle Theme"
+          >
+            {theme === "dark" ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-neutral-700" />}
+          </button>
+
+          {/* Back to App */}
           <Link
             href="/"
-            className="px-3.5 py-1.5 rounded-full border-2 border-black bg-white hover:bg-black hover:text-white transition text-xs font-heading font-extrabold flex items-center gap-1.5 shadow-[2px_2px_0_0_#000] cursor-pointer shrink-0"
+            className="px-3.5 py-1.5 rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white/80 dark:bg-white/5 hover:bg-black/5 dark:hover:bg-white/10 text-foreground transition text-xs font-heading font-semibold flex items-center gap-1.5 shadow-xs cursor-pointer shrink-0 apple-press"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Back to Task Hub</span>
+            <span className="hidden sm:inline">Back to Hub</span>
             <span className="sm:hidden">App</span>
           </Link>
         </div>
@@ -96,237 +116,338 @@ export default function DocsPage() {
           /* ============================================================
              FEATURE GUIDE
              ============================================================ */
-          <div className="space-y-12 animate-in fade-in duration-200">
+          <div className="space-y-10 animate-in fade-in duration-200">
             {/* Hero Banner */}
-            <div className="p-6 sm:p-8 rounded-3xl border-3 border-black bg-white shadow-[6px_6px_0_0_#000] relative overflow-hidden">
-              <div className="max-w-2xl">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-black bg-amber-100 text-black text-xs font-heading font-bold mb-3 shadow-xs">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-600 fill-amber-600" />
-                  <span>The Collaborative Operating System for Couples</span>
+            <div className="apple-card p-6 sm:p-10 relative overflow-hidden">
+              <div className="max-w-2xl relative z-10">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 dark:bg-blue-400/15 text-blue-600 dark:text-blue-400 text-xs font-semibold mb-3 border border-blue-500/20">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>The Collaborative Operating System for Shared Life</span>
                 </div>
-                <h1 className="text-2xl sm:text-4xl font-heading font-black tracking-tight text-black uppercase mb-3">
+                <h1 className="text-2xl sm:text-4xl font-heading font-bold tracking-tight text-foreground mb-3">
                   Welcome to Couple Task Hub
                 </h1>
-                <p className="text-sm sm:text-base text-zinc-600 leading-relaxed font-medium mb-5">
-                  Couple Task Hub is designed from the ground up for two partners sharing a life. It replaces disjointed note apps and scattered to-do lists with a single neo-brutalist dashboard featuring 3 unified boards, real-time cloud sync, and playful gamification.
+                <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-300 leading-relaxed font-normal mb-6">
+                  Couple Task Hub is designed from the ground up for partners sharing a life. It unifies scattered reminders and note apps into an Apple-minimalist, distraction-free workspace featuring 3 unified boards, real-time cloud sync, and playful shared gamification.
                 </p>
-                <div className="flex flex-wrap gap-2 text-xs font-heading font-extrabold">
+                <div className="flex flex-wrap gap-2 text-xs font-medium">
                   <a
-                    href="#pairing"
-                    className="px-3 py-1.5 rounded-xl border-2 border-black bg-zinc-100 hover:bg-black hover:text-white transition shadow-[2px_2px_0_0_#000]"
+                    href="#spaces"
+                    className="px-3 py-1.5 rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white/60 dark:bg-white/5 hover:bg-black/5 dark:hover:bg-white/10 transition apple-press"
                   >
-                    1. Pairing Space
+                    1. Spaces &amp; Pairing
                   </a>
                   <a
                     href="#board1"
-                    className="px-3 py-1.5 rounded-xl border-2 border-black bg-zinc-100 hover:bg-black hover:text-white transition shadow-[2px_2px_0_0_#000]"
+                    className="px-3 py-1.5 rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white/60 dark:bg-white/5 hover:bg-black/5 dark:hover:bg-white/10 transition apple-press"
                   >
                     2. Daily Routines
                   </a>
                   <a
                     href="#board2"
-                    className="px-3 py-1.5 rounded-xl border-2 border-black bg-zinc-100 hover:bg-black hover:text-white transition shadow-[2px_2px_0_0_#000]"
+                    className="px-3 py-1.5 rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white/60 dark:bg-white/5 hover:bg-black/5 dark:hover:bg-white/10 transition apple-press"
                   >
-                    3. Daily Tasks
+                    3. Daily Tasks &amp; Rollover
                   </a>
                   <a
                     href="#board3"
-                    className="px-3 py-1.5 rounded-xl border-2 border-black bg-zinc-100 hover:bg-black hover:text-white transition shadow-[2px_2px_0_0_#000]"
+                    className="px-3 py-1.5 rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white/60 dark:bg-white/5 hover:bg-black/5 dark:hover:bg-white/10 transition apple-press"
                   >
-                    4. 3-Col Kanban
+                    4. Kanban &amp; Card Drawer
+                  </a>
+                  <a
+                    href="#focus"
+                    className="px-3 py-1.5 rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white/60 dark:bg-white/5 hover:bg-black/5 dark:hover:bg-white/10 transition apple-press"
+                  >
+                    5. Co-Focus Desks
                   </a>
                   <a
                     href="#gamification"
-                    className="px-3 py-1.5 rounded-xl border-2 border-black bg-zinc-100 hover:bg-black hover:text-white transition shadow-[2px_2px_0_0_#000]"
+                    className="px-3 py-1.5 rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white/60 dark:bg-white/5 hover:bg-black/5 dark:hover:bg-white/10 transition apple-press"
                   >
-                    5. Points &amp; Wishlist
-                  </a>
-                  <a
-                    href="#accounts"
-                    className="px-3 py-1.5 rounded-xl border-2 border-black bg-amber-300 hover:bg-amber-400 transition shadow-[2px_2px_0_0_#000]"
-                  >
-                    6. Multi-Device Accounts
+                    6. Points &amp; Wishlist
                   </a>
                 </div>
               </div>
             </div>
 
-            {/* Desktop Dashboard Preview Screenshot */}
+            {/* Desktop Dashboard Preview */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="font-heading font-extrabold text-sm uppercase text-zinc-500 tracking-wider">
+                <h3 className="font-heading font-semibold text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
                   Live Interface Preview
                 </h3>
-                <span className="text-xs text-zinc-400 font-medium">3-Column Unified Architecture</span>
+                <span className="text-xs text-neutral-400 font-normal">Apple Minimalist Unified Design</span>
               </div>
-              <div className="rounded-3xl border-3 border-black overflow-hidden shadow-[6px_6px_0_0_#000] bg-white">
+              <div className="apple-card overflow-hidden rounded-3xl p-2 sm:p-3">
                 <img
                   src="/docs/desktop-dashboard.png"
                   alt="Couple Task Hub Desktop Dashboard with Daily Routines, Daily Tasks, and Kanban"
-                  className="w-full h-auto block"
+                  className="w-full h-auto block rounded-2xl border border-black/[0.06] dark:border-white/[0.08]"
                 />
               </div>
             </div>
 
-            {/* Section 1: Pairing & Setup */}
-            <section id="pairing" className="p-6 sm:p-8 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-4">
+            {/* Section 1: Space Modes & Pairing */}
+            <section id="spaces" className="apple-card p-6 sm:p-8 space-y-4">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-purple-100 border-2 border-black flex items-center justify-center font-heading font-black text-sm shadow-[1.5px_1.5px_0_0_#000]">
+                <div className="w-8 h-8 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 flex items-center justify-center font-heading font-bold text-xs">
                   01
                 </div>
-                <h2 className="text-lg sm:text-xl font-heading font-extrabold uppercase tracking-tight text-black flex items-center gap-2">
-                  <span>Circle Pairing &amp; Partner Linking</span>
+                <h2 className="text-lg sm:text-xl font-heading font-bold tracking-tight text-foreground flex items-center gap-2">
+                  <span>Circle Spaces &amp; Multi-Mode Pairing</span>
                   <Heart className="w-4 h-4 fill-pink-500 text-pink-500" />
                 </h2>
               </div>
-              <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed font-medium">
-                In Couple Task Hub, you and your partner share a private collaborative space called a <strong>Circle</strong>. No complex setup or invitations required:
+              <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed font-normal">
+                Couple Task Hub adapts to how you live. Choose between 4 tailored collaboration modes directly from your circle settings:
               </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                <div className="p-4 rounded-2xl border-2 border-black bg-[#fafafa] shadow-[2px_2px_0_0_#000]">
-                  <h3 className="font-heading font-extrabold text-xs uppercase mb-1.5 flex items-center gap-1.5 text-black">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>Option A: Create a New Space</span>
-                  </h3>
-                  <p className="text-xs text-zinc-600 font-medium">
-                    Enter your name and pick a title for your home. You receive a unique 6-character code (e.g. <code className="bg-zinc-200 px-1 py-0.5 rounded font-mono font-bold">CUP-XXXX</code>) and a 1-click shareable URL to text to your partner.
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
+                <div className="p-3.5 rounded-2xl bg-black/[0.02] dark:bg-white/[0.04] border border-black/[0.06] dark:border-white/[0.08] text-center">
+                  <span className="text-lg block mb-1">🧍</span>
+                  <h4 className="text-xs font-semibold text-foreground">Solo Space</h4>
+                  <p className="text-[11px] text-neutral-500 mt-1">Personal productivity &amp; focused habit mastery</p>
+                </div>
+                <div className="p-3.5 rounded-2xl bg-black/[0.02] dark:bg-white/[0.04] border border-pink-500/20 text-center">
+                  <span className="text-lg block mb-1">💕</span>
+                  <h4 className="text-xs font-semibold text-pink-600 dark:text-pink-400">Duo (Partner)</h4>
+                  <p className="text-[11px] text-neutral-500 mt-1">Shared household, partner cheer &amp; couple wishlist</p>
+                </div>
+                <div className="p-3.5 rounded-2xl bg-black/[0.02] dark:bg-white/[0.04] border border-black/[0.06] dark:border-white/[0.08] text-center">
+                  <span className="text-lg block mb-1">🧑‍🤝‍🧑</span>
+                  <h4 className="text-xs font-semibold text-foreground">Friends</h4>
+                  <p className="text-[11px] text-neutral-500 mt-1">Roommates, co-living chores &amp; trip planning</p>
+                </div>
+                <div className="p-3.5 rounded-2xl bg-black/[0.02] dark:bg-white/[0.04] border border-black/[0.06] dark:border-white/[0.08] text-center">
+                  <span className="text-lg block mb-1">🏡</span>
+                  <h4 className="text-xs font-semibold text-foreground">Family</h4>
+                  <p className="text-[11px] text-neutral-500 mt-1">Multi-member household routines &amp; calendars</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                <div className="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.04] border border-black/[0.06] dark:border-white/[0.08]">
+                  <h4 className="font-semibold text-xs mb-1.5 flex items-center gap-1.5 text-foreground">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                    <span>Create a Space</span>
+                  </h4>
+                  <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-normal">
+                    Give your home a name. You will receive a unique 6-character code (e.g. <code className="bg-black/[0.06] dark:bg-white/10 px-1 py-0.5 rounded font-mono font-semibold">CUP-XXXX</code>) and a 1-tap invitation link to share.
                   </p>
                 </div>
-                <div className="p-4 rounded-2xl border-2 border-black bg-[#fafafa] shadow-[2px_2px_0_0_#000]">
-                  <h3 className="font-heading font-extrabold text-xs uppercase mb-1.5 flex items-center gap-1.5 text-black">
-                    <Users className="w-3.5 h-3.5 text-blue-600" />
-                    <span>Option B: Join Partner&apos;s Circle</span>
-                  </h3>
-                  <p className="text-xs text-zinc-600 font-medium">
-                    If your partner already created the space, paste their <code className="bg-zinc-200 px-1 py-0.5 rounded font-mono font-bold">CUP-XXXX</code> code or open their invite link. You are instantly synced into the exact same dashboard.
+                <div className="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.04] border border-black/[0.06] dark:border-white/[0.08]">
+                  <h4 className="font-semibold text-xs mb-1.5 flex items-center gap-1.5 text-foreground">
+                    <Users className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                    <span>Join Partner&apos;s Space</span>
+                  </h4>
+                  <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-normal">
+                    Paste the invite code or click your partner&apos;s invite link. You are instantly linked into the same real-time cloud synchronized hub.
                   </p>
                 </div>
               </div>
             </section>
 
             {/* Section 2: Board 1 - Daily Routines & Streak Freeze */}
-            <section id="board1" className="p-6 sm:p-8 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-4">
+            <section id="board1" className="apple-card p-6 sm:p-8 space-y-4">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-emerald-100 border-2 border-black flex items-center justify-center font-heading font-black text-sm shadow-[1.5px_1.5px_0_0_#000]">
+                <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center justify-center font-heading font-bold text-xs">
                   02
                 </div>
-                <h2 className="text-lg sm:text-xl font-heading font-extrabold uppercase tracking-tight text-black flex items-center gap-2">
+                <h2 className="text-lg sm:text-xl font-heading font-bold tracking-tight text-foreground flex items-center gap-2">
                   <span>Board 1: Daily Routines &amp; Habits</span>
-                  <Check className="w-4 h-4 text-emerald-600 stroke-[3]" />
+                  <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400 stroke-[3]" />
                 </h2>
               </div>
-              <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed font-medium">
-                Inspired by Apple Notes paper lists, this board tracks non-negotiable daily recurring rituals (e.g., watering plants, morning vitamins, 10k steps, or bedtime reading).
+              <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed font-normal">
+                Inspired by Apple Notes paper lists, this board tracks daily recurring habits (e.g., watering plants, morning vitamins, 10k steps, or bedtime reading).
               </p>
-              <div className="space-y-3 pt-1">
-                <div className="p-3.5 rounded-2xl border border-zinc-200 bg-[#fafafa] text-xs space-y-1.5">
-                  <span className="font-heading font-extrabold text-black uppercase">Custom Cadence</span>
-                  <p className="text-zinc-600 font-medium">
-                    Configure habits to occur <strong>Daily</strong>, on <strong>Weekdays only</strong>, on <strong>Weekends only</strong>, or select custom days of the week (e.g. Mon/Wed/Fri gym sessions).
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                <div className="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.04] border border-black/[0.06] dark:border-white/[0.08] text-xs space-y-1">
+                  <span className="font-semibold text-foreground">Flexible Cadence</span>
+                  <p className="text-neutral-600 dark:text-neutral-400 leading-normal">
+                    Schedule routines for <strong>Everyday</strong>, <strong>Weekdays only</strong>, <strong>Weekends only</strong>, or select custom days of the week (e.g. Mon / Wed / Fri gym sessions).
                   </p>
                 </div>
-                <div className="p-3.5 rounded-2xl border border-zinc-200 bg-[#fafafa] text-xs space-y-1.5">
-                  <span className="font-heading font-extrabold text-black uppercase flex items-center gap-1.5">
+                <div className="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.04] border border-black/[0.06] dark:border-white/[0.08] text-xs space-y-1">
+                  <span className="font-semibold text-foreground flex items-center gap-1.5">
                     <span>Emergency Freeze Days</span>
-                    <span className="px-1.5 py-0.2 rounded bg-cyan-100 text-cyan-800 text-[10px] font-bold">Cold Weather / Sick</span>
+                    <span className="px-1.5 py-0.2 rounded bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 text-[10px] font-semibold">Travel / Sick</span>
                   </span>
-                  <p className="text-zinc-600 font-medium">
-                    Life happens. Toggle the <strong>Freeze Day</strong> button in the calendar bar when sick or traveling. Habits on freeze days are protected so your streak counter never breaks unfairly.
+                  <p className="text-neutral-600 dark:text-neutral-400 leading-normal">
+                    Life happens. Toggle <strong>Freeze Day</strong> in the calendar bar when sick or traveling. Routines on freeze days are protected so your streak counter never breaks unfairly.
                   </p>
                 </div>
               </div>
             </section>
 
             {/* Section 3: Board 2 - Daily Tasks & Auto-Rollover */}
-            <section id="board2" className="p-6 sm:p-8 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-4">
+            <section id="board2" className="apple-card p-6 sm:p-8 space-y-4">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-amber-100 border-2 border-black flex items-center justify-center font-heading font-black text-sm shadow-[1.5px_1.5px_0_0_#000]">
+                <div className="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 flex items-center justify-center font-heading font-bold text-xs">
                   03
                 </div>
-                <h2 className="text-lg sm:text-xl font-heading font-extrabold uppercase tracking-tight text-black">
+                <h2 className="text-lg sm:text-xl font-heading font-bold tracking-tight text-foreground">
                   Board 2: Daily Execution &amp; Auto-Rollover
                 </h2>
               </div>
-              <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed font-medium">
-                Day-specific to-dos (e.g. groceries, plumber calls, dry cleaning pick-up) tied to the active calendar date.
+              <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed font-normal">
+                Immediate day-specific errands and tasks (e.g., plumber appointments, groceries, picking up dry cleaning) anchored to the active calendar date.
               </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
-                <div className="p-4 rounded-2xl border-2 border-black bg-white shadow-[2px_2px_0_0_#000]">
-                  <span className="font-heading font-extrabold text-xs uppercase block mb-1 text-black">
-                    Auto-Rollover Engine
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                <div className="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.04] border border-black/[0.06] dark:border-white/[0.08]">
+                  <span className="font-semibold text-xs block mb-1 text-foreground">
+                    Automatic Rollover Engine
                   </span>
-                  <p className="text-xs text-zinc-600 font-medium">
-                    Unfinished tasks from yesterday or past dates are never lost. When viewing today, unfinished past tasks automatically roll over with an amber &ldquo;Rollover&rdquo; badge so you can tackle them today.
+                  <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-normal">
+                    Unfinished tasks from yesterday or past days are never forgotten. When viewing today, uncompleted past items roll forward with an amber &ldquo;Rollover&rdquo; badge.
                   </p>
                 </div>
-                <div className="p-4 rounded-2xl border-2 border-black bg-white shadow-[2px_2px_0_0_#000]">
-                  <span className="font-heading font-extrabold text-xs uppercase block mb-1 text-black">
+                <div className="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.04] border border-black/[0.06] dark:border-white/[0.08]">
+                  <span className="font-semibold text-xs block mb-1 text-foreground">
                     Assignee Filtering
                   </span>
-                  <p className="text-xs text-zinc-600 font-medium">
-                    Tag tasks as <strong>Mine</strong>, <strong>Partner</strong>, or <strong>Both</strong>. Use the top filter pill to isolate your tasks, view what your partner has claimed, or review everything at a glance.
+                  <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-normal">
+                    Tag tasks as <strong>Mine</strong>, <strong>Partner</strong>, or <strong>Both</strong>. Use the header filter pill to quickly isolate your assignments or review shared duties at a glance.
                   </p>
                 </div>
               </div>
             </section>
 
-            {/* Section 4: Board 3 - 3-Column Kanban */}
-            <section id="board3" className="p-6 sm:p-8 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-4">
+            {/* Section 4: Board 3 - Kanban & Card Detail Drawer */}
+            <section id="board3" className="apple-card p-6 sm:p-8 space-y-4">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-blue-100 border-2 border-black flex items-center justify-center font-heading font-black text-sm shadow-[1.5px_1.5px_0_0_#000]">
+                <div className="w-8 h-8 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 flex items-center justify-center font-heading font-bold text-xs">
                   04
                 </div>
-                <h2 className="text-lg sm:text-xl font-heading font-extrabold uppercase tracking-tight text-black flex items-center gap-2">
-                  <span>Board 3: 3-Column Vertical Kanban</span>
-                  <Layout className="w-4 h-4 text-blue-600" />
+                <h2 className="text-lg sm:text-xl font-heading font-bold tracking-tight text-foreground flex items-center gap-2">
+                  <span>Board 3: Vertical Kanban &amp; Card Detail Drawer</span>
+                  <Layout className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                 </h2>
               </div>
-              <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed font-medium">
-                For larger household projects that take multiple days or weeks (e.g., &ldquo;Plan anniversary trip&rdquo;, &ldquo;Reorganize garage&rdquo;, &ldquo;Tax filings&rdquo;):
+              <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed font-normal">
+                For larger multi-day household projects (e.g. &ldquo;Plan anniversary trip&rdquo;, &ldquo;Reorganize garage&rdquo;, &ldquo;Tax filings&rdquo;), Kanban cards provide structured long-term tracking across <strong>To Do</strong>, <strong>In Progress</strong>, and <strong>Completed</strong>.
               </p>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1 text-xs">
-                <div className="p-3.5 rounded-2xl border-2 border-black bg-zinc-50 shadow-[2px_2px_0_0_#000]">
-                  <span className="font-heading font-extrabold uppercase text-black block mb-1">
-                    To Do
-                  </span>
-                  <p className="text-zinc-600 font-medium">Backlog of ideas and tasks queued for upcoming execution.</p>
-                </div>
-                <div className="p-3.5 rounded-2xl border-2 border-black bg-amber-50 shadow-[2px_2px_0_0_#000]">
-                  <span className="font-heading font-extrabold uppercase text-black block mb-1">
-                    In Progress
-                  </span>
-                  <p className="text-zinc-600 font-medium">Active projects currently being worked on by either partner.</p>
-                </div>
-                <div className="p-3.5 rounded-2xl border-2 border-black bg-emerald-50 shadow-[2px_2px_0_0_#000]">
-                  <span className="font-heading font-extrabold uppercase text-black block mb-1">
-                    Completed
-                  </span>
-                  <p className="text-zinc-600 font-medium">Finished milestones with celebration badges and reward points awarded.</p>
-                </div>
-              </div>
-              <div className="p-4 rounded-2xl border border-zinc-200 bg-[#fafafa] text-xs space-y-1.5">
-                <span className="font-heading font-extrabold text-black uppercase">Subtasks &amp; Category Filters</span>
-                <p className="text-zinc-600 font-medium">
-                  Every card supports subtask checklists with live completion progress bars, notes, and category filters (<code className="font-bold">Home</code>, <code className="font-bold">Finances</code>, <code className="font-bold">Date Nights</code>, <code className="font-bold">Shopping</code>, <code className="font-bold">Travel</code>).
+              <div className="p-4 rounded-2xl bg-blue-500/[0.06] border border-blue-500/20 space-y-2">
+                <span className="font-semibold text-xs text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
+                  <ListChecks className="w-4 h-4" />
+                  <span>Interactive Card Detail Slide-Over Drawer</span>
+                </span>
+                <p className="text-xs text-neutral-600 dark:text-neutral-300 leading-normal">
+                  Clicking any card opens the deep-dive drawer without disrupting your board:
                 </p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1 text-xs">
+                  <div className="p-3 rounded-xl bg-white/70 dark:bg-white/5 border border-black/[0.04] dark:border-white/[0.06]">
+                    <span className="font-medium text-foreground block mb-0.5">Subtask Checklists</span>
+                    <span className="text-neutral-500 text-[11px]">Add sub-items with live visual progress meters.</span>
+                  </div>
+                  <div className="p-3 rounded-xl bg-white/70 dark:bg-white/5 border border-black/[0.04] dark:border-white/[0.06]">
+                    <span className="font-medium text-foreground block mb-0.5">Rich Project Notes</span>
+                    <span className="text-neutral-500 text-[11px]">Full markdown notes for links, budgets, and instructions.</span>
+                  </div>
+                  <div className="p-3 rounded-xl bg-white/70 dark:bg-white/5 border border-black/[0.04] dark:border-white/[0.06]">
+                    <span className="font-medium text-foreground block mb-0.5">Emoji Categories</span>
+                    <span className="text-neutral-500 text-[11px]">Tag with custom categories (Home, Finance, Travel, Date Night).</span>
+                  </div>
+                </div>
               </div>
             </section>
 
-            {/* Mobile View Screenshot */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-              <div className="space-y-4">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-black bg-zinc-100 text-black text-xs font-heading font-bold shadow-xs">
-                  <Smartphone className="w-3.5 h-3.5" />
-                  <span>Mobile-First Responsive Design</span>
+            {/* Section 5: Co-Focus Desks & Focus Timer */}
+            <section id="focus" className="apple-card p-6 sm:p-8 space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 flex items-center justify-center font-heading font-bold text-xs">
+                  05
                 </div>
-                <h3 className="text-xl sm:text-2xl font-heading font-extrabold uppercase text-black">
-                  Zero Horizontal Overflow on Any Screen
+                <h2 className="text-lg sm:text-xl font-heading font-bold tracking-tight text-foreground flex items-center gap-2">
+                  <span>Co-Focus Desks &amp; 24H Timeline</span>
+                  <Timer className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                </h2>
+              </div>
+              <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed font-normal">
+                Work alongside your partner even across different rooms or during remote workdays.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 text-xs">
+                <div className="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.04] border border-black/[0.06] dark:border-white/[0.08]">
+                  <span className="font-semibold block mb-1 text-foreground">
+                    Virtual Desks &amp; Status
+                  </span>
+                  <p className="text-neutral-600 dark:text-neutral-400 leading-normal">
+                    See when your partner is active at their desk, in deep focus, or taking a break with live ambient status indicators.
+                  </p>
+                </div>
+                <div className="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.04] border border-black/[0.06] dark:border-white/[0.08]">
+                  <span className="font-semibold block mb-1 text-foreground">
+                    Integrated Pomodoro Timer
+                  </span>
+                  <p className="text-neutral-600 dark:text-neutral-400 leading-normal">
+                    Launch focus sessions tied to specific Kanban tasks with ambient tick sounds and 24-hour visual progress timelines.
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            {/* Section 6: Gamification & Wishlist */}
+            <section id="gamification" className="apple-card p-6 sm:p-8 space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 flex items-center justify-center font-heading font-bold text-xs">
+                  06
+                </div>
+                <h2 className="text-lg sm:text-xl font-heading font-bold tracking-tight text-foreground flex items-center gap-2">
+                  <span>Gamification &amp; Customizable Wishlist</span>
+                  <Gift className="w-4 h-4 text-amber-500" />
+                </h2>
+              </div>
+              <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed font-normal">
+                Turning household chores into a positive-sum shared experience:
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1 text-xs">
+                <div className="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.04] border border-black/[0.06] dark:border-white/[0.08] flex flex-col justify-between">
+                  <div>
+                    <span className="font-semibold text-foreground flex items-center gap-1.5 mb-1">
+                      <Flame className="w-3.5 h-3.5 text-orange-500" />
+                      <span>Streaks</span>
+                    </span>
+                    <p className="text-neutral-500 leading-normal">Counts consecutive completed routine days, protected by Freeze Days.</p>
+                  </div>
+                  <span className="mt-3 font-semibold text-sm text-orange-600 dark:text-orange-400">Daily Multipliers</span>
+                </div>
+                <div className="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.04] border border-black/[0.06] dark:border-white/[0.08] flex flex-col justify-between">
+                  <div>
+                    <span className="font-semibold text-foreground flex items-center gap-1.5 mb-1">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                      <span>Points</span>
+                    </span>
+                    <p className="text-neutral-500 leading-normal">Earn +3 pts for daily tasks and +2 pts for completed habits with instant sync.</p>
+                  </div>
+                  <span className="mt-3 font-semibold text-sm text-amber-600 dark:text-amber-400">+3 Pts / Task</span>
+                </div>
+                <div className="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.04] border border-black/[0.06] dark:border-white/[0.08] flex flex-col justify-between">
+                  <div>
+                    <span className="font-semibold text-foreground flex items-center gap-1.5 mb-1">
+                      <Gift className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
+                      <span>Wishlist Shop</span>
+                    </span>
+                    <p className="text-neutral-500 leading-normal">Redeem points for real-world rewards. Delete or create custom rewards anytime.</p>
+                  </div>
+                  <span className="mt-3 font-semibold text-sm text-purple-600 dark:text-purple-400">Custom Rewards</span>
+                </div>
+              </div>
+            </section>
+
+            {/* Mobile View Section */}
+            <div className="apple-card p-6 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+              <div className="space-y-3">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/[0.04] dark:bg-white/[0.06] text-foreground text-xs font-semibold">
+                  <Smartphone className="w-3.5 h-3.5" />
+                  <span>Mobile-First Experience</span>
+                </div>
+                <h3 className="text-xl sm:text-2xl font-heading font-bold text-foreground">
+                  Streamlined &amp; Clean Touch Ergonomics
                 </h3>
-                <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed font-medium">
-                  On smartphones, the interface defaults directly to your Daily Routines with an ergonomic bottom navigation bar (<code className="font-bold">Habits &bull; Daily &bull; Kanban &bull; Stats</code>). The 3-column Kanban collapses into an intuitive segmented tab control (<code className="font-bold">To Do / In Progress / Done</code>) and full-height touch drawers. Header pills wrap cleanly so modals remain centered on 375px mobile screens.
+                <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed font-normal">
+                  On mobile screens, the app defaults to Daily Routines with a tactile bottom dock (<code className="font-semibold">Habits &bull; Daily &bull; Kanban &bull; Stats</code>). Redundant buttons are hidden, input zoom is disabled, and control popovers mount in a clean root document portal with zero clipping.
                 </p>
               </div>
-              <div className="max-w-[280px] mx-auto rounded-3xl border-3 border-black overflow-hidden shadow-[6px_6px_0_0_#000] bg-white">
+              <div className="max-w-[260px] mx-auto overflow-hidden rounded-3xl border border-black/[0.06] dark:border-white/[0.08] shadow-sm bg-black">
                 <img
                   src="/docs/mobile-view.png"
                   alt="Couple Task Hub Mobile View on iPhone"
@@ -334,534 +455,229 @@ export default function DocsPage() {
                 />
               </div>
             </div>
-
-            {/* Section 5: Gamification & Wishlist */}
-            <section id="gamification" className="p-6 sm:p-8 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-amber-100 border-2 border-black flex items-center justify-center font-heading font-black text-sm shadow-[1.5px_1.5px_0_0_#000]">
-                  05
-                </div>
-                <h2 className="text-lg sm:text-xl font-heading font-extrabold uppercase tracking-tight text-black flex items-center gap-2">
-                  <span>Gamification &amp; Real-World Wishlist</span>
-                  <Gift className="w-4 h-4 text-amber-500" />
-                </h2>
-              </div>
-              <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed font-medium">
-                Turning household chores into a shared positive-sum game:
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1 text-xs">
-                <div className="p-4 rounded-2xl border-2 border-black bg-white shadow-[2px_2px_0_0_#000] flex flex-col justify-between">
-                  <div>
-                    <span className="font-heading font-extrabold uppercase text-black flex items-center gap-1.5 mb-1">
-                      <Flame className="w-3.5 h-3.5 text-orange-500" />
-                      <span>Streaks</span>
-                    </span>
-                    <p className="text-zinc-600 font-medium">Counts consecutive days with completed routines. Protected by Freeze Days.</p>
-                  </div>
-                  <span className="mt-3 font-heading font-black text-base text-orange-600">Daily Multipliers</span>
-                </div>
-                <div className="p-4 rounded-2xl border-2 border-black bg-white shadow-[2px_2px_0_0_#000] flex flex-col justify-between">
-                  <div>
-                    <span className="font-heading font-extrabold uppercase text-black flex items-center gap-1.5 mb-1">
-                      <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                      <span>Points</span>
-                    </span>
-                    <p className="text-zinc-600 font-medium">Earn +3 pts for daily tasks and +2 pts for completed habits.</p>
-                  </div>
-                  <span className="mt-3 font-heading font-black text-base text-amber-600">+3 Pts / Task</span>
-                </div>
-                <div className="p-4 rounded-2xl border-2 border-black bg-white shadow-[2px_2px_0_0_#000] flex flex-col justify-between">
-                  <div>
-                    <span className="font-heading font-extrabold uppercase text-black flex items-center gap-1.5 mb-1">
-                      <Gift className="w-3.5 h-3.5 text-purple-600" />
-                      <span>Wishlist</span>
-                    </span>
-                    <p className="text-zinc-600 font-medium">Redeem points for couple rewards (dinner dates, movie night pick, foot massages).</p>
-                  </div>
-                  <span className="mt-3 font-heading font-black text-base text-purple-600">Custom Rewards</span>
-                </div>
-              </div>
-            </section>
-
-            {/* Section 6: Accounts & Multi-Device Sync */}
-            <section id="accounts" className="p-6 sm:p-8 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-cyan-100 border-2 border-black flex items-center justify-center font-heading font-black text-sm shadow-[1.5px_1.5px_0_0_#000]">
-                  06
-                </div>
-                <h2 className="text-lg sm:text-xl font-heading font-extrabold uppercase tracking-tight text-black flex items-center gap-2">
-                  <span>Multi-Device Accounts &amp; Cloud Sync</span>
-                  <ShieldCheck className="w-4 h-4 text-cyan-600" />
-                </h2>
-              </div>
-              <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed font-medium">
-                To prevent data loss and ensure your space follows you everywhere:
-              </p>
-              <div className="space-y-3 pt-1 text-xs">
-                <div className="p-3.5 rounded-2xl border border-zinc-200 bg-[#fafafa] space-y-1">
-                  <span className="font-heading font-extrabold text-black uppercase flex items-center gap-1.5">
-                    <LogIn className="w-3.5 h-3.5" />
-                    <span>1-Click Google Sign-In</span>
-                  </span>
-                  <p className="text-zinc-600 font-medium">
-                    Log in instantly with your Google account. Your profile is automatically indexed in Firestore and links your active circle.
-                  </p>
-                </div>
-                <div className="p-3.5 rounded-2xl border border-zinc-200 bg-[#fafafa] space-y-1">
-                  <span className="font-heading font-extrabold text-black uppercase">
-                    Username &amp; Gmail Registration
-                  </span>
-                  <p className="text-zinc-600 font-medium">
-                    Choose a custom username (e.g. <code className="font-bold">@alex</code>) and Gmail. Once registered, you can log in on your phone with just your username and password!
-                  </p>
-                </div>
-                <div className="p-3.5 rounded-2xl border border-zinc-200 bg-[#fafafa] space-y-1">
-                  <span className="font-heading font-extrabold text-black uppercase">
-                    Clean Circle Leave &amp; Rejoin
-                  </span>
-                  <p className="text-zinc-600 font-medium">
-                    If you ever need to reset or leave a circle, clicking <strong>Leave Circle</strong> detaches your profile in the cloud, resets local tasks cleanly, and immediately presents the Circle Setup modal.
-                  </p>
-                </div>
-              </div>
-            </section>
           </div>
         ) : (
           /* ============================================================
              CHANGELOG & RELEASE HISTORY
              ============================================================ */
           <div className="space-y-8 animate-in fade-in duration-200">
-            <div className="p-6 sm:p-8 rounded-3xl border-3 border-black bg-white shadow-[6px_6px_0_0_#000]">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-black bg-emerald-100 text-black text-xs font-heading font-bold mb-3 shadow-xs">
-                <Tag className="w-3.5 h-3.5 text-emerald-700" />
+            {/* Changelog Header */}
+            <div className="apple-card p-6 sm:p-8">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-semibold mb-3 border border-emerald-500/20">
+                <Tag className="w-3.5 h-3.5" />
                 <span>Version History</span>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-black uppercase mb-2">
+              <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-foreground mb-2">
                 Release Notes &amp; Changelog
               </h1>
-              <p className="text-xs sm:text-sm text-zinc-600 font-medium">
-                Detailed record of all feature additions, UX iterations, and backend infrastructure improvements.
+              <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 font-normal">
+                Structured record of design overhauls, feature releases, and cloud reliability milestones.
               </p>
             </div>
 
-            {/* Timeline Item: v0.6.1 (Current Release) */}
-            <article className="p-6 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-3">
+            {/* Version 0.7.0 (Current Release) */}
+            <article className="apple-card p-6 sm:p-8 space-y-4 border-blue-500/20 dark:border-blue-400/20">
               <div className="flex items-center justify-between flex-wrap gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 rounded-full border-2 border-black bg-black text-white font-heading font-black text-xs">
-                    v0.6.1
+                <div className="flex items-center gap-2.5">
+                  <span className="px-2.5 py-1 rounded-full bg-[#0071e3] text-white font-heading font-bold text-xs shadow-xs">
+                    v0.7.0
                   </span>
-                  <h3 className="font-heading font-extrabold text-base text-black">
-                    v0.6.1 (still fixing)
+                  <h3 className="font-heading font-bold text-base sm:text-lg text-foreground">
+                    Apple Minimalist Redesign &amp; Kanban Deep-Dive
                   </h3>
                 </div>
-                <span className="text-xs text-zinc-400 font-medium flex items-center gap-1">
+                <span className="text-xs text-blue-600 dark:text-blue-400 font-medium flex items-center gap-1.5 bg-blue-500/10 px-2.5 py-1 rounded-full">
                   <Clock className="w-3.5 h-3.5" />
                   <span>Current Release</span>
                 </span>
               </div>
-              <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
+              <div className="space-y-3 pt-1 text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 font-normal leading-relaxed">
+                <div>
+                  <h4 className="font-semibold text-foreground text-xs uppercase tracking-wide mb-1 text-blue-600 dark:text-blue-400">
+                    Design &amp; Aesthetics
+                  </h4>
+                  <ul className="list-disc list-inside space-y-1.5 pl-1">
+                    <li>
+                      <strong>Apple Minimalist Visual Overhaul:</strong> Transformed entire application from retro neo-brutalism to modern Apple minimalism featuring frosted glass cards (<code className="font-semibold">apple-card</code>), subtle border hairlines, dark mode elevation, and refined SF-style typography.
+                    </li>
+                    <li>
+                      <strong>Translucent Control Bars:</strong> Implemented backdrop-filtered floating navigation bars and segmented view tracks for seamless light/dark mode adaptation.
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-foreground text-xs uppercase tracking-wide mb-1 text-blue-600 dark:text-blue-400">
+                    Kanban Deep-Dive
+                  </h4>
+                  <ul className="list-disc list-inside space-y-1.5 pl-1">
+                    <li>
+                      <strong>Slide-Over Card Detail Drawer:</strong> Clicking any Kanban card opens an in-depth slide-over inspector for subtask checklists, markdown project notes, emoji category tagging, and assignee assignment.
+                    </li>
+                    <li>
+                      <strong>Card Action Insulation:</strong> Quick buttons (<code className="font-semibold">Start</code>, <code className="font-semibold">Done</code>, <code className="font-semibold">Focus</code>, <code className="font-semibold">Delete</code>) execute with event propagation protection so card actions do not trigger the drawer unintentionally.
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-foreground text-xs uppercase tracking-wide mb-1 text-blue-600 dark:text-blue-400">
+                    Ergonomics &amp; &ldquo;Less is More&rdquo; Decluttering
+                  </h4>
+                  <ul className="list-disc list-inside space-y-1.5 pl-1">
+                    <li>
+                      <strong>Mobile Button Pruning:</strong> Removed redundant routine quick-add buttons on mobile viewports since the persistent bottom-right floating action button already handles creation.
+                    </li>
+                    <li>
+                      <strong>Concise Copy &amp; Placeholders:</strong> Streamlined task input placeholder text (<code className="font-semibold">What&apos;s gotta finish today?</code>) and eliminated noisy mobile container borders.
+                    </li>
+                    <li>
+                      <strong>Portal-Mounted Control Center:</strong> Re-anchored the top header popover into a root document portal (<code className="font-semibold">createPortal</code>), permanently solving first-click dropdown clipping and stacking context collisions.
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </article>
+
+            {/* Version 0.6.2 */}
+            <article className="apple-card p-6 sm:p-8 space-y-4">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div className="flex items-center gap-2.5">
+                  <span className="px-2.5 py-1 rounded-full bg-black/10 dark:bg-white/10 text-foreground font-heading font-bold text-xs">
+                    v0.6.2
+                  </span>
+                  <h3 className="font-heading font-bold text-base text-foreground">
+                    Multi-Mode Spaces, Dynamic Cheers &amp; Wishlist Polish
+                  </h3>
+                </div>
+                <span className="text-xs text-neutral-400 font-medium">Late October 2026</span>
+              </div>
+              <ul className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 space-y-2 list-disc list-inside font-normal leading-relaxed pt-1">
                 <li>
-                  <strong>Fixed Mock Data Restoration on Page Refresh:</strong> Resolved an issue where refreshing the browser while logged in caused all pre-login mock routines, tasks, Kanban items, and &ldquo;Alex &amp; Sam&rdquo; streaks to reappear on screen due to an asynchronous authentication gap. Added synchronous session caching and auth loading guards across all boards.
+                  <strong>Space Modes (Solo, Duo, Friends, Family):</strong> Added flexible space configuration. Switching between modes automatically updates UI titles, avatar counters, and collaboration settings.
                 </li>
                 <li>
-                  <strong>Fixed Mobile Header Overlapping &amp; Negative Space:</strong> Polished top navigation layout on mobile screens by hiding redundant desktop controls (Widgets preview, Docs link, and Desktop multi-board view switcher), compressing action dock buttons, and streamlining partner switcher and streak counters into a single balanced row with zero empty negative space.
+                  <strong>Mode-Adaptive Consistency Dials:</strong> Dials and Momentum Cheer banners dynamically reflect the active mode (e.g. &ldquo;Couple Momentum Cheer&rdquo; only appears in Duo mode; Solo spaces show personalized focus dials).
                 </li>
                 <li>
-                  <strong>Removed Duplicate Calendar on Stats Tab:</strong> Fixed mobile navigation so the 7-day week calendar strip is only shown on Habits and Daily tabs, removing the redundant duplicate calendar from the Stars/Stats screen.
+                  <strong>Penalty Ladder Display Fix:</strong> Resolved negative value formatting in penalty banners using <code className="font-semibold">Math.abs</code>, cleanly showing point deductions without double dashes.
                 </li>
                 <li>
-                  <strong>Live Real-Time Calendar Date:</strong> Resolved system date bug where calendar and task boards were hardcoded to October 14, 2026, dynamically binding to the user&rsquo;s live current device day while preserving test suite determinism.
-                </li>
-                <li>
-                  <strong>Wishlist Shop Hover Polish &amp; Headroom:</strong> Added top headroom padding to the scroll container in the Couple Wishlist Shop modal, preventing card hover elevation (<code className="font-bold">translateY(-2px)</code>) on the first reward card from clipping or overlapping under the modal header border.
-                </li>
-                <li>
-                  <strong>Delete Existing Rewards Option:</strong> Added a 1-tap delete button (trash icon) to every wishlist item card, empowering couples to delete existing rewards and customize their rewards shop to their liking.
-                </li>
-                <li>
-                  <strong>Prevent Mobile Auto-Zoom on Input Focus:</strong> Added Next.js viewport locking (<code className="font-bold">maximumScale: 1, userScalable: false</code>) in root layout and enforced 16px font-size standards on mobile input fields, completely preventing iOS Safari from zooming into the screen when focusing task and habit inputs.
-                </li>
-                <li>
-                  <strong>Fixed Assignee Filter &amp; Partner Intent Inversion:</strong> Resolved issue where Partner 2 (Sam) adding a daily routine or kanban task marked &ldquo;Me&rdquo; caused the task to be attributed to Partner 1 and appear under the partner&rsquo;s filter instead. Implemented dynamic intent resolution (<code className="font-bold">resolveIntentToAssignee</code>) and contextual badge labeling (<code className="font-bold">getAssigneeLabel</code>).
-                </li>
-                <li>
-                  <strong>Fixed Daily Tasks Disappearing on Refresh:</strong> Resolved synchronization bug where daily tasks containing undefined fields failed during Firestore <code className="font-bold">setDoc</code> writes and were subsequently erased by empty remote snapshots on page refresh. Added recursive payload sanitization and resilient local-remote snapshot merging.
-                </li>
-                <li>
-                  <strong>Purged Mock Streaks &amp; Points for Logged-In Users:</strong> Removed lingering pre-login demo scores (9 PTS / 12 PTS) from local state, guaranteeing authenticated and circle spaces always display authentic, live household point balances and streak counters starting from clean state.
-                </li>
-                <li>
-                  <strong>Username Display &amp; Google Auth First-Name Normalization:</strong> Updated user switcher and filter tags to display clean usernames instead of full names (first + last name). Fixed Google Auth username generation to derive clean handles from first names rather than underscore-joined full names, cleaned existing partner records, and introduced an in-app Profile &amp; Username editor modal.
-                </li>
-                <li>
-                  <strong>Fixed Mobile Horizontal Screen Overflow:</strong> Resolved mobile layout bug where partner switcher buttons and streak counters in header Tier 2 exceeded mobile screen boundaries, pushing the streaks pill off-screen and creating horizontal page sway. Added button text truncation, compact responsive badge formatting, and strict <code className="font-bold">overflow-x-clip</code> viewport containment.
-                </li>
-                <li>
-                  <strong>Independent Partner Perfect Day &amp; Automated Point Accrual:</strong> Resolved an issue where completing all personal (&ldquo;Me&rdquo;) and shared (&ldquo;Both&rdquo;) daily routines did not award +1 point or activate streak counters when the partner had remaining tasks. Replaced filter-dependent completion checks with partner-specific domain evaluation (<code className="font-bold">evaluatePartnerDay</code>), wired automated real-time point and streak reconciliation into household state and Firestore, and updated the celebratory banner to recognize individual and household Perfect Days.
-                </li>
-                <li>
-                  <strong>Real-Time Partner Cheers &amp; Notifications Sync:</strong> Connected in-app notifications and cheers to Firestore circle subcollections (<code className="font-bold">circles/&#123;circleId&#125;/notifications</code>), enabling instant cross-device notification delivery. When cheering from Consistency Dials or the Notification Drawer quick cheer box, cheers and habit/task completion alerts are directly delivered to your partner&rsquo;s device with live push notifications, and drawer filtering displays incoming alerts intended for you rather than echoing your own sent cheers.
-                </li>
-                <li>
-                  <strong>Persistent Task &amp; Kanban Check State Across Reloads:</strong> Resolved task state persistence gaps where checking off a daily task or moving a card on the Kanban board occasionally reverted upon page reload or snapshot sync. Fixed two-way Kanban-Daily task sync hooks to immediately write deterministic updates to Firestore, eliminated race conditions during asynchronous React state updates, and guaranteed bidirectional status synchronization.
-                </li>
-                <li>
-                  <strong>Resilient Routine Creation, Mobile Quick Add Bar &amp; Other-Days Visibility:</strong> Fixed routine creation so incoming Firestore snapshots never overwrite pending or locally added habits via robust <code className="font-bold">localOnly</code> snapshot merging. Upgraded the Quick Add Routine bar with an explicit <code className="font-bold">&lt;form onSubmit&gt;</code>, mobile-friendly <strong>Add</strong> button, and Assignee selector (<code className="font-bold">Me</code>, <code className="font-bold">Partner</code>, <code className="font-bold">Both</code>). Added an &ldquo;Other Days&rdquo; collapsible indicator on the habits board so routines scheduled for different days of the week (such as Tue/Thu/Sat when viewing Wednesday) are clearly displayed and manageable instead of appearing missing.
+                  <strong>Wishlist Shop Customization:</strong> Empowered users to delete existing rewards via a 1-tap trash action and added scroll headroom padding to prevent card hover clipping.
                 </li>
               </ul>
             </article>
 
-            {/* Timeline Item: v0.6.0 */}
-            <article className="p-6 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-3">
+            {/* Version 0.6.1 */}
+            <article className="apple-card p-6 sm:p-8 space-y-4">
               <div className="flex items-center justify-between flex-wrap gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 rounded-full border-2 border-black bg-zinc-200 text-black font-heading font-black text-xs">
+                <div className="flex items-center gap-2.5">
+                  <span className="px-2.5 py-1 rounded-full bg-black/10 dark:bg-white/10 text-foreground font-heading font-bold text-xs">
+                    v0.6.1
+                  </span>
+                  <h3 className="font-heading font-bold text-base text-foreground">
+                    Real-Time Cloud Synchronization &amp; Gamification Engine
+                  </h3>
+                </div>
+                <span className="text-xs text-neutral-400 font-medium">Mid October 2026</span>
+              </div>
+              <ul className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 space-y-2 list-disc list-inside font-normal leading-relaxed pt-1">
+                <li>
+                  <strong>Independent Partner Perfect Days:</strong> Introduced partner-specific domain evaluation (<code className="font-semibold">evaluatePartnerDay</code>), ensuring completing all personal routines immediately awards +1 point and maintains streak status even if the partner has remaining tasks.
+                </li>
+                <li>
+                  <strong>Resilient Cloud State Persistence:</strong> Resolved task state reverting gaps across browser refreshes with recursive payload sanitization for Firestore <code className="font-semibold">setDoc</code> and resilient local-remote snapshot merging.
+                </li>
+                <li>
+                  <strong>Live Partner Cheers &amp; Push Alerts:</strong> Subscribed notification drawers to Firestore subcollections (<code className="font-semibold">circles/&#123;id&#125;/notifications</code>) for instant delivery of partner cheers, task completions, and streaks.
+                </li>
+                <li>
+                  <strong>Intent Resolution &amp; Filter Isolation:</strong> Fixed partner intent inversion so tasks marked &ldquo;Me&rdquo; accurately link to the creating partner regardless of active filter state.
+                </li>
+                <li>
+                  <strong>Security Upgrade:</strong> Upgraded framework core to Next.js 15.2.9 with enhanced build validation.
+                </li>
+              </ul>
+            </article>
+
+            {/* Version 0.6.0 */}
+            <article className="apple-card p-6 sm:p-8 space-y-4">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div className="flex items-center gap-2.5">
+                  <span className="px-2.5 py-1 rounded-full bg-black/10 dark:bg-white/10 text-foreground font-heading font-bold text-xs">
                     v0.6.0
                   </span>
-                  <h3 className="font-heading font-extrabold text-base text-black">
-                    Multi-Mode Spaces, In-App &amp; Push Notifications, and Home Screen Widgets
+                  <h3 className="font-heading font-bold text-base text-foreground">
+                    Home Screen Widgets &amp; Multi-Device Accounts
                   </h3>
                 </div>
-                <span className="text-xs text-zinc-400 font-medium">October 16, 2026</span>
+                <span className="text-xs text-neutral-400 font-medium">October 16, 2026</span>
               </div>
-              <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
+              <ul className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 space-y-2 list-disc list-inside font-normal leading-relaxed pt-1">
                 <li>
-                  <strong>Multi-Mode Collaboration (&ldquo;Your Space, Your Way&rdquo;):</strong> Users can now choose whether to use the app <code className="font-bold">🧍 Solo</code>, <code className="font-bold">💕 With Partner (Duo)</code>, <code className="font-bold">🧑‍🤝‍🧑 With Friends</code>, or <code className="font-bold">🏡 With Family</code>. Switch modes anytime directly from the top navigation bar or circle settings with tailor-made title labels and tailored single- or multi-user profiles.
+                  <strong>Glanceable Home Screen Widgets:</strong> Interactive Small (2×2), Medium (4×2), and Large (4×4) widgets with live habit check toggles, 7-day consistency strip, and standalone <code className="font-semibold">/widget</code> route for iOS and Android.
                 </li>
                 <li>
-                  <strong>Real-Time Notifications &amp; Web Push:</strong> Integrated in-app neo-brutalist slide-out notification drawer with unread count badge, filter tabs (All, Cheers, Tasks, Streaks), native Web Notifications API browser push alerts, and 1-tap quick cheers. Routine and task completions instantly push live alerts.
+                  <strong>1-Click Google Sign-In &amp; Usernames:</strong> Instant authentication with Google OAuth or custom username &amp; password with profile linking in Cloud Firestore.
                 </li>
                 <li>
-                  <strong>Glanceable Home Screen Widgets:</strong> Interactive widget system supporting Small (2×2), Medium (4×2), and Large (4×4) sizes with live habit check toggles, 7-day consistency strip, flame streaks, and completion meters. Includes dedicated standalone <code className="bg-zinc-100 px-1 py-0.5 rounded font-mono font-bold">/widget</code> route and step-by-step home screen installation guide for iOS (Safari), Android (Chrome), and Notion.
-                </li>
-                <li>
-                  <strong>Vercel Privacy-Friendly Analytics:</strong> Zero-config analytics tracking integrated to monitor Core Web Vitals and app traffic.
-                </li>
-                <li>
-                  <strong>Board Hover Elevation Polish:</strong> Added top headroom (<code className="bg-zinc-100 px-1 py-0.5 rounded font-mono font-bold">pt-1.5 pb-1</code>) to scroll containers in Daily Tasks and Daily Routines boards, eliminating top border clipping during hover animations on mobile and desktop.
-                </li>
-                <li>
-                  <strong>Task Detail Drawer &amp; 2-Way Kanban Sync Badge:</strong> Enhanced <code className="bg-zinc-100 px-1 py-0.5 rounded font-mono font-bold">TaskDetailDrawer</code> with accurate rollover detection keyed to the active calendar view date, and surfaced live 2-way Kanban sync status badges.
+                  <strong>In-App Notification Center:</strong> Slide-out drawer with unread badges, filter tabs, and native Web Push notification support.
                 </li>
               </ul>
             </article>
 
-            {/* Roadmap: What's Next */}
-            <article className="p-6 rounded-3xl border-2 border-dashed border-black bg-[#fff9db] shadow-[4px_4px_0_0_#000] space-y-3">
+            {/* Version 0.5.x Milestones */}
+            <article className="apple-card p-6 sm:p-8 space-y-4">
               <div className="flex items-center justify-between flex-wrap gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 rounded-full border-2 border-black bg-pink-300 text-black font-heading font-black text-xs">
+                <div className="flex items-center gap-2.5">
+                  <span className="px-2.5 py-1 rounded-full bg-black/5 dark:bg-white/5 text-neutral-500 font-heading font-bold text-xs">
+                    v0.5.x
+                  </span>
+                  <h3 className="font-heading font-bold text-base text-foreground">
+                    Calendar Navigation, Auth-First Onboarding &amp; Logo Design
+                  </h3>
+                </div>
+                <span className="text-xs text-neutral-400 font-medium">October 14–15, 2026</span>
+              </div>
+              <ul className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 space-y-2 list-disc list-inside font-normal leading-relaxed pt-1">
+                <li>
+                  <strong>7-Day Week Calendar Strip:</strong> Added horizontal Mon–Sun day navigation strip on mobile with instant day filtering and real-time status dots.
+                </li>
+                <li>
+                  <strong>Mock Data Auto-Wipe:</strong> Guaranteed that logging into an account cleanly clears demo items and displays fresh household state.
+                </li>
+                <li>
+                  <strong>Official Brand Identity:</strong> Shipped &ldquo;The Orbiting Hub&rdquo; logo with SVG assets, favicons, and manifest icons.
+                </li>
+                <li>
+                  <strong>Cloud Firestore Migration:</strong> Re-architected backend onto Google Firebase Cloud Firestore with zero cold-start latency.
+                </li>
+              </ul>
+            </article>
+
+            {/* Roadmap */}
+            <article className="apple-card p-6 sm:p-8 space-y-4 border-dashed border-purple-500/30 bg-purple-500/[0.02]">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div className="flex items-center gap-2.5">
+                  <span className="px-2.5 py-1 rounded-full bg-purple-500/15 text-purple-600 dark:text-purple-400 font-heading font-bold text-xs border border-purple-500/20">
                     NEXT UP
                   </span>
-                  <h3 className="font-heading font-extrabold text-base text-black">
-                    Roadmap: What&apos;s Next
+                  <h3 className="font-heading font-bold text-base text-foreground">
+                    Roadmap &amp; Future Milestones
                   </h3>
                 </div>
-                <span className="text-xs text-zinc-500 font-medium">Future additions</span>
+                <span className="text-xs text-neutral-400 font-medium">Under active development</span>
               </div>
-              <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
+              <ul className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 space-y-2 list-disc list-inside font-normal leading-relaxed pt-1">
                 <li>
-                  <strong>Multi-Circle Architecture &amp; Unified Personal Sync:</strong> Join multiple circles simultaneously (e.g. Partner space, Roommates space, Family circle) with 1-click space switching. Tasks assigned to <code className="font-bold">Mine</code> automatically synchronize across all your circles so you only track personal to-dos once, while shared tasks marked <code className="font-bold">Both</code> remain strictly sandboxed and private to that specific circle.
+                  <strong>Multi-Circle Architecture:</strong> Join multiple circles simultaneously (e.g. Partner space + Family circle) with instant space switching and unified personal task synchronization.
                 </li>
                 <li>
-                  <strong>Live Floating Notification Toasts (&ldquo;Momentum Floaters&rdquo;):</strong> Real-time dynamic floating toast pills that glide across the top of the screen when your partner checks off a task, hits a streak milestone, or sends love, complete with a 1-tap &ldquo;Cheer Back ❤️&rdquo; micro-reaction.
+                  <strong>Live Floating Toasts (&ldquo;Momentum Floaters&rdquo;):</strong> Real-time dynamic toast pills gliding across the screen when a partner completes a task or sends love.
                 </li>
                 <li>
-                  <strong>Polish Mobile UI:</strong> Refinements to mobile touch ergonomics, responsive flow, layout spacing, and gestures as further real-world device testing and feedback roll in.
+                  <strong>Partner Scratch Cards:</strong> Gamified surprise vouchers and scratch-off reward vouchers in the Wishlist.
                 </li>
                 <li>
-                  <strong>Custom Partner Reward Scratch Cards:</strong> Gamified surprise vouchers and realistic scratch-off reward cards in the Wishlist.
-                </li>
-                <li>
-                  <strong>Voice Task Dictation:</strong> 1-tap micro-dictation to quickly capture to-dos and habit reminders on the go.
-                </li>
-                <li>
-                  <strong>Google &amp; Apple Calendar Sync:</strong> Two-way calendar synchronization for time-blocked routines and shared household deadlines.
-                </li>
-                <li>
-                  <strong>AI Smart Habit Breakdown:</strong> Intelligent task breakdown and cadence recommendations for complex household chores.
-                </li>
-              </ul>
-            </article>
-
-            {/* Timeline Item: v0.5.5 */}
-            <article className="p-6 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-3">
-              <div className="flex items-center justify-between flex-wrap gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 rounded-full border-2 border-black bg-amber-300 text-black font-heading font-black text-xs">
-                    v0.5.5
-                  </span>
-                  <h3 className="font-heading font-extrabold text-base text-black">
-                    7-Day Mobile Week Calendar Strip &amp; Navbar Focus Reordering
-                  </h3>
-                </div>
-                <span className="text-xs text-zinc-400 font-medium">Oct 15, 2026</span>
-              </div>
-              <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
-                <li>
-                  <strong>Desktop Focus Switcher Sequence:</strong> Realigned the top navigation view switcher pills to <code className="font-bold">All Boards &rarr; Day &amp; Habits &rarr; Kanban Focus</code>, matching the natural 1-2-3 left-to-right board progression.
-                </li>
-                <li>
-                  <strong>7-Day Pill Row (Mon&ndash;Sun):</strong> Added a dedicated horizontal week calendar directly above the Daily Routines and Daily Tasks boards on mobile screens. Displays day abbreviations (MON to SUN) and dates (12 to 18).
-                </li>
-                <li>
-                  <strong>Real-Time Status Dots:</strong> Each day pill features a visual status indicator &mdash; green for 100% completion, amber for in-progress or partial completion, cyan for Freeze / Rest Days, and neutral zinc for upcoming/empty days.
-                </li>
-                <li>
-                  <strong>Instant Day Filtering:</strong> Tapping any day pill immediately filters Daily Routines to habits scheduled for that day, and switches Daily Tasks to to-dos and rolled-over tasks for that specific date.
-                </li>
-                <li>
-                  <strong>1-Tap &ldquo;Today&rdquo; Return &amp; Week Slider:</strong> Effortlessly slide forward or backward across weeks with <code className="font-bold">&lt;</code> <code className="font-bold">&gt;</code> controls, and snap back to the current day in a single click via the yellow &ldquo;Today&rdquo; pill.
-                </li>
-                <li>
-                  <strong>Clean Mobile Hierarchy:</strong> Intelligently shown on Habits, Daily, and Progress tabs while kept off the Kanban board to maximize screen real estate for drag-and-drop workflow columns.
-                </li>
-              </ul>
-            </article>
-
-            {/* Timeline Item: v0.5.4 */}
-            <article className="p-6 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-3">
-              <div className="flex items-center justify-between flex-wrap gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 rounded-full border-2 border-black bg-amber-300 text-black font-heading font-black text-xs">
-                    v0.5.4
-                  </span>
-                  <h3 className="font-heading font-extrabold text-base text-black">
-                    Mock Data Auto-Wipe, SSR Hydration &amp; Layout Stability
-                  </h3>
-                </div>
-                <span className="text-xs text-zinc-400 font-medium">Oct 15, 2026</span>
-              </div>
-              <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
-                <li>
-                  <strong>Clean Household on Login:</strong> Authenticating via Google Sign-In or Username/Password now completely purges all pre-login mock routines, tasks, Kanban items, mock points/streaks, and the sample &ldquo;Alex &amp; Sam&rdquo; names, giving every authenticated pair a pristine, dedicated space.
-                </li>
-                <li>
-                  <strong>Next.js SSR Hydration Stability:</strong> Resolved server/client text mismatches across the header space title and Wishlist reward modal by properly isolating client state and applying hydration guards.
-                </li>
-                <li>
-                  <strong>Desktop Header Streamlining:</strong> Refined view focus switcher pills (&ldquo;All Boards&rdquo;, &ldquo;Kanban Focus&rdquo;, &ldquo;Day &amp; Habits&rdquo;) with responsive nowrap behavior, ensuring zero multi-line wrapping or clipping on 1280px–1440px desktop screens.
-                </li>
-                <li>
-                  <strong>HMR &amp; Dev Environment Hardening:</strong> Resolved Webpack chunk manifest cache collisions between production builds and dev server runs, and suppressed blocking dev overlay popups on client-side form validation catches.
-                </li>
-              </ul>
-            </article>
-
-            {/* Timeline Item: v0.5.3 */}
-            <article className="p-6 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-3">
-              <div className="flex items-center justify-between flex-wrap gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 rounded-full border-2 border-black bg-amber-300 text-black font-heading font-black text-xs">
-                    v0.5.3
-                  </span>
-                  <h3 className="font-heading font-extrabold text-base text-black">
-                    Pre-Login Mock Tasks &amp; Streak Showcase
-                  </h3>
-                </div>
-                <span className="text-xs text-zinc-400 font-medium">Oct 15, 2026</span>
-              </div>
-              <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
-                <li>
-                  <strong>All 3 Boards Populated:</strong> Before logging in, visitors and new users immediately see vibrant interactive mock items across Daily Routines, Daily Tasks (with rollover indicator), and the 3-Column Kanban board.
-                </li>
-                <li>
-                  <strong>Mock Streaks &amp; Points:</strong> Header and Stats sections showcase live gamification numbers (4-day streak with 12 PTS for Alex, and 2-day streak with 9 PTS for Sam) so visitors can explore partner switching and points feedback.
-                </li>
-                <li>
-                  <strong>Zero Blank States:</strong> First-time visitors on both desktop and mobile experience the full product design without needing to register first.
-                </li>
-              </ul>
-            </article>
-
-            {/* Timeline Item: v0.5.2 */}
-            <article className="p-6 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-3">
-              <div className="flex items-center justify-between flex-wrap gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 rounded-full border-2 border-black bg-amber-300 text-black font-heading font-black text-xs">
-                    v0.5.2
-                  </span>
-                  <h3 className="font-heading font-extrabold text-base text-black">
-                    Auth-First Onboarding &amp; Mobile Visit Flow
-                  </h3>
-                </div>
-                <span className="text-xs text-zinc-400 font-medium">Oct 15, 2026</span>
-              </div>
-              <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
-                <li>
-                  <strong>Mobile Tab Ordering:</strong> Reordered the mobile bottom navigation bar to <code className="font-bold">Habits &rarr; Daily &rarr; Kanban &rarr; Stats</code>, setting Daily Routines as the default initial view on mobile screens.
-                </li>
-                <li>
-                  <strong>Clean First Visit:</strong> Eliminated the premature Join Circle modal popup for unauthenticated visitors on both mobile and desktop screens.
-                </li>
-                <li>
-                  <strong>Auth-Gated Circles:</strong> Joining or creating circles now mandates registering via Gmail or logging in with Username first, preventing isolated local circles and ensuring cloud multi-device sync works flawlessly.
-                </li>
-                <li>
-                  <strong>Invite Link Stashing:</strong> Incoming <code className="bg-zinc-100 px-1 py-0.5 rounded font-mono font-bold">?join=CODE</code> invitation links stash the code across registration/login and automatically open the join prompt once authenticated.
-                </li>
-                <li>
-                  <strong>Smart Header Action:</strong> Clicking &ldquo;Join Circle&rdquo; when logged out directly opens the authentication dialog.
-                </li>
-              </ul>
-            </article>
-
-            {/* Timeline Item: v0.5.1 */}
-            <article className="p-6 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-3">
-              <div className="flex items-center justify-between flex-wrap gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 rounded-full border-2 border-black bg-amber-300 text-black font-heading font-black text-xs">
-                    v0.5.1
-                  </span>
-                  <h3 className="font-heading font-extrabold text-base text-black">
-                    1-Click Google Sign-In &amp; Built-In Docs
-                  </h3>
-                </div>
-                <span className="text-xs text-zinc-400 font-medium">Oct 15, 2026</span>
-              </div>
-              <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
-                <li>
-                  <strong>1-Click Google Sign-In:</strong> Added Google OAuth provider directly into the neo-brutalist authentication modal with automatic username generation and Firestore profile linking.
-                </li>
-                <li>
-                  <strong>Comprehensive Documentation &amp; Changelog:</strong> Added dedicated <code className="bg-zinc-100 px-1 py-0.5 rounded font-mono font-bold">/docs</code> portal featuring full walkthrough guides, architecture breakdowns, screenshots, and release notes.
-                </li>
-                <li>
-                  <strong>Header Navigation:</strong> Added a direct &ldquo;Docs&rdquo; quick-link in the top navigation bar.
-                </li>
-              </ul>
-            </article>
-
-            {/* Timeline Item: v0.5.0 */}
-            <article className="p-6 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-3">
-              <div className="flex items-center justify-between flex-wrap gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 rounded-full border-2 border-black bg-amber-300 text-black font-heading font-black text-xs">
-                    v0.5.0
-                  </span>
-                  <h3 className="font-heading font-extrabold text-base text-black">
-                    Multi-Device Authentication &amp; Leave Circle Overhaul
-                  </h3>
-                </div>
-                <span className="text-xs text-zinc-400 font-medium">Oct 14, 2026</span>
-              </div>
-              <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
-                <li>
-                  <strong>Multi-Device Auth Context:</strong> Introduced <code className="bg-zinc-100 px-1 py-0.5 rounded font-mono font-bold">AuthContext</code> supporting Gmail/Email registration and Username &amp; Password sign-in.
-                </li>
-                <li>
-                  <strong>Cross-Device Space Loading:</strong> When signing in on a new device (laptop or smartphone), the user&apos;s active circle and tasks load automatically from Firestore without needing re-pairing.
-                </li>
-                <li>
-                  <strong>Leave Circle Fix:</strong> Resolved an issue where clicking &ldquo;Leave Circle&rdquo; left stale tasks visible on screen. It now detaches cloud credentials, clears local storage, and immediately prompts the Circle Setup modal.
-                </li>
-                <li>
-                  <strong>Account Pill:</strong> Header now displays the authenticated handle (e.g. <code className="font-bold">@username</code>) with instant Sign Out action.
-                </li>
-              </ul>
-            </article>
-
-            {/* Timeline Item: v0.4.0 */}
-            <article className="p-6 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-3">
-              <div className="flex items-center justify-between flex-wrap gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 rounded-full border-2 border-black bg-zinc-100 text-black font-heading font-black text-xs">
-                    v0.4.0
-                  </span>
-                  <h3 className="font-heading font-extrabold text-base text-black">
-                    Firebase Cloud Firestore Real-Time Sync
-                  </h3>
-                </div>
-                <span className="text-xs text-zinc-400 font-medium">Oct 14, 2026</span>
-              </div>
-              <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
-                <li>
-                  <strong>Backend Migration:</strong> Transitioned from Supabase free tier to Google Firebase Cloud Firestore for zero cold-start real-time collaboration.
-                </li>
-                <li>
-                  <strong>Live Document Listeners:</strong> Implemented real-time <code className="bg-zinc-100 px-1 py-0.5 rounded font-mono font-bold">onSnapshot</code> synchronization across circles, habits/routines, daily tasks, and kanban cards.
-                </li>
-                <li>
-                  <strong>Vercel Deployment Readiness:</strong> Environment keys configured in <code className="font-mono">.env.local</code> and ready for automated Vercel CI/CD deployment.
-                </li>
-              </ul>
-            </article>
-
-            {/* Timeline Item: v0.3.0 */}
-            <article className="p-6 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-3">
-              <div className="flex items-center justify-between flex-wrap gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 rounded-full border-2 border-black bg-zinc-100 text-black font-heading font-black text-xs">
-                    v0.3.0
-                  </span>
-                  <h3 className="font-heading font-extrabold text-base text-black">
-                    Official Logo: &ldquo;The Orbiting Hub&rdquo; (Variant 04)
-                  </h3>
-                </div>
-                <span className="text-xs text-zinc-400 font-medium">Oct 14, 2026</span>
-              </div>
-              <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
-                <li>
-                  <strong>Logo Design &amp; Selection:</strong> Evaluated 18 concepts across minimal and playful aesthetics, finalizing on Variant 04 featuring partner hearts, a 45° snapped checkmark, and a dashed squircle orbit.
-                </li>
-                <li>
-                  <strong>Full Asset Suite:</strong> Exported custom SVG icons, PWA manifests (<code className="font-mono">icon-192.png</code>, <code className="font-mono">icon-512.png</code>), and crisp browser favicons.
-                </li>
-                <li>
-                  <strong>Brand Integration:</strong> Inlined SVG logo into headers, onboarding modals, and app shells.
-                </li>
-              </ul>
-            </article>
-
-            {/* Timeline Item: v0.2.0 */}
-            <article className="p-6 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-3">
-              <div className="flex items-center justify-between flex-wrap gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 rounded-full border-2 border-black bg-zinc-100 text-black font-heading font-black text-xs">
-                    v0.2.0
-                  </span>
-                  <h3 className="font-heading font-extrabold text-base text-black">
-                    Mobile Responsiveness &amp; Overflow Elimination
-                  </h3>
-                </div>
-                <span className="text-xs text-zinc-400 font-medium">Oct 14, 2026</span>
-              </div>
-              <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
-                <li>
-                  <strong>Viewport Clamping:</strong> Added <code className="font-mono">max-width: 100vw; overflow-x: hidden;</code> to prevent header pills from pushing iPhone screens horizontally.
-                </li>
-                <li>
-                  <strong>Centered Modals:</strong> Fixed modal alignment on 375px screens by making top header items wrap dynamically.
-                </li>
-                <li>
-                  <strong>Dismissible Onboarding:</strong> Added close &ldquo;X&rdquo; button and &ldquo;Explore Demo Space&rdquo; action to the circle onboarding modal.
-                </li>
-              </ul>
-            </article>
-
-            {/* Timeline Item: v0.1.0 */}
-            <article className="p-6 rounded-3xl border-2 border-black bg-white shadow-[4px_4px_0_0_#000] space-y-3">
-              <div className="flex items-center justify-between flex-wrap gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 rounded-full border-2 border-black bg-zinc-100 text-black font-heading font-black text-xs">
-                    v0.1.0
-                  </span>
-                  <h3 className="font-heading font-extrabold text-base text-black">
-                    Initial Foundation &amp; 3-Board Architecture
-                  </h3>
-                </div>
-                <span className="text-xs text-zinc-400 font-medium">Oct 14, 2026</span>
-              </div>
-              <ul className="text-xs sm:text-sm text-zinc-600 space-y-2 list-disc list-inside font-medium pt-1">
-                <li>
-                  <strong>Core Boards:</strong> Built Board 1 (Daily Routines), Board 2 (Daily Tasks with Rollover), and Board 3 (3-Column Kanban).
-                </li>
-                <li>
-                  <strong>Gamification Engine:</strong> Streaks, point accruals, and Wishlist reward modal.
-                </li>
-                <li>
-                  <strong>Neo-Brutalist Visual Language:</strong> Bold 2px/3px black outlines, crisp drop shadows, and high-contrast typography.
+                  <strong>Calendar Synchronization:</strong> Two-way Google and Apple Calendar integration for scheduled routines and shared deadlines.
                 </li>
               </ul>
             </article>
@@ -870,22 +686,22 @@ export default function DocsPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t-2 border-black bg-white px-4 sm:px-8 py-6 text-center text-xs text-zinc-500 font-medium">
+      <footer className="border-t border-black/[0.06] dark:border-white/[0.08] bg-white/50 dark:bg-black/50 backdrop-blur-xl px-4 sm:px-8 py-6 text-center text-xs text-neutral-500 font-medium transition-colors">
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <Logo size={18} />
-            <span className="font-heading font-bold text-black uppercase">Couple Task Hub</span>
+            <span className="font-heading font-bold text-foreground">Couple Task Hub</span>
             <span>&bull; Collaborative Home OS</span>
           </div>
           <div className="flex items-center gap-4">
-            <Link href="/" className="hover:text-black font-bold underline transition">
+            <Link href="/" className="hover:text-foreground font-semibold transition">
               Back to App
             </Link>
             <a
               href="https://github.com/kiwicoder171/todolist"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-black font-bold flex items-center gap-1 transition"
+              className="hover:text-foreground font-semibold flex items-center gap-1 transition"
             >
               <span>GitHub</span>
               <ExternalLink className="w-3 h-3" />
