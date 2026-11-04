@@ -462,17 +462,29 @@ export default function DocsPage() {
              ============================================================ */
           <div className="space-y-8 animate-in fade-in duration-200">
             {/* Changelog Header */}
-            <div className="apple-card p-6 sm:p-8">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-semibold mb-3 border border-emerald-500/20">
-                <Tag className="w-3.5 h-3.5" />
-                <span>Version History</span>
+            <div className="apple-card p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-semibold mb-3 border border-emerald-500/20">
+                  <Tag className="w-3.5 h-3.5" />
+                  <span>Version History</span>
+                </div>
+                <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-foreground mb-2">
+                  Release Notes &amp; Changelog
+                </h1>
+                <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 font-normal">
+                  Structured record of design overhauls, feature releases, and cloud reliability milestones.
+                </p>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-foreground mb-2">
-                Release Notes &amp; Changelog
-              </h1>
-              <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 font-normal">
-                Structured record of design overhauls, feature releases, and cloud reliability milestones.
-              </p>
+              <a
+                href="/poster.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-blue-500/10 hover:bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/20 text-xs font-semibold shrink-0 transition-all apple-press self-start sm:self-center shadow-xs"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>v0.7.0 Release Poster (9:16)</span>
+                <ExternalLink className="w-3 h-3 ml-0.5" />
+              </a>
             </div>
 
             {/* Version 0.7.0 (Current Release) */}

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Couple Task Hub • Oct 15 Changelog Poster (9:16)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700;800&family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#121215;font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:#000;display:flex;flex-direction:column;align-items:center;padding:24px 12px;-webkit-font-smoothing:antialiased}
+.toolbar{position:fixed;top:16px;right:16px;display:flex;gap:10px;z-index:9;background:#fff;padding:8px 12px;border-radius:999px;border:2px solid #000;box-shadow:4px 4px 0 #000}
+.btn{border:2px solid #000;background:#FFDE59;font:800 13px 'Plus Jakarta Sans';padding:8px 16px;border-radius:999px;cursor:pointer;color:#000;text-decoration:none;box-shadow:2px 2px 0 #000}
+body.capture-mode{padding:0;background:none}
+body.capture-mode .toolbar{display:none}
+#viewport{margin-top:40px}
+body.capture-mode #viewport{margin:0}
+
+#poster{width:1080px;height:1920px;flex:none;position:relative;overflow:hidden;background:#FBF9F3;background-image:radial-gradient(rgba(0,0,0,.12) 1.5px,transparent 1.5px);background-size:24px 24px;border:8px solid #000;padding:44px 48px;display:flex;flex-direction:column;gap:26px;transform-origin:top center}
+@media (max-width:1200px){#poster{transform:scale(.48);margin-bottom:-980px}}
+body.capture-mode #poster{transform:none;margin:0}
+
+.mono{font-family:'JetBrains Mono',monospace}
+.pill{display:inline-flex;align-items:center;gap:8px;border:3px solid #000;border-radius:999px;padding:8px 18px;font:800 15px 'JetBrains Mono';text-transform:uppercase;box-shadow:3px 3px 0 #000}
+.y{background:#FFDE59}.c{background:#A5F3FC}.p{background:#FDA4AF}.v{background:#E9D5FF}.g{background:#A7F3D0}.w{background:#fff}
+
+.top{display:flex;justify-content:space-between;align-items:center;padding-bottom:22px;border-bottom:4px solid #000}
+.brand{display:flex;align-items:center;gap:16px}
+.logo{width:68px;height:68px;background:#A7F3D0;border:3.5px solid #000;border-radius:19px;display:flex;align-items:center;justify-content:center;box-shadow:4px 4px 0 #000}
+.brand b{display:block;font-size:34px;font-weight:900;letter-spacing:-.03em;line-height:1}
+.brand small{font:700 13px 'JetBrains Mono';color:#52525B;text-transform:uppercase;letter-spacing:.05em}
+
+.headline{display:flex;justify-content:space-between;align-items:flex-end}
+.headline h1{font-size:92px;font-weight:900;line-height:.92;letter-spacing:-.05em;text-transform:uppercase}
+.headline h1 span{background:#FFDE59;padding:0 14px;border:4px solid #000;border-radius:16px;display:inline-block;transform:rotate(-2deg);box-shadow:5px 5px 0 #000;margin-top:8px}
+.stats{display:flex;flex-direction:column;gap:10px}
+.stat{background:#fff;border:3px solid #000;border-radius:16px;box-shadow:4px 4px 0 #000;padding:8px 18px;text-align:center;min-width:150px}
+.stat i{display:block;font:800 34px 'JetBrains Mono';font-style:normal;line-height:1}
+.stat s{text-decoration:none;font-size:12px;font-weight:800;text-transform:uppercase;color:#71717A}
+
+.hero{display:flex;gap:26px;background:#fff;border:4px solid #000;border-radius:28px;box-shadow:8px 8px 0 #000;padding:26px}
+.hero-l{flex:1;display:flex;flex-direction:column;gap:14px;min-width:0}
+.hero h2{font-size:38px;font-weight:900;letter-spacing:-.03em;line-height:1.05;text-transform:uppercase}
+.hero ul{list-style:none;display:flex;flex-direction:column;gap:12px;font-size:20px;font-weight:600;line-height:1.35;color:#27272A}
+.hero li::before{content:"■ ";font-size:12px;color:#000}
+.hero strong,.row strong{color:#000;font-weight:800}
+code{font:800 .85em 'JetBrains Mono';background:#FAFAFA;border:1.5px solid #000;border-radius:5px;padding:1px 5px}
+.phone{width:300px;flex:none;border:5px solid #000;border-radius:38px;overflow:hidden;box-shadow:6px 6px 0 #000;background:#fff;height:560px}
+.phone img{width:100%;display:block}
+.live{display:flex;align-items:center;gap:6px;font:800 13px 'JetBrains Mono';color:#059669}
+.live u{width:10px;height:10px;border-radius:50%;background:#10B981;border:1.5px solid #000}
+
+.desk{border:4px solid #000;border-radius:20px;overflow:hidden;box-shadow:6px 6px 0 #000;background:#fff;height:300px;position:relative}
+.desk img{width:100%;display:block;object-position:top}
+.desk .tag{position:absolute;left:14px;bottom:14px}
+
+.rows{display:flex;flex-direction:column;gap:16px;flex:1}
+.row{display:flex;gap:20px;align-items:center;background:#fff;border:3.5px solid #000;border-radius:22px;box-shadow:5px 5px 0 #000;padding:16px 22px;flex:1}
+.row .ver{flex:none;width:130px;text-align:center}
+.row .ver .pill{font-size:18px;padding:8px 16px}
+.row h3{font-size:25px;font-weight:900;text-transform:uppercase;letter-spacing:-.02em;line-height:1.1;margin-bottom:6px}
+.row p{font-size:17.5px;font-weight:600;line-height:1.35;color:#3F3F46}
+
+.foot{background:#000;color:#fff;border-radius:22px;padding:18px 26px;display:flex;justify-content:space-between;align-items:center}
+.foot b{color:#FFDE59;font-size:22px;font-weight:900;text-transform:uppercase;letter-spacing:-.02em;display:block}
+.foot span{font-size:14px;color:#A1A1AA;font-weight:600}
+.foot a{background:#fff;color:#000;border-radius:999px;padding:10px 20px;font:800 15px 'JetBrains Mono';box-shadow:3px 3px 0 #FFDE59;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <a class="btn" href="/">&larr; App</a>
+  <a class="btn" href="/docs">Docs</a>
+</div>
+
+<div id="viewport"><div id="poster">
+
+  <div class="top">
+    <div class="brand">
+      <div class="logo">
+        <svg width="48" height="48" viewBox="0 0 100 100" fill="none"><rect x="13" y="13" width="74" height="74" rx="26" stroke="#000" stroke-width="5" stroke-dasharray="9 6"/><path d="M 32 30 C 32 25, 27 22, 24 24 C 20 27, 21 32, 25 37 L 32 43 L 39 37 C 43 32, 44 27, 40 24 C 37 22, 32 25, 32 30 Z" fill="#000"/><path d="M 68 66 C 68 61, 63 58, 60 60 C 56 63, 57 68, 61 73 L 68 79 L 75 73 C 79 68, 80 63, 76 60 C 73 58, 68 61, 68 66 Z" fill="#000"/><path d="M 28 54 L 44 70 L 80 34" stroke="#000" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="brand"><div><b>COUPLE TASK HUB</b><small>Collaborative Household OS</small></div></div>
+    </div>
+    <span class="pill y">Changelog &bull; Oct 15, 2026</span>
+  </div>
+
+  <div class="headline">
+    <h1>Shipped<br>today <span>x5</span></h1>
+    <div class="stats">
+      <div class="stat"><i style="color:#059669">5</i><s>Releases</s></div>
+      <div class="stat"><i style="color:#2563EB">108</i><s>Tests passing</s></div>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-l">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span class="pill y">v0.5.5 &bull; Latest</span>
+        <span class="live"><u></u>LIVE ON VERCEL</span>
+      </div>
+      <h2>7-day week strip on mobile</h2>
+      <ul>
+        <li><strong>Mon&ndash;Sun pill row</strong> with live status dots: green done, amber partial, cyan freeze day.</li>
+        <li><strong>1-tap Today</strong> and week slider across past &amp; future weeks.</li>
+        <li><strong>Navbar reordered:</strong> <code>All Boards</code> &rarr; <code>Day &amp; Habits</code> &rarr; <code>Kanban</code>.</li>
+      </ul>
+      <div class="desk" style="margin-top:auto;height:230px"><img src="/docs/desktop-dashboard.png" alt="Desktop app"></div>
+    </div>
+    <div class="phone"><img src="/docs/mobile-view.png" alt="Mobile app"></div>
+  </div>
+
+  <div class="rows">
+    <div class="row">
+      <div class="ver"><span class="pill c">v0.5.4</span></div>
+      <div><h3>Clean slate on login</h3><p>All mock data and the &ldquo;Alex &amp; Sam&rdquo; names vanish on sign-in. Next.js hydration mismatch fixed.</p></div>
+    </div>
+    <div class="row">
+      <div class="ver"><span class="pill p">v0.5.3</span></div>
+      <div><h3>Zero blank states</h3><p>Visitors explore all 3 boards pre-login with sample routines, rollover tasks, kanban and live streaks.</p></div>
+    </div>
+    <div class="row">
+      <div class="ver"><span class="pill v">v0.5.2</span></div>
+      <div><h3>Auth-first, habits-first</h3><p>Mobile tabs: <code>Habits</code> &rarr; <code>Daily</code> &rarr; <code>Kanban</code> &rarr; <code>Stats</code>. <code>?join=CODE</code> invite links survive sign-up.</p></div>
+    </div>
+    <div class="row">
+      <div class="ver"><span class="pill y">v0.5.1</span></div>
+      <div><h3>Google sign-in + /docs</h3><p>1-click Google OAuth with auto username, plus a built-in docs &amp; changelog portal.</p></div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div><b>Couple Task Hub</b><span>Chores, habits &amp; home projects &mdash; together.</span></div>
+    <a href="#">&#9733; Open source on GitHub</a>
+  </div>
+
+</div></div>
+
+<script>
+if (new URLSearchParams(location.search).get('capture') === '1') document.body.classList.add('capture-mode');
+</script>
+</body>
+</html>
