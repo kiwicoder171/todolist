@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Couple Task Hub • v0.7.0 Massive Update Poster (9:16)</title>
+<title>Couple Task Hub • v0.7.0 Apple Minimalist Poster (9:16)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
   background: #000000;
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
@@ -19,6 +20,7 @@ body {
   padding: 24px 12px;
   -webkit-font-smoothing: antialiased;
 }
+
 .toolbar {
   position: fixed;
   top: 16px;
@@ -26,7 +28,7 @@ body {
   display: flex;
   gap: 10px;
   z-index: 99;
-  background: rgba(28, 28, 30, 0.85);
+  background: rgba(24, 24, 27, 0.8);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   padding: 8px 14px;
@@ -34,14 +36,15 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: 0 10px 30px rgba(0,0,0,0.6);
 }
+
 .btn {
   border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
   font: 700 13px 'Plus Jakarta Sans';
   padding: 8px 16px;
   border-radius: 999px;
   cursor: pointer;
-  color: #fff;
+  color: #FFFFFF;
   text-decoration: none;
   transition: all 0.2s ease;
 }
@@ -49,6 +52,7 @@ body {
   background: #0071E3;
   border-color: #0071E3;
 }
+
 body.capture-mode { padding: 0; background: none; }
 body.capture-mode .toolbar { display: none; }
 #viewport { margin-top: 20px; }
@@ -60,326 +64,361 @@ body.capture-mode #viewport { margin: 0; }
   flex: none;
   position: relative;
   overflow: hidden;
-  background: #09090B;
-  background-image: 
-    radial-gradient(circle at 15% 10%, rgba(0, 113, 227, 0.18) 0%, transparent 40%),
-    radial-gradient(circle at 85% 30%, rgba(191, 90, 242, 0.15) 0%, transparent 45%),
-    radial-gradient(circle at 50% 80%, rgba(48, 209, 88, 0.12) 0%, transparent 50%),
-    radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 100% 100%, 28px 28px;
-  border: 2px solid rgba(255, 255, 255, 0.12);
+  background: #050507;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 40px;
-  padding: 44px 48px;
+  padding: 52px 56px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  justify-content: space-between;
   transform-origin: top center;
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 30px 100px rgba(0, 0, 0, 0.9);
 }
+
 @media (max-width: 1200px) {
   #poster { transform: scale(0.48); margin-bottom: -980px; }
 }
 body.capture-mode #poster { transform: none; margin: 0; border: none; border-radius: 0; }
 
+/* Apple Keynote Bento Card */
+.bento {
+  background: #0E0E11;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 28px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
 .mono { font-family: 'JetBrains Mono', monospace; }
-.pill {
+
+/* Subtle Pills */
+.capsule {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   border-radius: 999px;
-  padding: 7px 16px;
-  font: 700 13px 'JetBrains Mono';
+  padding: 6px 14px;
+  font: 700 12px 'JetBrains Mono';
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
 }
-.p-blue { background: rgba(0, 113, 227, 0.18); color: #2997FF; border: 1px solid rgba(41, 151, 255, 0.3); }
-.p-emerald { background: rgba(48, 209, 88, 0.18); color: #30D158; border: 1px solid rgba(48, 209, 88, 0.3); }
-.p-purple { background: rgba(191, 90, 242, 0.18); color: #BF5AF2; border: 1px solid rgba(191, 90, 242, 0.3); }
-.p-amber { background: rgba(255, 159, 10, 0.18); color: #FF9F0A; border: 1px solid rgba(255, 159, 10, 0.3); }
-.p-pink { background: rgba(255, 55, 95, 0.18); color: #FF375F; border: 1px solid rgba(255, 55, 95, 0.3); }
+.capsule-blue { background: rgba(0, 113, 227, 0.15); color: #2997FF; border: 1px solid rgba(41, 151, 255, 0.25); }
+.capsule-emerald { background: rgba(48, 209, 88, 0.15); color: #30D158; border: 1px solid rgba(48, 209, 88, 0.25); }
+.capsule-purple { background: rgba(191, 90, 242, 0.15); color: #BF5AF2; border: 1px solid rgba(191, 90, 242, 0.25); }
+.capsule-neutral { background: rgba(255, 255, 255, 0.06); color: #8E8E93; border: 1px solid rgba(255, 255, 255, 0.1); }
 
-/* Top Header Bar */
-.top {
+/* Header */
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
-.brand {
+.brand-group {
   display: flex;
   align-items: center;
   gap: 16px;
 }
-.logo {
-  width: 58px;
-  height: 58px;
+.brand-icon {
+  width: 52px;
+  height: 52px;
   background: #FFFFFF;
-  color: #000000;
-  border-radius: 18px;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
+  color: #000000;
+  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.15);
 }
-.brand b {
-  display: block;
-  font-size: 28px;
+.brand-title {
+  font-size: 26px;
   font-weight: 800;
   letter-spacing: -0.03em;
-  line-height: 1.1;
   color: #FFFFFF;
+  line-height: 1.1;
 }
-.brand small {
-  font: 700 12px 'JetBrains Mono';
-  color: #8E8E93;
+.brand-sub {
+  font: 600 12px 'JetBrains Mono';
+  color: #71717A;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
 }
 
-/* Big Headline Area */
-.headline {
+/* Keynote Headline Section */
+.hero-title-section {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-top: 4px;
+  padding: 12px 0 4px 0;
 }
-.headline-l {
+.hero-copy {
   max-width: 680px;
 }
-.eyebrow {
+.hero-eyebrow {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font: 800 13px 'JetBrains Mono';
+  font: 700 12px 'JetBrains Mono';
   color: #2997FF;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 12px;
+  letter-spacing: 0.12em;
+  margin-bottom: 10px;
 }
-.eyebrow u {
-  width: 8px;
-  height: 8px;
+.hero-eyebrow span {
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: #2997FF;
-  display: inline-block;
-  box-shadow: 0 0 10px #2997FF;
 }
-.headline h1 {
-  font-size: 82px;
+.hero-h1 {
+  font-size: 76px;
   font-weight: 900;
-  line-height: 0.94;
-  letter-spacing: -0.05em;
-  text-transform: uppercase;
+  line-height: 0.95;
+  letter-spacing: -0.045em;
   color: #FFFFFF;
-}
-.headline h1 span {
-  background: linear-gradient(135deg, #2997FF 0%, #BF5AF2 50%, #FF375F 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.stats-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.stat-box {
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 18px;
-  padding: 10px 20px;
-  text-align: center;
-  min-width: 170px;
-}
-.stat-box i {
-  display: block;
-  font: 800 32px 'JetBrains Mono';
-  font-style: normal;
-  line-height: 1.1;
-}
-.stat-box s {
-  text-decoration: none;
-  font-size: 11px;
-  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+}
+.hero-sub {
+  margin-top: 14px;
+  font-size: 19px;
+  font-weight: 500;
   color: #8E8E93;
+  line-height: 1.45;
+}
+.hero-sub strong {
+  color: #F2F2F7;
+  font-weight: 600;
 }
 
-/* Glass Card */
-.glass-card {
-  background: rgba(255, 255, 255, 0.035);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 28px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-}
-
-/* Hero Showcase */
-.hero {
+/* Big Hero Hardware Showcase */
+.showcase-bento {
+  padding: 28px;
   display: flex;
-  gap: 24px;
-  padding: 24px;
+  gap: 28px;
+  height: 520px;
   align-items: stretch;
 }
-.hero-left {
+.showcase-left {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  justify-content: space-between;
   min-width: 0;
 }
-.hero-badges {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.hero h2 {
-  font-size: 34px;
+.showcase-info h2 {
+  font-size: 32px;
   font-weight: 800;
   letter-spacing: -0.03em;
-  line-height: 1.1;
   color: #FFFFFF;
+  margin-top: 12px;
+  margin-bottom: 8px;
 }
-.hero-bullets {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  font-size: 17px;
+.showcase-info p {
+  font-size: 16px;
   font-weight: 500;
-  line-height: 1.4;
-  color: #D1D1D6;
+  color: #A1A1A6;
+  line-height: 1.45;
 }
-.hero-bullets li {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-}
-.hero-bullets li::before {
-  content: "✦";
-  color: #2997FF;
-  font-size: 14px;
-  margin-top: 2px;
-}
-.hero-bullets strong {
-  color: #FFFFFF;
-  font-weight: 700;
-}
-
-.desk-frame {
-  margin-top: auto;
+.mac-window {
+  margin-top: 18px;
   border-radius: 18px;
-  overflow: hidden;
+  background: #141417;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  background: #000;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
-  height: 250px;
-  position: relative;
-}
-.desk-frame img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top center;
-  display: block;
-}
-
-.phone-frame {
-  width: 310px;
-  flex: none;
-  border: 2px solid rgba(255, 255, 255, 0.15);
-  border-radius: 36px;
   overflow: hidden;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
-  background: #000;
-  height: 520px;
-}
-.phone-frame img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top center;
-  display: block;
-}
-
-/* Feature Grid (4 Pillars) */
-.features-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
-  flex: 1;
-}
-.feature-card {
-  padding: 22px 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+  height: 310px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
 }
-.feature-hd {
+.mac-titlebar {
+  height: 28px;
+  background: #18181B;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  padding: 0 12px;
+  gap: 7px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
-.feature-icon {
+.dot { width: 9px; height: 9px; border-radius: 50%; }
+.dot-red { background: #FF5F56; }
+.dot-yellow { background: #FFBD2E; }
+.dot-green { background: #27C93F; }
+.mac-window img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+
+.iphone-bezel {
+  width: 320px;
+  flex: none;
+  background: #000000;
+  border: 3px solid rgba(255, 255, 255, 0.16);
+  border-radius: 44px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.iphone-island {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90px;
+  height: 22px;
+  background: #000000;
+  border-radius: 999px;
+  z-index: 10;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.iphone-bezel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+
+/* Middle Bento Row: 2 Major Feature Cards */
+.bento-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.feature-box {
+  padding: 26px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 230px;
+}
+.feature-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+.svg-icon-badge {
   width: 44px;
   height: 44px;
   border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
-.feature-card h3 {
-  font-size: 22px;
+.feature-box h3 {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: #FFFFFF;
+  margin-bottom: 8px;
+}
+.feature-box p {
+  font-size: 15px;
+  font-weight: 500;
+  color: #8E8E93;
+  line-height: 1.45;
+}
+.feature-box p strong {
+  color: #E5E5EA;
+}
+
+/* Lower Bento Row: 3 Fast Pillar Cards */
+.bento-row-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+}
+.mini-box {
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 200px;
+}
+.mini-box .feature-top {
+  margin-bottom: 12px;
+}
+.mini-box h4 {
+  font-size: 19px;
   font-weight: 800;
   letter-spacing: -0.02em;
   color: #FFFFFF;
-  line-height: 1.15;
+  margin-bottom: 6px;
 }
-.feature-card p {
-  font-size: 15px;
+.mini-box p {
+  font-size: 13.5px;
   font-weight: 500;
+  color: #8E8E93;
   line-height: 1.45;
-  color: #A1A1A6;
 }
-.feature-card p strong {
-  color: #F2F2F7;
+.mini-box p strong {
+  color: #E5E5EA;
 }
 
-/* Bottom Footer */
-.foot {
+/* Metric Strip */
+.metrics-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.metric-tile {
   background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 22px;
-  padding: 18px 28px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  padding: 16px 20px;
+  text-align: center;
+}
+.metric-num {
+  font: 800 32px 'JetBrains Mono';
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.metric-label {
+  font: 700 11px 'JetBrains Mono';
+  color: #71717A;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Footer */
+.footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
-.foot b {
-  color: #FFFFFF;
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  display: block;
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-.foot span {
+.footer-text {
   font-size: 13px;
-  color: #8E8E93;
-  font-weight: 500;
+  font-weight: 600;
+  color: #71717A;
 }
-.foot-pill {
-  background: #FFFFFF;
+.footer-text strong {
+  color: #FFFFFF;
+}
+.footer-link {
+  font: 700 12px 'JetBrains Mono';
   color: #000000;
+  background: #FFFFFF;
+  padding: 7px 18px;
   border-radius: 999px;
-  padding: 8px 18px;
-  font: 800 13px 'JetBrains Mono';
   text-decoration: none;
-  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+  letter-spacing: 0.03em;
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.2);
 }
 </style>
 </head>
@@ -393,126 +432,221 @@ body.capture-mode #poster { transform: none; margin: 0; border: none; border-rad
 <div id="viewport">
   <div id="poster">
 
-    <!-- Top Header -->
-    <div class="top">
-      <div class="brand">
-        <div class="logo">
-          <svg width="38" height="38" viewBox="0 0 100 100" fill="none">
-            <rect x="13" y="13" width="74" height="74" rx="26" stroke="#000" stroke-width="5" stroke-dasharray="9 6"/>
-            <path d="M 32 30 C 32 25, 27 22, 24 24 C 20 27, 21 32, 25 37 L 32 43 L 39 37 C 43 32, 44 27, 40 24 C 37 22, 32 25, 32 30 Z" fill="#000"/>
-            <path d="M 68 66 C 68 61, 63 58, 60 60 C 56 63, 57 68, 61 73 L 68 79 L 75 73 C 79 68, 80 63, 76 60 C 73 58, 68 61, 68 66 Z" fill="#000"/>
-            <path d="M 28 54 L 44 70 L 80 34" stroke="#000" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Section 1: Header -->
+    <header class="header">
+      <div class="brand-group">
+        <div class="brand-icon">
+          <!-- Clean SVG Logo -->
+          <svg width="34" height="34" viewBox="0 0 100 100" fill="none">
+            <rect x="13" y="13" width="74" height="74" rx="26" stroke="#000000" stroke-width="5" stroke-dasharray="9 6"/>
+            <path d="M 32 30 C 32 25, 27 22, 24 24 C 20 27, 21 32, 25 37 L 32 43 L 39 37 C 43 32, 44 27, 40 24 C 37 22, 32 25, 32 30 Z" fill="#000000"/>
+            <path d="M 68 66 C 68 61, 63 58, 60 60 C 56 63, 57 68, 61 73 L 68 79 L 75 73 C 79 68, 80 63, 76 60 C 73 58, 68 61, 68 66 Z" fill="#000000"/>
+            <path d="M 28 54 L 44 70 L 80 34" stroke="#000000" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
         <div>
-          <b>COUPLE TASK HUB</b>
-          <small>Collaborative Household OS &bull; Nov 2026</small>
+          <div class="brand-title">Couple Task Hub</div>
+          <div class="brand-sub">Collaborative Operating System &bull; Version 0.7.0</div>
         </div>
       </div>
-      <span class="pill p-blue">Changelog &bull; v0.7.0</span>
-    </div>
+      <span class="capsule capsule-blue">What&apos;s New Summary</span>
+    </header>
 
-    <!-- Big Headline Area -->
-    <div class="headline">
-      <div class="headline-l">
-        <div class="eyebrow"><u></u>Massive Release &bull; What We Shipped</div>
-        <h1>The Apple<br><span>Redesign</span></h1>
-      </div>
-      <div class="stats-grid">
-        <div class="stat-box">
-          <i style="color:#30D158">162</i>
-          <s>Tests Green (100%)</s>
+    <!-- Section 2: Keynote Headline -->
+    <section class="hero-title-section">
+      <div class="hero-copy">
+        <div class="hero-eyebrow">
+          <span></span>
+          Massive Release Overview
         </div>
-        <div class="stat-box">
-          <i style="color:#2997FF">4</i>
-          <s>Major Versions Shipped</s>
-        </div>
-      </div>
-    </div>
-
-    <!-- Hero Showcase: Apple Minimalist Overhaul + Screenshots -->
-    <div class="glass-card hero">
-      <div class="hero-left">
-        <div class="hero-badges">
-          <span class="pill p-emerald">v0.7.0 &bull; Shipped Today</span>
-          <span class="pill p-purple">Less is More</span>
-        </div>
-        <h2>Apple Minimalist Architecture</h2>
-        <ul class="hero-bullets">
-          <li><strong>Fluid Glass Materials:</strong> Frosted squircle cards, hairline borders, and full Light/Dark mode elevation.</li>
-          <li><strong>Dynamic Island Floating Nav:</strong> Segmented iOS sliding track with zero-clutter root portal popover.</li>
-          <li><strong>Kanban Detail Drawer:</strong> Slide-over project inspector with live subtasks, markdown notes &amp; emoji categories.</li>
-        </ul>
-        <div class="desk-frame">
-          <img src="/docs/desktop-dashboard.png" alt="Desktop Dashboard Screenshot">
-        </div>
-      </div>
-      <div class="phone-frame">
-        <img src="/docs/mobile-view.png" alt="Mobile View Screenshot">
-      </div>
-    </div>
-
-    <!-- 4 Shipped Feature Pillars -->
-    <div class="features-grid">
-
-      <!-- Pillar 1: Kanban Deep-Dive -->
-      <div class="glass-card feature-card">
-        <div class="feature-hd">
-          <div class="feature-icon" style="background:rgba(41,151,255,0.15);color:#2997FF">📋</div>
-          <span class="pill p-blue">v0.7.0</span>
-        </div>
-        <h3>Kanban Card Drawer</h3>
-        <p>
-          Clicking any long-term card opens a deep-dive slide-over inspector with <strong>subtask progress meters</strong>, rich markdown notes, category tagging with emoji pickers, and insulated action controls.
+        <h1 class="hero-h1">Less is More.<br>All in Sync.</h1>
+        <p class="hero-sub">
+          The collaborative home OS, rebuilt from the ground up with <strong>Apple minimalism</strong>, <strong>translucent materials</strong>, and a powerful <strong>Kanban detail drawer</strong>.
         </p>
       </div>
+      <div class="capsule capsule-emerald" style="padding:10px 18px;font-size:13px">
+        Shipped &amp; Live
+      </div>
+    </section>
 
-      <!-- Pillar 2: Multi-Mode Spaces -->
-      <div class="glass-card feature-card">
-        <div class="feature-hd">
-          <div class="feature-icon" style="background:rgba(255,55,95,0.15);color:#FF375F">💕</div>
-          <span class="pill p-pink">v0.6.2</span>
+    <!-- Section 3: Big Hero Showcase -->
+    <section class="bento showcase-bento">
+      <div class="showcase-left">
+        <div class="showcase-info">
+          <div style="display:flex;gap:8px">
+            <span class="capsule capsule-neutral">Apple Design</span>
+            <span class="capsule capsule-neutral">3-Board Architecture</span>
+          </div>
+          <h2>Fluid Interface Redesign</h2>
+          <p>
+            Frosted squircle cards, Dynamic Island floating navigation, and zero-clutter root portal popovers. Reclaimed vertical screen space across desktop and mobile.
+          </p>
         </div>
-        <h3>Multi-Mode Spaces</h3>
-        <p>
-          Your space, your way. Choose between <strong>🧍 Solo</strong>, <strong>💕 Duo</strong>, <strong>🧑‍🤝‍🧑 Friends</strong>, or <strong>🏡 Family</strong> with adaptive consistency dials and dynamic Momentum Cheers.
-        </p>
-      </div>
-
-      <!-- Pillar 3: Real-Time Sync & Gamification -->
-      <div class="glass-card feature-card">
-        <div class="feature-hd">
-          <div class="feature-icon" style="background:rgba(48,209,88,0.15);color:#30D158">⚡</div>
-          <span class="pill p-emerald">v0.6.1</span>
+        <div class="mac-window">
+          <div class="mac-titlebar">
+            <div class="dot dot-red"></div>
+            <div class="dot dot-yellow"></div>
+            <div class="dot dot-green"></div>
+            <span style="margin-left:auto;font:600 11px 'JetBrains Mono';color:#71717A">1440 &times; 900 Desktop</span>
+          </div>
+          <img src="/docs/desktop-dashboard.png" alt="Desktop Dashboard">
         </div>
-        <h3>Real-Time Cloud Engine</h3>
-        <p>
-          <strong>Independent Perfect Days</strong> award personal points instantly. Zero task reverts with Firestore snapshot merging, live partner cheer delivery, and Next.js 15.2.9 security core.
-        </p>
       </div>
 
-      <!-- Pillar 4: Desks, Pomodoro & Widgets -->
-      <div class="glass-card feature-card">
-        <div class="feature-hd">
-          <div class="feature-icon" style="background:rgba(191,90,242,0.15);color:#BF5AF2">⏱️</div>
-          <span class="pill p-purple">v0.6.0</span>
+      <div class="iphone-bezel">
+        <div class="iphone-island"></div>
+        <img src="/docs/mobile-view.png" alt="Mobile iPhone View">
+      </div>
+    </section>
+
+    <!-- Section 4: Middle Bento Row (2 Feature Pillars) -->
+    <section class="bento-row-2">
+
+      <!-- Feature 1: Kanban Deep-Dive -->
+      <div class="bento feature-box">
+        <div>
+          <div class="feature-top">
+            <div class="svg-icon-badge">
+              <!-- Lucide Layout / Kanban SVG -->
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2997FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="18" height="18" x="3" y="3" rx="2"/>
+                <path d="M3 9h18"/><path d="M9 21V9"/>
+              </svg>
+            </div>
+            <span class="capsule capsule-blue">v0.7.0 New</span>
+          </div>
+          <h3>Kanban Card Drawer</h3>
+          <p>
+            Clicking any long-term card opens an in-depth slide-over inspector with <strong>subtask progress meters</strong>, rich markdown notes, category tagging with emoji pickers, and insulated action buttons.
+          </p>
         </div>
-        <h3>Co-Focus Desks &amp; Widgets</h3>
-        <p>
-          Virtual desk presence, Pomodoro timer with <strong>ambient synthesizer sounds</strong>, 24h timeline rail, and Small/Medium/Large home screen widgets for iOS &amp; Android.
-        </p>
+        <div style="font:600 12px 'JetBrains Mono';color:#2997FF;margin-top:14px">
+          Subtasks &bull; Notes &bull; Emoji Tags &bull; Focus Link
+        </div>
       </div>
 
-    </div>
-
-    <!-- Bottom Footer -->
-    <div class="foot">
-      <div>
-        <b>Couple Task Hub</b>
-        <span>Chores, routines, projects &amp; habits &mdash; together in sync.</span>
+      <!-- Feature 2: Multi-Mode Spaces -->
+      <div class="bento feature-box">
+        <div>
+          <div class="feature-top">
+            <div class="svg-icon-badge">
+              <!-- Lucide Users SVG -->
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#BF5AF2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
+            <span class="capsule capsule-purple">v0.6.2</span>
+          </div>
+          <h3>Multi-Mode Spaces</h3>
+          <p>
+            Your space, your way. Tailored collaboration profiles for <strong>Solo</strong>, <strong>Duo (Partner)</strong>, <strong>Friends</strong>, and <strong>Family</strong> with adaptive consistency dials and dynamic Momentum Cheers.
+          </p>
+        </div>
+        <div style="font:600 12px 'JetBrains Mono';color:#BF5AF2;margin-top:14px">
+          4 Spaces &bull; Adaptive Dials &bull; Dynamic Cheers
+        </div>
       </div>
-      <a class="foot-pill" href="https://github.com/kiwicoder171/todolist" target="_blank">&bull; v0.7.0 Live</a>
-    </div>
+
+    </section>
+
+    <!-- Section 5: Lower Bento Row (3 Fast Pillars) -->
+    <section class="bento-row-3">
+
+      <!-- Pillar A: Co-Focus Desks -->
+      <div class="bento mini-box">
+        <div>
+          <div class="feature-top">
+            <div class="svg-icon-badge">
+              <!-- Lucide Timer SVG -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF9F0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="10" x2="14" y1="2" y2="2"/><line x1="12" x2="15" y1="14" y2="11"/><circle cx="12" cy="14" r="8"/>
+              </svg>
+            </div>
+            <span class="capsule capsule-neutral">Focus</span>
+          </div>
+          <h4>Co-Focus Desks</h4>
+          <p>
+            Live partner desk presence, Pomodoro timer with <strong>ambient synthesizers</strong>, and 24h timeline rail.
+          </p>
+        </div>
+      </div>
+
+      <!-- Pillar B: Cloud Engine & Perfect Day -->
+      <div class="bento mini-box">
+        <div>
+          <div class="feature-top">
+            <div class="svg-icon-badge">
+              <!-- Lucide CheckCircle2 SVG -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#30D158" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>
+              </svg>
+            </div>
+            <span class="capsule capsule-emerald">Engine</span>
+          </div>
+          <h4>Independent Perfect Day</h4>
+          <p>
+            Personal routine completion awards <strong>+1 pt instantly</strong>. Resilient snapshot merging with zero reverts.
+          </p>
+        </div>
+      </div>
+
+      <!-- Pillar C: Home Screen Widgets -->
+      <div class="bento mini-box">
+        <div>
+          <div class="feature-top">
+            <div class="svg-icon-badge">
+              <!-- Lucide Smartphone SVG -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2997FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/>
+              </svg>
+            </div>
+            <span class="capsule capsule-neutral">Widgets</span>
+          </div>
+          <h4>Home Widgets</h4>
+          <p>
+            Small, Medium, and Large widgets with <strong>live habit toggles</strong> for iOS, Android, and <code>/widget</code>.
+          </p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Section 6: Metric Strip -->
+    <section class="metrics-strip">
+      <div class="metric-tile">
+        <div class="metric-num" style="color:#30D158">162</div>
+        <div class="metric-label">Tests Green (100%)</div>
+      </div>
+      <div class="metric-tile">
+        <div class="metric-num" style="color:#2997FF">4</div>
+        <div class="metric-label">Releases Shipped</div>
+      </div>
+      <div class="metric-tile">
+        <div class="metric-num" style="color:#BF5AF2">4</div>
+        <div class="metric-label">Space Modes</div>
+      </div>
+      <div class="metric-tile">
+        <div class="metric-num" style="color:#FF9F0A">0ms</div>
+        <div class="metric-label">Real-Time Sync</div>
+      </div>
+    </section>
+
+    <!-- Section 7: Footer -->
+    <footer class="footer">
+      <div class="footer-left">
+        <div class="brand-icon" style="width:28px;height:28px;border-radius:8px">
+          <svg width="18" height="18" viewBox="0 0 100 100" fill="none">
+            <path d="M 28 54 L 44 70 L 80 34" stroke="#000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="footer-text">
+          <strong>Couple Task Hub</strong> &bull; Collaborative Household OS
+        </div>
+      </div>
+      <a class="footer-link" href="https://github.com/kiwicoder171/todolist" target="_blank">
+        Open Source on GitHub &rarr;
+      </a>
+    </footer>
 
   </div>
 </div>
